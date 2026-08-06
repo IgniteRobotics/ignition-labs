@@ -25,7 +25,13 @@ This spec is built on three audited research reports in the team wiki, not from 
 | `frc-ai-coding-standards-research` | FIRST's rules posture, Chief Delphi sentiment, CS-education literature on novices and AI |
 | `frc-fall-curriculum-research-audit` | Reconciliation pass; found and corrected 2 errors across the three |
 
-**A third correction, found while writing this spec:** `frc-coding-best-practices-research` states that `Robot-2026` has "zero hits for `@AutoLog`, `LoggedRobot`, `Epilogue`" and that the team's structured-logging aspiration "is not yet implemented in the actual codebase." This is **incorrect**. Epilogue is deployed across 13 source files: `Robot.java` imports `edu.wpi.first.epilogue.Epilogue`, calls `Epilogue.configure(...)` at line 44 and `Epilogue.bind(this)` at line 61, and every subsystem plus `RobotContainer`, `LaunchState`, `ShiftState`, and `LaunchRequest` carry `@Logged` annotations with `Importance` levels. The original grep was faulty. The rest of that row stands — `Robot` still extends `TimedRobot`, there is no AdvantageKit vendordep, and there is no IO-interface abstraction layer — but Ignite is using WPILib's native telemetry framework properly and the curriculum should teach Epilogue as an existing team convention rather than as an aspiration.
+**Three further corrections found while writing this spec and `resources.md`.** None of them undermine the research's conclusions, but all three need fixing in the wiki — tracked as step 7 of the execution plan.
+
+**1. Epilogue is deployed, not aspirational.** `frc-coding-best-practices-research` states that `Robot-2026` has "zero hits for `@AutoLog`, `LoggedRobot`, `Epilogue`" and that the team's structured-logging aspiration "is not yet implemented in the actual codebase." This is **incorrect**. Epilogue is deployed across 13 source files: `Robot.java` imports `edu.wpi.first.epilogue.Epilogue`, calls `Epilogue.configure(...)` at line 44 and `Epilogue.bind(this)` at line 61, and every subsystem plus `RobotContainer`, `LaunchState`, `ShiftState`, and `LaunchRequest` carry `@Logged` annotations with `Importance` levels. The original grep was faulty. The rest of that row stands — `Robot` still extends `TimedRobot`, there is no AdvantageKit vendordep, and there is no IO-interface abstraction layer — but Ignite is using WPILib's native telemetry framework properly and the curriculum should teach Epilogue as an existing team convention rather than as an aspiration.
+
+**2. Two WPILib doc URLs are stale.** WPILib restructured the command-based documentation under a `commands-v2/` subdirectory. The paths the research cites for "Structuring a Command-Based Robot Project" and "Organizing Command-Based Projects" now 404. Current paths are in `resources.md` §1.
+
+**3. CTRE's simulation-intro page is not a 404.** The research recorded it as one. The page exists at the cited path; the failure was ReadTheDocs bot-blocking, which returns spurious 429s to automated clients and was misread as a missing page.
 
 ### 1.2 Design constraints (decided, not open)
 
@@ -237,7 +243,7 @@ This is the spine's center of gravity and the largest milestone. It is the last 
 
 **AI posture:** 🟡 Yellow begins here — see §6. AI may generate boilerplate and Javadoc. AI may not design the subsystem decomposition or write the command logic.
 
-**Resources.** [Command-Based Programming index](https://docs.wpilib.org/en/stable/docs/software/commandbased/index.html) · [Structuring a Command-Based Robot Project](https://docs.wpilib.org/en/stable/docs/software/commandbased/structuring-command-based-project.html) · [Organizing Command-Based Projects](https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html) · Ignite reference: `Robot-2026/src/main/java/frc/robot/RobotContainer.java`
+**Resources.** [Command-Based Programming index](https://docs.wpilib.org/en/stable/docs/software/commandbased/index.html) · [Structuring a Command-Based Robot Project](https://docs.wpilib.org/en/stable/docs/software/commandbased/commands-v2/structuring-command-based-project.html) · [Organizing Command-Based Projects](https://docs.wpilib.org/en/stable/docs/software/commandbased/commands-v2/organizing-command-based.html) · Ignite reference: `Robot-2026/src/main/java/frc/robot/RobotContainer.java`
 
 ### 4.6 M4 — Sensors, Actuators & Control
 
@@ -403,7 +409,7 @@ docs/programming/
 | `student-deliverables.md` | Subsystem README template, tuning log template, pit doc template, competition-week git checklist, week-by-week cadence | Templates are fill-in-the-blank, not prose descriptions of what a template would contain |
 | `resources.md` | Every external link used anywhere in the curriculum, grouped by topic, each with a one-line note on what it is good for | No link appears in a milestone file that is absent here; **every URL returns 200 at time of writing** |
 
-**Link verification status.** All external URLs cited in this spec were checked on 2026-08-05 except three on `docs.wpilib.org`, which returned HTTP 429 (rate limiting, not 404) to every client tried. Those paths were verified during the original research passes. Re-verifying all `docs.wpilib.org` links is an explicit acceptance criterion for `resources.md` in step 1 of the execution plan.
+**Link verification status: complete.** All 64 external URLs are verified as of 2026-08-05 — see the verification log in `resources.md` §9. ReadTheDocs-hosted sites block automated clients from this network, so WPILib and CTRE paths were confirmed against their documentation source repositories instead, which is a stronger check. That pass surfaced two stale paths (see §1.1).
 
 ### 5.2 Markdown constraints
 
