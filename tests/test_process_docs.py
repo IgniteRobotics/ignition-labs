@@ -45,3 +45,34 @@ def test_m0_pull_request_targets_upstream(git_workflow):
 
 def test_later_milestones_pull_request_into_own_fork(git_workflow):
     assert "into your own fork" in git_workflow
+
+
+LADDER = REPO / "programming" / "robot-repo-ladder.md"
+
+
+@pytest.fixture(scope="module")
+def ladder() -> str:
+    return LADDER.read_text(encoding="utf-8")
+
+
+@pytest.mark.parametrize("milestone", [f"M{n}" for n in range(9)])
+def test_every_milestone_has_a_row(ladder, milestone):
+    assert f"**{milestone}**" in ladder
+
+
+@pytest.mark.parametrize("level", ["browse", "clone", "fork", "branch"])
+def test_all_four_contact_levels_are_named(ladder, level):
+    assert level in ladder
+
+
+def test_explains_why_m6_is_not_circular(ladder):
+    assert "the pull request comes from a fork" in ladder.lower()
+
+
+def test_states_the_pure_logic_hard_rule(ladder):
+    assert "No timing, no simulation, no hardware." in ladder
+
+
+def test_no_reference_to_pre_2026_ignite_code(ladder):
+    for stale in ("Robot-2025", "Robot-2024", "Robot-2023", "2025-Robotics-Intro"):
+        assert stale not in ladder
