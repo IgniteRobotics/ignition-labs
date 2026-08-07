@@ -68,6 +68,16 @@ def test_staged_files_excludes_http_targets(tmp_path):
     assert not any(f.startswith("http") for f in files)
 
 
+def test_staged_files_includes_link_with_anchor(tmp_path):
+    index = _make_index(
+        tmp_path,
+        "[Section](programming/git-workflow.md#branching)\n",
+    )
+    files = staged_files(index)
+    assert "programming/git-workflow.md" in files
+    assert not any("#" in f for f in files)
+
+
 def test_staged_files_deduplicates_repeated_links(tmp_path):
     index = _make_index(
         tmp_path,

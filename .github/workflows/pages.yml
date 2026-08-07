@@ -5,8 +5,9 @@ on:
     branches: [main]
     paths:
       - '**.md'
-      - '00-index.md'
       - 'tools/site_guard.py'
+      - 'tools/stage_site.py'
+      - 'mkdocs.yml'
       - '.github/workflows/pages.yml'
   workflow_dispatch:
 

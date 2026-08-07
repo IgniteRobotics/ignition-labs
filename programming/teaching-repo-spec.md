@@ -33,7 +33,7 @@ It is not a course-in-a-box that replaces mentors. Every milestone retains expla
 
 ### 1.3 Revision history
 
-**2026-08-07.** Merged in the skeleton-projects design session. Changes: skeletons moved from a proposed `ignite-training` repository into this one (D1); the git ritual specified end to end (D2, §5); the real-repo ladder added (D8, §6); M6's deliverable changed from a sandbox exercise to a real pull request (D9, §9.7); GitHub Pages publication added (D7, §7); the multi-project GradleRIO spike deleted as obviated (§4.2); build order revised (§13). The originating design document is preserved at [`../superpowers/specs/2026-08-07-skeleton-projects-design.md`](../superpowers/specs/2026-08-07-skeleton-projects-design.md).
+**2026-08-07.** Merged in the skeleton-projects design session. Changes: skeletons moved from a proposed `ignite-training` repository into this one (D1); the git ritual specified end to end (D2, §5); the real-repo ladder added (D8, §6); M6's deliverable changed from a sandbox exercise to a real pull request (D9, §9.7); GitHub Pages publication added (D7, §7); the multi-project GradleRIO spike deleted as obviated (§4.2); build order revised (§13). The originating design document is preserved at `../superpowers/specs/2026-08-07-skeleton-projects-design.md`.
 
 ---
 
@@ -683,7 +683,7 @@ Order matters: bump first, then re-pin, then cross-check. A cross-check against 
 
 | Item | Status |
 |---|---|
-| Does `./gradlew build` run tests under GradleRIO's `configureTestTasks`? | **Resolved: yes.** Empirically verified with a fail-loudly probe test on a Phoenix-2026 copy (GradleRIO 2026.2.1, wrapper 8.11, JUnit 5.10.1) — `./gradlew build` and `./gradlew test` both failed identically on the probe assertion. See [`superpowers/notes/2026-08-07-gradle-test-lifecycle.md`](../superpowers/notes/2026-08-07-gradle-test-lifecycle.md). No §7.3 correction needed |
+| Does `./gradlew build` run tests under GradleRIO's `configureTestTasks`? | **Resolved: yes.** Empirically verified with a fail-loudly probe test on a Phoenix-2026 copy (GradleRIO 2026.2.1, wrapper 8.11, JUnit 5.10.1) — `./gradlew build` and `./gradlew test` both failed identically on the probe assertion. See `superpowers/notes/2026-08-07-gradle-test-lifecycle.md`. No §7.3 correction needed |
 | Who maintains `FEATURE-BACKLOG.md` and `UNTESTED-TARGETS.md` in-season? | **Unassigned.** M7 and M6 both depend on it. See §16 |
 | Should `templates/` live here or stay inline in `student-deliverables.md`? | Proposed: **both** — the prose stays for reading, the files exist for copying. Duplication risk is real; a CI check that the two match would resolve it |
 | Is one worked-example test enough scaffolding for M6? | **Genuinely uncertain.** L0 is the sharpest drop on the fade curve and M6 has no test-out, so every student hits it at full density — now with a real pull request attached. Watch the first cohort; if they stall, the fix is a second worked example, not a lower bar |

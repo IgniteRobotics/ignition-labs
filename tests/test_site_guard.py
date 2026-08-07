@@ -2,7 +2,7 @@
 
 from pathlib import Path
 
-from tools.site_guard import forbidden_files, missing_pages
+from tools.site_guard import REQUIRED_PAGES, forbidden_files, missing_pages
 
 
 def _make_site(tmp_path: Path, files: list[str]) -> Path:
@@ -68,3 +68,25 @@ def test_missing_required_page_is_reported(tmp_path):
 def test_present_required_page_is_not_reported(tmp_path):
     site = _make_site(tmp_path, ["programming/git-workflow/index.html"])
     assert missing_pages(site, ["programming/git-workflow"]) == []
+
+
+def test_setup_and_contributing_are_required_pages():
+    # SETUP.md is the first document a student opens and CONTRIBUTING.md
+    # governs the PR workflow; both must actually be published, not just
+    # present on disk. This makes that a checked invariant rather than a
+    # hope (spec §15: SETUP's fork-Actions step is the highest-likelihood
+    # M0 failure).
+    assert "SETUP" in REQUIRED_PAGES
+    assert "CONTRIBUTING" in REQUIRED_PAGES
+
+
+def test_missing_setup_page_is_reported(tmp_path):
+    site = _make_site(tmp_path, ["index.html", "CONTRIBUTING/index.html"])
+    assert missing_pages(site, ["SETUP", "CONTRIBUTING"]) == ["SETUP"]
+
+
+def test_present_setup_and_contributing_pages_are_not_reported(tmp_path):
+    site = _make_site(
+        tmp_path, ["SETUP/index.html", "CONTRIBUTING/index.html"]
+    )
+    assert missing_pages(site, ["SETUP", "CONTRIBUTING"]) == []

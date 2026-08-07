@@ -2,7 +2,13 @@ name: Skeleton Integrity
 
 on:
   pull_request:
-    paths: ['projects/**', 'tests.lock', '.github/workflows/skeleton-integrity.yml']
+    paths:
+      - 'projects/**'
+      - 'tests.lock'
+      - '.github/workflows/skeleton-integrity.yml'
+      - 'tools/**'
+      - 'tests/**'
+      - 'pyproject.toml'
   push:
     branches: [main]
     paths: ['projects/**', 'tests.lock']
@@ -21,6 +27,12 @@ jobs:
       - name: List every skeleton project
         id: list
         run: |
+          # find's exit status is swallowed by the pipe into sort | jq, so a
+          # missing projects/ directory would otherwise still yield a clean
+          # `[]` via the empty split — that is the intended graceful skip.
+          # Guard it explicitly rather than relying on that implicit
+          # behaviour, which breaks the moment anyone adds `set -o pipefail`.
+          test -d projects || { echo "projects=[]" >> "$GITHUB_OUTPUT"; exit 0; }
           found=$(find projects -mindepth 2 -maxdepth 3 -name settings.gradle -printf '%h\n' \
             | sort | jq -R -s -c 'split("\n") | map(select(length > 0))')
           echo "projects=$found" >> "$GITHUB_OUTPUT"
@@ -28,7 +40,7 @@ jobs:
 
   integrity:
     needs: matrix
-    if: needs.matrix.outputs.projects != '[]'
+    if: github.repository == 'IgniteRobotics/docs' && needs.matrix.outputs.projects != '[]'
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -82,3 +94,18 @@ jobs:
           python tools/tests_lock.py write
           git diff --exit-code tests.lock \
             || { echo "::error::tests.lock is stale. Run: python tools/tests_lock.py write"; exit 1; }
+
+  pytest:
+    if: github.repository == 'IgniteRobotics/docs'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install Poetry
+        run: pip install poetry
+      - name: Install dependencies
+        run: poetry install
+      - name: Run test suite
+        run: poetry run pytest

@@ -50,6 +50,8 @@ REQUIRED_PAGES = [
     "programming/robot-repo-ladder",
     "programming",  # renders programming/README.md -> programming/index.html
     "programming/teaching-repo-spec",
+    "SETUP",
+    "CONTRIBUTING",
 ]
 
 

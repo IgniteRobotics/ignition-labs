@@ -11,7 +11,7 @@ import shutil
 import sys
 from pathlib import Path
 
-LINK = re.compile(r"\]\(([^)]+\.md)\)")
+LINK = re.compile(r"\]\(([^)#]+\.md)(?:#[^)]*)?\)")
 
 
 def staged_files(index: Path) -> list[str]:

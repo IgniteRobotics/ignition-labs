@@ -13,6 +13,11 @@
 
 FRC 6829 · Team documentation
 
+## Getting Started
+
+- [Setup](SETUP.md)
+- [Contributing](CONTRIBUTING.md)
+
 ## Programming Curriculum
 
 - [Programming Curriculum](programming/README.md)
