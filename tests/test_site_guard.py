@@ -32,6 +32,15 @@ def test_gradle_and_vendordep_files_are_forbidden(tmp_path):
     assert forbidden_files(site) == ["build.gradle", "gradlew", "vendordeps/Phoenix6.json"]
 
 
+def test_markdown_file_under_projects_is_forbidden(tmp_path):
+    # doc-builder renders every markdown file it finds regardless of
+    # 00-index.md linkage (verified against superpowers/ during Task 3's
+    # investigation) — so anything under projects/, of any extension,
+    # must be caught, not just the FRC source-file suffixes.
+    site = _make_site(tmp_path, ["index.html", "projects/m2-oop/README.md"])
+    assert forbidden_files(site) == ["projects/m2-oop/README.md"]
+
+
 def test_missing_required_page_is_reported(tmp_path):
     site = _make_site(tmp_path, ["index.html"])
     assert missing_pages(site, ["programming/git-workflow"]) == ["programming/git-workflow"]

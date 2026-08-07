@@ -1,0 +1,5 @@
+site_name: Ignite Robotics
+theme:
+  name: material
+docs_dir: _staging
+site_dir: _site

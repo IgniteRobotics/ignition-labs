@@ -1,3 +1,14 @@
+<!--
+  Publication path: staged build (Task 3, step 7).
+  doc-builder renders every markdown file it finds regardless of index
+  linkage (confirmed: unindexed superpowers/ docs leaked into a raw
+  build-from-source run), so this repo does not build straight from the
+  repo root. Task 8's workflow must run, in order:
+    poetry run python tools/stage_site.py
+    doc-builder build --config mkdocs.yml
+    poetry run python tools/site_guard.py ./_site
+-->
+
 # Ignite Robotics Documentation
 
 FRC 6829 · Team documentation
