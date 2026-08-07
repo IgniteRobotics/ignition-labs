@@ -1,0 +1,11 @@
+# Given tests and read-only source require mentor review (spec §12.2 layer 2).
+# Replace @IgniteRobotics/mentors with the real team slug at Task 10.
+
+/projects/*/src/test/                @IgniteRobotics/mentors
+/projects/*/src/main/java/**/plant/   @IgniteRobotics/mentors
+/projects/testouts/                   @IgniteRobotics/mentors
+/tests.lock                           @IgniteRobotics/mentors
+/tools/                               @IgniteRobotics/mentors
+/.github/workflows/                   @IgniteRobotics/mentors
+/programming/teaching-repo-spec.md    @IgniteRobotics/mentors
+/programming/ai-use-standard.md       @IgniteRobotics/mentors
