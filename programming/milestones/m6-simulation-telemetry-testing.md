@@ -93,9 +93,11 @@ public class SensorProfileTest {
 }
 ```
 
+That is a test against the `SensorProfile` **you** wrote in M2 — a good first target precisely because you know what it is supposed to do.
+
 **Note the tolerance argument.** Comparing doubles exactly fails — M1's lesson, arriving in test form.
 
-**What is worth testing.** Pure logic: unit conversions, interpolation, state machine transitions, "is it at setpoint" checks, launch calculations. Ignite's `LaunchCalculator` and `SensorProfile` are near-perfect test targets — real math, no hardware.
+**What is worth testing.** Pure logic: unit conversions, interpolation, state machine transitions, "is it at setpoint" checks, launch calculations. In `Robot-2026`, `statemachines/LaunchCalculator.java` and the two `LaunchRequestBuilder` implementations (`MappedLaunchRequestBuilder`, `ParabolicLaunchRequestBuilder`) are near-perfect targets — real math, no hardware, and not one line of test coverage today.
 
 **What is not worth testing.** Whether CTRE's simulated motor behaves like CTRE says it does. That tests CTRE, not you. A caution from the community that is worth taking seriously: over-relying on simulated-motor behavior in tests can "defeat the purpose" if the test just re-asserts the simulator's own model.
 
@@ -137,7 +139,7 @@ Ignite is starting from zero tests. The goal is not to convert anyone to test-dr
 **Three parts.**
 
 **Part 1 — test a subsystem's logic.**
-1. Pick a subsystem with real logic. `LaunchCalculator` and `SensorProfile` are excellent targets
+1. Pick something with real logic. Your own M2 `SensorProfile` is the easy start; `Robot-2026`'s `LaunchCalculator` or either `LaunchRequestBuilder` implementation is the real one
 2. Write at least three JUnit tests against it
 3. Make them run: `./gradlew test` green locally
 4. **Introduce a deliberate regression** — flip a sign, drop a gear ratio. Watch the test fail

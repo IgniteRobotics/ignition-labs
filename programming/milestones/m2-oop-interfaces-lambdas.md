@@ -170,7 +170,15 @@ Requirements:
 - At least four JUnit tests, including one that would catch an integer-division bug
 - One method takes a `DoubleSupplier` rather than a `double`, and you can explain why that would be useful
 
-**Then read the real one.** Ignite already has `SensorProfile` in `2025-Robotics-Intro`. Compare. Where it differs from yours, work out why — some differences are improvements you missed and some are choices you would make differently, and telling those apart is the actual exercise.
+**Then read real Ignite code.** Open `Robot-2026/src/main/java/frc/robot/preferences/`. Five files, and between them they use every concept in this milestone:
+
+```java
+public abstract class RobotPreference<T> implements Supplier<T> {
+```
+
+Work through it in this order. Find the four concrete subclasses. Work out what the `<T>` buys you — why is this one generic class and not four unrelated ones? Then answer the question that matters: because `RobotPreference<T>` implements `Supplier<T>`, a tunable preference can be handed to a command **the same way a joystick axis can**. That is the supplier idea from the section above, in production code, and it is why M3 will make sense.
+
+Compare it to what you just built. Your conversion class holds a value; a preference supplies one on demand. Being able to say why that difference matters is the exercise.
 
 ## Definition of done
 
@@ -180,7 +188,7 @@ Requirements:
 - [ ] You can read `Robot-2026`'s `LaunchState.getInstance()` and explain what a singleton guarantees
 - [ ] You can explain why the shooter's two launch-request builders both implement one interface
 - [ ] You wrote at least one lambda and can say what its type is
-- [ ] You compared your `SensorProfile` to Ignite's and can name one real difference
+- [ ] You read `Robot-2026/.../preferences/` and can explain why `RobotPreference<T>` implements `Supplier<T>`
 
 ## Common failure modes
 
@@ -208,7 +216,7 @@ This is the last Red milestone. M3 moves to Yellow.
 
 See `resources.md` for the full library. For this milestone:
 
-- **Ignite:** `2025-Robotics-Intro/.../robotbase/calc/SensorProfile.java` — the reference implementation for the project
+- **Ignite:** `Robot-2026/.../preferences/` — an abstract generic class, four subclasses, and `Supplier<T>` doing real work. The single best file set in the codebase for this milestone
 - **Ignite:** `Robot-2026/.../statemachines/LaunchState.java` — the singleton you will meet on day one
 - **Ignite:** `Robot-2026/.../subsystems/shooter/LaunchRequestBuilder.java` and its two implementations — interfaces doing real work
 - **Ignite:** `Robot-2026/.../RobotContainer.java` — read it once now. Most of it will not make sense yet. Find the lambdas

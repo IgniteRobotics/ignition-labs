@@ -22,14 +22,14 @@ The spine of the curriculum. When WPILib's docs and a peer team's tutorial disag
 | [Git Version Control Introduction](https://docs.wpilib.org/en/stable/docs/software/basic-programming/git-getting-started.html) | Deliberately introductory git walkthrough. Also warns not to hand-edit the generated `.gitignore` | M0 |
 | [Robot Code CI with GitHub Actions](https://docs.wpilib.org/en/stable/docs/software/advanced-gradlerio/robot-code-ci.html) | Why the build runs on every PR and what it checks | M0 |
 | [Command-Based Programming index](https://docs.wpilib.org/en/stable/docs/software/commandbased/index.html) | Landing page for the whole command-based section | M3 |
-| [What Is Command-Based Programming?](https://docs.wpilib.org/en/stable/docs/software/commandbased/commands-v2/what-is-command-based.html) | The conceptual "why" — read before any of the mechanics | M3 |
-| [Commands](https://docs.wpilib.org/en/stable/docs/software/commandbased/commands-v2/commands.html) | `initialize` / `execute` / `end` / `isFinished`, and both authoring idioms | M3 |
-| [Subsystems](https://docs.wpilib.org/en/stable/docs/software/commandbased/commands-v2/subsystems.html) | Why a subsystem owns hardware and what "requirements" mean | M3 |
-| [Command Compositions](https://docs.wpilib.org/en/stable/docs/software/commandbased/commands-v2/command-compositions.html) | Sequential, parallel, race, and the decorators like `.withTimeout()` | M3 |
-| [Binding Commands to Triggers](https://docs.wpilib.org/en/stable/docs/software/commandbased/commands-v2/binding-commands-to-triggers.html) | `CommandXboxController` and the trigger API Ignite's real code uses | M3 |
-| [The Command Scheduler](https://docs.wpilib.org/en/stable/docs/software/commandbased/commands-v2/command-scheduler.html) | What actually runs your commands, and how interruption works | M3 |
-| [Structuring a Command-Based Robot Project](https://docs.wpilib.org/en/stable/docs/software/commandbased/commands-v2/structuring-command-based-project.html) | Thin `Robot.java`, declarative `RobotContainer`, subsystems as private fields | M3 |
-| [Organizing Command-Based Projects](https://docs.wpilib.org/en/stable/docs/software/commandbased/commands-v2/organizing-command-based.html) | WPILib's own take on factory methods vs. subclasses, and the named anti-patterns | M3 |
+| [What Is Command-Based Programming?](https://docs.wpilib.org/en/stable/docs/software/commandbased/what-is-command-based.html) | The conceptual "why" — read before any of the mechanics | M3 |
+| [Commands](https://docs.wpilib.org/en/stable/docs/software/commandbased/commands.html) | `initialize` / `execute` / `end` / `isFinished`, and both authoring idioms | M3 |
+| [Subsystems](https://docs.wpilib.org/en/stable/docs/software/commandbased/subsystems.html) | Why a subsystem owns hardware and what "requirements" mean | M3 |
+| [Command Compositions](https://docs.wpilib.org/en/stable/docs/software/commandbased/command-compositions.html) | Sequential, parallel, race, and the decorators like `.withTimeout()` | M3 |
+| [Binding Commands to Triggers](https://docs.wpilib.org/en/stable/docs/software/commandbased/binding-commands-to-triggers.html) | `CommandXboxController` and the trigger API Ignite's real code uses | M3 |
+| [The Command Scheduler](https://docs.wpilib.org/en/stable/docs/software/commandbased/command-scheduler.html) | What actually runs your commands, and how interruption works | M3 |
+| [Structuring a Command-Based Robot Project](https://docs.wpilib.org/en/stable/docs/software/commandbased/structuring-command-based-project.html) | Thin `Robot.java`, declarative `RobotContainer`, subsystems as private fields | M3 |
+| [Organizing Command-Based Projects](https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html) | WPILib's own take on factory methods vs. subclasses, and the named anti-patterns | M3 |
 | [Introduction to PID](https://docs.wpilib.org/en/stable/docs/software/advanced-controls/introduction/introduction-to-pid.html) | P as a software spring, D as a damper, and why WPILib says the I term is "generally not recommended for FRC use" | M4 |
 | [Feedforward Control](https://docs.wpilib.org/en/stable/docs/software/advanced-controls/controllers/feedforward.html) | kS / kV / kA / kG and the three feedforward classes. States plainly that accurate feedforward matters more than feedback | M4 |
 | [System Identification (SysId)](https://docs.wpilib.org/en/stable/docs/software/advanced-controls/system-identification/index.html) | Characterizing a mechanism instead of guessing gains | M4 |
@@ -39,7 +39,7 @@ The spine of the curriculum. When WPILib's docs and a peer team's tutorial disag
 | [Unit Testing](https://docs.wpilib.org/en/stable/docs/software/wpilib-tools/robot-simulation/unit-testing.html) | JUnit 5 is already available in every WPILib Java project. Also covers the `AutoCloseable` teardown pattern | M6 |
 | [Robot Telemetry with Annotations (Epilogue)](https://docs.wpilib.org/en/stable/docs/software/telemetry/robot-telemetry-with-annotations.html) | `@Logged` and `Importance` — the telemetry framework Ignite already runs in production | M6 |
 
-> **Path note.** WPILib moved the command-based pages under a `commands-v2/` subdirectory. Older links that omit it — including several in the team wiki's research files — now 404. The URLs above are the current ones, confirmed against the `wpilibsuite/frc-docs` source tree on 2026-08-05.
+> **Path note.** WPILib has since removed the `commands-v2/` subdirectory it previously used for the command-based pages. Links that still include it — including the ones previously listed here — now 404. The URLs above omit `commands-v2/` and are the current ones, confirmed live against `docs.wpilib.org` on 2026-08-07.
 
 ---
 
@@ -173,7 +173,11 @@ Internal references. Paths are relative to `~/workspace/ignite/`. These are not 
 | `Robot-2026/build.gradle` | JUnit 5 is configured and entirely unused. The M6 starting point | M6 |
 | `Robot-2026/.github/workflows/pr-build-check.yml` | The CI students' PRs must pass — build plus `spotlessCheck` | M0 |
 | `Robot-2026/.github/prompts/code-review-prompt.md` | Ignite's coding standards. Currently only a bot reads them | M3–M7 |
-| `2025-Robotics-Intro/.../robotbase/calc/SensorProfile.java` | The unit-conversion class M2's project mirrors | M2 |
+| `Robot-2026/src/main/java/frc/robot/preferences/` | `RobotPreference<T>` — an abstract generic class implementing `Supplier<T>`, with four concrete subclasses. Generics, abstraction, inheritance, and the supplier idea in five short files | M2 |
+| `Robot-2026/src/main/java/frc/robot/Constants.java` and `.../intake/IntakeConstants.java` | `static final` in production — and three different naming conventions across two files, none of them written down | M1 |
+| `Phoenix-2026/` (whole repo) | **The reading-scale 2026 codebase.** 22 Java files on WPILib 2026.2.1 + Phoenix 6 + PathPlanner + photonlib, with both CI workflows. Same stack as the competition robot, half the size. Read end to end in M3 | M3 |
+| `Phoenix-2026/src/main/java/frc/robot/commands/DriveToPose.java` | The explicit `Command` subclass idiom on the 2026 toolchain. `Robot-2026` contains no `extends Command` at all, so this is the only place in current Ignite code to see it | M3 |
+| `Phoenix-2026/build.gradle` | Spotless pinned to 6.25.0 while `Robot-2026` is on 8.2.1. A real, small, safe version-drift fix on team code | M0 (stretch) |
 | `docs/VISION_GUIDE.md` | PhotonVision setup for the team's actual camera hardware | M5 |
 | `docs/vision-subsystem.md` | The multi-camera pose fusion pipeline in prose | M5 |
 | `docs/field-boundary-speed-limiting.md` | An already-written, already-assignable student design project | M4 (stretch) |

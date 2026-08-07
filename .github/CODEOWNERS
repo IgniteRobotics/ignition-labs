@@ -1,0 +1,15 @@
+# Given tests and read-only source require mentor review (spec §12.2 layer 2).
+#
+# @IgniteRobotics/mentors must be created by the repository owner before this
+# file has any effect. GitHub silently ignores CODEOWNERS entries that name a
+# team which does not exist — there is no error, no warning, just no review
+# requirement. Create the team first.
+
+/projects/*/src/test/                @IgniteRobotics/mentors
+/projects/*/src/main/java/**/plant/   @IgniteRobotics/mentors
+/projects/testouts/                   @IgniteRobotics/mentors
+/tests.lock                           @IgniteRobotics/mentors
+/tools/                               @IgniteRobotics/mentors
+/.github/workflows/                   @IgniteRobotics/mentors
+/programming/teaching-repo-spec.md    @IgniteRobotics/mentors
+/programming/ai-use-standard.md       @IgniteRobotics/mentors
