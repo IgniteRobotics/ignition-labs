@@ -683,7 +683,7 @@ Order matters: bump first, then re-pin, then cross-check. A cross-check against 
 
 | Item | Status |
 |---|---|
-| Does `./gradlew build` run tests under GradleRIO's `configureTestTasks`? | **Near-certain yes** — standard Gradle `build → check → test` wiring. Verified empirically at build step 0. Determines whether three curriculum documents need the §7.3 correction |
+| Does `./gradlew build` run tests under GradleRIO's `configureTestTasks`? | **Resolved: yes.** Empirically verified with a fail-loudly probe test on a Phoenix-2026 copy (GradleRIO 2026.2.1, wrapper 8.11, JUnit 5.10.1) — `./gradlew build` and `./gradlew test` both failed identically on the probe assertion. See [`superpowers/notes/2026-08-07-gradle-test-lifecycle.md`](../superpowers/notes/2026-08-07-gradle-test-lifecycle.md). No §7.3 correction needed |
 | Who maintains `FEATURE-BACKLOG.md` and `UNTESTED-TARGETS.md` in-season? | **Unassigned.** M7 and M6 both depend on it. See §16 |
 | Should `templates/` live here or stay inline in `student-deliverables.md`? | Proposed: **both** — the prose stays for reading, the files exist for copying. Duplication risk is real; a CI check that the two match would resolve it |
 | Is one worked-example test enough scaffolding for M6? | **Genuinely uncertain.** L0 is the sharpest drop on the fade curve and M6 has no test-out, so every student hits it at full density — now with a real pull request attached. Watch the first cohort; if they stall, the fix is a second worked example, not a lower bar |
