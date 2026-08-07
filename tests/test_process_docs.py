@@ -76,3 +76,28 @@ def test_states_the_pure_logic_hard_rule(ladder):
 def test_no_reference_to_pre_2026_ignite_code(ladder):
     for stale in ("Robot-2025", "Robot-2024", "Robot-2023", "2025-Robotics-Intro"):
         assert stale not in ladder
+
+
+SETUP = REPO / "SETUP.md"
+CONTRIBUTING = REPO / "CONTRIBUTING.md"
+
+
+def test_setup_documents_enabling_actions_on_a_fork():
+    text = SETUP.read_text(encoding="utf-8")
+    assert "I understand my workflows" in text
+
+
+def test_setup_pins_the_toolchain_versions():
+    text = SETUP.read_text(encoding="utf-8")
+    for version in ("2026", "17"):
+        assert version in text
+
+
+def test_contributing_states_the_pure_logic_rule():
+    text = CONTRIBUTING.read_text(encoding="utf-8")
+    assert "No timing, no simulation, no hardware." in text
+
+
+def test_contributing_links_the_git_workflow():
+    text = CONTRIBUTING.read_text(encoding="utf-8")
+    assert "programming/git-workflow.md" in text
