@@ -150,7 +150,7 @@ Everything outside `docs/` is unpublishable in the structural sense D7 and D10 d
 
 Each `projects/mN/` carries its own `gradlew`, its own `settings.gradle`, and its own `vendordeps/`. There is no root aggregation and no root `build.gradle`.
 
-This was originally the *fallback* to a multi-project GradleRIO build, and that build was flagged as the spec's one load-bearing technical unknown, to be spiked before anything else. **D1 obviates the spike.** The repository root is a documentation site, not a Gradle project, so there is no root to aggregate from — standalone-per-milestone is the only available shape. The risk is gone rather than mitigated.
+This was originally the *fallback* to a multi-project GradleRIO build, and that build was flagged as the spec's one load-bearing technical unknown, to be spiked before anything else. **D1 obviates the spike.** The repository root is not a Gradle project — it builds a documentation site from `docs/`, and sits alongside `projects/`, `tools/`, and `tests/` as siblings, with no `build.gradle` of its own to aggregate from. Standalone-per-milestone is the only available shape. The risk is gone rather than mitigated.
 
 It is also the better shape on its own merits. GradleRIO is designed for single-project builds; every WPILib example and every peer team repository surveyed is one Gradle project at its root. Students open the milestone directory as their VS Code workspace and the WPILib extension behaves exactly as it expects — including the "Simulate Robot Code" button, which a multi-project build would have broken by assuming a root project.
 
