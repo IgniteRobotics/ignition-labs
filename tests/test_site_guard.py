@@ -41,6 +41,25 @@ def test_markdown_file_under_projects_is_forbidden(tmp_path):
     assert forbidden_files(site) == ["projects/m2-oop/README.md"]
 
 
+def test_markdown_derived_page_under_projects_is_forbidden(tmp_path):
+    # The realistic shape of the leak: doc-builder converts a stray
+    # projects/**/README.md into an .html page in the built site (verified
+    # via the probe: projects/m-probe/README.md -> projects/m-probe/index.html).
+    site = _make_site(tmp_path, ["index.html", "projects/m2-oop/index.html"])
+    assert forbidden_files(site) == ["projects/m2-oop/index.html"]
+
+
+def test_superpowers_path_in_site_is_forbidden(tmp_path):
+    # doc-builder renders every markdown file it finds regardless of
+    # 00-index.md linkage — superpowers/ (agent notes, plans, specs) leaked
+    # into a raw build-from-source run even though nothing links it. The
+    # guard must catch this on any build path, not just the staged one.
+    site = _make_site(
+        tmp_path, ["index.html", "superpowers/specs/whatever.html"]
+    )
+    assert forbidden_files(site) == ["superpowers/specs/whatever.html"]
+
+
 def test_missing_required_page_is_reported(tmp_path):
     site = _make_site(tmp_path, ["index.html"])
     assert missing_pages(site, ["programming/git-workflow"]) == ["programming/git-workflow"]
