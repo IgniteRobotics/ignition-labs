@@ -69,19 +69,21 @@ The metacognitive half of that finding is already satisfied by the curriculum's 
 
 ## 3. Decisions
 
-Nine decisions, all made, recorded with reasoning so they can be argued with rather than rediscovered.
+Eleven decisions, all made, recorded with reasoning so they can be argued with rather than rediscovered.
 
 | # | Decision | Reasoning |
 |---|---|---|
-| **D1** | **Skeletons live in this repository**, at `projects/m0-onboarding/` … `projects/m8-ownership/` and `projects/testouts/`, beside the prose that describes them | One clone gets a student the curriculum and the code. CI can verify the docs against the code they describe — the drift failure mode `curriculum-spec.md` §1.2 exists to prevent. One seasonal re-verification surface, not two. A separate `ignite-training` repo was the original proposal and was rejected: it reintroduces exactly the sync problem it was meant to avoid. Accepted cost: a student forking to do M1 also forks every mentor-facing document, which is harmless — those documents are public, and the README already sends students to them |
+| **D1** | **Skeletons live in this repository**, at `projects/m0-onboarding/` … `projects/m8-ownership/` and `projects/testouts/`, a sibling of `docs/` rather than of `programming/` | One clone gets a student the curriculum and the code. CI can verify the docs against the code they describe — the drift failure mode `curriculum-spec.md` §1.2 exists to prevent. One seasonal re-verification surface, not two. A separate `ignite-training` repo was the original proposal and was rejected: it reintroduces exactly the sync problem it was meant to avoid. Accepted cost: a student forking to do M1 also forks every mentor-facing document, which is harmless — those documents are public, and the README already sends students to them |
 | **D2** | **Fork this repository once at M0. Branch per milestone. Pull request into your own fork.** Upstream receives exactly one student PR, ever | Mentor review and CI happen on the student's fork; the canonical repository never accumulates thirty students' solutions, and no cohort can read the previous cohort's answers. The single upstream PR is M0's contributor file, because shipping a real PR past CI **is** M0's stated learning objective. GitHub Classroom's autograding is genuinely better verification, but it is a roster-linked tracking system, and `curriculum-spec.md` §8 excluded tracking systems after a peer resource drew real criticism for collecting student names and emails with no deletion path. Reversing that needs a privacy review, not a convenience argument. Full mechanics in §5 |
 | **D3** | **Tests enforce the mechanical Definition-of-Done items only** | A JUnit assertion can prove a deadband function clamps correctly. It cannot prove a student can explain why `1/2` is `0`. Wiring CI to "check" the explanation items would produce a green check that means less than the mentor conversation it replaced. The test suite is the floor; the mentor conversation remains the ceiling. Every milestone's DoD is split explicitly in §9 |
 | **D4** | **Local WPILib toolchain only. No devcontainer, no Codespaces** | Installing the toolchain and getting `./gradlew build` green **is** M0's stated learning objective. A devcontainer lets a student skip the thing M0 exists to teach. Revisit only if a real student is genuinely blocked by a locked-down machine — at which point it is a one-off accommodation, not a shipped artifact |
 | **D5** | **Shared milestone skeletons + per-track test-out fixtures** | The curriculum is "one spine, four entry points" — tracks differ by *where you get on*, not what you learn. Per-track skeleton variants would be up to 36 artifacts duplicating the same content four ways, which is exactly the drift `curriculum-spec.md` §2 rejected. The track axis surfaces where it actually exists: the test-out fixtures, which are the load-bearing mechanism for Tracks B, C, and D |
 | **D6** | **Reference solutions live in a separate private repository** | `ignite-training-solutions`, mentor-access only. A `solutions/` directory in the student repo relies on honor, and Red-tier students under time pressure are precisely the population that will look. Accepted cost: two repos to keep in sync, mitigated by the cross-check CI in §11.2 |
-| **D7** | **This repository publishes to GitHub Pages via `doc-builder`**, staged from `00-index.md` | The curriculum is a document set that students read on a phone in the shop, not a folder they browse on github.com. `doc-builder` is the team's own tool (`IgniteRobotics/doc-builder`, v2.0.0, MkDocs + Material) and dogfooding it is how it stays alive. `doc-builder` ignores non-markdown files outright but renders every markdown file it finds regardless of index linkage, so publication scope is enforced by `tools/stage_site.py` copying only index-linked prose into `_staging/`, checked by `tools/site_guard.py` |
+| **D7** | **This repository publishes to GitHub Pages via MkDocs Material**, built directly from an explicit `nav:` in `mkdocs.yml` | The curriculum is a document set that students read on a phone in the shop, not a folder they browse on github.com. Prose lives in `docs/`, which is `docs_dir` (D10) — MkDocs can read nothing outside it, so `projects/` and `superpowers/` are not excluded from publication, they are invisible to the builder. That is a boundary, not a rule: the old staging-script approach could be forgotten or skipped on some future change; a boundary can't be. `tools/site_guard.py` still verifies the result — every required page rendered, nothing forbidden leaked through — because a boundary proves what the builder can't see, not what actually got published |
 | **D8** | **A four-level real-repo contact ladder: browse → clone → fork+PR → branch on upstream**, with the fork/branch boundary set at the Kickoff Readiness Gate | The curriculum already withholds commit access to `Robot-2026` until M0–M3 clear, which means everything before that point is fork-and-PR by definition. Making the git ritual and the commit-access policy the same boundary is what makes the Gate legible to a student rather than arbitrary. Full matrix in §6 |
 | **D9** | **M6's deliverable is a real pull request** adding `src/test` to `Robot-2026`, not a sandbox exercise | The sandbox version was a `Robot-2026` lookalike, chosen so the exercise would not depend on a second repository building. Defensible, but it is a copy — and M6's own prose names `LaunchCalculator` as "the best test target in the codebase" while the repository has zero tests across three seasons. The sandbox project remains as the warm-up; the real PR is the DoD item, and it leaves the team something it keeps. Consequences and the hard rule this forces are in §6.5 |
+| **D10** | **Prose lives in `docs/`, not at the repository root** | Forced, not chosen. MkDocs rejects `docs_dir: .` outright: *"The 'docs_dir' should not be the parent directory of the config file. Use a child directory instead."* Nesting prose one level down is the only configuration MkDocs will build, and it is also what makes D7's boundary property hold — the builder needs a directory it structurally cannot see past, and the repository root isn't one |
+| **D11** | **The repository is `IgniteRobotics/ignition-labs`**, not `IgniteRobotics/docs` | Once prose moved into a `docs/` subdirectory (D10), a repository also named `docs` made every path ambiguous between "the repository" and "the folder inside it." `ignition-labs` names the product rather than a directory, and matches `site_name` in `mkdocs.yml` |
 
 ---
 
@@ -90,28 +92,31 @@ Nine decisions, all made, recorded with reasoning so they can be argued with rat
 ### 4.1 Layout
 
 ```
-docs/                            IgniteRobotics/ignition-labs — published to GitHub Pages
-├── 00-index.md                  site nav — lists ONLY prose
-├── VISION_GUIDE.md              ┐
-├── vision-subsystem.md          │ rendered
-├── field-boundary-speed-limiting.md
-├── programming/
-│   ├── README.md                │
-│   ├── curriculum-spec.md       │
-│   ├── teaching-repo-spec.md    │ rendered
-│   ├── ai-use-standard.md       │
-│   ├── student-deliverables.md  │
-│   ├── resources.md             │
-│   ├── git-workflow.md          ← the §5 ritual, student-facing
-│   ├── robot-repo-ladder.md     ← the §6 matrix, student-facing
-│   ├── UNTESTED-TARGETS.md      ← mentor-maintained M6 queue (§6.5)
-│   ├── milestones/m0…m8.md      │ rendered
-│   └── tracks/                  ┘
-├── projects/                    ← NOT in nav, never rendered
-│   ├── m0-onboarding/           each is a STANDALONE Gradle project:
-│   ├── m1-java-fundamentals/    own gradlew, own settings.gradle,
-│   ├── m2-oop/                  own vendordeps/, no root aggregation
-│   ├── m3-command-based/
+ignition-labs/                   IgniteRobotics/ignition-labs — the repository
+├── docs/                        docs_dir — the ONLY directory MkDocs can read from
+│   ├── index.md                 ┐
+│   ├── SETUP.md                 │ rendered — toolchain install, verified per OS
+│   ├── CONTRIBUTING.md          │ rendered — fork → branch → PR → review ritual
+│   ├── VISION_GUIDE.md          │
+│   ├── vision-subsystem.md      │ rendered
+│   ├── field-boundary-speed-limiting.md
+│   └── programming/             ┘
+│       ├── README.md            │
+│       ├── curriculum-spec.md   │
+│       ├── teaching-repo-spec.md│ rendered
+│       ├── ai-use-standard.md   │
+│       ├── student-deliverables.md
+│       ├── resources.md         │
+│       ├── git-workflow.md      ← the §5 ritual, student-facing
+│       ├── robot-repo-ladder.md ← the §6 matrix, student-facing
+│       ├── UNTESTED-TARGETS.md  ← mentor-maintained M6 queue (§6.5)
+│       ├── milestones/m0…m8.md  │ rendered
+│       └── tracks/              ┘
+├── projects/                    a sibling of docs/, not inside it — unpublishable,
+│   ├── m0-onboarding/           because MkDocs cannot read outside docs_dir at all.
+│   ├── m1-java-fundamentals/    each is a STANDALONE Gradle project: own gradlew,
+│   ├── m2-oop/                  own settings.gradle, own vendordeps/, no root
+│   ├── m3-command-based/        aggregation
 │   ├── m4-control/
 │   ├── m5-auto-vision/
 │   ├── m6-testing/
@@ -123,20 +128,23 @@ docs/                            IgniteRobotics/ignition-labs — published to G
 │       ├── t3-scheduler-conflict/
 │       ├── t4-bad-kv/
 │       └── t5-drifting-auto/
-├── templates/                   M8 deliverables as real copyable files
+├── templates/                   M8 deliverables as real copyable files — unpublishable, same reason
 │   ├── SUBSYSTEM-README.md
 │   ├── TUNING-LOG.md
 │   └── PIT-DOC.md
-├── contributors/                M0 output, one file per student handle
-├── superpowers/specs/           design records
+├── contributors/                M0 output, one file per student handle — unpublishable, same reason
+├── tools/                       verification scripts the CI workflows call, incl. site_guard.py
+├── tests/                       tests for tools/
+├── superpowers/specs/           design records — unpublishable, same reason
 ├── tests.lock                   SHA-256 manifest of every given test file
-├── CONTRIBUTING.md              the fork → branch → PR → review ritual
-├── SETUP.md                     toolchain install, verified per OS
+├── mkdocs.yml                   docs_dir: docs, pinned MkDocs Material, explicit nav: — §7.1
 └── .github/
     ├── workflows/               four workflows — §7.2
     ├── PULL_REQUEST_TEMPLATE.md includes the AI-use disclosure block
     └── CODEOWNERS               given test files require mentor review
 ```
+
+Everything outside `docs/` is unpublishable in the structural sense D7 and D10 describe: not filtered, excluded, or ignored by convention, but outside the one directory the builder is configured to read.
 
 ### 4.2 Standalone projects, no Gradle root
 
@@ -187,12 +195,12 @@ This repository is the only thing a student forks at M0, because it is the only 
 ### 5.2 M0 — the one upstream pull request
 
 ```
-fork IgniteRobotics/ignition-labs  →  jsmith/docs
-git clone git@github.com:jsmith/docs.git
+fork IgniteRobotics/ignition-labs  →  jsmith/ignition-labs
+git clone git@github.com:jsmith/ignition-labs.git
 git remote add upstream git@github.com:IgniteRobotics/ignition-labs.git
 git checkout -b add-jsmith-contributor
     …create contributors/jsmith.md, run spotlessApply on FormatMe.java…
-PR: jsmith/docs:add-jsmith-contributor → IgniteRobotics/ignition-labs:main
+PR: jsmith/ignition-labs:add-jsmith-contributor → IgniteRobotics/ignition-labs:main
 ```
 
 Merged by a mentor. This is the only student pull request the canonical repository ever receives, and shipping it *is* M0's stated learning objective.
@@ -205,7 +213,7 @@ Merged by a mentor. This is the only student pull request the canonical reposito
 git fetch upstream && git merge upstream/main      ← also the merge command M0 teaches
 git checkout -b m3-command-based
     …work in projects/m3-command-based/…
-PR: jsmith/docs:m3-command-based → jsmith/docs:main
+PR: jsmith/ignition-labs:m3-command-based → jsmith/ignition-labs:main
 ```
 
 CI runs on the fork. A mentor reviews on the fork. Upstream never sees a student solution. Skeleton updates arrive through `fetch upstream` — the same command M0 already teaches, now doing real work.
@@ -237,7 +245,7 @@ The git ritual and the commit-access policy are the same boundary. That is not a
 
 | | Sandbox project | Git ritual | Real repo | Contact |
 |---|---|---|---|---|
-| **M0** | `projects/m0-onboarding/` | fork `docs` → branch → **PR upstream** | — | none |
+| **M0** | `projects/m0-onboarding/` | fork `ignition-labs` → branch → **PR upstream** | — | none |
 | **M1** | `m1-java-fundamentals/` | branch → PR into own fork | Robot-2026 | **browse** on github.com — `IntakeConstants.java`, `Constants.java` |
 | **M2** | `m2-oop/` | branch → PR into own fork | Robot-2026 | **clone** — first real clone. `preferences/`, `LaunchState`, `LaunchRequestBuilder` |
 | **M3** | `m3-command-based/` | branch → PR into own fork | Phoenix-2026, Robot-2026 | **clone** — Phoenix end to end, then `RobotContainer` |
@@ -301,9 +309,9 @@ The refactor itself may stay optional. But **"you have opened one pull request a
 
 ### 7.1 GitHub Pages
 
-Built with **`doc-builder`** (`IgniteRobotics/doc-builder`, v2.0.0 — MkDocs + Material, installable CLI, last updated 2026-03-20), per D7.
+Built with **MkDocs Material** (`mkdocs` 1.6.1, `mkdocs-material` 9.7.7, pinned in `pyproject.toml`'s `docs` dependency group), per D7 and D10.
 
-`doc-builder` ignores non-markdown files outright, so Java, Gradle, and vendordep files under `projects/` are never candidates for publication — but it renders every markdown file it finds regardless of `00-index.md` linkage, so `tools/stage_site.py` copies only index-linked prose into `_staging/` before the build, and `tools/site_guard.py` verifies the result.
+`docs_dir: docs` in `mkdocs.yml` is what makes publication scope structural rather than enforced. MkDocs reads nothing outside `docs_dir`, so Java, Gradle, and vendordep files under `projects/`, and the design records under `superpowers/`, are never candidates for publication — not because anything filters them out, but because the builder cannot see them. Every published page is also named explicitly in `mkdocs.yml`'s `nav:` rather than discovered by scanning for markdown files, so a stray file dropped into `docs/` renders but stays out of navigation until someone adds it. `tools/site_guard.py` still verifies the result — every required page rendered, nothing forbidden leaked through — because a structural boundary proves what the builder can't reach, not what a particular build actually produced.
 
 > **Prerequisite.** `IgniteRobotics/ignition-labs` had **no git remote configured** as of 2026-08-07. Creating it blocks every workflow below.
 
@@ -313,7 +321,7 @@ This distinction matters and is easy to get wrong.
 
 | Workflow | Runs where | Trigger | Does |
 |---|---|---|---|
-| `pages.yml` | canonical only | push `main`, `paths: ['**.md', '00-index.md']` | `doc-builder` → deploy Pages |
+| `pages.yml` | canonical only | push `main`, `paths: ['docs/**', 'mkdocs.yml', 'tools/site_guard.py', 'pyproject.toml', '.github/workflows/pages.yml']` | `mkdocs build` → `site_guard.py` → deploy Pages |
 | `skeleton-integrity.yml` | canonical only | PR touching `projects/**` | `assemble` + `spotlessCheck` + `tests.lock` + inverted check |
 | `student-check.yml` | **student forks** | `pull_request` | `build` + `spotlessCheck` + `tests.lock`, changed milestone only |
 | `docs-links.yml` | canonical only | weekly + PR on `**.md` | link check |
@@ -672,6 +680,7 @@ Each season, before the fall:
 3. Re-run the solutions cross-check
 4. Re-generate T4's plot and T5's logs if the sim stack changed
 5. Refresh `UNTESTED-TARGETS.md` against the new season's repository
+6. Bump and re-pin `mkdocs` and `mkdocs-material` in `pyproject.toml`. Material's own build already warns that MkDocs 2.0 removes the plugin system entirely and ships no migration path — treat that warning as live every season it appears, not a one-time notice, and require a full `mkdocs build` plus a passing `tools/site_guard.py` before merging the bump. A version number that resolves is not the same thing as a site that still builds
 
 Order matters: bump first, then re-pin, then cross-check. A cross-check against an un-bumped skeleton proves nothing useful.
 
@@ -705,8 +714,10 @@ Checked directly against `~/workspace/ignite/` on the dates shown.
 | `Phoenix-2026` Java files | 22 | 2026-08-07 |
 | `Phoenix-2026` `src/test` | **absent** | 2026-08-07 |
 | `Phoenix-2026` activity | 0 commits in 90 days; last 2026-02-10 | 2026-08-07 |
-| `doc-builder` | v2.0.0, MkDocs + Material, `IgniteRobotics/doc-builder`, last 2026-03-20 | 2026-08-07 |
-| `docs` git remote | **none configured** | 2026-08-07 |
+| `mkdocs` with `docs_dir: .` | **rejected outright** — `The 'docs_dir' should not be the parent directory of the config file. Use a child directory instead.` No build produced | 2026-08-07 |
+| `mkdocs` (1.6.1) with `docs_dir: docs`, probe files under `projects/m-probe/` | **zero** matching files in the built site. Verified independently twice | 2026-08-07 |
+| `docs/programming/README.md` | publishes to the slug `programming` (`_site/programming/index.html`) — `tools/site_guard.py`'s `REQUIRED_PAGES` needed no edit | 2026-08-07 |
+| `ignition-labs` git remote | **none configured** | 2026-08-07 |
 | Build tooling versions, vendordep set, `pr-build-check.yml` contents | §4.3 | 2026-08-06 |
 
 ---
