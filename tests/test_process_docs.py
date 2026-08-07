@@ -10,7 +10,7 @@ from pathlib import Path
 import pytest
 
 REPO = Path(__file__).resolve().parents[1]
-GIT_WORKFLOW = REPO / "programming" / "git-workflow.md"
+GIT_WORKFLOW = REPO / "docs" / "programming" / "git-workflow.md"
 
 
 @pytest.fixture(scope="module")
@@ -47,7 +47,7 @@ def test_later_milestones_pull_request_into_own_fork(git_workflow):
     assert "into your own fork" in git_workflow
 
 
-LADDER = REPO / "programming" / "robot-repo-ladder.md"
+LADDER = REPO / "docs" / "programming" / "robot-repo-ladder.md"
 
 
 @pytest.fixture(scope="module")
@@ -78,8 +78,8 @@ def test_no_reference_to_pre_2026_ignite_code(ladder):
         assert stale not in ladder
 
 
-SETUP = REPO / "SETUP.md"
-CONTRIBUTING = REPO / "CONTRIBUTING.md"
+SETUP = REPO / "docs" / "SETUP.md"
+CONTRIBUTING = REPO / "docs" / "CONTRIBUTING.md"
 
 
 def test_setup_documents_enabling_actions_on_a_fork():
