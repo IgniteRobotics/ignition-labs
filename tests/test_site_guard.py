@@ -1,0 +1,42 @@
+"""The site guard enforces spec §14: every prose file renders, zero files from projects/."""
+
+from pathlib import Path
+
+from tools.site_guard import forbidden_files, missing_pages
+
+
+def _make_site(tmp_path: Path, files: list[str]) -> Path:
+    site = tmp_path / "_site"
+    for rel in files:
+        target = site / rel
+        target.parent.mkdir(parents=True, exist_ok=True)
+        target.write_text("x", encoding="utf-8")
+    return site
+
+
+def test_clean_site_has_no_forbidden_files(tmp_path):
+    site = _make_site(tmp_path, ["index.html", "programming/index.html"])
+    assert forbidden_files(site) == []
+
+
+def test_java_source_in_site_is_forbidden(tmp_path):
+    site = _make_site(tmp_path, ["index.html", "projects/m1/Deadband.java"])
+    assert forbidden_files(site) == ["projects/m1/Deadband.java"]
+
+
+def test_gradle_and_vendordep_files_are_forbidden(tmp_path):
+    site = _make_site(
+        tmp_path,
+        ["build.gradle", "gradlew", "vendordeps/Phoenix6.json", "index.html"],
+    )
+    assert forbidden_files(site) == ["build.gradle", "gradlew", "vendordeps/Phoenix6.json"]
+
+
+def test_missing_required_page_is_reported(tmp_path):
+    site = _make_site(tmp_path, ["index.html"])
+    assert missing_pages(site, ["programming/git-workflow"]) == ["programming/git-workflow"]
+
+
+def test_present_required_page_is_not_reported(tmp_path):
+    site = _make_site(tmp_path, ["programming/git-workflow/index.html"])
+    assert missing_pages(site, ["programming/git-workflow"]) == []
