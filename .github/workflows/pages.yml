@@ -22,7 +22,7 @@ concurrency:
 
 jobs:
   build:
-    if: github.repository == 'IgniteRobotics/docs'
+    if: github.repository == 'IgniteRobotics/ignition-labs'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -49,7 +49,7 @@ jobs:
 
   deploy:
     needs: build
-    if: github.repository == 'IgniteRobotics/docs'
+    if: github.repository == 'IgniteRobotics/ignition-labs'
     runs-on: ubuntu-latest
     environment:
       name: github-pages

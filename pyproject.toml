@@ -1,7 +1,7 @@
 [tool.poetry]
-name = "ignite-docs-tools"
+name = "ignition-labs-tools"
 version = "0.1.0"
-description = "Verification tooling for the Ignite Robotics teaching repository"
+description = "Verification tooling for the Ignition Labs teaching repository"
 authors = ["FRC 6829 Ignite Robotics"]
 package-mode = false
 

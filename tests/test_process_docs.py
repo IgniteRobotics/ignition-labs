@@ -40,7 +40,7 @@ def test_gives_copy_pasteable_commands(git_workflow, command):
 
 
 def test_m0_pull_request_targets_upstream(git_workflow):
-    assert "IgniteRobotics/docs:main" in git_workflow
+    assert "IgniteRobotics/ignition-labs:main" in git_workflow
 
 
 def test_later_milestones_pull_request_into_own_fork(git_workflow):

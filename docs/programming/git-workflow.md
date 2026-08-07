@@ -16,17 +16,17 @@ You **fork** this repository once, at M0, because it is the only thing you will 
 
 ## M0 — your one pull request to the team repository
 
-This is the only pull request you will ever open against `IgniteRobotics/docs`. Getting it merged past CI **is** what M0 is for.
+This is the only pull request you will ever open against `IgniteRobotics/ignition-labs`. Getting it merged past CI **is** what M0 is for.
 
 ```bash
-# 1. Fork IgniteRobotics/docs on github.com  →  <your-handle>/docs
+# 1. Fork IgniteRobotics/ignition-labs on github.com  →  <your-handle>/ignition-labs
 
 # 2. Clone YOUR fork, not the team's
-git clone git@github.com:<your-handle>/docs.git
-cd docs
+git clone git@github.com:<your-handle>/ignition-labs.git
+cd ignition-labs
 
 # 3. Point "upstream" at the team repository so you can pull updates later
-git remote add upstream git@github.com:IgniteRobotics/docs.git
+git remote add upstream git@github.com:IgniteRobotics/ignition-labs.git
 
 # 4. Branch. Never work on main.
 git checkout -b add-<your-handle>-contributor
@@ -41,7 +41,7 @@ git commit -m "Add <your-handle> to contributors"
 git push -u origin add-<your-handle>-contributor
 ```
 
-Then open the pull request on github.com: `<your-handle>/docs:add-<your-handle>-contributor` → `IgniteRobotics/docs:main`.
+Then open the pull request on github.com: `<your-handle>/ignition-labs:add-<your-handle>-contributor` → `IgniteRobotics/ignition-labs:main`.
 
 > **⚠️ Do this before you open the pull request.** GitHub disables Actions on forked repositories by default. Go to your fork → **Actions** tab → click **"I understand my workflows, go ahead and enable them."** If you skip it, your pull request shows *no checks at all*, which looks broken but isn't. This is the single most common M0 problem.
 
@@ -70,7 +70,7 @@ git commit -m "M3: drivetrain subsystem and command composition"
 git push -u origin m3-command-based
 ```
 
-Then open the pull request: `<your-handle>/docs:m3-command-based` → `<your-handle>/docs:main`.
+Then open the pull request: `<your-handle>/ignition-labs:m3-command-based` → `<your-handle>/ignition-labs:main`.
 
 Yes — **into your own fork.** That is not a mistake. Your solutions stay yours, the team repository stays clean, and the next student to reach M3 cannot read your answer. CI runs on your fork and a mentor reviews it there.
 

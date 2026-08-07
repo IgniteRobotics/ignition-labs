@@ -90,7 +90,7 @@ Nine decisions, all made, recorded with reasoning so they can be argued with rat
 ### 4.1 Layout
 
 ```
-docs/                            IgniteRobotics/docs — published to GitHub Pages
+docs/                            IgniteRobotics/ignition-labs — published to GitHub Pages
 ├── 00-index.md                  site nav — lists ONLY prose
 ├── VISION_GUIDE.md              ┐
 ├── vision-subsystem.md          │ rendered
@@ -187,12 +187,12 @@ This repository is the only thing a student forks at M0, because it is the only 
 ### 5.2 M0 — the one upstream pull request
 
 ```
-fork IgniteRobotics/docs  →  jsmith/docs
+fork IgniteRobotics/ignition-labs  →  jsmith/docs
 git clone git@github.com:jsmith/docs.git
-git remote add upstream git@github.com:IgniteRobotics/docs.git
+git remote add upstream git@github.com:IgniteRobotics/ignition-labs.git
 git checkout -b add-jsmith-contributor
     …create contributors/jsmith.md, run spotlessApply on FormatMe.java…
-PR: jsmith/docs:add-jsmith-contributor → IgniteRobotics/docs:main
+PR: jsmith/docs:add-jsmith-contributor → IgniteRobotics/ignition-labs:main
 ```
 
 Merged by a mentor. This is the only student pull request the canonical repository ever receives, and shipping it *is* M0's stated learning objective.
@@ -305,7 +305,7 @@ Built with **`doc-builder`** (`IgniteRobotics/doc-builder`, v2.0.0 — MkDocs + 
 
 `doc-builder` ignores non-markdown files outright, so Java, Gradle, and vendordep files under `projects/` are never candidates for publication — but it renders every markdown file it finds regardless of `00-index.md` linkage, so `tools/stage_site.py` copies only index-linked prose into `_staging/` before the build, and `tools/site_guard.py` verifies the result.
 
-> **Prerequisite.** `IgniteRobotics/docs` had **no git remote configured** as of 2026-08-07. Creating it blocks every workflow below.
+> **Prerequisite.** `IgniteRobotics/ignition-labs` had **no git remote configured** as of 2026-08-07. Creating it blocks every workflow below.
 
 ### 7.2 Four workflows, running in three places
 
@@ -318,7 +318,7 @@ This distinction matters and is easy to get wrong.
 | `student-check.yml` | **student forks** | `pull_request` | `build` + `spotlessCheck` + `tests.lock`, changed milestone only |
 | `docs-links.yml` | canonical only | weekly + PR on `**.md` | link check |
 
-Gate the canonical-only workflows with `if: github.repository == 'IgniteRobotics/docs'`. That skips **grey**, not red — a student's fork does not sprout three broken checks on day one.
+Gate the canonical-only workflows with `if: github.repository == 'IgniteRobotics/ignition-labs'`. That skips **grey**, not red — a student's fork does not sprout three broken checks on day one.
 
 **`skeleton-integrity.yml`** must **not** run `./gradlew build`. A freshly cloned skeleton is *supposed* to fail its tests — that is the student's target. It runs `assemble` (every skeleton compiles on a clean clone), `spotlessCheck` (every skeleton is already formatted), `tests.lock` verification (§12.2), and an **inverted check** per milestone: the given tests must **fail** on the unmodified skeleton. A skeleton whose tests pass out of the box has a stub that accidentally implements itself, which is a real and silent authoring bug.
 
@@ -554,7 +554,7 @@ The track axis, per D5. Each fixture is a standalone project under `projects/tes
 
 The obvious failure mode of D6 is a skeleton test changing and the solution silently no longer passing it. A scheduled CI job in the solutions repository:
 
-1. Checks out `IgniteRobotics/docs` at `main`
+1. Checks out `IgniteRobotics/ignition-labs` at `main`
 2. Overlays the solution sources onto `projects/`
 3. Runs the full test suite
 4. Fails loudly if anything is red
