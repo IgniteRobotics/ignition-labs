@@ -94,4 +94,6 @@ Green opens after M6, same as everyone.
 
 **[M0 test-out](../milestones/m0-tooling-and-git.md)** — fifteen minutes, then M1 and M2 test-outs back to back, then **[M3](../milestones/m3-wpilib-command-based.md)** for real.
 
-Before M3, open `Robot-2026/src/main/java/frc/robot/RobotContainer.java`. You will follow the structure and not the vocabulary. That gap is exactly what M3 closes.
+Before M3, open `Phoenix-2026/src/main/java/frc/robot/RobotContainer.java`. Twenty-two files in that repo, on the same WPILib 2026 and Phoenix 6 stack as the competition robot — you can read the whole thing, and M3 will ask you to. You will follow the structure and not the vocabulary. That gap is exactly what M3 closes.
+
+Then open `Robot-2026/src/main/java/frc/robot/RobotContainer.java` for the same file at full complexity, and notice how much of the difference is scale rather than concept.

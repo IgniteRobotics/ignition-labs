@@ -173,7 +173,11 @@ Internal references. Paths are relative to `~/workspace/ignite/`. These are not 
 | `Robot-2026/build.gradle` | JUnit 5 is configured and entirely unused. The M6 starting point | M6 |
 | `Robot-2026/.github/workflows/pr-build-check.yml` | The CI students' PRs must pass — build plus `spotlessCheck` | M0 |
 | `Robot-2026/.github/prompts/code-review-prompt.md` | Ignite's coding standards. Currently only a bot reads them | M3–M7 |
-| `2025-Robotics-Intro/.../robotbase/calc/SensorProfile.java` | The unit-conversion class M2's project mirrors | M2 |
+| `Robot-2026/src/main/java/frc/robot/preferences/` | `RobotPreference<T>` — an abstract generic class implementing `Supplier<T>`, with four concrete subclasses. Generics, abstraction, inheritance, and the supplier idea in five short files | M2 |
+| `Robot-2026/src/main/java/frc/robot/Constants.java` and `.../intake/IntakeConstants.java` | `static final` in production — and three different naming conventions across two files, none of them written down | M1 |
+| `Phoenix-2026/` (whole repo) | **The reading-scale 2026 codebase.** 22 Java files on WPILib 2026.2.1 + Phoenix 6 + PathPlanner + photonlib, with both CI workflows. Same stack as the competition robot, half the size. Read end to end in M3 | M3 |
+| `Phoenix-2026/src/main/java/frc/robot/commands/DriveToPose.java` | The explicit `Command` subclass idiom on the 2026 toolchain. `Robot-2026` contains no `extends Command` at all, so this is the only place in current Ignite code to see it | M3 |
+| `Phoenix-2026/build.gradle` | Spotless pinned to 6.25.0 while `Robot-2026` is on 8.2.1. A real, small, safe version-drift fix on team code | M0 (stretch) |
 | `docs/VISION_GUIDE.md` | PhotonVision setup for the team's actual camera hardware | M5 |
 | `docs/vision-subsystem.md` | The multi-camera pose fusion pipeline in prose | M5 |
 | `docs/field-boundary-speed-limiting.md` | An already-written, already-assignable student design project | M4 (stretch) |

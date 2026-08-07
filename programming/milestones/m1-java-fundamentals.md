@@ -185,4 +185,5 @@ See `resources.md` for the full library. For this milestone:
 - **FRC Java Koans (Team 3550)** — interactive Java scoped to exactly this subset, needs no prior experience
 - **Team 8744 Lesson01_BasicJava** — the same cut, taught through an immediate robotics hook
 - **Team 3255 FRC Java Tutorial** — a second path through the same material
-- **Ignite:** `2025-Robotics-Intro/.../robotbase/calc/SensorProfile.java` — the real version of exercises 2 and 3, once you have written yours
+- **Ignite:** `Robot-2026/.../subsystems/intake/IntakeConstants.java` — `static final` constants in production, SCREAMING_SNAKE_CASE, nothing else in this file you need yet
+- **Ignite:** `Robot-2026/.../Constants.java` — the same idea one level up. **Note that it does not match:** it uses `kDriverControllerPort` (WPILib's `k` prefix) and `robotCenterToEdge` (camelCase) alongside the SCREAMING_SNAKE_CASE you were just taught. Three conventions, one codebase. Nobody wrote the rule down. This is what inconsistency costs, and you will meet more of it

@@ -89,22 +89,52 @@ A command is something a subsystem can *do*. It has four parts:
 **Idiom 1: an explicit `Command` subclass.**
 
 ```java
-public class DriveDistance extends Command {
-  private final Drivetrain drive;
-  private final double target;
+public class DriveToPose extends Command {
+  private DrivetrainSubsystem drivetrain;
+  private Pose2d targetPose;
+  private PIDController xControl;
+  private PIDController yControl;
+  private PIDController rotControl;
 
-  public DriveDistance(Drivetrain drive, double target) {
-    this.drive = drive;
-    this.target = target;
-    addRequirements(drive);
+  public DriveToPose(DrivetrainSubsystem subsystem, Pose2d pose) {
+    drivetrain = subsystem;
+    targetPose = pose;
+    addRequirements(drivetrain);
   }
 
-  @Override public void initialize() { drive.resetEncoders(); }
-  @Override public void execute()    { drive.arcadeDrive(0.5, 0); }
-  @Override public boolean isFinished() { return drive.getDistance() >= target; }
-  @Override public void end(boolean interrupted) { drive.stop(); }
+  @Override
+  public void initialize() {
+    xControl = drivetrain.getTranslationPIDController();
+    yControl = drivetrain.getTranslationPIDController();
+    rotControl = drivetrain.getRotationPIDController();
+  }
+
+  @Override
+  public void execute() {
+    drivetrain.setControl(
+        DriveConstants.AUTO_DRIVE_REQUEST
+            .withVelocityX(xControl.calculate(drivetrain.getFieldPose().getX(), targetPose.getX()))
+            .withVelocityY(yControl.calculate(drivetrain.getFieldPose().getY(), targetPose.getY()))
+            .withRotationalRate(
+                rotControl.calculate(
+                    drivetrain.getFieldPose().getRotation().getDegrees(),
+                    targetPose.getRotation().getDegrees())));
+  }
+
+  @Override
+  public void end(boolean interrupted) {
+    drivetrain.setControl(
+        DriveConstants.AUTO_DRIVE_REQUEST.withVelocityX(0).withVelocityY(0).withRotationalRate(0));
+  }
+
+  @Override
+  public boolean isFinished() {
+    return xControl.atSetpoint() && yControl.atSetpoint() && rotControl.atSetpoint();
+  }
 }
 ```
+
+That is `Phoenix-2026`'s real `DriveToPose`, imports elided. Note what the four methods each do: `initialize()` grabs fresh PID controllers per run, `execute()` runs the loop, `end()` stops the drivetrain whether it was interrupted or not, `isFinished()` asks all three controllers whether they arrived.
 
 **Idiom 2: a factory method on the subsystem.**
 
@@ -121,7 +151,7 @@ public Command extendCommand() {
 
 Both examples above are real — the second pair is Ignite's actual `IntakeSubsystem`.
 
-**Why you must learn both.** Ignite's onboarding repo (`2025-Robotics-Intro`) uses idiom 1 throughout. Ignite's actual competition code (`Robot-2026`) uses idiom 2 almost exclusively. Learn one and half the codebase is unreadable.
+**Why you must learn both.** Ignite's competition code (`Robot-2026`) uses idiom 2 **exclusively** — there is not one `extends Command` anywhere in the repo. The benchtop rig (`Phoenix-2026`) uses idiom 1 for `DriveToPose`. Both run WPILib 2026 against the same Phoenix 6 swerve stack. Learn one idiom and half of what you will read is opaque.
 
 **Which to use when.** WPILib's own guidance: prefer factory methods on the subsystem for single-subsystem commands, use factory methods in a separate class for multi-subsystem commands, and reserve full subclasses for commands with genuinely complex internal state. WPILib is explicit that "the best organization system is a perennial topic of debate" — this is a convention, not a law.
 
@@ -214,7 +244,9 @@ Ignite splits constants per subsystem (`ShooterConstants`, `IntakeConstants`) ra
 
 ## Project
 
-**Build a two-subsystem robot in simulation.**
+**First, read `Phoenix-2026` end to end.** Twenty-two Java files, WPILib 2026, the same Phoenix 6 swerve stack the competition robot runs — and small enough that you can actually finish it in a sitting. It has both idioms in one place: `DriveToPose` as a subclass, factory methods on `DrivetrainSubsystem`. `Robot-2026` is twice the size and you will meet it soon enough; start with the one you can hold in your head.
+
+**Then build a two-subsystem robot in simulation.**
 
 Requirements:
 
@@ -240,6 +272,7 @@ Requirements:
 - [ ] Subsystems are private fields in `RobotContainer`, not globals or statics
 - [ ] The drivetrain has a default command
 - [ ] You can trace one full 20ms loop iteration out loud, start to finish
+- [ ] You have read `Phoenix-2026` end to end and can name where each idiom appears in it
 - [ ] You can open `Robot-2026/RobotContainer.java` and explain any binding a mentor points at
 
 ## Common failure modes
@@ -279,6 +312,7 @@ See `resources.md` for the full library. For this milestone:
 - **WPILib: Structuring a Command-Based Robot Project** — file layout and the private-fields rule
 - **WPILib: Organizing Command-Based Projects** — factory methods vs. subclasses, and the named anti-patterns
 - **Team 8744 Lesson02** — the clearest rookie-facing explanation of *why* command-based is shaped this way
-- **Ignite:** `Robot-2026/.../RobotContainer.java` — the real thing. Read it before and after this milestone
+- **Ignite:** `Phoenix-2026` — **read this repo end to end.** 22 files, WPILib 2026, same Phoenix 6 swerve stack as the competition robot. Small enough to actually finish
+- **Ignite:** `Phoenix-2026/.../commands/DriveToPose.java` — the subclass idiom, on the 2026 toolchain
+- **Ignite:** `Robot-2026/.../RobotContainer.java` — the real thing, at full complexity. Read it before and after this milestone
 - **Ignite:** `Robot-2026/.../subsystems/intake/IntakeSubsystem.java` — factory methods in production
-- **Ignite:** `2025-Robotics-Intro/.../commands/DriveDistance.java` — the subclass idiom

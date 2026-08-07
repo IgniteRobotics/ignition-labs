@@ -127,8 +127,12 @@ The three most likely to generate friction:
 | Piece | State |
 |---|---|
 | Spec, resources, AI standard, all nine milestones, deliverables, tracks | **Written** |
-| Teaching repository for M0–M3 projects | **Not built** |
-| `CommandTemplate` rewrite | **Out of scope** — see spec §8. Still the highest-leverage single fix |
+| Teaching repository for M0–M3 projects | **Not built** — when built, seed it from `Robot-2026` / `Phoenix-2026` conventions, not from `CommandTemplate` |
+| `CommandTemplate` rewrite | **Out of scope** — see spec §8. Still the highest-leverage single fix, and it is still on WPILib 2025.2.1 |
 | Repo-level READMEs | **Not written** — M8 creates the habit per subsystem |
+| Code references | **All 2026.** `Phoenix-2026` is the reading-scale repo, `Robot-2026` the full-complexity one. No milestone cites pre-2026 Ignite code |
 
-**Re-verify [`resources.md`](resources.md) at the start of each season.** WPILib restructures its documentation between seasons — building this curriculum found two already-stale URLs inside research written five months earlier.
+**Re-verify [`resources.md`](resources.md) at the start of each season** — both halves of it.
+
+1. **External links.** WPILib restructures its documentation between seasons; building this curriculum found two already-stale URLs inside research written five months earlier.
+2. **Ignite code references.** Every repo path a student is sent to read must be on the current WPILib and vendordep generation. A reference repo that no longer builds with the toolchain M0 installs is worse than no reference at all — this is how the curriculum first drifted, and §8 of the spec records the fix.

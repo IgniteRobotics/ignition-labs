@@ -42,7 +42,10 @@ This spec is built on three audited research reports in the team wiki, not from 
 | Hardware floor | **Desktop simulation is mandatory for every project.** Last season's competition robot is available as optional hardware validation |
 | Scope | Curriculum documents + AI-use standard + in-season student deliverables spec |
 | Out of scope | Rewriting `CommandTemplate`, building an LMS or tracking site |
+| Reference codebases | **2026 only.** `Phoenix-2026` is the reading-scale repo; `Robot-2026` is the full-complexity reference. No milestone cites pre-2026 Ignite code |
 | Format | Markdown, importable to both Notion and GitHub without rework |
+
+**On the reference-codebase constraint.** Curriculum content ages through its code references faster than through its prose. The rule is that every Ignite file a student is sent to read must be on the current WPILib and vendordep generation, so that `./gradlew build` on a reference repo works with the toolchain M0 just installed. Re-checking this is part of the per-season re-verification pass (see §9.1 and `README.md`), alongside the external link check.
 
 ---
 
@@ -204,7 +207,7 @@ Reported pacing from teams running this: **hours, not weeks.** One instructor re
 
 **Concepts.** Classes and objects as a way to bundle state with behavior. Fields, constructors, methods. `public`/`private` and why encapsulation matters when four people share a repo. Inheritance and when *not* to use it. Interfaces as contracts. The singleton pattern — taught here because Ignite's `statemachines/` package uses it and students will encounter `LaunchState.getInstance()` on day one. Lambdas and functional interfaces: `Supplier<Double>`, `DoubleSupplier`, `BooleanSupplier`, `Runnable` — this is the highest-leverage topic in the milestone, because WPILib's entire command and trigger API is built on them and a student who does not understand `() -> value` cannot read `RobotContainer`.
 
-**Project (simulation-mandatory).** Build a unit-conversion class with tests — ticks to rotations to RPM, with a configurable gear ratio and encoder resolution. This deliberately mirrors Ignite's own `com.igniterobotics.robotbase.calc.SensorProfile`. Students then read the real one and compare.
+**Project (simulation-mandatory).** Build a unit-conversion class with tests — ticks to rotations to RPM, with a configurable gear ratio and encoder resolution. The class is written from scratch; there is deliberately no Ignite file to copy from, which is what makes it safe under Red tier. Students then read `Robot-2026/src/main/java/frc/robot/preferences/` — `RobotPreference<T>` is an abstract generic class implementing `Supplier<T>` with four concrete subclasses, and it carries generics, abstraction, inheritance, and the supplier concept in five short files. It also connects the milestone's lambda material directly to M3, which a unit converter cannot do.
 
 **Test-out challenge.** Given an interface and two implementing classes, add a third implementation and wire it in. Then rewrite one method to take a `DoubleSupplier` instead of a `double` and explain the difference in when the value is read. 45 minutes.
 
@@ -216,7 +219,7 @@ Reported pacing from teams running this: **hours, not weeks.** One instructor re
 
 **AI posture:** 🔴 Red — same reasoning as M1. Lambdas in particular are a concept students must struggle with; AI-generated lambdas are trivially producible and teach nothing.
 
-**Resources.** Ignite reference: `2025-Robotics-Intro/src/main/java/com/igniterobotics/robotbase/calc/SensorProfile.java`, `Robot-2026/src/main/java/frc/robot/statemachines/LaunchState.java`
+**Resources.** Ignite reference: `Robot-2026/src/main/java/frc/robot/preferences/` (abstract generic class implementing `Supplier<T>` — the highest-value read in the milestone), `Robot-2026/src/main/java/frc/robot/statemachines/LaunchState.java`
 
 ### 4.5 M3 — WPILib Command-Based Programming
 
@@ -226,9 +229,9 @@ This is the spine's center of gravity and the largest milestone. It is the last 
 
 **Concepts.** The `TimedRobot` lifecycle and the 20ms loop. What a subsystem is and why it owns hardware. What a command is and why it has `initialize`/`execute`/`end`/`isFinished`. **Both command idioms** — explicit `Command` subclasses *and* subsystem-hosted factory methods returning `Command` — with an explicit explanation of why WPILib moved toward factories and when a full subclass is still correct. Command compositions: sequential, parallel, race, and decorators like `.withTimeout()`. Triggers and `CommandXboxController` bindings. The command scheduler and requirement-based interruption. Project structure: `Robot.java` thin, `RobotContainer.java` declarative, subsystems as private fields injected into commands rather than reached globally.
 
-**Why both idioms are mandatory.** Ignite's onboarding repo (`2025-Robotics-Intro`) uses the older explicit-subclass style with raw `JoystickButton` bindings. Ignite's actual competition code (`Robot-2026`) uses `CommandXboxController` triggers, subsystem factory methods, and static `Commands.parallel(...)` composition. A student taught only one idiom cannot read the other. Teaching both, with the historical reason for the shift, closes a gap the research explicitly flagged.
+**Why both idioms are mandatory.** Ignite's competition code (`Robot-2026`) uses `CommandXboxController` triggers, subsystem factory methods, and static `Commands.parallel(...)` composition — and contains **zero** `extends Command` subclasses. The benchtop rig (`Phoenix-2026`) carries the subclass idiom in `commands/DriveToPose.java`. Both repos are on WPILib 2026.2.1 and Phoenix 6, so a student sees both idioms without leaving the current toolchain. A student taught only one idiom cannot read the other. Teaching both, with the reason for the shift, closes a gap the research explicitly flagged.
 
-**Project (simulation-mandatory).** Build a two-subsystem robot in simulation: a drivetrain and one mechanism. Write one command as an explicit subclass and one as a factory method. Compose them into a sequence. Bind both to controller buttons. Run it in the simulator and demonstrate it.
+**Project (simulation-mandatory).** Read `Phoenix-2026` end to end first — 22 files on the current toolchain, containing both idioms, and small enough to finish in a sitting. Then build a two-subsystem robot in simulation: a drivetrain and one mechanism. Write one command as an explicit subclass and one as a factory method. Compose them into a sequence. Bind both to controller buttons. Run it in the simulator and demonstrate it.
 
 **Optional hardware variant.** Deploy the same code to last season's competition robot.
 
@@ -243,7 +246,7 @@ This is the spine's center of gravity and the largest milestone. It is the last 
 
 **AI posture:** 🟡 Yellow begins here — see §6. AI may generate boilerplate and Javadoc. AI may not design the subsystem decomposition or write the command logic.
 
-**Resources.** [Command-Based Programming index](https://docs.wpilib.org/en/stable/docs/software/commandbased/index.html) · [Structuring a Command-Based Robot Project](https://docs.wpilib.org/en/stable/docs/software/commandbased/commands-v2/structuring-command-based-project.html) · [Organizing Command-Based Projects](https://docs.wpilib.org/en/stable/docs/software/commandbased/commands-v2/organizing-command-based.html) · Ignite reference: `Robot-2026/src/main/java/frc/robot/RobotContainer.java`
+**Resources.** [Command-Based Programming index](https://docs.wpilib.org/en/stable/docs/software/commandbased/index.html) · [Structuring a Command-Based Robot Project](https://docs.wpilib.org/en/stable/docs/software/commandbased/commands-v2/structuring-command-based-project.html) · [Organizing Command-Based Projects](https://docs.wpilib.org/en/stable/docs/software/commandbased/commands-v2/organizing-command-based.html) · Ignite reference: `Phoenix-2026/` (read end to end), `Phoenix-2026/src/main/java/frc/robot/commands/DriveToPose.java` (subclass idiom), `Robot-2026/src/main/java/frc/robot/RobotContainer.java` (full complexity)
 
 ### 4.6 M4 — Sensors, Actuators & Control
 
@@ -521,12 +524,12 @@ Full content in `student-deliverables.md`. Required artifacts:
 
 | Item | Status | Note |
 |---|---|---|
-| `CommandTemplate` is stock WPILib sample code | **Excluded from scope, still the highest-leverage fix** | Every season inherits generic sample code with no README, no CI, no Ignite conventions. The curriculum will produce a teaching repo as a byproduct; that is the natural seed for fixing this later |
-| `2025-Robotics-Intro` teaches an outdated idiom | **Mitigated, not fixed** | M3 teaches both command idioms explicitly, which closes the readability gap without requiring the repo to be rewritten |
+| `CommandTemplate` is stock WPILib sample code, still on WPILib 2025.2.1 | **Excluded from scope, still the highest-leverage fix** | Every season inherits generic sample code with no README, no CI, no Ignite conventions. **It must be bumped to 2026 before it seeds a 2027 season repo.** The curriculum will produce a teaching repo as a byproduct; seed that from `Robot-2026` and `Phoenix-2026` conventions, not from `CommandTemplate` |
+| `2025-Robotics-Intro` is retired from the curriculum | **Fixed** | It is a Romi project on WPILib 2025.2.1 with one vendordep, last touched 2025-02-11 — and §1.2 excludes Romi as a hardware floor, so three milestones sending students into it was a self-contradiction. All nine references were retargeted to 2026 repos: M1 and M2 to `Robot-2026` (`Constants`, `IntakeConstants`, `preferences/`), M3's subclass idiom to `Phoenix-2026/commands/DriveToPose.java`. **No student-facing path now references pre-2026 Ignite code** |
 | No README in any Ignite repo | **Partially addressed** | M8's subsystem README deliverable creates the habit; the repo-level READMEs remain unwritten |
 | Ignite's standards live only in a bot prompt | **Addressed indirectly** | `.github/prompts/code-review-prompt.md` is the best existing draft of Ignite's conventions and should be mined when writing M3–M6 content. Converting it to a human-facing doc is out of scope here |
 | Romi / XRP practice robots | **Optional enrichment only** | Not selected as a hardware floor; no milestone depends on them |
-| `Phoenix-2026` benchtop rig | **Optional enrichment only** | Would make an excellent M4 hardware variant if it gets used; no milestone depends on it |
+| `Phoenix-2026` benchtop rig | **Promoted: M3 depends on it as reading material** | Reclassified from optional enrichment. It is on WPILib 2026.2.1, Phoenix 6 26.1.0, PathPlanner 2026.1.2 and photonlib — the same stack as `Robot-2026` — with both CI workflows, Spotless, and `useJUnitPlatform()` configured, in **22 Java files versus `Robot-2026`'s 48**. It is the only current Ignite repo containing an explicit `Command` subclass. M3 now assigns it as a read-end-to-end target with `Robot-2026` as the full-complexity reference. Its *hardware* use remains optional — the M4 hardware variant is still enrichment |
 | Tracking site / LMS | **Explicitly excluded** | A peer resource drew real criticism for collecting student names and emails without a deletion path. If Ignite ever builds one, that is a separate project with its own privacy review |
 
 ---
