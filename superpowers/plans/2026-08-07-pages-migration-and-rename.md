@@ -12,7 +12,7 @@
 
 Copied verbatim from `superpowers/specs/2026-08-07-pages-migration-and-rename-design.md`.
 
-- **Canonical repository name is `IgniteRobotics/ignition-labs`.** All five workflow gate strings must match it exactly. A mismatched gate does not fail — it silently skips the job forever.
+- **Canonical repository name is `IgniteRobotics/ignition-labs`.** All seven workflow gate strings must match it exactly. A mismatched gate does not fail — it silently skips the job forever.
 - **`student-check.yml` must NEVER carry a repository gate.** It is the one workflow that must run on student forks.
 - **Never `pull_request_target`.**
 - **Nothing under `projects/` is ever published.** Enforced structurally by `docs_dir`, checked by `tools/site_guard.py`.
@@ -560,7 +560,7 @@ Read every hit before editing. Note that `git-workflow.md` contains student-faci
 
 - [ ] **Step 2: Rename in the three workflows**
 
-Replace `IgniteRobotics/docs` with `IgniteRobotics/ignition-labs` in all five gate strings across `pages.yml` (2), `skeleton-integrity.yml` (4 — note one may be in a comment), and `docs-links.yml` (1).
+Replace `IgniteRobotics/docs` with `IgniteRobotics/ignition-labs` in all seven gate strings across `pages.yml` (2), `skeleton-integrity.yml` (4 — note one may be in a comment), and `docs-links.yml` (1).
 
 Then verify **both** halves of the constraint:
 
@@ -750,7 +750,7 @@ grep -rn "pull_request_target" .github/workflows/ || echo "no pull_request_targe
 grep -c "github.repository" .github/workflows/student-check.yml || echo "student-check ungated: correct"
 ```
 
-Expected: all five gates read `'IgniteRobotics/ignition-labs'`; no `pull_request_target`; `student-check.yml` ungated.
+Expected: all seven gates read `'IgniteRobotics/ignition-labs'`; no `pull_request_target`; `student-check.yml` ungated.
 
 - [ ] **Step 3: Write the owner handoff**
 
@@ -781,7 +781,7 @@ git commit -m "Record owner-only steps for the ignition-labs rename"
 - [ ] `_site` contains every page in `nav:` and **zero** files from `projects/`, `superpowers/`, `tools/`, or `tests/`
 - [ ] `tools/site_guard.py` passes with `REQUIRED_PAGES` unedited
 - [ ] `grep -rn "IgniteRobotics/docs"` returns hits only inside `superpowers/`
-- [ ] All five workflow gate strings read `IgniteRobotics/ignition-labs`
+- [ ] All seven workflow gate strings read `IgniteRobotics/ignition-labs`
 - [ ] `student-check.yml` carries no repository gate
 - [ ] `pytest` is green at 54 tests
 - [ ] `lychee` reports zero errors
