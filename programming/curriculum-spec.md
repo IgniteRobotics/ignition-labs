@@ -246,7 +246,7 @@ This is the spine's center of gravity and the largest milestone. It is the last 
 
 **AI posture:** 🟡 Yellow begins here — see §6. AI may generate boilerplate and Javadoc. AI may not design the subsystem decomposition or write the command logic.
 
-**Resources.** [Command-Based Programming index](https://docs.wpilib.org/en/stable/docs/software/commandbased/index.html) · [Structuring a Command-Based Robot Project](https://docs.wpilib.org/en/stable/docs/software/commandbased/commands-v2/structuring-command-based-project.html) · [Organizing Command-Based Projects](https://docs.wpilib.org/en/stable/docs/software/commandbased/commands-v2/organizing-command-based.html) · Ignite reference: `Phoenix-2026/` (read end to end), `Phoenix-2026/src/main/java/frc/robot/commands/DriveToPose.java` (subclass idiom), `Robot-2026/src/main/java/frc/robot/RobotContainer.java` (full complexity)
+**Resources.** [Command-Based Programming index](https://docs.wpilib.org/en/stable/docs/software/commandbased/index.html) · [Structuring a Command-Based Robot Project](https://docs.wpilib.org/en/stable/docs/software/commandbased/structuring-command-based-project.html) · [Organizing Command-Based Projects](https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html) · Ignite reference: `Phoenix-2026/` (read end to end), `Phoenix-2026/src/main/java/frc/robot/commands/DriveToPose.java` (subclass idiom), `Robot-2026/src/main/java/frc/robot/RobotContainer.java` (full complexity)
 
 ### 4.6 M4 — Sensors, Actuators & Control
 
