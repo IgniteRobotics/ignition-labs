@@ -1,0 +1,58 @@
+name: Publish Pages
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '**.md'
+      - '00-index.md'
+      - 'tools/site_guard.py'
+      - '.github/workflows/pages.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    if: github.repository == 'IgniteRobotics/docs'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install doc-builder
+        run: pip install 'doc-builder @ git+https://github.com/IgniteRobotics/doc-builder@main'
+
+      - name: Stage published files
+        run: python tools/stage_site.py
+
+      - name: Build site
+        run: doc-builder build --config mkdocs.yml
+
+      - name: Guard against published source files
+        run: python tools/site_guard.py ./_site
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./_site
+
+  deploy:
+    needs: build
+    if: github.repository == 'IgniteRobotics/docs'
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
