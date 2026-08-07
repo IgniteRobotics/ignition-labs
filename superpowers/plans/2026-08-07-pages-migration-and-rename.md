@@ -402,7 +402,7 @@ eval "$(pyenv init -)" && pyenv activate ignite-docs
 poetry run pytest -q
 ```
 
-Expected: PASS, **55 tests** (61 minus the 6 in `test_stage_site.py`).
+Expected: PASS, **54 tests** (61 minus the 7 in `test_stage_site.py`).
 
 - [ ] **Step 3: Update the stale doc-builder comments**
 
@@ -624,7 +624,7 @@ poetry run pytest -q
 grep -rn "IgniteRobotics/docs" --include="*.md" --include="*.yml" --include="*.py" --include="*.toml" . | grep -v "^./superpowers/"
 ```
 
-Expected: 55 tests pass; the grep returns nothing.
+Expected: 54 tests pass; the grep returns nothing.
 
 ```bash
 git add -A
@@ -740,7 +740,7 @@ git log --follow --oneline docs/programming/git-workflow.md | wc -l
 git status --short
 ```
 
-Expected, in order: 55 passed · actionlint silent · build succeeds · `site guard OK` · `0` · lychee zero errors · no rename hits · no doc-builder hits · more than 1 commit in the follow log · clean tree.
+Expected, in order: 54 passed · actionlint silent · build succeeds · `site guard OK` · `0` · lychee zero errors · no rename hits · no doc-builder hits · more than 1 commit in the follow log · clean tree.
 
 - [ ] **Step 2: Confirm the two constraints that fail silently**
 
@@ -783,7 +783,7 @@ git commit -m "Record owner-only steps for the ignition-labs rename"
 - [ ] `grep -rn "IgniteRobotics/docs"` returns hits only inside `superpowers/`
 - [ ] All five workflow gate strings read `IgniteRobotics/ignition-labs`
 - [ ] `student-check.yml` carries no repository gate
-- [ ] `pytest` is green at 55 tests
+- [ ] `pytest` is green at 54 tests
 - [ ] `lychee` reports zero errors
 - [ ] `mkdocs` and `mkdocs-material` are pinned exactly and named in spec §16 maintenance
 - [ ] `git log --follow docs/programming/git-workflow.md` shows pre-move history
