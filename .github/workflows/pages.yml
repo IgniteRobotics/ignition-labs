@@ -4,10 +4,10 @@ on:
   push:
     branches: [main]
     paths:
-      - '**.md'
-      - 'tools/site_guard.py'
-      - 'tools/stage_site.py'
+      - 'docs/**'
       - 'mkdocs.yml'
+      - 'tools/site_guard.py'
+      - 'pyproject.toml'
       - '.github/workflows/pages.yml'
   workflow_dispatch:
 
@@ -22,7 +22,7 @@ concurrency:
 
 jobs:
   build:
-    if: github.repository == 'IgniteRobotics/docs'
+    if: github.repository == 'IgniteRobotics/ignition-labs'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -31,14 +31,14 @@ jobs:
         with:
           python-version: '3.11'
 
-      - name: Install doc-builder
-        run: pip install 'doc-builder @ git+https://github.com/IgniteRobotics/doc-builder@main'
+      - name: Install Poetry
+        run: pip install poetry==2.4.1
 
-      - name: Stage published files
-        run: python tools/stage_site.py
+      - name: Install pinned docs dependencies
+        run: poetry install --only docs
 
       - name: Build site
-        run: doc-builder build --config mkdocs.yml
+        run: poetry run mkdocs build
 
       - name: Guard against published source files
         run: python tools/site_guard.py ./_site
@@ -49,7 +49,7 @@ jobs:
 
   deploy:
     needs: build
-    if: github.repository == 'IgniteRobotics/docs'
+    if: github.repository == 'IgniteRobotics/ignition-labs'
     runs-on: ubuntu-latest
     environment:
       name: github-pages

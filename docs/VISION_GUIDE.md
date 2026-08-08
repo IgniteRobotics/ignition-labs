@@ -14,10 +14,10 @@
 4. [Camera Calibration](#4-camera-calibration)
 5. [AprilTag Pipeline Tuning](#5-apriltag-pipeline-tuning)
 6. [Pose Estimation Strategies](#6-pose-estimation-strategies)
-7. [Filtering & Validation](#7-filtering--validation)
+7. [Filtering & Validation](#7-filtering-validation)
 8. [Standard Deviation Tuning](#8-standard-deviation-tuning)
 9. [Code Review: Current Implementation](#9-code-review-current-implementation)
-10. [Recommended Fixes & Improvements](#10-recommended-fixes--improvements)
+10. [Recommended Fixes & Improvements](#10-recommended-fixes-improvements)
 11. [Troubleshooting: Issue/Resolution Checklist](#11-troubleshooting-issueresolution-checklist)
 12. [References](#12-references)
 

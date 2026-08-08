@@ -18,7 +18,7 @@ permissions:
 
 jobs:
   matrix:
-    if: github.repository == 'IgniteRobotics/docs'
+    if: github.repository == 'IgniteRobotics/ignition-labs'
     runs-on: ubuntu-latest
     outputs:
       projects: ${{ steps.list.outputs.projects }}
@@ -40,7 +40,7 @@ jobs:
 
   integrity:
     needs: matrix
-    if: github.repository == 'IgniteRobotics/docs' && needs.matrix.outputs.projects != '[]'
+    if: github.repository == 'IgniteRobotics/ignition-labs' && needs.matrix.outputs.projects != '[]'
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -77,7 +77,7 @@ jobs:
           echo "OK: tests fail as intended on the unmodified skeleton."
 
   lock:
-    if: github.repository == 'IgniteRobotics/docs'
+    if: github.repository == 'IgniteRobotics/ignition-labs'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -96,7 +96,7 @@ jobs:
             || { echo "::error::tests.lock is stale. Run: python tools/tests_lock.py write"; exit 1; }
 
   pytest:
-    if: github.repository == 'IgniteRobotics/docs'
+    if: github.repository == 'IgniteRobotics/ignition-labs'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4

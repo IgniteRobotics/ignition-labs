@@ -33,31 +33,45 @@ def test_gradle_and_vendordep_files_are_forbidden(tmp_path):
 
 
 def test_markdown_file_under_projects_is_forbidden(tmp_path):
-    # doc-builder renders every markdown file it finds regardless of
-    # 00-index.md linkage (verified against superpowers/ during Task 3's
-    # investigation) — so anything under projects/, of any extension,
-    # must be caught, not just the FRC source-file suffixes.
+    # MkDocs cannot read outside docs_dir, so projects/ is normally
+    # unpublishable by construction. This guards the remaining case:
+    # someone creating docs/projects/. Any extension, not just the FRC
+    # source-file suffixes.
     site = _make_site(tmp_path, ["index.html", "projects/m2-oop/README.md"])
     assert forbidden_files(site) == ["projects/m2-oop/README.md"]
 
 
 def test_markdown_derived_page_under_projects_is_forbidden(tmp_path):
-    # The realistic shape of the leak: doc-builder converts a stray
-    # projects/**/README.md into an .html page in the built site (verified
-    # via the probe: projects/m-probe/README.md -> projects/m-probe/index.html).
+    # The realistic shape of a leak: a stray README.md inside docs_dir
+    # becomes an .html page in the built site
+    # (docs/projects/m2-oop/README.md -> projects/m2-oop/index.html).
     site = _make_site(tmp_path, ["index.html", "projects/m2-oop/index.html"])
     assert forbidden_files(site) == ["projects/m2-oop/index.html"]
 
 
 def test_superpowers_path_in_site_is_forbidden(tmp_path):
-    # doc-builder renders every markdown file it finds regardless of
-    # 00-index.md linkage — superpowers/ (agent notes, plans, specs) leaked
-    # into a raw build-from-source run even though nothing links it. The
-    # guard must catch this on any build path, not just the staged one.
+    # superpowers/ holds design records, plans, and session notes, and is
+    # never published. It sits outside docs_dir, so this is belt-and-braces
+    # against a future layout change that pulls it back inside.
     site = _make_site(
         tmp_path, ["index.html", "superpowers/specs/whatever.html"]
     )
     assert forbidden_files(site) == ["superpowers/specs/whatever.html"]
+
+
+def test_tools_path_in_site_is_forbidden(tmp_path):
+    # tools/ holds CI verification scripts (spec §10) and sits outside
+    # docs_dir; this is belt-and-braces against a future layout change
+    # that pulls it back inside.
+    site = _make_site(tmp_path, ["index.html", "tools/site_guard.html"])
+    assert forbidden_files(site) == ["tools/site_guard.html"]
+
+
+def test_tests_path_in_site_is_forbidden(tmp_path):
+    # tests/ holds tests for tools/ (spec §10) and sits outside docs_dir;
+    # same belt-and-braces reasoning as tools/ and superpowers/.
+    site = _make_site(tmp_path, ["index.html", "tests/test_site_guard.html"])
+    assert forbidden_files(site) == ["tests/test_site_guard.html"]
 
 
 def test_missing_required_page_is_reported(tmp_path):

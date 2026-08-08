@@ -12,7 +12,9 @@ from pathlib import Path
 
 FORBIDDEN_SUFFIXES = frozenset({".java", ".gradle", ".jar", ".patch", ".wpilog"})
 FORBIDDEN_NAMES = frozenset({"gradlew", "gradlew.bat", "gradle.properties", "tests.lock"})
-FORBIDDEN_DIRS = frozenset({"vendordeps", "gradle", "projects", "superpowers"})
+FORBIDDEN_DIRS = frozenset(
+    {"vendordeps", "gradle", "projects", "superpowers", "tools", "tests"}
+)
 
 
 def forbidden_files(site_root: Path) -> list[str]:

@@ -106,8 +106,8 @@ FIRST has no rule about this and no other FRC team has published a policy. This 
 | [`ai-use-standard.md`](ai-use-standard.md) | The AI policy. Required reading, signed at M7 |
 | [`student-deliverables.md`](student-deliverables.md) | Fill-in-the-blank templates for everything you produce in-season |
 | [`resources.md`](resources.md) | Every external link in the curriculum, with notes on what each is good for |
-| [`tracks/`](tracks/) | The four entry-point guides |
-| [`milestones/`](milestones/) | M0 through M8 |
+| [`tracks/`](tracks/track-a-new-to-programming.md) | The four entry-point guides, starting with Track A |
+| [`milestones/`](milestones/m0-tooling-and-git.md) | M0 through M8, starting with M0 |
 
 ---
 
