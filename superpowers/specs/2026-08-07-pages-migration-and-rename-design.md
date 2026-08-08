@@ -79,7 +79,7 @@ ignition-labs/                          (renamed from docs)
 | Deleted | Why it existed |
 |---|---|
 | `tools/stage_site.py` | Only ever a workaround for `doc-builder` publishing non-indexed markdown. D7′ removes the condition it worked around |
-| `tests/test_stage_site.py` (6 tests) | Defended that workaround |
+| `tests/test_stage_site.py` (7 tests) | Defended that workaround |
 | `00-index.md` | Replaced by explicit `nav:` in `mkdocs.yml` |
 | The `doc-builder` dependency | Wrong tool — §1 |
 
