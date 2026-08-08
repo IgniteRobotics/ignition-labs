@@ -91,14 +91,18 @@ There is also a second workflow that runs an AI reviewer against every PR diff. 
 
 **Ship a real pull request.**
 
-1. Fork or clone the teaching repository
-2. Create a branch named for what you are doing
-3. Make a small but real change — fix a typo in a README, add a comment explaining something confusing, correct a wrong constant
-4. Commit it with a message that explains why
-5. Push and open a pull request
-6. Get it through CI. If `spotlessCheck` fails, fix it yourself
-7. Respond to at least one review comment
-8. Merge it
+The project is `projects/m0-onboarding/`. It ships with a real thing to fix — `FormatMe.java`, deliberately misformatted — and a real thing to add: yourself, to the contributors list. Its own README walks the build and the simulator. The exact git commands — fork, branch, commit, push, pull request — are in [the git workflow](../git-workflow.md); this milestone does not repeat them.
+
+1. Fork and clone `ignition-labs`, per the git workflow's M0 section
+2. Work through `projects/m0-onboarding/README.md`: build it, run the simulator, fix `FormatMe.java`'s formatting, add your contributor file
+3. Commit both changes with a message that explains why
+
+⚠️ **Enable Actions on your fork before you open the pull request.** GitHub disables Actions on forked repositories by default. Until you turn them on, your pull request shows **no checks at all** — which looks like the repository is broken, and it isn't. Go to your fork on github.com → **Actions** tab → click **"I understand my workflows, go ahead and enable them."** Spec §15 rates this the single most likely thing to go wrong at M0.
+
+4. Push and open the pull request — upstream, the only one you send there
+5. Get it through CI. If `spotlessCheck` fails, fix it yourself
+6. Respond to at least one review comment
+7. Merge it
 
 The change deliberately does not need to be impressive. The point is the pipeline, not the diff.
 
@@ -107,7 +111,7 @@ The change deliberately does not need to be impressive. The point is the pipelin
 ## Definition of done
 
 - [ ] WPILib VS Code installed; `./gradlew build` succeeds on your machine
-- [ ] The simulator launches and you can identify the Driver Station panel
+- [ ] The simulator launches and you can identify the Robot State panel
 - [ ] A merged pull request exists under your GitHub account
 - [ ] `spotlessCheck` passed without a mentor fixing it for you
 - [ ] You can explain what a branch is without using the word "branch"

@@ -22,7 +22,7 @@ gets fast after that.
 
 **2. Run the simulator.**
 
-In VS Code: `Ctrl+Shift+P` → **WPILib: Simulate Robot Code** → check **Sim GUI** → OK.
+In VS Code: `Ctrl+Shift+P` (`Cmd+Shift+P` on macOS) → **WPILib: Simulate Robot Code** → check **Sim GUI** → OK.
 
 A window opens with a Robot State panel and a Joysticks panel. That window is the
 robot as far as your laptop is concerned. Find the Robot State panel and switch
@@ -64,7 +64,7 @@ at all, which looks broken but isn't.
 ## Done when
 
 - `./gradlew build` succeeds on your machine
-- The simulator opens and you can point at the Driver Station panel
+- The simulator opens and you can point at the Robot State panel
 - `./gradlew spotlessCheck` passes
 - Your pull request is green and merged
 - You can explain what a branch is without using the word "branch"

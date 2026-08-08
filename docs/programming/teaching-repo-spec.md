@@ -381,7 +381,7 @@ M0 is not about code. The skeleton exists so the pull request has something real
 **Student authors:** `contributors/<github-handle>.md` from a template, and runs `./gradlew spotlessApply` on `FormatMe.java`, then opens one pull request containing both — upstream, per §5.2.
 
 **Tests cover:** contributor file exists and matches the schema; `spotlessCheck` passes.
-**Mentor verifies:** simulator launches and the student can point at the Driver Station panel; can explain a branch without using the word "branch"; **Actions are enabled on their fork** (§7.3, mechanic 3).
+**Mentor verifies:** simulator launches and the student can point at the Robot State panel; can explain a branch without using the word "branch"; **Actions are enabled on their fork** (§7.3, mechanic 3).
 
 ### 9.2 M1 — `projects/m1-java-fundamentals/` · fade: L3
 
@@ -608,23 +608,23 @@ Stubs throw `UnsupportedOperationException`; they do not fail to compile. A stud
 
 Ordered by dependency, then by value. Each step is independently reviewable and independently useful.
 
-| # | Step | Notes |
-|---|---|---|
-| **0** | Sanity check: one standalone project builds from a clean clone; confirm `build` runs `test` under GradleRIO | 30 minutes. Not a spike — §4.2 removed that risk |
-| **1** | **`programming/git-workflow.md` + `programming/robot-repo-ladder.md`** | §5 and §6 as student-facing prose. **Zero dependencies. Ships immediately** |
-| **2** | Create the git remote; repository scaffold: four workflows, `tests.lock` tooling, `CODEOWNERS`, pull request template, `CONTRIBUTING.md`, `SETUP.md` (including the fork-Actions step) | — |
-| **3** | Pages live | Proves the pipeline before there is much to publish |
-| **4** | **M0** | Smallest, and the one every single student hits |
-| **5** | **M1** + T1 | Highest volume of students. L3 is the most authoring-heavy fade level per unit of content |
-| **6** | **M2** + T2 | — |
-| **7** | **M3** + T3 | Largest milestone. The `M3Deliverables` harness is the risky part — build it first and validate against a throwaway solution |
-| — | — | **Kickoff Gate block complete (M0–M3). Ship it and stop if time runs out.** Everything below can land after the season starts |
-| **8** | **M6** + `UNTESTED-TARGETS.md` | Out of numeric order deliberately: it is the M7 gate, and the regression-patch verification is novel enough to want proving early |
-| **9** | **M4** + T4 | — |
-| **10** | **M5** + T5 | T5's three log sets are the single largest authoring cost in the spec |
-| **11** | **M7**, **M8 templates** | Mostly documents |
-| **12** | **Doc corrections.** The §7.3 CI claim in three files; M6's "first tests" → "a class that has none"; M4's required-PR DoD item; `curriculum-spec.md` §8 and `README.md` status tables; the `resources.md` seasonal re-verification list | — |
-| **—** | Solutions repository, built continuously alongside steps 4–11, with the §11.2 cross-check job live from step 4 | Not a final step. A milestone shipped without its solution is not shipped |
+| # | Step | Notes | Status |
+|---|---|---|---|
+| **0** | Sanity check: one standalone project builds from a clean clone; confirm `build` runs `test` under GradleRIO | 30 minutes. Not a spike — §4.2 removed that risk | Done |
+| **1** | **`programming/git-workflow.md` + `programming/robot-repo-ladder.md`** | §5 and §6 as student-facing prose. **Zero dependencies. Ships immediately** | Done |
+| **2** | Create the git remote; repository scaffold: four workflows, `tests.lock` tooling, `CODEOWNERS`, pull request template, `CONTRIBUTING.md`, `SETUP.md` (including the fork-Actions step) | — | Done |
+| **3** | Pages live | Proves the pipeline before there is much to publish | Done |
+| **4** | **M0** | Smallest, and the one every single student hits | **Done** |
+| **5** | **M1** + T1 | Highest volume of students. L3 is the most authoring-heavy fade level per unit of content | — |
+| **6** | **M2** + T2 | — | — |
+| **7** | **M3** + T3 | Largest milestone. The `M3Deliverables` harness is the risky part — build it first and validate against a throwaway solution | — |
+| — | — | **Kickoff Gate block complete (M0–M3). Ship it and stop if time runs out.** Everything below can land after the season starts | — |
+| **8** | **M6** + `UNTESTED-TARGETS.md` | Out of numeric order deliberately: it is the M7 gate, and the regression-patch verification is novel enough to want proving early | — |
+| **9** | **M4** + T4 | — | — |
+| **10** | **M5** + T5 | T5's three log sets are the single largest authoring cost in the spec | — |
+| **11** | **M7**, **M8 templates** | Mostly documents | — |
+| **12** | **Doc corrections.** The §7.3 CI claim in three files; M6's "first tests" → "a class that has none"; M4's required-PR DoD item; `curriculum-spec.md` §8 and `README.md` status tables; the `resources.md` seasonal re-verification list | — | — |
+| **—** | Solutions repository, built continuously alongside steps 4–11, with the §11.2 cross-check job live from step 4 | Not a final step. A milestone shipped without its solution is not shipped | — |
 
 **Timing.** 2026-08-07, kickoff roughly five months out. Steps 1–7 fit comfortably *if step 1 lands now*. Steps 1–3 are almost entirely writing and configuration — they do not wait on the toolchain being settled.
 
@@ -700,6 +700,7 @@ Order matters: bump first, then re-pin, then cross-check. A cross-check against 
 | Should `templates/` live here or stay inline in `student-deliverables.md`? | Proposed: **both** — the prose stays for reading, the files exist for copying. Duplication risk is real; a CI check that the two match would resolve it |
 | Is one worked-example test enough scaffolding for M6? | **Genuinely uncertain.** L0 is the sharpest drop on the fade curve and M6 has no test-out, so every student hits it at full density — now with a real pull request attached. Watch the first cohort; if they stall, the fix is a second worked example, not a lower bar |
 | Does a student's `Robot-2026` fork survive from M4 to M6 usefully? | Unknown. Expected yes during the quiet season; re-evaluate if M4 and M6 end up separated by kickoff for anyone |
+| Does the inverted check in `skeleton-integrity.yml` fail M0, which ships no given tests to fail? | **Resolved: it skips.** The inverted check now skips any project with no `src/test` directory. M0 is fade N/A (§9.1) and ships no stubs by design, so there is nothing for the check to require failing — skipping is correct, not a workaround. It still fires for a project that has `src/test` |
 
 ---
 
