@@ -6,9 +6,10 @@ import edu.wpi.first.wpilibj.TimedRobot;
  * The smallest robot program that runs. It does nothing except tick, which is the point — M0 is
  * about the toolchain, git, and the build, not about making anything move.
  *
- * <p>Each of these methods is called by WPILib at a specific moment. robotPeriodic() runs every 20
- * milliseconds, always. The others run when the robot enters that mode. You will meet all of them
- * properly in M3.
+ * <p>robotPeriodic() runs every 20 milliseconds, in every mode. The *Init() methods run once, the
+ * moment the robot enters that mode. The matching *Periodic() methods then run every 20
+ * milliseconds for as long as the robot stays in that mode. simulationPeriodic() is different: it
+ * runs during simulation regardless of mode. You will meet all of this properly in M3.
  */
 public class Robot extends TimedRobot {
   @Override
