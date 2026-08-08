@@ -887,7 +887,7 @@ Expected: `build` succeeds; then, with `FormatMe.java` restored to its broken st
 
 - [ ] **Step 6: Confirm the site still excludes `projects/`**
 
-`projects/` now contains real Java for the first time — the boundary claim finally has something real to exclude.
+This is a config-regression guard, not evidence about content. `docs_dir: docs` means MkDocs never reads `projects/` at all, so this check cannot fail under the current configuration — it exists to catch a future `docs_dir` change or a workflow step that stages files from the repository root.
 
 ```bash
 eval "$(pyenv init -)" && pyenv activate ignite-docs
