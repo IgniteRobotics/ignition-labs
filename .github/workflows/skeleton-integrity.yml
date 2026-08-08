@@ -69,6 +69,13 @@ jobs:
       - name: Inverted check — given tests MUST fail on the unmodified skeleton
         working-directory: ${{ matrix.project }}
         run: |
+          # A skeleton with no src/test has no given tests, so there is nothing to
+          # invert -- M0 is a complete working project by design (spec §9.1, fade N/A).
+          # Skipping on absence rather than an exemption list keeps this self-maintaining.
+          if [ ! -d src/test ]; then
+            echo "No src/test in ${{ matrix.project }} — no given tests to invert. Skipping."
+            exit 0
+          fi
           if ./gradlew test --console=plain; then
             echo "::error::${{ matrix.project }} passes its own tests unmodified."
             echo "A stub is accidentally implementing itself. See spec §7.2."
