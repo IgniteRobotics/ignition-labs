@@ -2,6 +2,10 @@
 
 How work gets into this repository, and into the robot code.
 
+Everything under `docs/` is published to the public site — there is no draft
+state and no staging area, so a scratch note or a work-in-progress page does
+not belong there.
+
 ---
 
 ## The git ritual

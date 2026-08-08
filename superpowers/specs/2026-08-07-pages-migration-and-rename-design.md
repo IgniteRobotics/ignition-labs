@@ -235,9 +235,9 @@ Dependency-ordered. Everything before step 8 is local and reversible.
 - [ ] `_site` contains every page in `nav:` and **zero** files from `projects/`, `superpowers/`, `tools/`, or `tests/`
 - [ ] `tools/site_guard.py` passes against the built site, with `REQUIRED_PAGES` unedited
 - [ ] `grep -rn "IgniteRobotics/docs"` returns hits only inside `superpowers/plans/` (the historical record)
-- [ ] All five workflow gate strings read `IgniteRobotics/ignition-labs`
+- [ ] All seven workflow gate strings read `IgniteRobotics/ignition-labs`
 - [ ] `student-check.yml` still carries **no** repository gate
-- [ ] `pytest` is green, minus the six deleted staging tests
+- [ ] `pytest` is green, minus the seven deleted staging tests
 - [ ] `lychee` reports zero errors
 - [ ] `mkdocs` and `mkdocs-material` are pinned to exact versions and named in §16 maintenance
 - [ ] `git log --follow docs/programming/git-workflow.md` shows history from before the move

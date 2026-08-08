@@ -59,6 +59,21 @@ def test_superpowers_path_in_site_is_forbidden(tmp_path):
     assert forbidden_files(site) == ["superpowers/specs/whatever.html"]
 
 
+def test_tools_path_in_site_is_forbidden(tmp_path):
+    # tools/ holds CI verification scripts (spec §10) and sits outside
+    # docs_dir; this is belt-and-braces against a future layout change
+    # that pulls it back inside.
+    site = _make_site(tmp_path, ["index.html", "tools/site_guard.html"])
+    assert forbidden_files(site) == ["tools/site_guard.html"]
+
+
+def test_tests_path_in_site_is_forbidden(tmp_path):
+    # tests/ holds tests for tools/ (spec §10) and sits outside docs_dir;
+    # same belt-and-braces reasoning as tools/ and superpowers/.
+    site = _make_site(tmp_path, ["index.html", "tests/test_site_guard.html"])
+    assert forbidden_files(site) == ["tests/test_site_guard.html"]
+
+
 def test_missing_required_page_is_reported(tmp_path):
     site = _make_site(tmp_path, ["index.html"])
     assert missing_pages(site, ["programming/git-workflow"]) == ["programming/git-workflow"]

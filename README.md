@@ -3,8 +3,10 @@
 FRC 6829 Ignite Robotics — programming curriculum, team documentation, and the
 skeleton projects students work through.
 
-**📖 Read the documentation site.** Everything here is written to be read there,
-with navigation and search. This README exists so GitHub has something to show.
+**📖 [Read the documentation site](https://igniterobotics.github.io/ignition-labs/).**
+Everything here is written to be read there, with navigation and search. The
+link goes live once GitHub Pages is enabled for this repository; until then it
+will 404. This README exists so GitHub has something to show.
 
 ## What is in this repository
 

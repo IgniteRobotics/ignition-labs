@@ -16,6 +16,8 @@ git push -u origin feature/pages-migration-ignition-labs
 
 Once the remote exists, enabling GitHub Pages (Settings → Pages → Source: GitHub Actions) is also a one-time manual step — `pages.yml` is already written to deploy correctly once Pages is turned on.
 
+After enabling Pages, verify that `https://igniterobotics.github.io/ignition-labs/` (the link in the root `README.md`) actually resolves — it will 404 until Pages is turned on and the first deploy completes.
+
 ## 2. Rename the local checkout — do this LAST
 
 Only after the remote is created (or the owner decides not to create one yet) and all other work is merged. Renaming the working directory invalidates the cwd of any shell, editor, or agent session currently pointed at it, so it must be the very last step of the whole migration, not something folded into this task:
