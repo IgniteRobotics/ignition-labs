@@ -6,6 +6,10 @@ set is deliberately NOT a roster. GitHub handle only -- no legal names, no
 emails, no school. The validator enforces that, because the privacy promise is
 only as good as the thing that checks it.
 
+SCOPE: Detects obvious email addresses and common obfuscations (spaced,
+bracketed, parenthesized forms). Does NOT detect legal names or school names
+in free text -- those require human review.
+
 Messages are addressed to a fifteen-year-old opening their first pull request.
 They say what to change, not what was done wrong.
 """
@@ -17,7 +21,21 @@ import sys
 from pathlib import Path
 
 EMAIL = re.compile(r"[\w.+-]+@[\w-]+\.[\w.]+")
-GITHUB_LINE = re.compile(r"^\*\*GitHub:\*\*\s*@([A-Za-z0-9](?:[A-Za-z0-9-]{0,37}[A-Za-z0-9])?)\s*$", re.M)
+# Spaced around @ and/or dots (e.g. "jsmith @ example . com")
+EMAIL_SPACED = re.compile(r"\w+\s*@\s*\w+\s*\.\s*\w+")
+# Bracketed [at] marker (e.g. "jsmith[at]example.com")
+EMAIL_AT_BRACKETS = re.compile(r"\w+\s*\[\s*at\s*\]\s*\w+", re.I)
+# Bracketed [dot] marker (e.g. "jsmith@example[dot]com")
+EMAIL_DOT_BRACKETS = re.compile(r"\w+\s*\[\s*dot\s*\]\s*\w", re.I)
+# Parenthesized (at) marker (e.g. "jsmith(at)example.com")
+EMAIL_AT_PARENS = re.compile(r"\w+\s*\(\s*at\s*\)\s*\w+", re.I)
+# Parenthesized (dot) marker (e.g. "jsmith@example(dot)com")
+EMAIL_DOT_PARENS = re.compile(r"\w+\s*\(\s*dot\s*\)\s*\w", re.I)
+# GitHub handle: no consecutive hyphens
+GITHUB_LINE = re.compile(
+    r"^\*\*GitHub:\*\*\s*@([A-Za-z0-9](?:(?:[A-Za-z0-9]|-(?=[A-Za-z0-9]))*[A-Za-z0-9])?)\s*$",
+    re.M,
+)
 PLACEHOLDERS = ("your-github-handle", "<your-handle>", "your-handle", "TODO", "FIXME")
 
 
@@ -38,7 +56,14 @@ def validate_file(path: Path) -> list[str]:
             "Rename the file to match your handle."
         )
 
-    if EMAIL.search(text):
+    if (
+        EMAIL.search(text)
+        or EMAIL_SPACED.search(text)
+        or EMAIL_AT_BRACKETS.search(text)
+        or EMAIL_DOT_BRACKETS.search(text)
+        or EMAIL_AT_PARENS.search(text)
+        or EMAIL_DOT_PARENS.search(text)
+    ):
         problems.append(
             "Remove the email address. This file is public and carries your GitHub "
             "handle only -- no emails, no legal names, no school."
@@ -72,7 +97,10 @@ def validate_all(root: Path) -> dict[str, list[str]]:
 def main() -> int:
     results = validate_all(Path.cwd())
     if not results:
-        print("contributor files OK")
+        print(
+            "contributor files OK: schema valid, obvious email patterns checked. "
+            "Legal names and school names need human review."
+        )
         return 0
     for rel, problems in results.items():
         print(f"\n{rel}", file=sys.stderr)

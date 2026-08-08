@@ -69,3 +69,53 @@ def test_validate_all_reports_only_bad_files(tmp_path):
 
 def test_missing_contributors_directory_is_not_an_error(tmp_path):
     assert validate_all(tmp_path) == {}
+
+
+def test_email_with_spaces_around_at_and_dot_is_rejected(tmp_path):
+    body = VALID + "\nReach me at jsmith @ example . com\n"
+    problems = validate_file(_write(tmp_path, "jsmith.md", body))
+    assert any("email" in p.lower() for p in problems)
+
+
+def test_email_with_bracketed_at_is_rejected(tmp_path):
+    body = VALID + "\nEmail: jsmith[at]example.com\n"
+    problems = validate_file(_write(tmp_path, "jsmith.md", body))
+    assert any("email" in p.lower() for p in problems)
+
+
+def test_email_with_bracketed_dot_is_rejected(tmp_path):
+    body = VALID + "\nEmail: jsmith@example[dot]com\n"
+    problems = validate_file(_write(tmp_path, "jsmith.md", body))
+    assert any("email" in p.lower() for p in problems)
+
+
+def test_email_with_parenthesized_at_is_rejected(tmp_path):
+    body = VALID + "\nEmail: jsmith(at)example.com\n"
+    problems = validate_file(_write(tmp_path, "jsmith.md", body))
+    assert any("email" in p.lower() for p in problems)
+
+
+def test_email_with_parenthesized_dot_is_rejected(tmp_path):
+    body = VALID + "\nEmail: jsmith@example(dot)com\n"
+    problems = validate_file(_write(tmp_path, "jsmith.md", body))
+    assert any("email" in p.lower() for p in problems)
+
+
+def test_prose_with_at_and_shop_is_not_rejected(tmp_path):
+    body = VALID + "\nI like to work at the shop in my spare time.\n"
+    problems = validate_file(_write(tmp_path, "jsmith.md", body))
+    # Should not have email problems
+    assert not any("email" in p.lower() for p in problems)
+
+
+def test_prose_with_dot_product_is_not_rejected(tmp_path):
+    body = VALID + "\nI enjoy mathematics, especially the dot product.\n"
+    problems = validate_file(_write(tmp_path, "jsmith.md", body))
+    # Should not have email problems
+    assert not any("email" in p.lower() for p in problems)
+
+
+def test_github_handle_with_consecutive_hyphens_is_rejected(tmp_path):
+    body = VALID.replace("@jsmith", "@j--smith")
+    problems = validate_file(_write(tmp_path, "j--smith.md", body))
+    assert any("filename" in p.lower() or "github" in p.lower() for p in problems)
