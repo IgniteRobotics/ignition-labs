@@ -11,28 +11,19 @@ The exact git commands are in [the git workflow](../../docs/programming/git-work
 
 ## What you do
 
-**1. Build it.**
+**1. Meet the formatter.**
 
 ```bash
-./gradlew build
+./gradlew spotlessCheck
 ```
 
-The first run downloads a lot and can take several minutes. That is normal. It
-gets fast after that.
+This fails, and names `src/main/java/frc/robot/FormatMe.java`. That is
+deliberate — the file is formatted wrong on purpose, and this is what a
+real formatting violation looks like when CI catches one.
 
-**2. Run the simulator.**
+**2. Fix it.**
 
-In VS Code: `Ctrl+Shift+P` (`Cmd+Shift+P` on macOS) → **WPILib: Simulate Robot Code** → check **Sim GUI** → OK.
-
-A window opens with a Robot State panel and a Joysticks panel. That window is the
-robot as far as your laptop is concerned. Find the Robot State panel and switch
-between Disabled, Autonomous, and Teleoperated. Nothing will happen — this robot
-does nothing on purpose. You are checking that the toolchain works.
-
-**3. Fix the broken formatting.**
-
-`src/main/java/frc/robot/FormatMe.java` is formatted wrong on purpose. Do not fix
-it by hand:
+Do not fix it by hand:
 
 ```bash
 ./gradlew spotlessApply
@@ -41,14 +32,32 @@ it by hand:
 Look at the diff afterward. That is what the formatter does, and it is why nobody
 on this team argues about braces in code review.
 
-**4. Add yourself to the contributors list.**
+**3. Build it.**
+
+```bash
+./gradlew build
+```
+
+The first run downloads a lot and can take several minutes. That is normal. It
+gets fast after that. This proves the toolchain works end to end.
+
+**4. Run the simulator.**
+
+In VS Code: `Ctrl+Shift+P` (`Cmd+Shift+P` on macOS) → **WPILib: Simulate Robot Code** → check **Sim GUI** → OK.
+
+A window opens with a Robot State panel and a Joysticks panel. That window is the
+robot as far as your laptop is concerned. Find the Robot State panel and switch
+between Disabled, Autonomous, and Teleoperated. Nothing will happen — this robot
+does nothing on purpose. You are checking that the toolchain works.
+
+**5. Add yourself to the contributors list.**
 
 Copy `templates/CONTRIBUTOR.md` from the repository root to
 `contributors/<your-github-handle>.md` and fill it in. GitHub handle only — no
 legal name, no email, no school. It is your file and you can delete it with
 another pull request whenever you want.
 
-**5. Open the pull request.**
+**6. Open the pull request.**
 
 One pull request containing both the formatting fix and your contributor file.
 This one goes **upstream**, to `IgniteRobotics/ignition-labs` — it is the only

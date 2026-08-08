@@ -64,10 +64,6 @@ jobs:
         working-directory: ${{ matrix.project }}
         run: chmod +x gradlew
 
-      - name: Build with Gradle
-        working-directory: ${{ matrix.project }}
-        run: ./gradlew build --console=plain
-
       - name: Check code formatting
         id: spotless
         working-directory: ${{ matrix.project }}
@@ -79,6 +75,10 @@ jobs:
           else
             echo "formatted=false" >> "$GITHUB_OUTPUT"
           fi
+
+      - name: Build with Gradle
+        working-directory: ${{ matrix.project }}
+        run: ./gradlew build --console=plain
 
       - name: Comment on formatting violations
         if: steps.spotless.outputs.formatted == 'false'

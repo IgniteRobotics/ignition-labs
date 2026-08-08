@@ -78,7 +78,7 @@ Deliberately narrower than all of git. This mirrors a pattern used by other FRC 
 
 A pull request proposes merging your branch into `main`. It is where code review happens — and code review is not a judgment of you. It is how the team catches things and how you learn faster than by yourself.
 
-Ignite's CI runs automatically on every PR (`.github/workflows/pr-build-check.yml`). It does two things:
+Ignite's CI runs automatically on every PR (`.github/workflows/student-check.yml`). It does two things:
 
 - `./gradlew build` — does the code compile?
 - `spotlessCheck` — is it formatted per Google Java Format?

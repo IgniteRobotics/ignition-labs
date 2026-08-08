@@ -23,8 +23,12 @@ import sys
 from pathlib import Path
 
 EMAIL = re.compile(r"[\w.+-]+@[\w-]+\.[\w.]+")
-# Spaced around @ and/or dots (e.g. "jsmith @ example . com")
-EMAIL_SPACED = re.compile(r"\w+\s*@\s*\w+\s*\.\s*\w+")
+# Spaced around @ and/or dots (e.g. "jsmith @ example . com"). The domain
+# suffix must not start with a capital letter, which is what distinguishes an
+# obfuscated email's lowercase TLD from a GitHub @mention that happens to end
+# a sentence (e.g. "learning from @sciencewhiz. Mostly autonomous" — "Mostly"
+# starts the next sentence, not a domain).
+EMAIL_SPACED = re.compile(r"\w+\s*@\s*\w+\s*\.\s*(?![A-Z])\w+")
 # Bracketed [at] marker (e.g. "jsmith[at]example.com")
 EMAIL_AT_BRACKETS = re.compile(r"\w+\s*\[\s*at\s*\]\s*\w+", re.I)
 # Bracketed [dot] marker (e.g. "jsmith@example[dot]com")
@@ -61,7 +65,7 @@ def validate_file(path: Path) -> list[str]:
         problems.append(
             "Add a line reading exactly '**GitHub:** @your-handle' with your real handle."
         )
-    elif match.group(1) != stem:
+    elif match.group(1).lower() != stem.lower():
         problems.append(
             f"The filename says '{stem}' but the GitHub line says '@{match.group(1)}'. "
             "Rename the file to match your handle."
@@ -107,12 +111,22 @@ def validate_all(root: Path) -> dict[str, list[str]]:
 
 
 def main() -> int:
-    results = validate_all(Path.cwd())
+    root = Path.cwd()
+    results = validate_all(root)
     if not results:
-        print(
-            "contributor files OK: schema valid, common accidental email disclosures caught. "
-            "Mentor: please review for deliberate obfuscation and any legal names or school references."
-        )
+        directory = root / "contributors"
+        checked = [p for p in sorted(directory.glob("*.md")) if p.name != "README.md"] if directory.is_dir() else []
+        if not checked:
+            print(
+                "No contributor files found to check. This tool cannot know which student "
+                "authored this pull request, so it cannot verify that one was added -- "
+                "Mentor: confirm contributors/<handle>.md exists for this PR."
+            )
+        else:
+            print(
+                "contributor files OK: schema valid, common accidental email disclosures caught. "
+                "Mentor: please review for deliberate obfuscation and any legal names or school references."
+            )
         return 0
     for rel, problems in results.items():
         print(f"\n{rel}", file=sys.stderr)

@@ -199,3 +199,15 @@ def test_prose_maths_at_moment_is_not_rejected(tmp_path):
     body = VALID + "\nMy favourite subject is maths at the moment, dot.\n"
     problems = validate_file(_write(tmp_path, "jsmith.md", body))
     assert not any("email" in p.lower() for p in problems)
+
+
+def test_at_mention_ending_a_sentence_is_not_rejected(tmp_path):
+    body = VALID + "\nStill learning from @sciencewhiz. Mostly autonomous.\n"
+    problems = validate_file(_write(tmp_path, "jsmith.md", body))
+    assert not any("email" in p.lower() for p in problems)
+
+
+def test_handle_filename_comparison_is_case_insensitive(tmp_path):
+    body = VALID.replace("@jsmith", "@JSmith")
+    problems = validate_file(_write(tmp_path, "jsmith.md", body))
+    assert not any("filename" in p.lower() for p in problems)

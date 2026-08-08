@@ -58,13 +58,13 @@ jobs:
       - working-directory: ${{ matrix.project }}
         run: chmod +x gradlew
 
-      - name: Skeleton compiles on a clean clone
-        working-directory: ${{ matrix.project }}
-        run: ./gradlew assemble --console=plain
-
       - name: Skeleton is already formatted
         working-directory: ${{ matrix.project }}
         run: ./gradlew spotlessCheck --console=plain
+
+      - name: Skeleton compiles on a clean clone
+        working-directory: ${{ matrix.project }}
+        run: ./gradlew assemble --console=plain
 
       - name: Inverted check — given tests MUST fail on the unmodified skeleton
         working-directory: ${{ matrix.project }}

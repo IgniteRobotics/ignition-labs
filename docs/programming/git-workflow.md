@@ -37,6 +37,7 @@ cd projects/m0-onboarding && ./gradlew spotlessApply && cd ../..
 
 # 6. Commit and push
 git add -u
+git add contributors/<your-handle>.md
 git commit -m "Add <your-handle> to contributors"
 git push -u origin add-<your-handle>-contributor
 ```

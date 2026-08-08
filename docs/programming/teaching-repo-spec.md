@@ -380,8 +380,8 @@ M0 is not about code. The skeleton exists so the pull request has something real
 
 **Student authors:** `contributors/<github-handle>.md` from a template, and runs `./gradlew spotlessApply` on `FormatMe.java`, then opens one pull request containing both — upstream, per §5.2.
 
-**Tests cover:** contributor file exists and matches the schema; `spotlessCheck` passes.
-**Mentor verifies:** simulator launches and the student can point at the Robot State panel; can explain a branch without using the word "branch"; **Actions are enabled on their fork** (§7.3, mechanic 3).
+**Tests cover:** the contributor file's schema, when one is present — GitHub line, no placeholder text, no accidental email disclosure. `spotlessCheck` passes.
+**Mentor verifies:** the contributor file exists for this student's PR (the checker cannot know which student authored a given pull request, so it cannot enforce this — an empty `contributors/` directory still exits 0); simulator launches and the student can point at the Robot State panel; can explain a branch without using the word "branch"; **Actions are enabled on their fork** (§7.3, mechanic 3).
 
 ### 9.2 M1 — `projects/m1-java-fundamentals/` · fade: L3
 
