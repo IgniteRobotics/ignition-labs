@@ -170,7 +170,7 @@ The project is deliberately not about code quality — it is about surviving the
 
 **Definition of done.**
 - [ ] WPILib VS Code installed; `./gradlew build` succeeds locally
-- [ ] Simulator launches and the student can identify the Driver Station panel
+- [ ] Simulator launches and the student can identify the Robot State panel
 - [ ] A merged PR exists under the student's GitHub account
 - [ ] `spotlessCheck` passed without a mentor fixing it for them
 - [ ] Student can explain what a branch is without using the word "branch"
