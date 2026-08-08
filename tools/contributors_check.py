@@ -1,14 +1,16 @@
 """Validates contributor files (spec §9.1).
 
-Two jobs. The first is a schema check so a student's first pull request gets
-useful feedback instead of a silent merge. The second matters more: this file
-set is deliberately NOT a roster. GitHub handle only -- no legal names, no
-emails, no school. The validator enforces that, because the privacy promise is
-only as good as the thing that checks it.
+PURPOSE: Catch accidental email disclosure. A student who pastes an email
+without thinking about where the file goes. NOT: stop deliberate obfuscation.
+A determined student will succeed; a mentor must still read the file.
 
-SCOPE: Detects obvious email addresses and common obfuscations (spaced,
-bracketed, parenthesized forms). Does NOT detect legal names or school names
-in free text -- those require human review.
+Two jobs. The first is a schema check so a student's first pull request gets
+useful feedback instead of a silent merge. The second is privacy: GitHub handle
+only -- no legal names, no emails, no school. The validator catches common
+accidental disclosures (standard emails, spaced variants, bracketed/parenthesized
+replacements, fullwidth chars, spelled-out forms). It does not attempt to
+catch determined obfuscation or detect names/schools in free text -- those
+require human review.
 
 Messages are addressed to a fifteen-year-old opening their first pull request.
 They say what to change, not what was done wrong.
@@ -31,9 +33,13 @@ EMAIL_DOT_BRACKETS = re.compile(r"\w+\s*\[\s*dot\s*\]\s*\w", re.I)
 EMAIL_AT_PARENS = re.compile(r"\w+\s*\(\s*at\s*\)\s*\w+", re.I)
 # Parenthesized (dot) marker (e.g. "jsmith@example(dot)com")
 EMAIL_DOT_PARENS = re.compile(r"\w+\s*\(\s*dot\s*\)\s*\w", re.I)
-# GitHub handle: no consecutive hyphens
+# Spelled-out forms: AT SIGN (e.g. "jsmith AT SIGN example dot com")
+EMAIL_AT_SIGN = re.compile(r"\b\w+\s+(?:at\s+sign|at-sign)\s+\w+", re.I)
+# Bare token form: word at word dot word (e.g. "jsmith at example dot com")
+EMAIL_BARE_TOKENS = re.compile(r"\b\w+\s+at\s+\w+\s+dot\s+\w+\b", re.I)
+# GitHub handle: no consecutive hyphens, max 39 characters
 GITHUB_LINE = re.compile(
-    r"^\*\*GitHub:\*\*\s*@([A-Za-z0-9](?:(?:[A-Za-z0-9]|-(?=[A-Za-z0-9]))*[A-Za-z0-9])?)\s*$",
+    r"^\*\*GitHub:\*\*\s*@([A-Za-z0-9](?:(?:[A-Za-z0-9]|-(?=[A-Za-z0-9])){0,37}[A-Za-z0-9])?)\s*$",
     re.M,
 )
 PLACEHOLDERS = ("your-github-handle", "<your-handle>", "your-handle", "TODO", "FIXME")
@@ -44,6 +50,13 @@ def validate_file(path: Path) -> list[str]:
     problems: list[str] = []
     text = path.read_text(encoding="utf-8")
     stem = path.stem
+
+    # Normalize fullwidth Unicode characters to ASCII equivalents
+    # Fullwidth @ (U+FF20) and fullwidth . (U+FF0E) are common obfuscations
+    text_normalized = text.translate(str.maketrans({
+        '＠': '@',  # Fullwidth @
+        '．': '.',  # Fullwidth .
+    }))
 
     match = GITHUB_LINE.search(text)
     if match is None:
@@ -57,12 +70,14 @@ def validate_file(path: Path) -> list[str]:
         )
 
     if (
-        EMAIL.search(text)
-        or EMAIL_SPACED.search(text)
-        or EMAIL_AT_BRACKETS.search(text)
-        or EMAIL_DOT_BRACKETS.search(text)
-        or EMAIL_AT_PARENS.search(text)
-        or EMAIL_DOT_PARENS.search(text)
+        EMAIL.search(text_normalized)
+        or EMAIL_SPACED.search(text_normalized)
+        or EMAIL_AT_BRACKETS.search(text_normalized)
+        or EMAIL_DOT_BRACKETS.search(text_normalized)
+        or EMAIL_AT_PARENS.search(text_normalized)
+        or EMAIL_DOT_PARENS.search(text_normalized)
+        or EMAIL_AT_SIGN.search(text_normalized)
+        or EMAIL_BARE_TOKENS.search(text_normalized)
     ):
         problems.append(
             "Remove the email address. This file is public and carries your GitHub "
@@ -98,8 +113,8 @@ def main() -> int:
     results = validate_all(Path.cwd())
     if not results:
         print(
-            "contributor files OK: schema valid, obvious email patterns checked. "
-            "Legal names and school names need human review."
+            "contributor files OK: schema valid, common accidental email disclosures caught. "
+            "Mentor: please review for deliberate obfuscation and any legal names or school references."
         )
         return 0
     for rel, problems in results.items():

@@ -119,3 +119,53 @@ def test_github_handle_with_consecutive_hyphens_is_rejected(tmp_path):
     body = VALID.replace("@jsmith", "@j--smith")
     problems = validate_file(_write(tmp_path, "j--smith.md", body))
     assert any("filename" in p.lower() or "github" in p.lower() for p in problems)
+
+
+def test_github_handle_with_39_chars_is_accepted(tmp_path):
+    # GitHub allows up to 39 characters
+    handle_39 = "a" * 39
+    body = VALID.replace("jsmith", handle_39)
+    problems = validate_file(_write(tmp_path, f"{handle_39}.md", body))
+    assert not any("github" in p.lower() or "filename" in p.lower() for p in problems)
+
+
+def test_github_handle_with_40_chars_is_rejected(tmp_path):
+    # GitHub limits to 39 characters max
+    handle_40 = "a" * 40
+    body = VALID.replace("jsmith", handle_40)
+    problems = validate_file(_write(tmp_path, f"{handle_40}.md", body))
+    assert any("github" in p.lower() for p in problems)
+
+
+def test_email_with_fullwidth_at_is_rejected(tmp_path):
+    body = VALID + "\nEmail: jsmith＠example.com\n"
+    problems = validate_file(_write(tmp_path, "jsmith.md", body))
+    assert any("email" in p.lower() for p in problems)
+
+
+def test_email_spelled_out_at_sign_is_rejected(tmp_path):
+    body = VALID + "\nContact: jsmith AT SIGN example dot com\n"
+    problems = validate_file(_write(tmp_path, "jsmith.md", body))
+    assert any("email" in p.lower() for p in problems)
+
+
+
+
+def test_email_bare_tokens_at_dot_is_rejected(tmp_path):
+    body = VALID + "\nContact: jsmith at example dot com\n"
+    problems = validate_file(_write(tmp_path, "jsmith.md", body))
+    assert any("email" in p.lower() for p in problems)
+
+
+def test_prose_with_article_before_at_is_not_rejected(tmp_path):
+    body = VALID + "\nI work at the coffee shop dot net.\n"
+    problems = validate_file(_write(tmp_path, "jsmith.md", body))
+    # "the" in "at the" prevents matching as email pattern
+    assert not any("email" in p.lower() for p in problems)
+
+
+def test_prose_with_article_before_dot_is_not_rejected(tmp_path):
+    body = VALID + "\nLet's meet at the place dot org tomorrow.\n"
+    problems = validate_file(_write(tmp_path, "jsmith.md", body))
+    # "the" in "at the" prevents matching as email pattern
+    assert not any("email" in p.lower() for p in problems)
