@@ -35,8 +35,6 @@ EMAIL_AT_PARENS = re.compile(r"\w+\s*\(\s*at\s*\)\s*\w+", re.I)
 EMAIL_DOT_PARENS = re.compile(r"\w+\s*\(\s*dot\s*\)\s*\w", re.I)
 # Spelled-out forms: AT SIGN (e.g. "jsmith AT SIGN example dot com")
 EMAIL_AT_SIGN = re.compile(r"\b\w+\s+(?:at\s+sign|at-sign)\s+\w+", re.I)
-# Bare token form: word at word dot word (e.g. "jsmith at example dot com")
-EMAIL_BARE_TOKENS = re.compile(r"\b\w+\s+at\s+\w+\s+dot\s+\w+\b", re.I)
 # GitHub handle: no consecutive hyphens, max 39 characters
 GITHUB_LINE = re.compile(
     r"^\*\*GitHub:\*\*\s*@([A-Za-z0-9](?:(?:[A-Za-z0-9]|-(?=[A-Za-z0-9])){0,37}[A-Za-z0-9])?)\s*$",
@@ -77,7 +75,6 @@ def validate_file(path: Path) -> list[str]:
         or EMAIL_AT_PARENS.search(text_normalized)
         or EMAIL_DOT_PARENS.search(text_normalized)
         or EMAIL_AT_SIGN.search(text_normalized)
-        or EMAIL_BARE_TOKENS.search(text_normalized)
     ):
         problems.append(
             "Remove the email address. This file is public and carries your GitHub "

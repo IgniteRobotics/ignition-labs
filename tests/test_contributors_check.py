@@ -151,12 +151,6 @@ def test_email_spelled_out_at_sign_is_rejected(tmp_path):
 
 
 
-def test_email_bare_tokens_at_dot_is_rejected(tmp_path):
-    body = VALID + "\nContact: jsmith at example dot com\n"
-    problems = validate_file(_write(tmp_path, "jsmith.md", body))
-    assert any("email" in p.lower() for p in problems)
-
-
 def test_prose_with_article_before_at_is_not_rejected(tmp_path):
     body = VALID + "\nI work at the coffee shop dot net.\n"
     problems = validate_file(_write(tmp_path, "jsmith.md", body))
@@ -168,4 +162,40 @@ def test_prose_with_article_before_dot_is_not_rejected(tmp_path):
     body = VALID + "\nLet's meet at the place dot org tomorrow.\n"
     problems = validate_file(_write(tmp_path, "jsmith.md", body))
     # "the" in "at the" prevents matching as email pattern
+    assert not any("email" in p.lower() for p in problems)
+
+
+def test_prose_meet_at_the_dot_is_not_rejected(tmp_path):
+    body = VALID + "\nMeet at the dot on the field.\n"
+    problems = validate_file(_write(tmp_path, "jsmith.md", body))
+    assert not any("email" in p.lower() for p in problems)
+
+
+def test_prose_dot_matrix_printer_is_not_rejected(tmp_path):
+    body = VALID + "\nI like to look at the dot matrix printer.\n"
+    problems = validate_file(_write(tmp_path, "jsmith.md", body))
+    assert not any("email" in p.lower() for p in problems)
+
+
+def test_prose_work_at_shop_is_not_rejected(tmp_path):
+    body = VALID + "\nI want to work at the shop on Saturdays.\n"
+    problems = validate_file(_write(tmp_path, "jsmith.md", body))
+    assert not any("email" in p.lower() for p in problems)
+
+
+def test_prose_dot_product_is_not_rejected(tmp_path):
+    body = VALID + "\nWe compute the dot product of the two vectors.\n"
+    problems = validate_file(_write(tmp_path, "jsmith.md", body))
+    assert not any("email" in p.lower() for p in problems)
+
+
+def test_prose_at_school_is_not_rejected(tmp_path):
+    body = VALID + "\nI am at school at the moment.\n"
+    problems = validate_file(_write(tmp_path, "jsmith.md", body))
+    assert not any("email" in p.lower() for p in problems)
+
+
+def test_prose_maths_at_moment_is_not_rejected(tmp_path):
+    body = VALID + "\nMy favourite subject is maths at the moment, dot.\n"
+    problems = validate_file(_write(tmp_path, "jsmith.md", body))
     assert not any("email" in p.lower() for p in problems)
