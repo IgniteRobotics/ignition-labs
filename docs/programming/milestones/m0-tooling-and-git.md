@@ -94,8 +94,8 @@ There is also a second workflow that runs an AI reviewer against every PR diff. 
 The project is `projects/m0-onboarding/`. It ships with a real thing to fix — `FormatMe.java`, deliberately misformatted — and a real thing to add: yourself, to the contributors list. Its own README walks the build and the simulator. The exact git commands — fork, branch, commit, push, pull request — are in [the git workflow](../git-workflow.md); this milestone does not repeat them.
 
 1. Fork and clone `ignition-labs`, per the git workflow's M0 section
-2. Work through `projects/m0-onboarding/README.md`: build it, run the simulator, fix `FormatMe.java`'s formatting, add your contributor file
-3. Commit both changes with a message that explains why
+2. Work through `projects/m0-onboarding/README.md`: build it, run the simulator, fix `FormatMe.java`'s formatting and then revert the fix, add your contributor file
+3. Commit only the contributor file, with a message that explains why — the formatting fix is never shipped, so the next student gets the same exercise
 
 ⚠️ **Enable Actions on your fork before you open the pull request.** GitHub disables Actions on forked repositories by default. Until you turn them on, your pull request shows **no checks at all** — which looks like the repository is broken, and it isn't. Go to your fork on github.com → **Actions** tab → click **"I understand my workflows, go ahead and enable them."** Spec §15 rates this the single most likely thing to go wrong at M0.
 
