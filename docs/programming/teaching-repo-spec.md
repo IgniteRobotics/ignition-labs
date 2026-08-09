@@ -167,11 +167,13 @@ Every skeleton project matches the current in-house stack, verified against `Rob
 | Java | `sourceCompatibility` / `targetCompatibility` 17 | Both repos |
 | Spotless plugin | `8.2.1` | `Robot-2026` (newer than `Phoenix-2026`'s 6.25.0) |
 | Formatter | `googleJavaFormat('1.19.2').reflowLongStrings()`, `removeUnusedImports()`, `trimTrailingWhitespace()`, `endWithNewline()` | Both repos, identical |
-| Spotless enforcement | `enforceCheck false` plus `compileJava.dependsOn 'spotlessApply'` | Both repos |
+| Spotless enforcement | `enforceCheck false`, **without** `compileJava.dependsOn 'spotlessApply'` | Deviates from both repos, deliberately — see below |
 | JUnit | `org.junit.jupiter:junit-jupiter:5.10.1`, `useJUnitPlatform()`, `wpi.java.configureTestTasks(test)` | Both repos |
 | Vendordeps | Minimum set per milestone — see §9. Never "all of them by default" | — |
 
 **Not carried over:** the `com.peterabeles.gversion` plugin and generated `BuildConstants` from `Robot-2026`. Useful in a season repo, noise in a teaching one.
+
+**Deviation: `compileJava.dependsOn 'spotlessApply'` is deliberately omitted here.** Both `Robot-2026` and `Phoenix-2026` wire it, but auto-apply-on-compile and a meaningful CI format check are mutually exclusive: any compile reformats the tree before `spotlessCheck` ever runs, so the check can never see a violation. That is not hypothetical — it is exactly what made M0's own formatting gate unreachable, and the same wiring makes the check vacuous in the real repos (§17). The teaching skeletons keep `enforceCheck false` (a build must not fail on formatting alone) but drop the auto-apply, so `spotlessCheck` stays a real, failable, separate step, per §7.3 mechanic 4 and the CI ordering in §7.2.
 
 ### 4.4 Package naming
 
@@ -376,12 +378,12 @@ Each entry lists what ships, which DoD items the tests cover, and which stay men
 
 M0 is not about code. The skeleton exists so the pull request has something real to change.
 
-**Given:** a complete, working, minimal `TimedRobot` project that builds and whose simulator launches. `CONTRIBUTING.md` with the curated command set from `curriculum-spec.md` §4.2 — `clone`, `checkout -b`, `add -u`, `commit -m`, `fetch --all`, `merge`, `push` — and nothing else. `student-check.yml`. A deliberately mis-formatted `FormatMe.java`.
+**Given:** a complete, working, minimal `TimedRobot` project that builds and whose simulator launches. `CONTRIBUTING.md` with the curated command set from `curriculum-spec.md` §4.2 — `clone`, `checkout -b`, `add -u`, `commit -m`, `fetch --all`, `merge`, `push` — and nothing else. `student-check.yml`. A deliberately mis-formatted `FormatMe.java`. `FormatMe.java` is the conventional name for a formatting-exercise file and, by that convention, is the one file `skeleton-integrity.yml`'s formatting check exempts.
 
-**Student authors:** `contributors/<github-handle>.md` from a template, and runs `./gradlew spotlessApply` on `FormatMe.java`, then opens one pull request containing both — upstream, per §5.2.
+**Student authors:** `contributors/<github-handle>.md` from a template, and runs `./gradlew spotlessApply` on `FormatMe.java` locally to see the fix — then **reverts it**, and opens one pull request containing only the contributor file, upstream, per §5.2. The formatting fix is never committed: its entire value is in running it and reading the diff once, and a fix that landed on `main` would leave the next student's `FormatMe.java` already correctly formatted, with nothing left to fix.
 
-**Tests cover:** contributor file exists and matches the schema; `spotlessCheck` passes.
-**Mentor verifies:** simulator launches and the student can point at the Driver Station panel; can explain a branch without using the word "branch"; **Actions are enabled on their fork** (§7.3, mechanic 3).
+**Tests cover:** the contributor file's schema, when one is present — GitHub line, no placeholder text, no accidental email disclosure. Because the pull request touches only `contributors/`, `student-check.yml`'s build-and-`spotlessCheck` job never runs for it at all — that job is gated on `projects/**` having changed (§7.3, mechanic 2), and by design it has not.
+**Mentor verifies:** the contributor file exists for this student's PR (the checker cannot know which student authored a given pull request, so it cannot enforce this — an empty `contributors/` directory still exits 0); simulator launches and the student can point at the Robot State panel; can explain a branch without using the word "branch"; **Actions are enabled on their fork** (§7.3, mechanic 3).
 
 ### 9.2 M1 — `projects/m1-java-fundamentals/` · fade: L3
 
@@ -608,23 +610,23 @@ Stubs throw `UnsupportedOperationException`; they do not fail to compile. A stud
 
 Ordered by dependency, then by value. Each step is independently reviewable and independently useful.
 
-| # | Step | Notes |
-|---|---|---|
-| **0** | Sanity check: one standalone project builds from a clean clone; confirm `build` runs `test` under GradleRIO | 30 minutes. Not a spike — §4.2 removed that risk |
-| **1** | **`programming/git-workflow.md` + `programming/robot-repo-ladder.md`** | §5 and §6 as student-facing prose. **Zero dependencies. Ships immediately** |
-| **2** | Create the git remote; repository scaffold: four workflows, `tests.lock` tooling, `CODEOWNERS`, pull request template, `CONTRIBUTING.md`, `SETUP.md` (including the fork-Actions step) | — |
-| **3** | Pages live | Proves the pipeline before there is much to publish |
-| **4** | **M0** | Smallest, and the one every single student hits |
-| **5** | **M1** + T1 | Highest volume of students. L3 is the most authoring-heavy fade level per unit of content |
-| **6** | **M2** + T2 | — |
-| **7** | **M3** + T3 | Largest milestone. The `M3Deliverables` harness is the risky part — build it first and validate against a throwaway solution |
-| — | — | **Kickoff Gate block complete (M0–M3). Ship it and stop if time runs out.** Everything below can land after the season starts |
-| **8** | **M6** + `UNTESTED-TARGETS.md` | Out of numeric order deliberately: it is the M7 gate, and the regression-patch verification is novel enough to want proving early |
-| **9** | **M4** + T4 | — |
-| **10** | **M5** + T5 | T5's three log sets are the single largest authoring cost in the spec |
-| **11** | **M7**, **M8 templates** | Mostly documents |
-| **12** | **Doc corrections.** The §7.3 CI claim in three files; M6's "first tests" → "a class that has none"; M4's required-PR DoD item; `curriculum-spec.md` §8 and `README.md` status tables; the `resources.md` seasonal re-verification list | — |
-| **—** | Solutions repository, built continuously alongside steps 4–11, with the §11.2 cross-check job live from step 4 | Not a final step. A milestone shipped without its solution is not shipped |
+| # | Step | Notes | Status |
+|---|---|---|---|
+| **0** | Sanity check: one standalone project builds from a clean clone; confirm `build` runs `test` under GradleRIO | 30 minutes. Not a spike — §4.2 removed that risk | Done |
+| **1** | **`programming/git-workflow.md` + `programming/robot-repo-ladder.md`** | §5 and §6 as student-facing prose. **Zero dependencies. Ships immediately** | Done |
+| **2** | Create the git remote; repository scaffold: four workflows, `tests.lock` tooling, `CODEOWNERS`, pull request template, `CONTRIBUTING.md`, `SETUP.md` (including the fork-Actions step) | — | Done |
+| **3** | Pages live | Proves the pipeline before there is much to publish | Done |
+| **4** | **M0** | Smallest, and the one every single student hits | **Done** |
+| **5** | **M1** + T1 | Highest volume of students. L3 is the most authoring-heavy fade level per unit of content | — |
+| **6** | **M2** + T2 | — | — |
+| **7** | **M3** + T3 | Largest milestone. The `M3Deliverables` harness is the risky part — build it first and validate against a throwaway solution | — |
+| — | — | **Kickoff Gate block complete (M0–M3). Ship it and stop if time runs out.** Everything below can land after the season starts | — |
+| **8** | **M6** + `UNTESTED-TARGETS.md` | Out of numeric order deliberately: it is the M7 gate, and the regression-patch verification is novel enough to want proving early | — |
+| **9** | **M4** + T4 | — | — |
+| **10** | **M5** + T5 | T5's three log sets are the single largest authoring cost in the spec | — |
+| **11** | **M7**, **M8 templates** | Mostly documents | — |
+| **12** | **Doc corrections.** The §7.3 CI claim in three files; M6's "first tests" → "a class that has none"; M4's required-PR DoD item; `curriculum-spec.md` §8 and `README.md` status tables; the `resources.md` seasonal re-verification list | — | — |
+| **—** | Solutions repository, built continuously alongside steps 4–11, with the §11.2 cross-check job live from step 4 | Not a final step. A milestone shipped without its solution is not shipped | — |
 
 **Timing.** 2026-08-07, kickoff roughly five months out. Steps 1–7 fit comfortably *if step 1 lands now*. Steps 1–3 are almost entirely writing and configuration — they do not wait on the toolchain being settled.
 
@@ -700,6 +702,8 @@ Order matters: bump first, then re-pin, then cross-check. A cross-check against 
 | Should `templates/` live here or stay inline in `student-deliverables.md`? | Proposed: **both** — the prose stays for reading, the files exist for copying. Duplication risk is real; a CI check that the two match would resolve it |
 | Is one worked-example test enough scaffolding for M6? | **Genuinely uncertain.** L0 is the sharpest drop on the fade curve and M6 has no test-out, so every student hits it at full density — now with a real pull request attached. Watch the first cohort; if they stall, the fix is a second worked example, not a lower bar |
 | Does a student's `Robot-2026` fork survive from M4 to M6 usefully? | Unknown. Expected yes during the quiet season; re-evaluate if M4 and M6 end up separated by kickoff for anyone |
+| Does the inverted check in `skeleton-integrity.yml` fail M0, which ships no given tests to fail? | **Resolved: it skips.** The inverted check now skips any project with no `src/test` directory. M0 is fade N/A (§9.1) and ships no stubs by design, so there is nothing for the check to require failing — skipping is correct, not a workaround. It still fires for a project that has `src/test` |
+| **`Robot-2026`'s own formatting gate is unreachable, for the same reason M0's was.** `Robot-2026/build.gradle:15` sets `enforceCheck false`; `Robot-2026/build.gradle:136` sets `compileJava.dependsOn 'spotlessApply'`. `Robot-2026/.github/workflows/pr-build-check.yml` runs `./gradlew build` (line 33) *before* `spotlessCheck` (line 40) on every pull request — so the build step's implicit `spotlessApply` reformats the tree first, and `spotlessCheck` can never observe a violation. Its "Comment on PR with formatting violations" step (line 49) has been unreachable since it was written. **Fix owed to `Robot-2026`, not this repository:** drop the `compileJava.dependsOn` line and/or reorder the workflow so `spotlessCheck` runs before `build`, matching the fix applied to this repo's own `build.gradle` and workflows (§4.3). Not fixed here — `Robot-2026` is a separate repository |
 
 ---
 

@@ -31,12 +31,18 @@ git remote add upstream git@github.com:IgniteRobotics/ignition-labs.git
 # 4. Branch. Never work on main.
 git checkout -b add-<your-handle>-contributor
 
-# 5. Do the work: create contributors/<your-handle>.md,
-#    and run spotlessApply on the deliberately-ugly FormatMe.java
-cd projects/m0-onboarding && ./gradlew spotlessApply && cd ../..
+# 5. Do the exercise: run spotlessApply on the deliberately-ugly FormatMe.java,
+#    read the diff, then revert it -- the fix is never committed. The next
+#    student needs the same violation to find.
+cd projects/m0-onboarding
+./gradlew spotlessApply
+git checkout src/main/java/frc/robot/FormatMe.java
+cd ../..
 
-# 6. Commit and push
-git add -u
+# 6. Create contributors/<your-handle>.md, then commit and push.
+#    Only the contributor file goes in -- there is no formatting fix left to
+#    stage after step 5's revert.
+git add contributors/<your-handle>.md
 git commit -m "Add <your-handle> to contributors"
 git push -u origin add-<your-handle>-contributor
 ```

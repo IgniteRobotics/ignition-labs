@@ -58,17 +58,73 @@ jobs:
       - working-directory: ${{ matrix.project }}
         run: chmod +x gradlew
 
+      # This must run before "Skeleton compiles on a clean clone". A build step
+      # must never be trusted to leave the tree as it found it -- that is
+      # exactly how compileJava.dependsOn 'spotlessApply' made this gate
+      # unreachable before (it silently reformatted the tree on every compile,
+      # so spotlessCheck never saw a violation). Checking formatting first
+      # means a future build step that reformats the tree again cannot disable
+      # this gate without the reorder itself being the thing that has to change.
+      - name: Skeleton is already formatted
+        working-directory: ${{ matrix.project }}
+        run: |
+          # FormatMe.java is the M0 formatting exercise (spec §9.1): the one
+          # deliberately mis-formatted artifact in the whole curriculum. M1-M8
+          # ship stubs that throw UnsupportedOperationException, and those are
+          # properly formatted -- FormatMe.java is the sole, intentional
+          # exception, fixed locally with spotlessApply and never committed.
+          # It is exempted here by filename convention rather than listed in
+          # build.gradle so the exemption is self-maintaining, the same way
+          # the inverted check below skips on the absence of src/test rather
+          # than an exemption list.
+          #
+          # Do not just ignore spotlessCheck's exit code to grant that
+          # exemption -- that would silently pass this step even when some
+          # OTHER file is unformatted, which is the exact "check that passes
+          # while the thing it protects is broken" failure this repo keeps
+          # producing. Instead, capture the command's own exit status via
+          # command substitution (never pipe it into something like `tee`,
+          # which would mask it) and inspect spotlessCheck's own violation
+          # report: only pass when every offending file it names is a
+          # FormatMe.java, and fail loudly -- rather than pass by default --
+          # if the report can't be parsed at all, since that means something
+          # other than a clean formatting violation happened.
+          set +e
+          output=$(./gradlew spotlessCheck --console=plain 2>&1)
+          status=$?
+          set -e
+          echo "$output"
+          if [ "$status" -eq 0 ]; then
+            exit 0
+          fi
+          offenders=$(echo "$output" | sed -n '/had format violations:/,/^Run .\.\/gradlew spotlessApply. to fix/p' \
+            | grep -E '^ {6}\S' | sed 's/^ *//')
+          non_exempt=$(echo "$offenders" | grep -v '/FormatMe\.java$' | grep -vx 'FormatMe\.java' || true)
+          if [ -n "$non_exempt" ]; then
+            echo "::error::spotlessCheck failed on non-exempt file(s):"
+            echo "$non_exempt"
+            exit "$status"
+          fi
+          if [ -z "$offenders" ]; then
+            echo "::error::spotlessCheck failed but no violating files were parsed from its output; treating as a real failure rather than swallowing it."
+            exit "$status"
+          fi
+          echo "OK: only FormatMe.java (the formatting exercise, spec §9.1) is mis-formatted."
+
       - name: Skeleton compiles on a clean clone
         working-directory: ${{ matrix.project }}
         run: ./gradlew assemble --console=plain
 
-      - name: Skeleton is already formatted
-        working-directory: ${{ matrix.project }}
-        run: ./gradlew spotlessCheck --console=plain
-
       - name: Inverted check — given tests MUST fail on the unmodified skeleton
         working-directory: ${{ matrix.project }}
         run: |
+          # A skeleton with no src/test has no given tests, so there is nothing to
+          # invert -- M0 is a complete working project by design (spec §9.1, fade N/A).
+          # Skipping on absence rather than an exemption list keeps this self-maintaining.
+          if [ ! -d src/test ]; then
+            echo "No src/test in ${{ matrix.project }} — no given tests to invert. Skipping."
+            exit 0
+          fi
           if ./gradlew test --console=plain; then
             echo "::error::${{ matrix.project }} passes its own tests unmodified."
             echo "A stub is accidentally implementing itself. See spec §7.2."

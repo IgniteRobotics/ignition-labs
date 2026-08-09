@@ -64,7 +64,7 @@ to guess at from a description.
 
 ## 6. Verify the simulator
 
-In VS Code: `Ctrl+Shift+P` → **"WPILib: Simulate Robot Code"** → check
+In VS Code: `Ctrl+Shift+P` (`Cmd+Shift+P` on macOS) → **"WPILib: Simulate Robot Code"** → check
 **"Sim GUI"** → OK.
 
 Expected: a window with a Robot State panel and a Joysticks panel. That window is
