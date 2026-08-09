@@ -11,5 +11,5 @@
 /tests.lock                           @IgniteRobotics/mentors
 /tools/                               @IgniteRobotics/mentors
 /.github/workflows/                   @IgniteRobotics/mentors
-/programming/teaching-repo-spec.md    @IgniteRobotics/mentors
-/programming/ai-use-standard.md       @IgniteRobotics/mentors
+/docs/programming/teaching-repo-spec.md   @IgniteRobotics/mentors
+/docs/programming/ai-use-standard.md      @IgniteRobotics/mentors

@@ -130,7 +130,7 @@ The three most likely to generate friction:
 | Piece | State |
 |---|---|
 | Spec, resources, AI standard, all nine milestones, deliverables, tracks | **Written** |
-| Teaching repository for M0–M3 projects | **M0 built** — `projects/m0-onboarding/` builds from a clean clone and its simulator starts, alongside the process docs, verification tooling, four CI workflows, and the Pages pipeline already in this repository. M1–M8 skeleton projects are not yet built; they arrive in later plans |
+| Teaching repository for M0–M3 projects | **M0 and M1 built** — `projects/m0-onboarding/` builds from a clean clone and its simulator starts, and `projects/m1-java-fundamentals/` with its test-out fixture `projects/testouts/t1-find-the-bug/` assemble green and test red, alongside the process docs, verification tooling, four CI workflows, and the Pages pipeline already in this repository. M2–M8 skeleton projects are not yet built; they arrive in later plans |
 | `CommandTemplate` rewrite | **Out of scope** — see spec §8. Still the highest-leverage single fix, and it is still on WPILib 2025.2.1 |
 | Repo-level READMEs | **Not written** — M8 creates the habit per subsystem |
 | Code references | **All 2026.** `Phoenix-2026` is the reading-scale repo, `Robot-2026` the full-complexity one. No milestone cites pre-2026 Ignite code |

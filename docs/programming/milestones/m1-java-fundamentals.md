@@ -26,6 +26,9 @@ You are given a short Java method containing a deliberate bug — an off-by-one,
 
 **Time:** 30 minutes.
 
+The fixture is `projects/testouts/t1-find-the-bug/`. A mentor will tell you which
+variant to open.
+
 ## Concepts
 
 ### Scope, stated plainly
@@ -135,6 +138,12 @@ The four you will meet constantly:
 ## Project
 
 **Robot-flavored exercises.** Each one is a computation that appears somewhere in real FRC code.
+
+The project is `projects/m1-java-fundamentals/`. Each exercise ships as an empty
+method with a Javadoc contract above it and a complete set of tests beside it —
+`./gradlew assemble` is green from the first clone and `./gradlew test` is red
+until you have finished. Its own README walks the order. The git commands are in
+[the git workflow](../git-workflow.md); this milestone does not repeat them.
 
 1. **Deadband.** Given a joystick value from -1.0 to 1.0, return 0 if its magnitude is below a threshold, otherwise return it unchanged. Real joysticks never rest at exactly zero.
 2. **Tick conversion.** Convert encoder ticks to rotations given ticks-per-rotation. Then to RPM given a time interval. Watch for integer division.
