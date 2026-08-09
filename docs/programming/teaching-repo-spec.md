@@ -378,7 +378,7 @@ Each entry lists what ships, which DoD items the tests cover, and which stay men
 
 M0 is not about code. The skeleton exists so the pull request has something real to change.
 
-**Given:** a complete, working, minimal `TimedRobot` project that builds and whose simulator launches. `CONTRIBUTING.md` with the curated command set from `curriculum-spec.md` §4.2 — `clone`, `checkout -b`, `add -u`, `commit -m`, `fetch --all`, `merge`, `push` — and nothing else. `student-check.yml`. A deliberately mis-formatted `FormatMe.java`.
+**Given:** a complete, working, minimal `TimedRobot` project that builds and whose simulator launches. `CONTRIBUTING.md` with the curated command set from `curriculum-spec.md` §4.2 — `clone`, `checkout -b`, `add -u`, `commit -m`, `fetch --all`, `merge`, `push` — and nothing else. `student-check.yml`. A deliberately mis-formatted `FormatMe.java`. `FormatMe.java` is the conventional name for a formatting-exercise file and, by that convention, is the one file `skeleton-integrity.yml`'s formatting check exempts.
 
 **Student authors:** `contributors/<github-handle>.md` from a template, and runs `./gradlew spotlessApply` on `FormatMe.java` locally to see the fix — then **reverts it**, and opens one pull request containing only the contributor file, upstream, per §5.2. The formatting fix is never committed: its entire value is in running it and reading the diff once, and a fix that landed on `main` would leave the next student's `FormatMe.java` already correctly formatted, with nothing left to fix.
 
