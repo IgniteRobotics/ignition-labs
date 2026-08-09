@@ -99,4 +99,11 @@ tasks.withType(JavaCompile) {
     options.compilerArgs.add '-XDstringConcat=inline'
 }
 
-// Added in Task 5. Do not add it yet -- BlockingWaitDemo does not exist.
+// M1 has no simulator (see ROBOT_MAIN_CLASS above), so this is how the student runs
+// the one runnable thing in the project.
+tasks.register('blockingWaitDemo', JavaExec) {
+    group = 'training'
+    description = 'Runs the blocking-wait demonstration from milestone M1.'
+    classpath = sourceSets.main.runtimeClasspath
+    mainClass = 'frc.training.m1.BlockingWaitDemo'
+}
