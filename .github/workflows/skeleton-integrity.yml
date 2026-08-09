@@ -58,6 +58,13 @@ jobs:
       - working-directory: ${{ matrix.project }}
         run: chmod +x gradlew
 
+      # This must run before "Skeleton compiles on a clean clone". A build step
+      # must never be trusted to leave the tree as it found it -- that is
+      # exactly how compileJava.dependsOn 'spotlessApply' made this gate
+      # unreachable before (it silently reformatted the tree on every compile,
+      # so spotlessCheck never saw a violation). Checking formatting first
+      # means a future build step that reformats the tree again cannot disable
+      # this gate without the reorder itself being the thing that has to change.
       - name: Skeleton is already formatted
         working-directory: ${{ matrix.project }}
         run: ./gradlew spotlessCheck --console=plain

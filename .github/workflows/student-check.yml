@@ -64,6 +64,13 @@ jobs:
         working-directory: ${{ matrix.project }}
         run: chmod +x gradlew
 
+      # This must run before "Build with Gradle". The build itself must never be
+      # trusted to leave the tree as it found it -- that is exactly how
+      # compileJava.dependsOn 'spotlessApply' made this gate unreachable before
+      # (it silently reformatted FormatMe.java on every compile, so
+      # spotlessCheck could never see a violation). Running the check first
+      # means a future build step that reformats the tree again cannot disable
+      # this gate without the reorder itself being the thing that has to change.
       - name: Check code formatting
         id: spotless
         working-directory: ${{ matrix.project }}

@@ -10,7 +10,10 @@ java {
 }
 
 spotless {
-    // Not enforced during build; compileJava depends on spotlessApply below.
+    // Not enforced during build. Formatting is checked by CI (spotlessCheck) as a
+    // separate, deliberately failable step -- see teaching-repo-spec.md §4.3. Do not
+    // wire compileJava to spotlessApply: that reformats the tree on every build, which
+    // silently launders FormatMe.java before the formatting check ever runs.
     enforceCheck false
 
     java {
@@ -91,5 +94,3 @@ wpi.java.configureTestTasks(test)
 tasks.withType(JavaCompile) {
     options.compilerArgs.add '-XDstringConcat=inline'
 }
-
-compileJava.dependsOn 'spotlessApply'
