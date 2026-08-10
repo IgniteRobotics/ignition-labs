@@ -7,6 +7,7 @@
 
 /projects/*/src/test/                @IgniteRobotics/mentors
 /projects/*/src/main/java/**/plant/   @IgniteRobotics/mentors
+/projects/*/src/main/java/**/harness/ @IgniteRobotics/mentors
 /projects/testouts/                   @IgniteRobotics/mentors
 /tests.lock                           @IgniteRobotics/mentors
 /tools/                               @IgniteRobotics/mentors

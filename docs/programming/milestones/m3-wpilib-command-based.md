@@ -30,6 +30,8 @@ Given a working `RobotContainer` with three subsystems:
 
 **Time:** 60 minutes.
 
+The fixture is `projects/testouts/t3-scheduler-conflict/`.
+
 ## Concepts
 
 ### The 20ms loop
@@ -247,6 +249,14 @@ Ignite splits constants per subsystem (`ShooterConstants`, `IntakeConstants`) ra
 **First, read `Phoenix-2026` end to end.** Twenty-two Java files, WPILib 2026, the same Phoenix 6 swerve stack the competition robot runs — and small enough that you can actually finish it in a sitting. It has both idioms in one place: `DriveToPose` as a subclass, factory methods on `DrivetrainSubsystem`. `Robot-2026` is twice the size and you will meet it soon enough; start with the one you can hold in your head.
 
 **Then build a two-subsystem robot in simulation.**
+
+The project is `projects/m3-command-based/`. You are given the whole robot except
+the lesson — `Main`, a thin `Robot` with the scheduler running, a `Constants`
+shape, the controller, a seeded simulator config, and a test harness. The
+subsystems, the commands, the composition, the bindings, and the default command
+are yours. Its README walks the order, and its `READING.md` is the `Phoenix-2026`
+assignment above. The git commands are in [the git workflow](../git-workflow.md);
+this milestone does not repeat them.
 
 Requirements:
 
