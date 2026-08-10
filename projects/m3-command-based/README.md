@@ -18,7 +18,7 @@ Everything that is not the lesson is already here:
 | `Main.java` | Never edit it. Every WPILib project has one and they are all identical |
 | `Robot.java` | The scheduler call and the logging setup. Read `robotPeriodic()` — you owe a mentor a walkthrough of it |
 | `Constants.java` | The shape. You add a nested class per subsystem |
-| `simgui.json` | The simulator opens with a joystick already mapped to port 0 |
+| `simgui.json`, `simgui-ds.json` | The simulator opens with a keyboard joystick already mapped to port 0 |
 | `harness/M3Deliverables.java` | How the tests reach your work. Read it before you start |
 | `src/test/` | The given tests. Do not edit them |
 

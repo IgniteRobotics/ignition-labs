@@ -11,7 +11,7 @@ package frc.robot;
 public final class Constants {
   private Constants() {}
 
-  /** Given. The controller port that {@code simgui.json} already maps a joystick to. */
+  /** Given. The controller port that the simulator's saved config already maps a joystick to. */
   public static final class OperatorConstants {
     private OperatorConstants() {}
 

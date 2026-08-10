@@ -17,7 +17,7 @@ import frc.robot.harness.M3Deliverables;
  * thing it names.
  */
 public class RobotContainer implements M3Deliverables {
-  /** Given. Port 0, which is the port {@code simgui.json} already maps a joystick to. */
+  /** Given. Port 0, which is the port the simulator's saved config already maps a joystick to. */
   private final CommandXboxController driverController =
       new CommandXboxController(Constants.OperatorConstants.DRIVER_CONTROLLER_PORT);
 
