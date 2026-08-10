@@ -626,7 +626,7 @@ Ordered by dependency, then by value. Each step is independently reviewable and 
 | **10** | **M5** + T5 | T5's three log sets are the single largest authoring cost in the spec | — |
 | **11** | **M7**, **M8 templates** | Mostly documents | — |
 | **12** | **Doc corrections.** The §7.3 CI claim in three files; M6's "first tests" → "a class that has none"; M4's required-PR DoD item; `curriculum-spec.md` §8 and `README.md` status tables; the `resources.md` seasonal re-verification list | — | — |
-| **—** | Solutions repository, built continuously alongside steps 4–11, with the §11.2 cross-check job live from step 4 | Not a final step. A milestone shipped without its solution is not shipped | — |
+| **—** | Solutions repository, built continuously alongside steps 4–11, with the §11.2 cross-check job live from step 4 | Not a final step. A milestone shipped without its solution is not shipped. Backfilled late: steps 4–6 shipped without solutions, and each plan's verification implementation was written and then deleted rather than kept | M0–M2, T1–T2 done; cross-check live |
 
 **Timing.** 2026-08-07, kickoff roughly five months out. Steps 1–7 fit comfortably *if step 1 lands now*. Steps 1–3 are almost entirely writing and configuration — they do not wait on the toolchain being settled.
 
