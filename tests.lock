@@ -4,6 +4,11 @@ f6b20f03bff52ad309bef840d4d07569801d3555550fef742e38ddac96e76564  projects/m1-ja
 0d9dc857f5de5f52e26e39ea1e32dcfd045e64ad6cf1fb3d6a35c3955ec4d949  projects/m1-java-fundamentals/src/test/java/frc/training/m1/GearRatioTest.java
 3b2a2be90514f073c2ca58200047b258eb90c8e2277292a87bb3c17f9a79727b  projects/m1-java-fundamentals/src/test/java/frc/training/m1/InterpolateTest.java
 7a5789101eec66d7c163793d2e403eec97dc498f2a4f4ce657bf7ded17bbef91  projects/m1-java-fundamentals/src/test/java/frc/training/m1/TickConversionTest.java
+142b682f993cfcd9165dd414a2e2590e1bb6ff6a947599b6e32a032ac16d0929  projects/m2-oop/src/test/java/frc/training/m2/ContractProbe.java
+9def2f4489eca229f2b4e4f91c8ebbb4d5594689ea6f826ba76e5a26864244c3  projects/m2-oop/src/test/java/frc/training/m2/SensorProfileContractTest.java
+53742c1dc0fa2836a1833b5fc422491c71f89e33b19a36cd211d48eea63eca23  projects/m2-oop/src/test/java/frc/training/m2/SupplierDemoTest.java
 aaec6016d387ef49d297bbb0acb8d3b3329138b1a576f8dc2e7f74d96ce791d8  projects/testouts/t1-find-the-bug/src/test/java/frc/testout/t1/VariantATest.java
 524fb45148fe1603acaf0b3b8a9d29774848edfd34bcfc64fbd24c201ca02d0d  projects/testouts/t1-find-the-bug/src/test/java/frc/testout/t1/VariantBTest.java
 19c9d6986197d0b79bf1c3c4bf15430fafb8822040781f5eed130eca0ac0d927  projects/testouts/t1-find-the-bug/src/test/java/frc/testout/t1/VariantCTest.java
+96504dd48f919a77c0785e5817b74569d7c60edc579dba88a82658e5de248715  projects/testouts/t2-supplier-swap/src/test/java/frc/testout/t2/FlatRangeTableTest.java
+80970fda2e1fd50fc910d19be6e223810a8a678c1457bba589cf5822e8ebcf41  projects/testouts/t2-supplier-swap/src/test/java/frc/testout/t2/RangeTablesTest.java

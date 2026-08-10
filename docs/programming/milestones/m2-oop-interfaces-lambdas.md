@@ -27,6 +27,8 @@ Two parts:
 
 **Time:** 45 minutes.
 
+The fixture is `projects/testouts/t2-supplier-swap/`.
+
 ## Concepts
 
 ### Classes and objects
@@ -160,6 +162,13 @@ Once that clicks, `RobotContainer` stops looking like magic. Look at Ignite's re
 ## Project
 
 **Build a unit-conversion class with tests.**
+
+The project is `projects/m2-oop/`. It ships with a written specification and no
+class — unlike M1, there is no stub to fill in, because deciding what each
+signature has to be is the exercise. A read-only contract test checks your class
+against the specification as you write it, and a starter file gives you the shape
+of your own first test. Its README walks the order. The git commands are in
+[the git workflow](../git-workflow.md); this milestone does not repeat them.
 
 Write a `SensorProfile` class that converts between encoder ticks, mechanism rotations, and RPM, given a configurable ticks-per-rotation and gear ratio.
 
