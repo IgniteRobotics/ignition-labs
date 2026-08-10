@@ -96,8 +96,10 @@ class SchedulerInterruptionTest {
             + "running. Two commands cannot own one mechanism at once.");
     assertTrue(
         endedInterrupted.get(),
-        "Your command was interrupted but its end(true) never ran. Whatever your command was "
-            + "driving is still being driven. Give it an end(boolean) that stops what it started.");
+        "The scheduler never reported interrupting your command. onCommandInterrupt fires right "
+            + "after the scheduler calls end(true) on the command it is interrupting, so this "
+            + "confirms the scheduler ran the interruption path on your command — it cannot see "
+            + "what your end(boolean) body actually did with it.");
   }
 
   private static Subsystem oneRequirementOf(Command command) {

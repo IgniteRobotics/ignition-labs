@@ -61,8 +61,9 @@ any of them.
    happens in the constructor?
 
 3. **The one that matters.** Find a factory method on `DrivetrainSubsystem` and
-   find `DriveToPose`. Both produce a `Command`. Both end up requiring the
-   drivetrain — but they say so in different ways. Find both ways.
+   find `DriveToPose`. Both produce a `Command` that ends up requiring the
+   drivetrain, but each declares that requirement in a different place in the
+   file. Find the exact line in each — file name and line number for both.
 
 4. Pick one binding in `RobotContainer` and say, in one sentence each: what
    condition triggers it, what command runs, and what happens if the driver lets

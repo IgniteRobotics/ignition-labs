@@ -157,5 +157,6 @@ wrong, say so in your pull request — you might be right, and a mentor will loo
 - [ ] You have read `Phoenix-2026` end to end and can point at where each idiom appears
 - [ ] You can open `Robot-2026/RobotContainer.java` and explain any binding a mentor points at
 
-The last four are mentor-verified. No test can check them, and they are half the
+The last four, plus "You wrote one command each way and can say why you would
+pick each," are mentor-verified. No test can check them, and they are half the
 milestone.

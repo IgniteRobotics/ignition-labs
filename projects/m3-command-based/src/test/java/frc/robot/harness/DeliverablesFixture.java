@@ -27,6 +27,7 @@ public final class DeliverablesFixture {
           + "same object back every time.";
 
   private static RobotContainer container;
+  private static AssertionError containerFailure;
 
   private DeliverablesFixture() {}
 
@@ -64,15 +65,23 @@ public final class DeliverablesFixture {
   }
 
   private static RobotContainer container() {
+    if (containerFailure != null) {
+      throw containerFailure;
+    }
     if (container == null) {
       try {
         container = new RobotContainer();
       } catch (RuntimeException | Error e) {
-        return fail(
-            "Building your RobotContainer threw "
-                + describe(e)
-                + "\nEvery test in this milestone has to build one first, so nothing can pass "
-                + "until that constructor runs cleanly. Start there.");
+        try {
+          fail(
+              "Building your RobotContainer threw "
+                  + describe(e)
+                  + "\nEvery test in this milestone has to build one first, so nothing can pass "
+                  + "until that constructor runs cleanly. Start there.");
+        } catch (AssertionError failure) {
+          containerFailure = failure;
+          throw failure;
+        }
       }
     }
     return container;
@@ -117,7 +126,7 @@ public final class DeliverablesFixture {
               + " in RobotContainer still throws UnsupportedOperationException.\nThat is the stub "
               + "this project ships with. Implement it and return the thing its Javadoc names. "
               + "README.md walks the order.");
-    } catch (RuntimeException e) {
+    } catch (RuntimeException | Error e) {
       return fail(
           member
               + " in RobotContainer threw "

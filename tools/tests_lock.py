@@ -58,6 +58,7 @@ PATTERNS = [
     "projects/*/src/main/java/**/plant/*.java",
     "projects/*/src/main/java/**/harness/*.java",
     "projects/testouts/*/src/test/**/*.java",
+    "projects/testouts/*/src/main/java/**/harness/*.java",
 ]
 
 

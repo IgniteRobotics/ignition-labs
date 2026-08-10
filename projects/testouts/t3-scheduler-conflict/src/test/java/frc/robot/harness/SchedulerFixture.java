@@ -14,6 +14,7 @@ import frc.robot.RobotContainer;
 /** Given test support for T3. Part of the fixture — do not edit. */
 public final class SchedulerFixture {
   private static RobotContainer container;
+  private static AssertionError containerFailure;
 
   private SchedulerFixture() {}
 
@@ -43,11 +44,23 @@ public final class SchedulerFixture {
   }
 
   private static RobotContainer container() {
+    if (containerFailure != null) {
+      throw containerFailure;
+    }
     if (container == null) {
       try {
         container = new RobotContainer();
       } catch (RuntimeException | Error e) {
-        return fail("Building RobotContainer threw " + describe(e));
+        try {
+          fail(
+              "Building RobotContainer threw "
+                  + describe(e)
+                  + "\nEvery test in this test-out has to build one first, so nothing can pass "
+                  + "until that constructor runs cleanly. Start there.");
+        } catch (AssertionError failure) {
+          containerFailure = failure;
+          throw failure;
+        }
       }
     }
     return container;
@@ -77,7 +90,7 @@ public final class SchedulerFixture {
       return fail(
           "combinedCommand() still throws UnsupportedOperationException — that is the stub this "
               + "fixture ships with. Part 1 of the test-out is to replace it. See README.md.");
-    } catch (RuntimeException e) {
+    } catch (RuntimeException | Error e) {
       return fail("combinedCommand() threw " + describe(e) + " — that came out of your code.");
     }
     if (command == null) {

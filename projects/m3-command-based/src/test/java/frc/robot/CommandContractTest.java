@@ -108,7 +108,10 @@ class CommandContractTest {
             + "\", which is just its class name — the name WPILib uses when nobody has set one. "
             + "Chain .withName(\"Something Readable\") onto it. That name is what shows up in "
             + "Glass and AdvantageScope when you are trying to work out what the robot thought it "
-            + "was doing.");
+            + "was doing. If you already called .withName(...) and still see this, check what "
+            + "comes after it — a decorator such as .withTimeout(...) wraps your command in a new "
+            + "one that does not carry the name, so .withName(...) has to be the last thing you "
+            + "chain.");
   }
 
   private static void assertDeclaresRequirements(String member, Command command) {
