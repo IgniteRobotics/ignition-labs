@@ -81,6 +81,12 @@ class SensorProfileContractTest {
   }
 
   @Test
+  void aTinyNegativeRotationAlsoRoundsToTheNearestTick() {
+    // -0.0001 rotations is -1.8432 ticks. The nearest whole tick is -2.
+    assertEquals(-2, ContractProbe.rotationsToTicks(profile(), -0.0001));
+  }
+
+  @Test
   void oneMechanismRotationEveryHundredMillisecondsIsSixHundredRpm() {
     assertEquals(600.0, ContractProbe.ticksPer100msToRpm(profile(), 18432), DELTA);
   }
