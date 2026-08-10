@@ -7,8 +7,6 @@ import java.util.function.DoubleSupplier;
  *
  * <p>Something built this with a way of reading the stick, and asks it for the stick's position
  * whenever it needs one — every twenty milliseconds, for as long as the robot is enabled.
- *
- * <p>It does not do that. Its tests say so. Work out why, and fix it.
  */
 public class SupplierDemo {
 
