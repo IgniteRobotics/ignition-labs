@@ -85,6 +85,13 @@ test {
     systemProperty 'junit.jupiter.extensions.autodetection.enabled', 'true'
 }
 
+// Registers the simulator GUI and the simulated driver station as HAL extensions.
+// Without these, ./gradlew simulateJava starts the robot program headless -- it runs,
+// but no window opens, so there is nothing to map a joystick onto. M1 and M2 omit them
+// correctly (no robot, no simulator); every project that IS a robot needs them.
+wpi.sim.addGui().defaultEnabled = true
+wpi.sim.addDriverstation()
+
 jar {
     from { configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) } }
     from sourceSets.main.allSource

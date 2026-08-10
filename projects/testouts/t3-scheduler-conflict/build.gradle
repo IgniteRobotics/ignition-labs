@@ -78,6 +78,12 @@ test {
     systemProperty 'junit.jupiter.extensions.autodetection.enabled', 'true'
 }
 
+// Registers the simulator GUI and the simulated driver station as HAL extensions.
+// Without these, ./gradlew simulateJava starts the robot program headless -- it runs,
+// but no window opens. Parts 2 and 3 of this test-out are done in the simulator.
+wpi.sim.addGui().defaultEnabled = true
+wpi.sim.addDriverstation()
+
 jar {
     from { configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) } }
     from sourceSets.main.allSource
