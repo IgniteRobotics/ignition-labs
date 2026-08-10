@@ -617,8 +617,8 @@ Ordered by dependency, then by value. Each step is independently reviewable and 
 | **2** | Create the git remote; repository scaffold: four workflows, `tests.lock` tooling, `CODEOWNERS`, pull request template, `CONTRIBUTING.md`, `SETUP.md` (including the fork-Actions step) | — | Done |
 | **3** | Pages live | Proves the pipeline before there is much to publish | Done |
 | **4** | **M0** | Smallest, and the one every single student hits | **Done** |
-| **5** | **M1** + T1 | Highest volume of students. L3 is the most authoring-heavy fade level per unit of content | — |
-| **6** | **M2** + T2 | — | — |
+| **5** | **M1** + T1 | Highest volume of students. L3 is the most authoring-heavy fade level per unit of content | Done |
+| **6** | **M2** + T2 | L2's contract test cannot name the class the student writes; `ContractProbe` is the reflective seam that solves it | Done |
 | **7** | **M3** + T3 | Largest milestone. The `M3Deliverables` harness is the risky part — build it first and validate against a throwaway solution | — |
 | — | — | **Kickoff Gate block complete (M0–M3). Ship it and stop if time runs out.** Everything below can land after the season starts | — |
 | **8** | **M6** + `UNTESTED-TARGETS.md` | Out of numeric order deliberately: it is the M7 gate, and the regression-patch verification is novel enough to want proving early | — |
