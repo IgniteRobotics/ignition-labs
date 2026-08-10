@@ -159,6 +159,37 @@ Report actual command output, not a summary of what should have happened.
 - **Vendordeps: minimum set per milestone** (spec §9). Never "all of them by default."
   M0–M2 have none.
 
+## Plans and parallel work
+
+Implementation plans live in `superpowers/plans/`, one **directory** per plan
+(`00-plan.md` + one file per task + `99-integration.md`). Full conventions —
+task-file template, the required task-graph section, lane rules, worktree setup, how to
+hand a task to an agent — are in
+[`superpowers/plan-conventions.md`](superpowers/plan-conventions.md). **Read it before
+authoring a plan or splitting work across agents.**
+
+Three things apply to anyone touching this repo, plan or no plan:
+
+**These files are contended. Never edit them from a per-milestone task:**
+
+| File | What every plan does to it |
+|---|---|
+| `tests.lock` | regenerates it wholesale |
+| `docs/programming/README.md` | updates the built-milestones status row |
+| `docs/programming/teaching-repo-spec.md` | updates §13's build-order status column |
+
+They belong to a single integration task that runs after all other work has landed. Two
+agents finishing concurrently will otherwise clobber each other here, every time.
+
+**Don't fan out past the real width.** Within one milestone plan it is ~2 lanes — the
+milestone project and its test-out fixture. Everything inside a project is sequential
+(same Gradle project, same `build/`). The genuinely wide parallelism is *across*
+build-order steps: M4, M5, and M6 are standalone projects with disjoint file trees and can
+be built by three agents at once.
+
+**One worktree per lane**, under `.worktrees/<lane>`. Never two agents in one worktree, and
+never two agents running Gradle against the same project directory.
+
 ## Git
 
 - Default branch `main`; feature branches `feature/<name>`; worktrees under
