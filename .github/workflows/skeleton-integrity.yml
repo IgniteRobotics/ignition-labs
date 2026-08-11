@@ -115,7 +115,22 @@ jobs:
         working-directory: ${{ matrix.project }}
         run: ./gradlew assemble --console=plain
 
-      - name: Inverted check — given tests MUST fail on the unmodified skeleton
+      - name: Given tests compile on a clean clone
+        working-directory: ${{ matrix.project }}
+        run: |
+          # assemble does NOT compile src/test, so without this step a test compile
+          # error arrives at the inverted check below as nothing more than a non-zero
+          # `test` exit -- which that check used to read as "red as intended". Spec
+          # §12.3 requires compileTestJava green in its own right, and a student who
+          # cannot tell a compile error from a broken toolchain loses a session that
+          # was never their problem.
+          if [ ! -d src/test ]; then
+            echo "No src/test in ${{ matrix.project }} — nothing to compile. Skipping."
+            exit 0
+          fi
+          ./gradlew compileTestJava --console=plain
+
+      - name: Inverted check — given tests MUST fail, and for the right reason
         working-directory: ${{ matrix.project }}
         run: |
           # A skeleton with no src/test has no given tests, so there is nothing to
@@ -125,12 +140,20 @@ jobs:
             echo "No src/test in ${{ matrix.project }} — no given tests to invert. Skipping."
             exit 0
           fi
-          if ./gradlew test --console=plain; then
-            echo "::error::${{ matrix.project }} passes its own tests unmodified."
-            echo "A stub is accidentally implementing itself. See spec §7.2."
-            exit 1
-          fi
-          echo "OK: tests fail as intended on the unmodified skeleton."
+          # A non-zero exit status alone is NOT evidence of a correctly red skeleton:
+          # an UnsatisfiedLinkError exits non-zero too, and so does a build that never
+          # ran a test at all. M0-M2 were plain Java and could not link-fail, so the
+          # distinction did not exist until M3 started needing desktop HAL natives.
+          # tools/given_tests_red.py inspects the JUnit reports and fails loudly on
+          # anything it cannot positively confirm as legitimate red. It is stdlib-only,
+          # so the runner's preinstalled python3 is enough -- no setup-python needed.
+          # Not named `status`: that is read-only in zsh, which silently breaks anyone
+          # reproducing this step by hand on a Mac.
+          set +e
+          ./gradlew test --console=plain
+          test_status=$?
+          set -e
+          python3 "$GITHUB_WORKSPACE/tools/given_tests_red.py" . "$test_status"
 
   lock:
     if: github.repository == 'IgniteRobotics/ignition-labs'
