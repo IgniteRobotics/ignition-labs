@@ -3,6 +3,7 @@ package frc.robot;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import com.ctre.phoenix6.controls.VelocityVoltage;
 import frc.robot.plant.LaunchProfile;
 import frc.robot.plant.ShooterFlywheel;
 import frc.robot.support.PhoenixTestSupport;
@@ -54,11 +55,16 @@ class WorkedExampleTest {
    * tore its own down — and it tears down even if an assertion throws, which a {@code close()} call
    * at the end of the method would not.
    *
-   * <p>Note what is asserted and what is not. This checks that <b>a command reached the device</b>.
-   * It does not assert that the simulated motor spins up to exactly the velocity requested, because
-   * that would be testing whether CTRE's physics model behaves the way CTRE says it does — which
-   * tests CTRE, not you. If your assertion would pass regardless of what you wrote, you have not
-   * tested your code.
+   * <p>Note what is asserted and what is not. {@code getAppliedControl()} is the device's own
+   * record of the last control request it was sent — a local, in-process value, not something read
+   * back over simulated CAN — so checking it proves <b>your {@code setVelocity()} call reached the
+   * device</b>, carrying the exact value you commanded. It does not assert that the simulated motor
+   * spins up to exactly that velocity, because that would be testing whether CTRE's physics model
+   * behaves the way CTRE says it does — which tests CTRE, not you. If your assertion would pass
+   * regardless of what you wrote, you have not tested your code: an assertion that only checked the
+   * velocity <i>signal's</i> status code, for example, would still pass even if {@code
+   * setVelocity()} never called {@code setControl()} at all, because that signal reports OK
+   * independent of whether a command was ever sent.
    */
   @Test
   void shooterFlywheel_acceptsAControlRequest_andClosesCleanly() {
@@ -71,10 +77,13 @@ class WorkedExampleTest {
       flywheel.setVelocity(20.0);
       PhoenixTestSupport.settleAfterControlRequest(flywheel.motor());
 
+      Object appliedControl = flywheel.motor().getAppliedControl();
       assertTrue(
-          flywheel.motor().getVelocity().getStatus().isOK(),
-          "The flywheel's velocity signal is not reporting OK after a control request, so "
-              + "there is nothing meaningful to assert about the value it holds.");
+          appliedControl instanceof VelocityVoltage,
+          "The flywheel's last applied control request is not a VelocityVoltage. Either "
+              + "setVelocity() never called setControl(), or it sent the wrong kind of "
+              + "request.");
+      assertEquals(20.0, ((VelocityVoltage) appliedControl).Velocity, 1e-9);
     }
   }
 }

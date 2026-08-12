@@ -23,6 +23,15 @@ import edu.wpi.first.wpilibj.simulation.DriverStationSim;
  * becomes intermittent — and an intermittent failure is worse than a consistent one, because you
  * will assume your code is flaky when your test is. Waiting on the signal itself asks the question
  * you actually mean: <i>has the value arrived yet?</i>
+ *
+ * <p>Be honest with yourself about what you will see in this sandbox. A freshly constructed device
+ * at its default update rate answers that question "yes" almost immediately, so both waits below
+ * are expected to pass quietly every time you run this project's tests — a signal that has never
+ * missed a frame has nothing to make you wait for. The guard still earns its place: {@code
+ * waitForAll} blocks for the full timeout and returns a non-OK {@link StatusCode} when a signal
+ * genuinely has nothing to report — for instance, a signal whose update frequency has been turned
+ * off, or, on real hardware, a device that never comes up. If you ever see one of these assertions
+ * fail in this sandbox, something is actually wrong; it is not decoration.
  */
 public final class PhoenixTestSupport {
 
