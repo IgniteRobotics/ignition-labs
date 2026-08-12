@@ -55,16 +55,17 @@ class WorkedExampleTest {
    * tore its own down — and it tears down even if an assertion throws, which a {@code close()} call
    * at the end of the method would not.
    *
-   * <p>Note what is asserted and what is not. {@code getAppliedControl()} is the device's own
-   * record of the last control request it was sent — a local, in-process value, not something read
-   * back over simulated CAN — so checking it proves <b>your {@code setVelocity()} call reached the
-   * device</b>, carrying the exact value you commanded. It does not assert that the simulated motor
-   * spins up to exactly that velocity, because that would be testing whether CTRE's physics model
-   * behaves the way CTRE says it does — which tests CTRE, not you. If your assertion would pass
-   * regardless of what you wrote, you have not tested your code: an assertion that only checked the
-   * velocity <i>signal's</i> status code, for example, would still pass even if {@code
+   * <p>Note what is asserted and what is not. {@code getAppliedControl()} is the device object's
+   * own record of the last control request your code gave it — a local, in-process value, set the
+   * instant {@code setControl()} is called, not something read back over simulated CAN — so
+   * checking it proves <b>your {@code setVelocity()} call issued the exact control request you
+   * intended</b>. It does not prove the request reached the device, and it does not assert that the
+   * simulated motor spins up to exactly that velocity, because that would be testing whether CTRE's
+   * physics model behaves the way CTRE says it does — which tests CTRE, not you. If your assertion
+   * would pass regardless of what you wrote, you have not tested your code: an assertion that only
+   * checked the velocity <i>signal's</i> status code, for example, would still pass even if {@code
    * setVelocity()} never called {@code setControl()} at all, because that signal reports OK
-   * independent of whether a command was ever sent.
+   * independent of whether a command was ever issued.
    */
   @Test
   void shooterFlywheel_acceptsAControlRequest_andClosesCleanly() {
