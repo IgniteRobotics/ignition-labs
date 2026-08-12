@@ -39,7 +39,3 @@ repository's own CI proves the mechanism works at all.
 **`flip-sign.patch` and `widen-tolerance.patch` are not caught by anything you were given.**
 When you open your pull request, CI applies them and requires your tests to fail. That is
 the gate, and the only way through it is a test that genuinely catches the break.
-
-`widen-tolerance.patch` is the one that catches a test which can never fail. A tolerance of
-50 rotations per second accepts `atSetpoint(100.0, 100.0)` exactly as happily as a tolerance
-of 0.5 does. Catching it needs a case where the flywheel is genuinely too slow.
