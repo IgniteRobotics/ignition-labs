@@ -4,8 +4,6 @@ from __future__ import annotations
 
 from pathlib import Path
 
-import pytest
-
 from tools.regression_gate import RunOutcome, judge, parse_results
 
 SUITE = """<?xml version="1.0" encoding="UTF-8"?>

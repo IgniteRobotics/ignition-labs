@@ -104,9 +104,11 @@ def judge(before: RunOutcome, after: RunOutcome, expect: str) -> tuple[bool, str
     if not after.reports_found or not after.results:
         return False, (
             "The post-patch run produced no test results at all. The patch broke the "
-            "BUILD, not a test -- most likely it no longer applies cleanly to this file. "
-            "A build failure is not a caught regression, and reporting it as one would "
-            "let this gate pass forever without a single real test behind it."
+            "BUILD, not a test -- most likely a compile error, a link error, or some "
+            "other build failure introduced by the applied patch. Read the ./gradlew "
+            "output printed above for the actual cause. A build failure is not a caught "
+            "regression, and reporting it as one would let this gate pass forever "
+            "without a single real test behind it."
         )
 
     toolchain = sorted(
@@ -145,7 +147,10 @@ def judge(before: RunOutcome, after: RunOutcome, expect: str) -> tuple[bool, str
         return True, f"OK: the patch was caught by {caught}."
 
     if not expect.startswith("caught:"):
-        return False, f"Unknown expectation {expect!r}."
+        return False, (
+            f"Unknown expectation {expect!r}. --expect must be one of "
+            "caught:CLASS#METHOD, any-failure, or no-failure."
+        )
 
     wanted = expect[len("caught:") :]
     if wanted not in after.failed_tests:
@@ -209,7 +214,7 @@ def main(argv: list[str]) -> int:
         _run(["git", "apply", "-R", str(patch)], cwd=repo_root)
 
     dirty = subprocess.run(
-        ["git", "status", "--porcelain", str(project)],
+        ["git", "status", "--porcelain"],
         cwd=repo_root,
         capture_output=True,
         text=True,
