@@ -78,6 +78,22 @@ def read_outcome(results_dir: Path, status: int) -> RunOutcome:
     return RunOutcome(status=status, results=parse_results(results_dir))
 
 
+def reset_results(results_dir: Path) -> None:
+    """Delete any JUnit XML left in `results_dir` before the suite runs again.
+
+    A report is written only by a `:test` task that actually executes. A compile error
+    or a link error stops `:test` before it ever runs, and Gradle leaves whatever an
+    EARLIER invocation wrote sitting there untouched -- `--rerun-tasks` does not delete
+    it, it only forces tasks that do run to re-run. Without this, a run that produced no
+    output of its own would be judged on somebody else's: a patch that breaks the build
+    would be read as "all tests still pass," because the passing XML on disk is real,
+    just not from this run. Deleting the directory first means an empty or missing
+    `results_dir` afterward can only mean this run produced none.
+    """
+    if results_dir.is_dir():
+        shutil.rmtree(results_dir)
+
+
 def judge(before: RunOutcome, after: RunOutcome, expect: str) -> tuple[bool, str]:
     """Decide whether a regression was caught the way `expect` requires.
 
@@ -182,6 +198,7 @@ def main(argv: list[str]) -> int:
     repo_root = Path.cwd()
     results_dir = project / "build" / "test-results" / "test"
 
+    reset_results(results_dir)
     baseline_status = _run([args.gradlew, "test", "--console=plain"], cwd=project)
     try:
         before = read_outcome(results_dir, baseline_status)
@@ -198,6 +215,7 @@ def main(argv: list[str]) -> int:
         return 1
 
     try:
+        reset_results(results_dir)
         after_status = _run(
             [args.gradlew, "test", "--console=plain", "--rerun-tasks"], cwd=project
         )

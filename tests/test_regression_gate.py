@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from tools.regression_gate import RunOutcome, judge, parse_results
+from tools.regression_gate import RunOutcome, judge, parse_results, read_outcome, reset_results
 
 SUITE = """<?xml version="1.0" encoding="UTF-8"?>
 <testsuite name="frc.robot.WorkedExampleTest" tests="2" failures="{failures}">
@@ -68,6 +68,48 @@ def test_parse_results_strips_the_junit_no_arg_legacy_reporting_parens(tmp_path)
             "org.opentest4j.AssertionFailedError"
         ],
     }
+
+
+def test_reset_results_deletes_stale_reports(tmp_path):
+    """A directory left over from a PREVIOUS run must not survive into the next one --
+    `reset_results` is what makes an absent `results_dir` afterward mean "this run wrote
+    nothing," rather than "the last run's reports are still sitting here."
+    """
+    directory = write_suite(tmp_path / "stale", failing=False)
+    assert directory.is_dir()
+
+    reset_results(directory)
+
+    assert not directory.exists()
+
+
+def test_reset_results_is_a_noop_when_nothing_is_there(tmp_path):
+    missing = tmp_path / "never-existed"
+    reset_results(missing)  # must not raise
+    assert not missing.exists()
+
+
+def test_read_outcome_does_not_mistake_a_prior_runs_leftovers_for_this_runs_output(
+    tmp_path,
+):
+    """Reproduces the bug directly: a compile error stops `:test` from ever running, so
+    it writes no XML of its own. Without clearing `results_dir` first, `read_outcome`
+    would find the PREVIOUS run's passing XML still sitting there and report the suite
+    green -- exactly the "all tests still PASS" verdict a real Gradle run produced for a
+    patch that in fact never compiled. `reset_results` between runs is what prevents it:
+    called here in the same sequence `main()` uses -- write stale results, reset, then
+    read the (now-empty) directory as the next run's outcome.
+    """
+    directory = write_suite(tmp_path / "leftover", failing=False)
+
+    reset_results(directory)
+    # Simulate a run whose :test task never executed, e.g. a compile error: no new XML
+    # is written, so `directory` is exactly what `reset_results` left it as.
+    outcome = read_outcome(directory, status=1)
+
+    assert not outcome.reports_found
+    assert outcome.results == {}
+    assert outcome.failed_tests == {}
 
 
 GREEN = RunOutcome(status=0, results={"A#one": [], "A#two": []})
