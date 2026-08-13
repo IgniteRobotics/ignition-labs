@@ -3,9 +3,9 @@
 Classes in `Robot-2026` with real logic and no test coverage. **This is where you pick your
 M6 pull-request target from.**
 
-**Owner:** the programming mentor who owns `FEATURE-BACKLOG.md`. Both lists have the same
-failure mode — nobody's job, so nobody updates them, so the milestone quietly loses its
-targets. One person owns both. If the name in this line is out of date, that is the bug.
+**Owner:** Joshua Reddick, [`@y0shi`](https://github.com/y0shi). @-mention him or open an
+issue against him to resolve a claimed-by conflict or add a target — this list goes stale
+the moment nobody's watching it, and right now that's him.
 
 **Last verified:** 2026-08-11, against
 [`Robot-2026` @ `28ce539`](https://github.com/IgniteRobotics/Robot-2026/tree/28ce5397d88275001d656dbb717d22cf9ac0150d).
