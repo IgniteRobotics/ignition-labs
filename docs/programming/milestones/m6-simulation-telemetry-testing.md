@@ -157,7 +157,7 @@ Part 1 step 4 is the point of the whole exercise. A test you have never seen fai
 3. Make the subsystem `AutoCloseable` and confirm two tests in the same file both pass
 
 **Part 3 — diagnose from a real log.**
-1. Open a real log from `Robot-2026/logs/` in AdvantageScope
+1. Open the logs shipped in `projects/m6-testing/logs/` in AdvantageScope — `logs/QUESTIONS.md` says which log answers which question
 2. Answer a specific question a mentor gives you — did the shooter reach setpoint before it fired? did the auto routine follow its path? when did the intake stall?
 3. Show the evidence, not just the answer
 
