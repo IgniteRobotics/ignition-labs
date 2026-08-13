@@ -39,6 +39,7 @@ nav:
       - Overview: programming/README.md
       - Git Workflow: programming/git-workflow.md
       - Real-Repo Ladder: programming/robot-repo-ladder.md
+      - Untested Targets: programming/UNTESTED-TARGETS.md
       - AI Use Standard: programming/ai-use-standard.md
       - Student Deliverables: programming/student-deliverables.md
       - Resources: programming/resources.md

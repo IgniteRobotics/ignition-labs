@@ -71,7 +71,7 @@ The tool for reading logs. Plot signals over time, view field position, scrub th
 
 **The skill this milestone builds is diagnosis from a log**, not from watching the robot. At a competition you get one match, it lasts two and a half minutes, and you cannot reproduce it. The log is all you have.
 
-Practice on real logs from last season — `Robot-2026/logs/` has hundreds.
+Practice on the real log shipped in `projects/m6-testing/logs/`. `Robot-2026` writes hundreds of logs a season, but they are gitignored and never committed — cloning it gets you none, which is worth knowing before you go looking.
 
 ### Unit testing
 
@@ -135,6 +135,10 @@ Ignite is starting from zero tests. The goal is not to convert anyone to test-dr
 **What success looks like here:** you have written a test that caught a real regression. That is it. Three good tests beat an abandoned attempt at full coverage.
 
 ## Project
+
+The warm-up project is `projects/m6-testing/`. The deliverable is a pull request against
+`Robot-2026`, adding tests to a class from [`UNTESTED-TARGETS.md`](../UNTESTED-TARGETS.md)
+— pure logic only, per the hard rule stated there.
 
 **Three parts.**
 
@@ -212,4 +216,4 @@ See `resources.md` for the full library. For this milestone:
 - **Ignite:** `Robot-2026/build.gradle` — JUnit, configured and unused. Your starting point
 - **Ignite:** `Robot-2026/.../Robot.java` — Epilogue configuration in production
 - **Ignite:** `Robot-2026/.../statemachines/LaunchCalculator.java` — the best test target in the codebase
-- **Ignite:** `Robot-2026/logs/` — hundreds of real logs for Part 3
+- **Ignite:** `projects/m6-testing/logs/` — a real match log and two diagnostic questions. Logs are not committed to `Robot-2026`; this one was copied out of a practice session

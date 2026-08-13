@@ -18,6 +18,9 @@ def project(tmp_path: Path) -> Path:
     harness = tmp_path / "projects" / "m3" / "src" / "main" / "java" / "frc" / "robot" / "harness"
     harness.mkdir(parents=True)
     (harness / "M3Deliverables.java").write_text("interface M3Deliverables {}", encoding="utf-8")
+    regressions = tmp_path / "projects" / "m6" / "regressions"
+    regressions.mkdir(parents=True)
+    (regressions / "flip-sign.patch").write_text("--- a/Foo.java\n+++ b/Foo.java\n", encoding="utf-8")
     return tmp_path
 
 
@@ -27,6 +30,7 @@ def test_manifest_covers_every_matched_file(project):
         "projects/m1/src/test/java/DeadbandTest.java",
         "projects/m4/src/main/java/plant/FlywheelPlant.java",
         "projects/m3/src/main/java/frc/robot/harness/M3Deliverables.java",
+        "projects/m6/regressions/flip-sign.patch",
     }
 
 
@@ -64,6 +68,14 @@ def test_modified_harness_interface_is_reported(project, tmp_path):
     assert verify_manifest(project, lock) == [
         "projects/m3/src/main/java/frc/robot/harness/M3Deliverables.java"
     ]
+
+
+def test_modified_regression_patch_is_reported(project, tmp_path):
+    lock = tmp_path / "tests.lock"
+    write_manifest(project, PATTERNS, lock)
+    target = project / "projects/m6/regressions/flip-sign.patch"
+    target.write_text("--- a/Foo.java\n+++ b/Foo.java\n@@ -1 +1 @@\n-x\n+x\n", encoding="utf-8")
+    assert verify_manifest(project, lock) == ["projects/m6/regressions/flip-sign.patch"]
 
 
 def test_student_own_test_file_is_not_locked(project, tmp_path):

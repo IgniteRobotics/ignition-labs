@@ -87,6 +87,29 @@ jobs:
         working-directory: ${{ matrix.project }}
         run: ./gradlew build --console=plain
 
+      - name: Your tests must catch a real regression
+        working-directory: ${{ github.workspace }}
+        run: |
+          # M6's definition-of-done item -- "you demonstrated a test failing on an
+          # introduced regression" -- is the one most likely to be technically met and
+          # substantively missed. A student can satisfy a test-count check with three
+          # assertions on `true`; they cannot satisfy this one.
+          #
+          # Only the student-tier patches run here. drop-gear-ratio is caught by the given
+          # worked example, so including it would pass for every student regardless of what
+          # they wrote -- which is exactly the hole this check exists to close.
+          if [ ! -d "${{ matrix.project }}/regressions" ]; then
+            echo "${{ matrix.project }} ships no regressions/ — nothing to check."
+            exit 0
+          fi
+          for patch in "${{ matrix.project }}"/regressions/*.patch; do
+            case "$(basename "$patch")" in
+              drop-gear-ratio.patch) continue ;;
+            esac
+            python3 -m tools.regression_gate "${{ matrix.project }}" "$patch" \
+              --expect any-failure
+          done
+
       - name: Comment on formatting violations
         if: steps.spotless.outputs.formatted == 'false'
         continue-on-error: true

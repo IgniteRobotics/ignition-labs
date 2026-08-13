@@ -133,9 +133,42 @@ jobs:
       - name: Inverted check — given tests MUST fail, and for the right reason
         working-directory: ${{ matrix.project }}
         run: |
-          # A skeleton with no src/test has no given tests, so there is nothing to
-          # invert -- M0 is a complete working project by design (spec §9.1, fade N/A).
-          # Skipping on absence rather than an exemption list keeps this self-maintaining.
+          # Three branches, all keyed on what the project CONTAINS rather than on a list of
+          # project names. An exemption list is the smaller diff and is deliberately not
+          # what this is: a name-keyed skip is the exact shape of "a check that passes while
+          # the thing it protects is broken," which this repository keeps producing.
+          #
+          #   regressions/ present  -> M6: the suite is green, and must go provably red
+          #                            under a planted patch. Spec §12.3's guarantee is that
+          #                            a skeleton is never SILENTLY SATISFIABLE; for M1-M5
+          #                            that means the given tests fail, for M6 it means the
+          #                            given tests catch a regression.
+          #   no src/test           -> M0: no given tests, nothing to invert.
+          #   otherwise             -> M1-M5: the given tests must be red, for a real reason.
+          if [ -d regressions ]; then
+            echo "$(basename "$PWD") ships regressions/ — running the regression gate."
+            cd "$GITHUB_WORKSPACE"
+            # Example tier: the ONE given test must catch this, which is the only way this
+            # repository can prove the mechanism works at all -- there are no student tests
+            # here to catch anything.
+            python3 -m tools.regression_gate "${{ matrix.project }}" \
+              "${{ matrix.project }}/regressions/drop-gear-ratio.patch" \
+              --expect "caught:frc.robot.WorkedExampleTest#ticksToMechanismRotations_appliesBothTicksPerRevolutionAndGearRatio"
+            # Student tier: the given test must NOT catch these. If it does, a student
+            # passes the gate in their own fork having written no tests at all -- and
+            # nothing else in this pipeline would ever say so.
+            for patch in "${{ matrix.project }}"/regressions/*.patch; do
+              case "$(basename "$patch")" in
+                drop-gear-ratio.patch) continue ;;
+              esac
+              python3 -m tools.regression_gate "${{ matrix.project }}" "$patch" \
+                --expect no-failure
+            done
+            exit 0
+          fi
+
+          # A skeleton with no src/test has no given tests, so there is nothing to invert --
+          # M0 is a complete working project by design (spec §9.1, fade N/A).
           if [ ! -d src/test ]; then
             echo "No src/test in ${{ matrix.project }} — no given tests to invert. Skipping."
             exit 0
