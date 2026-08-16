@@ -191,9 +191,16 @@ public final class T4FlywheelPlant {
               GEARBOX, MOMENT_OF_INERTIA_KG_METERS_SQUARED, GEARING),
           GEARBOX);
 
-  /** Commands a voltage to the flywheel, clamped to what a battery can deliver. */
+  /**
+   * Commands a voltage to the flywheel, clamped to what a battery can deliver.
+   *
+   * <p>Deliberately {@code setInput}, never {@code setInputVoltage}: the latter re-clamps
+   * through {@code RobotController.getBatteryVoltage()}, which goes through the HAL. This
+   * fixture never initializes the HAL, so an uninitialized battery-voltage read would silently
+   * clamp every command to zero.
+   */
   public void setVoltage(double volts) {
-    sim.setInputVoltage(MathUtil.clamp(volts, -12.0, 12.0));
+    sim.setInput(MathUtil.clamp(volts, -12.0, 12.0));
   }
 
   /** Advances the simulated physics by {@code dtSeconds}. */
@@ -412,11 +419,15 @@ class FlywheelTuningTest {
 }
 ```
 
-- [ ] **Step 6: Confirm the shipped gains actually produce the symptom — not optional**
+- [ ] **Step 6: Confirm the shipped gains produce the symptom, and run the distractors — not optional**
 
-A fixture whose plot shows a clean first-order rise teaches nothing and cannot be diagnosed
-(non-negotiable, per the dispatch and `CLAUDE.md`'s verification discipline). Prove it two ways:
-the given test failing for the right reason, and the raw numbers.
+A fixture whose plot shows a clean first-order rise teaches nothing and cannot be diagnosed, and
+a gate that can be passed by the wrong diagnosis is as broken as one no right answer passes
+(non-negotiable, per the dispatch and `CLAUDE.md`'s verification discipline). Prove both: the
+given test failing for the right reason on the shipped gains, and failing for a *different*
+reason on the one wrong fix a student is most likely to try.
+
+**6a. Shipped gains — clean-clone invariant plus the raw numbers.**
 
 ```bash
 cd /Users/y0shi/workspace/ignite/docs/projects/testouts/t4-bad-kv
@@ -434,11 +445,11 @@ or a thrown exception. Paste the output.
 ./gradlew generateResponse --console=plain
 ```
 
-Read the printed line. Expected shape: `peak` measurably above `target` (overshoot), and
-`settled` measurably below `target` by more than the test's tolerance (the persistent gap
-proportional-only feedback leaves when feedforward is undercommanding). If `peak` never exceeds
-`target`, or `settled` lands within the test's own tolerance, the shipped gains do not produce
-the described symptom — stop and retune `kV`/`kP` in `BadlyTunedFlywheel.java`, not the test.
+Read the printed line. Design record §6.1's spike (independently reproduced before this task was
+written) put the shipped gains at `peak≈41.15` rot/s (`+1.15` over the 40.0 target) and
+`settled≈37.95` rot/s (`-2.05`, outside both test tolerances). If your numbers land elsewhere,
+retune `kV`/`kP` in `BadlyTunedFlywheel.java` to get back inside that neighborhood — not the
+test.
 
 Then look at the shape, not just the two numbers — print a few rows of `plots/response.csv` and
 confirm there is real ringing (the measurement crossing back and forth around its settled value
@@ -447,6 +458,51 @@ across at least a few consecutive rows), not a single overshoot that immediately
 ```bash
 head -20 plots/response.csv
 ```
+
+**6b. The distractor — fix `kV`, leave `kP` where it was.** This is the fix a student reaches for
+first, because it is the smaller edit, and design record §6.2 is explicit that it must still
+fail: a `kP` chosen to paper over a bad feedforward is the wrong `kP` once the feedforward is
+correct.
+
+```bash
+cp src/main/java/frc/testout/t4/BadlyTunedFlywheel.java /tmp/BadlyTunedFlywheel.java.orig
+```
+
+Edit `kV` in `BadlyTunedFlywheel.java` to `0.1247` — leave `kP` at `1.5`:
+
+```bash
+./gradlew test --console=plain; echo "test rc=$? (expect 1)"
+```
+
+Expected: `doesNotOvershootTargetByMoreThanTolerance` fails (peak overshoot grows to
+`≈+1.99` rot/s — worse than the shipped gains, not better), and
+`settlesWithinToleranceOfTarget` now passes on its own (the steady-state offset disappears once
+`kV` is correct). Read the overshoot failure message. Then restore the file:
+
+```bash
+cp /tmp/BadlyTunedFlywheel.java.orig src/main/java/frc/testout/t4/BadlyTunedFlywheel.java
+git diff --stat src/main/java/frc/testout/t4/BadlyTunedFlywheel.java   # expect no output
+```
+
+**6c. The correct-shape fix — both terms retuned.** Confirms the gate is passable by *something*,
+per `CLAUDE.md`'s "run a correct implementation" rule.
+
+Edit `kV` to `0.1247` and `kP` to `0.5`:
+
+```bash
+./gradlew test --console=plain; echo "test rc=$? (expect 0)"
+```
+
+Expected: both tests green. Restore the file the same way as 6b and confirm `test` is red again:
+
+```bash
+cp /tmp/BadlyTunedFlywheel.java.orig src/main/java/frc/testout/t4/BadlyTunedFlywheel.java
+./gradlew test --console=plain; echo "test rc=$? (expect 1, shipped gains again)"
+git diff --stat src/main/java/frc/testout/t4/BadlyTunedFlywheel.java   # expect no output
+```
+
+Paste all three `test` outputs (6a, 6b, 6c) with their exit codes. A report that only shows 6a is
+not this step done — 6b is the one that proves the gate can't be passed by the wrong diagnosis.
 
 - [ ] **Step 7: Write `README.md`**
 
@@ -459,8 +515,9 @@ head -20 plots/response.csv
 
 This is a flywheel velocity controller inherited from last season. It is not
 broken in the sense of throwing an exception or refusing to compile — it
-runs, and it reaches roughly the right speed. Look at `plots/response.png`
-before you touch anything.
+runs. Look at `plots/response.png` before you touch anything: it reaches the
+setpoint, overshoots, rings for a few cycles, and settles a little short of
+the target line rather than on it.
 
 ```bash
 ./gradlew test
