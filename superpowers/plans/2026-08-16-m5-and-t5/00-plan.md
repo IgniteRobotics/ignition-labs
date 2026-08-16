@@ -196,7 +196,7 @@ One auto, one drivetrain, three runs, one fault injected each. Recorded, not syn
 |---|---|
 | Gradle scaffold | From `m5-auto-vision`; needs PathPlanner + WPILib, no photonlib unless a log needs vision signals |
 | `src/main/java/frc/testout/t5/plant/T5DriveSim.java` | **Given, locked.** The drivetrain the recordings ran against |
-| `src/main/java/frc/testout/t5/LogRecorder.java` | **Given, locked.** Regenerates all three logs |
+| `src/main/java/frc/testout/t5/LogRecorder.java` | **Given, not locked.** Regenerates all three logs. `tools/tests_lock.py:PATTERNS` reaches `**/plant/*.java` and `**/harness/*.java` only, so a file at the package root is outside the manifest by construction. Left there deliberately rather than moved: T5 ships no tests, so there is no gate a tampered recorder could subvert, and the second known-limitation note below makes locking it pointless anyway. **Task 9 must not expect it in `tests.lock`.** |
 | `logs/a-*.wpilog`, `logs/b-*.wpilog`, `logs/c-*.wpilog` | The three recorded sets. Neutral filenames — see below |
 | `logs/README.md` | How to regenerate (§16). Never which log is which fault |
 | `README.md` | The task, the three candidate causes, the 60-minute box |
@@ -276,3 +276,16 @@ A task report that omits its command output is not a completed task.
 That is a real divergence from the pattern the student will use next season, so it is documented in three places, in these words or better: `SwerveDriveSim`'s class Javadoc, the project `README.md`, and the milestone document. Precedent: M4's inert-configuration limitation was handled the same way. A student who notices the difference and asks is doing exactly the right thing; a student who copies the wiring into a season repo has been misled by us.
 
 **Known limitation, decided not deferred.** T5's three logs ship as files a student can open in a hex editor, and their filenames would leak the answer if named for their faults. They are named `a-`, `b-`, `c-` for that reason, and `logs/README.md` never says which is which — the mapping lives only in the solutions repository's answer key. This is the same class of leak as step 9's `t4-bad-kv` directory name, caught this time before it shipped rather than after.
+
+**Second known limitation, accepted with eyes open (Josh's call, 2026-08-16).** The measure above hides the mapping; it does not make it unrecoverable. `LogRecorder` and `T5DriveSim` ship inside the student-facing fixture, generation is deterministic by design (§16 requires it), and `logs/README.md` documents the recovery recipe for maintainers:
+
+```bash
+./gradlew generateLog -Pfault=ODOMETRY_DRIFT -Pout=/tmp/candidate.wpilog
+cmp /tmp/candidate.wpilog logs/a-run.wpilog
+```
+
+Three runs and a `cmp` yield the diagnosis without opening AdvantageScope, and deleting that section from `logs/README.md` would not close it — a `Fault` enum next to a `generateLog` task is a signpost on its own. The alternative considered and rejected was moving both classes into `../ignite-training-solutions/` and shipping `logs/` + `README.md` alone.
+
+**Rejected because the diagnosis is not the pass criterion.** §10 and the milestone document both require *the ruling-out* — a student who recovers the letter still has to point at signals and say what excludes the other two, in front of a mentor, and that is the half this fixture exists to measure. Treat a student who finds the shortcut as having demonstrated something worth noting rather than as having cheated. **Do not "fix" this in a later maintenance pass without re-reading this paragraph** — it is a decision, not an oversight, and the deterministic regeneration it depends on is a §16 requirement that outranks the leak.
+
+Mentors should know the shortcut exists; that belongs in the answer key (Task 8), not in anything student-facing.
