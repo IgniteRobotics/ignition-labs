@@ -74,6 +74,48 @@ public final class VisionSim {
 }
 ```
 
+### `frc.robot.plant.ScoringMechanism` — given, implemented, locked
+
+**Added 2026-08-16 during Phase A review. This was a gap in the first draft of the contract.**
+Without it, `AutoTerminationTest` degrades into "the routine finished within a budget," which
+proves nothing: PathPlanner's follow command is time-based and terminates on its own whether or
+not the robot went anywhere, so nothing in a path-only routine can actually hang. Spec §9.6 and
+the milestone's project step 7 both require *forcing a step to fail*, and this is the thing that
+can be made to fail.
+
+```java
+public final class ScoringMechanism {
+  public ScoringMechanism();
+  public void startDeploy();
+  public boolean isDeployed();          // true a fixed number of ticks after startDeploy()
+  public void step(double dtSeconds);
+  public void setFaulted(boolean faulted);  // faulted -> isDeployed() never becomes true
+  public void reset();
+}
+```
+
+The student's named command starts the deploy and waits for `isDeployed()`. `setFaulted(true)` is
+how a given test forces that step to fail, and a routine without a timeout will hang on it — which
+is exactly the lesson project step 4 ("add timeouts so no step can hang") teaches.
+
+### `frc.robot.harness.VisionPoseHelper` — given, implemented, locked
+
+**Added 2026-08-16 during Phase A review.** Converting a raw `PhotonPipelineResult` into a
+candidate field pose is given, not student work — but it must live in **one** place in `src/main`
+that both `Robot` and `SimDriver` call. A test-source copy and a main-source copy of the same
+conversion will drift, and the day they disagree the given test is measuring something the robot
+does not do.
+
+```java
+public final class VisionPoseHelper {
+  /** Empty when the frame has no usable target. */
+  public static Optional<Pose2d> candidatePose(PhotonPipelineResult result);
+  public static double timestampSeconds(PhotonPipelineResult result);
+}
+```
+
+Uses photonlib's strategy-specific estimation. **Do not call `PhotonPoseEstimator.update(PhotonPipelineResult)`** — it is `@Deprecated(forRemoval = true, since = "2026")` in the pinned `v2026.2.1`.
+
 ### `frc.robot.harness.M5Deliverables` — given interface, `RobotContainer` implements it
 
 ```java
@@ -87,6 +129,7 @@ public interface M5Deliverables {
   void resetEstimator(Pose2d pose);
   SwerveDriveSim drivetrain();
   VisionSim vision();
+  ScoringMechanism mechanism();
 }
 ```
 
@@ -227,5 +270,9 @@ One auto, one drivetrain, three runs, one fault injected each. Recorded, not syn
 A task report that omits its command output is not a completed task.
 
 **Type consistency.** Every cross-task signature is pinned above and nowhere else. `SwerveDriveSim` appears in tasks 2, 3, 4, 8; `VisionSim` in 2, 3, 4, 8; `M5Deliverables` in 3, 4, 8; `SimDriver` in 4, 8; `LogRecorder` and `T5DriveSim` in 6, 7, 8; `Constants.SIM_STEP_SECONDS` in 3 and 4.
+
+**AutoBuilder follows ground truth, not the student's estimate — and that must be stated in the skeleton.** `AutoBuilder.configure(...)` is owned by `SwerveDriveSim` (the only given class that can own it, since `RobotContainer` is entirely student stub) and is wired to `truePose()`. On a real robot — including `Robot-2026` — the path follower runs against the pose *estimator*. The training project differs so that Part 1 (composition, timeouts, chooser, termination) works before Part 2 (fusion) is written, and so `AutoTerminationTest` does not fail because the student's estimator is still a stub. None of Part 1's DoD items depend on closed-loop path accuracy.
+
+That is a real divergence from the pattern the student will use next season, so it is documented in three places, in these words or better: `SwerveDriveSim`'s class Javadoc, the project `README.md`, and the milestone document. Precedent: M4's inert-configuration limitation was handled the same way. A student who notices the difference and asks is doing exactly the right thing; a student who copies the wiring into a season repo has been misled by us.
 
 **Known limitation, decided not deferred.** T5's three logs ship as files a student can open in a hex editor, and their filenames would leak the answer if named for their faults. They are named `a-`, `b-`, `c-` for that reason, and `logs/README.md` never says which is which — the mapping lives only in the solutions repository's answer key. This is the same class of leak as step 9's `t4-bad-kv` directory name, caught this time before it shipped rather than after.
