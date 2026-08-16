@@ -158,8 +158,17 @@ tasks.withType(JavaCompile) {
 tasks.register('generateResponse', JavaExec) {
     group = 'training'
     description = 'Runs the shipped BadlyTunedFlywheel and writes plots/response.csv.'
+    // FlywheelSim's discretization goes through Matrix.exp, which calls
+    // System.loadLibrary("wpimathjni") -- that needs java.library.path to point at the
+    // extracted native library, not just the classpath. extractReleaseNative is the
+    // NativeUtils task that puts it at build/jni/release; wpi.java.configureTestTasks(test)
+    // wires this same thing onto :test's java.library.path. Discovered by running this task
+    // and reading `no wpimathjni in java.library.path` -- without both lines below,
+    // generateResponse fails with an UnsatisfiedLinkError even though assemble is green.
+    dependsOn 'extractReleaseNative'
     classpath = sourceSets.main.runtimeClasspath
     mainClass = 'frc.testout.t4.ResponseRecorder'
+    systemProperty 'java.library.path', "$buildDir/jni/release"
 }
 ```
 
