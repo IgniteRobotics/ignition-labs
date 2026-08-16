@@ -26,6 +26,17 @@ limitation the design record already documents. This is a documentation-accuracy
 correction, not a contract change: the pinned API contract in `00-plan.md` says nothing
 about inversion, so nothing pinned is affected.
 
+**Clamp in Java, call `setInput`, not `setInputVoltage`.** `FlywheelSim`/`SingleJointedArmSim`
+inherit `setInputVoltage(double)` from `LinearSystemSim`, which is `setInput(volts)` followed
+by `clampInput(RobotController.getBatteryVoltage())` — a HAL read. M4 does initialize the HAL
+(`SimDriver`/`Robot` both bring it up), so this would probably work here, but it would make the
+plant's behavior depend on simulated battery state the model otherwise ignores everywhere else —
+exactly the kind of hidden coupling that makes Step 6's determinism proof stop reproducing later
+if that state ever isn't a plain constant. `setVoltage` already clamps to ±12 into
+`commandedVolts` before `step` ever runs, so `step` calls the HAL-free `sim.setInput(commandedVolts)`
+directly. T4's plant uses the identical two-line pattern (clamp in Java, then `setInput`), pinned
+in `00-plan.md`'s T4 section — both projects' plants read the same way.
+
 **Files:**
 - Create: `projects/m4-control/src/main/java/frc/robot/plant/FlywheelPlant.java`
 - Create: `projects/m4-control/src/main/java/frc/robot/plant/ArmPlant.java`
@@ -136,7 +147,7 @@ public final class FlywheelPlant implements AutoCloseable {
    * @param dtSeconds timestep, seconds
    */
   public void step(double dtSeconds) {
-    sim.setInputVoltage(commandedVolts);
+    sim.setInput(commandedVolts);
     sim.update(dtSeconds);
     simState.setRotorVelocity(velocityRotationsPerSecond() * GEARING);
   }
@@ -299,7 +310,7 @@ public final class ArmPlant implements AutoCloseable {
    * @param dtSeconds timestep, seconds
    */
   public void step(double dtSeconds) {
-    sim.setInputVoltage(commandedVolts);
+    sim.setInput(commandedVolts);
     sim.update(dtSeconds);
     double rotorRotations = sim.getAngleRads() / (2.0 * Math.PI) * GEARING;
     simState.setRawRotorPosition(rotorRotations);
