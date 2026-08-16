@@ -146,9 +146,12 @@ tell the two apart from a passing or failing test alone. Reading your own plot i
 actually judge tuning quality, and it is a mentor-verified item below, not a test.
 
 `ArmHomingTest` checks two things, not one: that the arm's reverse limit switch actually
-tripped, and that your encoder reads the home angle afterward. A homing routine that
-zeroes without ever driving to the limit will pass the second check and fail the first —
-on purpose.
+tripped, and that your encoder reads the home angle afterward. Zeroing rebases whatever
+position you happen to be at, so a routine that calls `zeroHere()` without ever confirming
+`atHomeLimit()` first can still end up with an encoder that reads correctly by coincidence,
+or one that doesn't — either check alone can be fooled depending on how and when it's
+wrong. Passing both is what actually says the arm got there and then zeroed, not just one
+or the other.
 
 ---
 
@@ -289,7 +292,7 @@ rule exists for exactly this failure mode).
 - [ ] **Step 4: Confirm no gain leaked into student-facing prose**
 
 ```bash
-cd /Users/y0shi/workspace/ignite/docs/projects/m4-control
+cd projects/m4-control   # relative to the worktree root -- NOT the main repo checkout
 grep -niE '\bk[sSvVaAgGpPdD]\s*=|\bk[sSvVaAgGpPdD]\b.{0,20}[0-9]' README.md READING.md
 ```
 
