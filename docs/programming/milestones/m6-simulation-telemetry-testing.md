@@ -71,7 +71,7 @@ The tool for reading logs. Plot signals over time, view field position, scrub th
 
 **The skill this milestone builds is diagnosis from a log**, not from watching the robot. At a competition you get one match, it lasts two and a half minutes, and you cannot reproduce it. The log is all you have.
 
-Practice on real logs from last season — `Robot-2026/logs/` has hundreds.
+Practice on the real log shipped in `projects/m6-testing/logs/`. `Robot-2026` writes hundreds of logs a season, but they are gitignored and never committed — cloning it gets you none, which is worth knowing before you go looking.
 
 ### Unit testing
 
@@ -136,6 +136,10 @@ Ignite is starting from zero tests. The goal is not to convert anyone to test-dr
 
 ## Project
 
+The warm-up project is `projects/m6-testing/`. The deliverable is a pull request against
+`Robot-2026`, adding tests to a class from [`UNTESTED-TARGETS.md`](../UNTESTED-TARGETS.md)
+— pure logic only, per the hard rule stated there.
+
 **Three parts.**
 
 **Part 1 — test a subsystem's logic.**
@@ -153,7 +157,7 @@ Part 1 step 4 is the point of the whole exercise. A test you have never seen fai
 3. Make the subsystem `AutoCloseable` and confirm two tests in the same file both pass
 
 **Part 3 — diagnose from a real log.**
-1. Open a real log from `Robot-2026/logs/` in AdvantageScope
+1. Open the logs shipped in `projects/m6-testing/logs/` in AdvantageScope — `logs/QUESTIONS.md` says which log answers which question
 2. Answer a specific question a mentor gives you — did the shooter reach setpoint before it fired? did the auto routine follow its path? when did the intake stall?
 3. Show the evidence, not just the answer
 
@@ -212,4 +216,4 @@ See `resources.md` for the full library. For this milestone:
 - **Ignite:** `Robot-2026/build.gradle` — JUnit, configured and unused. Your starting point
 - **Ignite:** `Robot-2026/.../Robot.java` — Epilogue configuration in production
 - **Ignite:** `Robot-2026/.../statemachines/LaunchCalculator.java` — the best test target in the codebase
-- **Ignite:** `Robot-2026/logs/` — hundreds of real logs for Part 3
+- **Ignite:** `projects/m6-testing/logs/` — a real match log and two diagnostic questions. Logs are not committed to `Robot-2026`; this one was copied out of a practice session

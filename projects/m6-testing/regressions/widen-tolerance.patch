@@ -1,0 +1,13 @@
+diff --git a/projects/m6-testing/src/main/java/frc/robot/plant/LaunchProfile.java b/projects/m6-testing/src/main/java/frc/robot/plant/LaunchProfile.java
+index 7dd1b63..04cb475 100644
+--- a/projects/m6-testing/src/main/java/frc/robot/plant/LaunchProfile.java
++++ b/projects/m6-testing/src/main/java/frc/robot/plant/LaunchProfile.java
+@@ -21,7 +21,7 @@ public final class LaunchProfile {
+    * How close the measured flywheel velocity must be to the target, in rotations per second, before
+    * a launch is allowed.
+    */
+-  private static final double VELOCITY_TOLERANCE_RPS = 0.5;
++  private static final double VELOCITY_TOLERANCE_RPS = 50.0;
+ 
+   /**
+    * Seconds between the decision to launch and the game piece actually leaving the launcher. The

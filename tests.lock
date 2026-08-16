@@ -13,6 +13,13 @@ cf8b958505618c7a5a43d99b4ee3f8b069a084f12e403bf8920de88cc4b05e73  projects/m3-co
 d05456923d2eadb9a079e64df29cb5d7c932e3464830dec7f0f3ed18a81cd550  projects/m3-command-based/src/test/java/frc/robot/DefaultCommandTest.java
 a03a9a05362df0c2fbd02cedd60b3344cd9a48015d792b7263ef2caa2beaaa2c  projects/m3-command-based/src/test/java/frc/robot/SchedulerInterruptionTest.java
 c8a2add7f8c508b19841938ab65ff3bf9c613d426f6d3a56cc32c0631b1fc131  projects/m3-command-based/src/test/java/frc/robot/harness/DeliverablesFixture.java
+6645ee07bde88438ca439bd7e0e02738b774f80f9b2625fd903a744a55913b69  projects/m6-testing/regressions/drop-gear-ratio.patch
+3f2878b9796ebc64f7bea7270ed22eb1132ee8883c574c244c30bbe686e49eb7  projects/m6-testing/regressions/flip-sign.patch
+86a924b2bd2529e024c998489f0e7dba9e51e08bb6634009e2aafd524a40a23f  projects/m6-testing/regressions/widen-tolerance.patch
+f10e616fc1d056114a1a3368e0a4522f3b3ef7ba5c30ce155ea151417431a5f1  projects/m6-testing/src/main/java/frc/robot/plant/LaunchProfile.java
+45ae9a10e6cb0ac48590e962dd0732db150b87e236b567748ae41a3783af05da  projects/m6-testing/src/main/java/frc/robot/plant/ShooterFlywheel.java
+6e1cb8510f2ef321fb56bc1a925eeac4dad69060a93626b389afeef3c4cfa4cd  projects/m6-testing/src/test/java/frc/robot/WorkedExampleTest.java
+859ea61d71f1c56a582eca4464e2d038b9a55cb7953024cda47fb48dc11b6897  projects/m6-testing/src/test/java/frc/robot/support/PhoenixTestSupport.java
 aaec6016d387ef49d297bbb0acb8d3b3329138b1a576f8dc2e7f74d96ce791d8  projects/testouts/t1-find-the-bug/src/test/java/frc/testout/t1/VariantATest.java
 524fb45148fe1603acaf0b3b8a9d29774848edfd34bcfc64fbd24c201ca02d0d  projects/testouts/t1-find-the-bug/src/test/java/frc/testout/t1/VariantBTest.java
 19c9d6986197d0b79bf1c3c4bf15430fafb8822040781f5eed130eca0ac0d927  projects/testouts/t1-find-the-bug/src/test/java/frc/testout/t1/VariantCTest.java

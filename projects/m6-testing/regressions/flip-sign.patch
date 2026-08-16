@@ -1,0 +1,13 @@
+diff --git a/projects/m6-testing/src/main/java/frc/robot/plant/LaunchProfile.java b/projects/m6-testing/src/main/java/frc/robot/plant/LaunchProfile.java
+index 7dd1b63..20d50a5 100644
+--- a/projects/m6-testing/src/main/java/frc/robot/plant/LaunchProfile.java
++++ b/projects/m6-testing/src/main/java/frc/robot/plant/LaunchProfile.java
+@@ -96,7 +96,7 @@ public final class LaunchProfile {
+    * @return the distance the launch math should actually use
+    */
+   public double lookAheadDistanceMeters(double distanceMeters, double closingSpeedMetersPerSecond) {
+-    return distanceMeters - closingSpeedMetersPerSecond * PHASE_DELAY_SECONDS;
++    return distanceMeters + closingSpeedMetersPerSecond * PHASE_DELAY_SECONDS;
+   }
+ 
+   /**

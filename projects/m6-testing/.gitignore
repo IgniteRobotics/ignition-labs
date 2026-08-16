@@ -1,0 +1,8 @@
+build/
+bin/
+.gradle/
+# logs/ is intentionally NOT ignored here: this project ships committed diagnostic logs, and nothing in it writes transient ones.
+ctre_sim/
+networktables.json
+simgui-window.json
+*.log
