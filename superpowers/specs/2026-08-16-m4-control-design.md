@@ -86,8 +86,59 @@ than the device's applied output, configuration that would shape that output on 
 supply-current limits, voltage compensation, ramp rates — is inert in this simulation. The
 `FlywheelPlant` Javadoc says so in those words. A student who configures a 40 A limit and sees no
 change in the plot has not found a bug; they have found the edge of the model, and the comment
-tells them where it is. Motor inversion and neutral mode *are* honoured, because the plant reads
-them from the configuration it applied.
+tells them where it is.
+
+**Corrected 2026-08-16.** An earlier draft of this section claimed motor inversion and neutral mode
+*are* honoured "because the plant reads them from the configuration it applied." That is wrong, and
+the code snippet above contradicts it: physics is fed from `commandedVolts`, the pre-inversion
+value, and nothing is read back off the device. Honouring inversion would mean reading the applied
+configuration back through CTRE, which is the wall-clock dependency §2 spent four experiments
+ruling out. **Inversion and neutral mode are inert too**, alongside current limits, voltage
+compensation and ramp rates. Both plants' Javadoc says so plainly. Caught during plan review by the
+agent implementing Task 2 — the review working as intended.
+
+## 3.1 The arm's gravity model, and what it forces
+
+`SingleJointedArmSim` does not take a mass. Its gravity term is
+
+```
+α = −3/2 · g · cos(θ) / L
+```
+
+derived on the assumption that `J = ⅓mL²` — so **mass cancels and gravity depends only on arm
+length.** Two consequences that are easy to get wrong and were:
+
+1. **`J` and `L` are independent constructor arguments, but physically they are not.** A plant
+   built with a `J` that is not `⅓mL²` for the `L` it was given is unphysical. Pick `m` and `L`,
+   then derive `J`.
+2. **The voltage needed to hold the arm horizontal is what decides whether the milestone's arm
+   is a real exercise**, and it falls out as
+
+   ```
+   V_hold = (3/2 · g / L) / (G·Kt / (R·J))     which for a consistent J reduces to  ≈ 8.3 · m·L / G
+   ```
+
+An early draft used `J = 0.62`, `G = 100`, giving `V_hold = 0.257 V`. At that scale a student who
+omits kG entirely lands within about 3° of target — so the "arm holds position against gravity"
+test would pass the exact distractor it exists to catch, and the milestone's kG lesson would be
+unassessed. The failure is silent: the arm looks fine.
+
+**Verified parameters** (Kraken X60 ×1, `m = 8 kg`, `L = 0.9 m`, `G = 30`, `J = mL²/3 = 2.16`):
+`V_hold = 1.99 V`, maximum speed `1.75 rad/s` (≈100 °/s), and the kG-omitted distractor settles
+**11.96° short** — a gate that fails with margin. The stiffness is sane too: the earlier `G = 100`
+arm had a velocity pole near `−181`, four times faster than the 20 ms control period, which is a
+badly scaled mechanism even where the integrator copes.
+
+## 3.2 The flywheel's kP ceiling
+
+With `J = 0.0021`, `G = 1.5` and a Kraken, true kV is `0.179 V/(rot/s)` — `7.16 V` at the 40 rot/s
+setpoint, comfortable against the 12 V rail. The discrete open-loop pole is `0.786`, which puts the
+**kP stability ceiling at 1.496**: kP `1.0` peaks at `41.42` and settles clean, kP `2.0` diverges.
+
+That band is narrow but it is honest, and "too high oscillates" is a lesson the milestone already
+teaches. What must not happen is a reference implementation or a README tuning hint that walks a
+student past `1.4` and leaves them thinking they broke something. Whatever gains the solutions
+repository ships must sit visibly inside the band.
 
 ## 4. Keeping the true parameters unreadable
 
