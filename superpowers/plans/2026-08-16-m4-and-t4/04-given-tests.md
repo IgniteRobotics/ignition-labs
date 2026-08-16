@@ -198,33 +198,70 @@ public final class SimDriver {
   }
 
   /**
-   * Schedules a fresh {@code homingCommand()} and runs the scheduler for {@code iterations}
-   * loops, stepping the arm's physics once per loop -- the same pairing {@code Robot} does.
+   * The outcome of {@link #runHomingLoop(int)}: whether {@code homingCommand()} finished within
+   * budget, and whether the arm was actually at its reverse limit at the exact moment it did.
+   *
+   * <p>Checking at the finish instant, rather than at the end of the loop's full iteration budget,
+   * catches a homing command that finishes <em>immediately</em> without ever driving anywhere -- at
+   * t=0 the arm is nowhere near the limit, so {@code atHomeLimitWhenFinished} is false. It does
+   * <b>not</b> catch a homing command that never drives at all but simply waits before zeroing:
+   * this arm's gravity carries an un-driven arm down to a stable rest exactly at the limit switch
+   * and it stays there, so any wait past the fall time reads as "arrived" by this check too.
+   * Distinguishing "actively driven here" from "gravity did it" would require instrumenting whether
+   * {@link ArmPlant#setVoltage} was ever called with a meaningfully nonzero value, which is outside
+   * what the pinned plant contract exposes to a test. Documented here rather than silently left for
+   * a future maintainer to rediscover.
    */
-  public static void runHomingLoop(int iterations) {
+  public static final class HomingResult {
+    public final boolean finishedWithinBudget;
+    public final boolean atHomeLimitWhenFinished;
+    public final double measuredPositionRadiansWhenFinished;
+
+    private HomingResult(
+        boolean finishedWithinBudget,
+        boolean atHomeLimitWhenFinished,
+        double measuredPositionRadiansWhenFinished) {
+      this.finishedWithinBudget = finishedWithinBudget;
+      this.atHomeLimitWhenFinished = atHomeLimitWhenFinished;
+      this.measuredPositionRadiansWhenFinished = measuredPositionRadiansWhenFinished;
+    }
+  }
+
+  /**
+   * Schedules a fresh {@code homingCommand()} and runs the scheduler for up to {@code iterations}
+   * loops, stepping the arm's physics once per loop -- the same pairing {@code Robot} does. Stops
+   * the instant the scheduler reports the command finished, and reports the arm's state at that
+   * exact tick rather than after however many more ticks the loop budget happens to allow.
+   */
+  public static HomingResult runHomingLoop(int iterations) {
     Command homing;
     try {
       homing = container().homingCommand();
     } catch (UnsupportedOperationException e) {
-      fail(
+      return fail(
           "homingCommand() in RobotContainer still throws UnsupportedOperationException. Return "
               + "a new command that drives to the reverse limit, then zeroes.");
-      return;
     }
     if (homing == null) {
-      fail("homingCommand() returned null. The harness needs a real command back.");
-      return;
+      return fail("homingCommand() returned null. The harness needs a real command back.");
     }
     try {
       CommandScheduler.getInstance().schedule(homing);
     } catch (IllegalArgumentException e) {
-      fail("homingCommand() could not be scheduled -- " + e.getMessage());
+      return fail("homingCommand() could not be scheduled -- " + e.getMessage());
     }
     for (int i = 0; i < iterations; i++) {
+      boolean wasScheduled = CommandScheduler.getInstance().isScheduled(homing);
       CommandScheduler.getInstance().run();
       armPlant().step(Constants.SIM_STEP_SECONDS);
       SimHooks.stepTiming(Constants.SIM_STEP_SECONDS);
+      boolean isScheduledNow = CommandScheduler.getInstance().isScheduled(homing);
+      if (wasScheduled && !isScheduledNow) {
+        return new HomingResult(
+            true, armPlant().atHomeLimit(), armPlant().measuredPositionRadians());
+      }
     }
+    return new HomingResult(false, armPlant().atHomeLimit(), armPlant().measuredPositionRadians());
   }
 }
 ```
@@ -367,8 +404,22 @@ class ArmGravityTest {
 
 `atHomeLimit()` reads the arm's true physical position; `measuredPositionRadians()` reads
 the encoder, which `zeroHere()` rebases unconditionally, at whatever position it is called
-from. Asserting only the second would let a homing routine that never moves pass, because
-zeroing at the boot position still makes it read `HOME_ANGLE_RADIANS`. Assert both.
+from. Checking both at the *end of the test window* is not enough on its own — see the
+box below, found and fixed during this task's own review. Check both **at the exact instant
+`homingCommand()` reports finished**, via `SimDriver.HomingResult`.
+
+**Why end-of-window checking is not sufficient, verified empirically.** This arm starts at
+15°, above `HOME_ANGLE_RADIANS` (−30°), and gravity pulls it toward the limit with no
+voltage commanded at all. Over a full 5-second (250-iteration) window, an *un-driven* arm
+falls into its own reverse limit switch on gravity alone — so a homing command whose
+`isFinished()` never once depends on `atHomeLimit()` can still have the physical limit
+switch tripped by the time the test's fixed iteration budget runs out, purely by
+coincidence of timing. Checking `atHomeLimit()` at the moment the command itself reports
+done removes that coincidence for the most likely real bug (an immediate no-op zero), but
+**does not** remove it entirely — see the residual documented in `SimDriver.HomingResult`'s
+Javadoc and repeated in this task's self-review below. A test that only checked the final
+state after 250 iterations would have let a homing command that does nothing but wait pass
+outright; this repository's own review process is what caught it, not automated tooling.
 
 Create `projects/m4-control/src/test/java/frc/robot/ArmHomingTest.java`:
 
@@ -379,6 +430,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import frc.robot.harness.SimDriver;
+import frc.robot.harness.SimDriver.HomingResult;
 import frc.robot.plant.ArmPlant;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -402,23 +454,32 @@ class ArmHomingTest {
 
   @Test
   void homesToTheLimitSwitchFromAnUnknownStart() {
-    SimDriver.runHomingLoop(ITERATIONS);
+    HomingResult result = SimDriver.runHomingLoop(ITERATIONS);
 
     assertTrue(
-        SimDriver.container().armPlant().atHomeLimit(),
-        "After running homingCommand() for five simulated seconds, the arm's reverse limit "
-            + "switch never tripped. A homing routine that zeroes the encoder without ever "
-            + "driving to the limit will pass a check on measuredPositionRadians() alone -- "
-            + "zeroing rebases whatever position you are currently at. This assertion reads the "
-            + "physical limit switch instead, which only trips if the arm actually got there.");
+        result.finishedWithinBudget,
+        "homingCommand() never finished within five simulated seconds. It has to end on its "
+            + "own once the arm is home -- check isFinished() actually returns true once "
+            + "armPlant().atHomeLimit() does.");
+
+    assertTrue(
+        result.atHomeLimitWhenFinished,
+        "homingCommand() reported finished, but the arm's reverse limit switch was not tripped "
+            + "at that exact instant. Checking at the moment of finish, not after however many "
+            + "seconds the test happens to run for, is deliberate: a gravity-loaded arm can "
+            + "drift into its own limit switch given enough uncontrolled time, so a command that "
+            + "finishes for the wrong reason could otherwise still look right by the end of a "
+            + "long window. Your homingCommand() must not finish until armPlant().atHomeLimit() "
+            + "is actually true.");
 
     assertEquals(
         ArmPlant.HOME_ANGLE_RADIANS,
-        SimDriver.container().armPlant().measuredPositionRadians(),
+        result.measuredPositionRadiansWhenFinished,
         POSITION_TOLERANCE_RADIANS,
-        "The arm reached its reverse limit but measuredPositionRadians() does not read "
+        "homingCommand() finished at the reverse limit, but measuredPositionRadians() does not "
+            + "read "
             + ArmPlant.HOME_ANGLE_RADIANS
-            + " afterward. Call zeroHere() once atHomeLimit() is true.");
+            + " at that moment. Call zeroHere() once atHomeLimit() is true, not before.");
   }
 }
 ```
@@ -505,11 +566,41 @@ the next row.
 | 1 | `updateFlywheel()` uses a `kP`-only loop (`voltage = kP * (target - measured)`), no feedforward, with the same modest `kP` the correct implementation used alongside its feedforward | `FlywheelVelocityTest` | Without `kV`, a small `kP` alone cannot produce enough steady-state voltage to reach a nonzero velocity target — it settles well short, failing the hold-window assertion |
 | 2 | `updateFlywheel()`'s feedforward is computed against `flywheelPlant().velocityRotationsPerSecond() * FlywheelPlant`'s gearing (i.e. applies the 1.5x gear ratio a second time on top of a correctly-converted `kV`) | `FlywheelVelocityTest` | Systematically over- or under-commands voltage by the gearing factor; settles at the wrong velocity, failing the hold-window assertion. This is the trap `FlywheelPlant`'s Javadoc (Task 2) names directly: SysId characterizes rotor velocity, control targets mechanism velocity, and they are not the same number |
 | 3 | `updateArm()`'s feedforward omits the gravity term entirely (`kG = 0`, or a plain `SimpleMotorFeedforward` instead of `ArmFeedforward`) | `ArmGravityTest` | Design record §3.1 verified this arm's kG-omitted miss at roughly 12° -- the arm sags below `SCORING_ANGLE_RADIANS` and settles there, well outside `POSITION_TOLERANCE_RADIANS` (~3°). This margin is the reason Task 2's arm parameters were pinned rather than picked freely: an earlier, lighter arm held within 3° even with `kG = 0`, which would have made this exact row a false negative |
-| 4 | `homingCommand()` returns `Commands.runOnce(armPlant::zeroHere)` — zeroes immediately, never drives toward the limit at all | `ArmHomingTest` | **Verified against the real plant, and the failure is not the one it looks like on paper.** `zeroHere()` runs at t=0 from `STARTING_ANGLE_RADIANS` (15°), so `atHomeLimit()` actually turns **true** by the end of the 5-second window anyway — gravity alone carries the un-driven arm down to the limit with zero commanded voltage. The `atHomeLimit()` assertion passes. What fails is the second assertion: `measuredPositionRadians()` reads `-1.309` rad, not `HOME_ANGLE_RADIANS` (`-0.5236`), because the offset was rebased against the wrong angle back at t=0, before the arm had moved. The test still correctly fails — just via the position assertion, not the limit-switch one. Confirmed empirically during Task 4 Step 6; do not assume the limit-switch assertion is what catches this distractor without checking, because for this gravity-loaded arm it usually is not |
+| 4 | `homingCommand()` returns `Commands.runOnce(armPlant::zeroHere)` — zeroes immediately, never drives toward the limit at all | `ArmHomingTest` | **Two findings from two verification passes.** Against the *original* end-of-window design, this distractor's failure was NOT the one it looks like on paper: `zeroHere()` runs at t=0 from `STARTING_ANGLE_RADIANS` (15°), and gravity alone carries the un-driven arm down to the limit over the remaining 5-second window regardless — so the end-of-window `atHomeLimit()` check actually passed, and the distractor was only caught by `measuredPositionRadians()` reading `-1.309` rad instead of `-0.5236`. After `ArmHomingTest` was strengthened to check at the exact instant `homingCommand()` reports finished (see Step 1's `HomingResult`), this distractor is now caught the way it was always meant to be: `homing­Command() reported finished, but the arm's reverse limit switch was not tripped at that exact instant` — because at t=0.02s (one tick), the arm is still at ~15°, nowhere near the limit |
 
 Paste each distractor's actual failing assertion message — this is the read-every-failure-message
 discipline `CLAUDE.md` requires, and distractor 4 specifically is only meaningful if you
 can see that it fails on the limit-switch assertion and not the position one.
+
+**What `ArmHomingTest` does not prove — documented, not fixed.** Checking `atHomeLimit()`
+at the instant `homingCommand()` reports finished (rather than at the end of the test's
+fixed window) closes the gap for the most likely real student bug: a homing routine that
+zeroes immediately without ever checking the limit. It does **not** close a more general
+one. This arm's gravity carries an un-driven arm to a *stable rest exactly at the limit
+switch* — it is not a transient the arm passes through and drifts away from, it is where
+the arm stays, indefinitely, under zero voltage. That means a command shaped like
+
+```java
+Commands.waitSeconds(3).andThen(Commands.runOnce(armPlant::zeroHere))
+```
+
+— which drives nothing at all, ever — reliably **passes** `ArmHomingTest`, for any wait
+constant longer than the arm's fall time. This was verified during this task's own review,
+not merely reasoned about: `waitSeconds(3)` was run against the strengthened test and it
+passed all three assertions. Closing this fully would require the test being able to tell
+"the student actively drove voltage toward the limit" apart from "gravity did it alone" —
+which means instrumenting whether `ArmPlant.setVoltage` was ever called with a
+meaningfully nonzero value, something the pinned plant contract does not expose to a test
+and that this task is not the right place to add (`ArmPlant` is Task 2's locked file).
+**On a real robot this bug is essentially impossible** — homing a real arm with the motor
+never commanded requires gravity to do the whole job at exactly the rate the test expects,
+on hardware with real friction and stiction working against it — which is presumably why
+spec §9.5 asks for a homed-to-a-limit-switch mechanism in the first place rather than a
+more elaborate one; but the simulated test does not enforce this the way a real mechanism
+would. Task 8's authoring notes should carry this forward so a future maintainer does not
+"simplify" `HomingResult`'s finish-instant check back down to an end-of-window one without
+knowing what problem it was solving, and does not conclude from a passing `ArmHomingTest`
+alone that a submitted `homingCommand()` necessarily drives anything.
 
 - [ ] **Step 7: The clean-clone invariant, from an actual fresh clone**
 
