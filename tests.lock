@@ -13,6 +13,15 @@ cf8b958505618c7a5a43d99b4ee3f8b069a084f12e403bf8920de88cc4b05e73  projects/m3-co
 d05456923d2eadb9a079e64df29cb5d7c932e3464830dec7f0f3ed18a81cd550  projects/m3-command-based/src/test/java/frc/robot/DefaultCommandTest.java
 a03a9a05362df0c2fbd02cedd60b3344cd9a48015d792b7263ef2caa2beaaa2c  projects/m3-command-based/src/test/java/frc/robot/SchedulerInterruptionTest.java
 c8a2add7f8c508b19841938ab65ff3bf9c613d426f6d3a56cc32c0631b1fc131  projects/m3-command-based/src/test/java/frc/robot/harness/DeliverablesFixture.java
+c6773a773353cecb5abd8ffcfbf5a5e0e6c583bc8966eaf29b4bd321ba570e41  projects/m4-control/src/main/java/frc/robot/harness/M4Deliverables.java
+14cb48790913df1a210bb32ae663fa49f208343c857408f04e81141e95ae06c8  projects/m4-control/src/main/java/frc/robot/harness/PlotHarness.java
+8eab5336923de4f3aafc0bb3d82d1097b6c014be04aaf78e3eec725d666f41cf  projects/m4-control/src/main/java/frc/robot/harness/SysIdWiring.java
+361e5915288f2f0c25f9f2f31e9165fb48051a9fd158fe7178f9578595a3474e  projects/m4-control/src/main/java/frc/robot/plant/ArmPlant.java
+d0158318945409c3aba6d33b1c8ea51051cb75a821f3110ec1491a1350e34f42  projects/m4-control/src/main/java/frc/robot/plant/FlywheelPlant.java
+c20d74021262b5ae83a5ef0735e5d76b6fb7064f84f4704538419fca982b6441  projects/m4-control/src/test/java/frc/robot/ArmGravityTest.java
+60893fa82127fafc25dfdcca1b44a5bd219e96bc0346940d6448cd68eb3f0fce  projects/m4-control/src/test/java/frc/robot/ArmHomingTest.java
+9c2ab9ecc55be8179548796e163cfff2d0e6cfb45c465fdeb1a664d2a7831a30  projects/m4-control/src/test/java/frc/robot/FlywheelVelocityTest.java
+36d2ec5eb7c75ce3b4512c8a005913262193df8a51eb9c6f4a58c50b948af2cc  projects/m4-control/src/test/java/frc/robot/harness/SimDriver.java
 6645ee07bde88438ca439bd7e0e02738b774f80f9b2625fd903a744a55913b69  projects/m6-testing/regressions/drop-gear-ratio.patch
 3f2878b9796ebc64f7bea7270ed22eb1132ee8883c574c244c30bbe686e49eb7  projects/m6-testing/regressions/flip-sign.patch
 86a924b2bd2529e024c998489f0e7dba9e51e08bb6634009e2aafd524a40a23f  projects/m6-testing/regressions/widen-tolerance.patch
@@ -27,3 +36,5 @@ aaec6016d387ef49d297bbb0acb8d3b3329138b1a576f8dc2e7f74d96ce791d8  projects/testo
 80970fda2e1fd50fc910d19be6e223810a8a678c1457bba589cf5822e8ebcf41  projects/testouts/t2-supplier-swap/src/test/java/frc/testout/t2/RangeTablesTest.java
 368985900afaeed1aaf6edb3851bdff45432af83d4ed9f533958f34a7c694624  projects/testouts/t3-scheduler-conflict/src/test/java/frc/robot/CombinedCommandTest.java
 f9680a801cd39aa848a4fbedb8d08831d19f6d9c80a72a6713622cc94f7b2c79  projects/testouts/t3-scheduler-conflict/src/test/java/frc/robot/harness/SchedulerFixture.java
+5a57aedce796a059af1cc4304c5fa17b3b2c3abb1ac5a522c1eb6d07c193dac4  projects/testouts/t4-bad-kv/src/main/java/frc/testout/t4/plant/T4FlywheelPlant.java
+d089c768588c8f724ac5c51e0b16e02864b2aeacfcf84841baaa6113d26f4b6a  projects/testouts/t4-bad-kv/src/test/java/frc/testout/t4/FlywheelTuningTest.java

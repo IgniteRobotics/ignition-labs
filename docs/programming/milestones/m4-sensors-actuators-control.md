@@ -18,7 +18,7 @@ Required before you commit to competition robot code.
 
 ## Test-out challenge
 
-You are given a simulated mechanism with deliberately wrong gains: a kV far too low, and a kP compensating for it. The mechanism reaches its target but overshoots and oscillates.
+You are given a simulated mechanism with deliberately wrong gains: a kV far too low, and a kP compensating for it. The mechanism reaches its target, overshoots, oscillates — and then settles a little *short* of the setpoint rather than on it. That last part is the most useful thing in the plot.
 
 1. Diagnose which term is wrong, from the response plot alone
 2. Fix it
@@ -120,6 +120,8 @@ The result is mechanisms that move fast without slamming, and far less wear.
 
 ### CTRE Phoenix 6 specifics
 
+Everything in this section is about the **competition** robot. Your M4 project computes its control loop in Java and commands a voltage; `Robot-2026` hands the gains to the motor controller and lets it close the loop on-device at 1 kHz. Both are correct, and on real hardware the on-device loop is usually the better answer — it runs faster than your 20 ms robot loop and keeps running if your code stutters. The training project does it the other way because CTRE's *simulation* runs its control loop on wall-clock time, which a stepped test cannot drive deterministically. The gains are the same numbers either way; only who multiplies them changes.
+
 **Configuration objects** are passive data structures, chainable, and applied once:
 
 ```java
@@ -149,7 +151,11 @@ Batching matters for CAN bandwidth, and `waitForAll` matters for odometry, where
 
 ## Project
 
+**The skeleton is [`projects/m4-control/`](https://github.com/IgniteRobotics/ignition-labs/tree/main/projects/m4-control).** Two simulated plants are given — a flywheel and a gravity-loaded arm — with their true parameters deliberately withheld. Characterizing a system you cannot look up is the milestone.
+
 **Closed-loop control in simulation, two mechanisms.**
+
+**You write the control loop in Java**, against the given plants: read the measurement, compute feedforward plus feedback, command a voltage. `ShooterSubsystem` closes the same loop *on the device*, with `Slot0` gains and `VelocityVoltage`, and that is how the competition robot does it — read it, because the stretch project and M5 both assume you have. The training project runs the loop in Java for a reason worth knowing: CTRE's simulation advances its onboard control loop and its status-signal pipeline on wall-clock time, so a test that steps the simulation cannot drive an on-device loop or read a measurement back from it. The same gains you characterize here are the numbers you would put in `Slot0`.
 
 **Part 1 — velocity control (flywheel).**
 1. Characterize it with SysId in sim; record kS, kV, kA
@@ -181,6 +187,7 @@ Batching matters for CAN bandwidth, and `waitForAll` matters for odometry, where
 - [ ] Motion profile demonstrated, with a before/after plot
 - [ ] You can explain why kI stays at zero
 - [ ] You can explain what happens when a CAN device stops hearing the roboRIO
+- [ ] **You have opened at least one pull request against a real robot repository.** Required, and the refactor above is only the recommended vehicle — a documentation fix or a typo correction counts. The skill being rehearsed is the ritual, not the refactor, and M6's pull request is assessed. That is a bad place to attempt one for the first time
 
 ## Common failure modes
 

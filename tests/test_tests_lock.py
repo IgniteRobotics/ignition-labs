@@ -21,6 +21,27 @@ def project(tmp_path: Path) -> Path:
     regressions = tmp_path / "projects" / "m6" / "regressions"
     regressions.mkdir(parents=True)
     (regressions / "flip-sign.patch").write_text("--- a/Foo.java\n+++ b/Foo.java\n", encoding="utf-8")
+    # Test-out fixtures nest a directory deeper than milestones -- projects/testouts/<name>/
+    # rather than projects/<name>/ -- so they need their own patterns. t4-bad-kv's plant is
+    # the case that caught this: unlocked, a student passes the fixture by editing the plant
+    # instead of fixing the gains.
+    testout_plant = (
+        tmp_path
+        / "projects"
+        / "testouts"
+        / "t4-bad-kv"
+        / "src"
+        / "main"
+        / "java"
+        / "frc"
+        / "testout"
+        / "t4"
+        / "plant"
+    )
+    testout_plant.mkdir(parents=True)
+    (testout_plant / "T4FlywheelPlant.java").write_text(
+        "class T4FlywheelPlant {}", encoding="utf-8"
+    )
     return tmp_path
 
 
@@ -31,7 +52,27 @@ def test_manifest_covers_every_matched_file(project):
         "projects/m4/src/main/java/plant/FlywheelPlant.java",
         "projects/m3/src/main/java/frc/robot/harness/M3Deliverables.java",
         "projects/m6/regressions/flip-sign.patch",
+        "projects/testouts/t4-bad-kv/src/main/java/frc/testout/t4/plant/T4FlywheelPlant.java",
     }
+
+
+def test_testout_plant_is_locked(project, tmp_path):
+    """A test-out fixture's plant must be tamper-evident, not just its tests.
+
+    Regression guard: the `projects/*/src/main/java/**/plant/*.java` pattern does not reach
+    `projects/testouts/<name>/...`, which is one directory deeper. t4-bad-kv shipped with its
+    plant unlocked while its README told the student it was locked.
+    """
+    lock = tmp_path / "tests.lock"
+    write_manifest(project, PATTERNS, lock)
+    target = (
+        project
+        / "projects/testouts/t4-bad-kv/src/main/java/frc/testout/t4/plant/T4FlywheelPlant.java"
+    )
+    target.write_text("class T4FlywheelPlant { /* tampered */ }", encoding="utf-8")
+    assert verify_manifest(project, lock) == [
+        "projects/testouts/t4-bad-kv/src/main/java/frc/testout/t4/plant/T4FlywheelPlant.java"
+    ]
 
 
 def test_manifest_hashes_are_sha256_hex(project):
