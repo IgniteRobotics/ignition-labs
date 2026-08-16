@@ -237,7 +237,35 @@ over a bad model is the wrong kP for a good one. That is the milestone's stated 
 "tune feedforward first, then a small amount of feedback" — enforced by the gate rather than
 asserted in prose. The fixture README describes the symptom; it never says which term is wrong.
 
+## 6.3 A custom `JavaExec` does not get the native libraries
+
+Found during T4's execution, and it will bite anyone who adds a Gradle task that touches WPILib
+math outside the `test` task. `FlywheelSim`'s discretization goes through `Matrix.exp` →
+`WPIMathJNI` → `System.loadLibrary("wpimathjni")`, which needs `java.library.path` pointed at the
+extracted native library — not merely the jar on the classpath. The `test` task gets this from
+`wpi.java.configureTestTasks(test)`; a hand-rolled `JavaExec` gets nothing and fails with
+`IOException: wpimathjni could not be loaded from path`.
+
+```groovy
+task generateResponse(type: JavaExec) {
+  dependsOn 'extractReleaseNative'
+  systemProperty 'java.library.path', "$buildDir/jni/release"
+  // ...
+}
+```
+
+M4's `PlotHarness` runs inside the test source set and is therefore unaffected, but any future
+plot-dumping or characterization task added as a standalone `JavaExec` needs both lines.
+
 ## 7. Open items for later steps
+
+- **Spec §10 names the fixture directory `t4-bad-kv/`, which leaks the answer.** The test-out's
+  stated pass criterion is diagnosing which term is wrong *from the response plot alone*, and the
+  directory name states it before the student opens anything. The fixture's own README has been
+  written to avoid naming the term, but the directory cannot be renamed without amending §10 and
+  the build-order table. Worth resolving in the doc-correction pass — either rename to something
+  neutral (`t4-tuning/`) and amend §10, or accept it explicitly and stop pretending the fixture is
+  blind. Do not leave it undecided.
 
 - The `Phoenix6` vendordep is pinned at `26.1.1` here, matching `Robot-2026` @ `28ce539` and
   `projects/m6-testing/`. Spec §9.5 says `26.1.0`. The spec line is stale; step 12's doc-correction
