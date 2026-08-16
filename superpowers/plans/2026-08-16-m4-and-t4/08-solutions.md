@@ -84,6 +84,14 @@ Follow `m6.md`'s shape. It must carry, so a future maintainer does not "simplify
 - **Why the arm is `m=8, L=0.9, G=30`** and what the rejected `J=0.62, G=100` arm did: held horizontal on `0.257 V`, so a kG-omitted student passed the test that exists to catch them.
 - The flywheel's `1.496` kP ceiling.
 - Which trap each given test aims at.
+- **What `ArmHomingTest` does not prove.** Found empirically in the milestone lane (`974b527`):
+  this arm's limit switch sits at the bottom of travel and the arm is gravity-loaded, so an
+  **un-driven** arm falls to the limit on its own inside the test window. "Reached the limit" is
+  therefore weaker evidence than it looks — the immediate-zero distractor is caught by the
+  *position* assertion, not the limit-switch one, and a command that merely waits before calling
+  `zeroHere()` can satisfy both without ever commanding a volt. Record whatever mitigation the
+  final test carries and why the assertion is shaped as it is. A future maintainer who
+  "simplifies" it back will silently reopen this.
 
 - [ ] **Step 6: Commit in the solutions repository**
 
