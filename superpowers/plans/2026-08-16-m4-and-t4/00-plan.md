@@ -117,7 +117,33 @@ public final class BadlyTunedFlywheel {
 }
 ```
 
-Gains are fields on `BadlyTunedFlywheel` — that is the whole point of the fixture, the student edits them. The plant it drives is `frc.testout.t4.plant.T4FlywheelPlant`, physically parameterised exactly like M4's, and locked.
+Gains are fields on `BadlyTunedFlywheel` — that is the whole point of the fixture, the student edits them. The plant it drives is `frc.testout.t4.plant.T4FlywheelPlant`, physically parameterised, and locked:
+
+```java
+public final class T4FlywheelPlant {
+  public T4FlywheelPlant();
+  public void setVoltage(double volts);                 // clamped to ±12
+  public double velocityRotationsPerSecond();
+  public void step(double dtSeconds);
+}
+```
+
+### Never call `FlywheelSim.setInputVoltage()` in T4
+
+`FlywheelSim.setInputVoltage(double)` is `setInput(volts)` followed by
+`clampInput(RobotController.getBatteryVoltage())`, and `getBatteryVoltage()` goes through the
+HAL. T4 initialises no HAL by design, and an uninitialised `getBatteryVoltage()` returning `0.0`
+would clamp every input to zero — a plant that silently never moves. Both plants clamp in Java
+and call the HAL-free `setInput(double)` instead:
+
+```java
+sim.setInput(MathUtil.clamp(volts, -12.0, 12.0));
+sim.update(dtSeconds);
+```
+
+M4 does initialise the HAL, so this is not strictly forced there — but M4 uses the same two lines
+anyway, so that the two plants read identically and neither depends on battery state that the
+model ignores.
 
 ---
 
