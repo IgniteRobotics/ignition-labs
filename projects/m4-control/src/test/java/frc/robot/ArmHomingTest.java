@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import frc.robot.harness.SimDriver;
+import frc.robot.harness.SimDriver.HomingResult;
 import frc.robot.plant.ArmPlant;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -27,22 +28,31 @@ class ArmHomingTest {
 
   @Test
   void homesToTheLimitSwitchFromAnUnknownStart() {
-    SimDriver.runHomingLoop(ITERATIONS);
+    HomingResult result = SimDriver.runHomingLoop(ITERATIONS);
 
     assertTrue(
-        SimDriver.container().armPlant().atHomeLimit(),
-        "After running homingCommand() for five simulated seconds, the arm's reverse limit "
-            + "switch never tripped. A homing routine that zeroes the encoder without ever "
-            + "driving to the limit will pass a check on measuredPositionRadians() alone -- "
-            + "zeroing rebases whatever position you are currently at. This assertion reads the "
-            + "physical limit switch instead, which only trips if the arm actually got there.");
+        result.finishedWithinBudget,
+        "homingCommand() never finished within five simulated seconds. It has to end on its "
+            + "own once the arm is home -- check isFinished() actually returns true once "
+            + "armPlant().atHomeLimit() does.");
+
+    assertTrue(
+        result.atHomeLimitWhenFinished,
+        "homingCommand() reported finished, but the arm's reverse limit switch was not tripped "
+            + "at that exact instant. Checking at the moment of finish, not after however many "
+            + "seconds the test happens to run for, is deliberate: a gravity-loaded arm can "
+            + "drift into its own limit switch given enough uncontrolled time, so a command that "
+            + "finishes for the wrong reason could otherwise still look right by the end of a "
+            + "long window. Your homingCommand() must not finish until armPlant().atHomeLimit() "
+            + "is actually true.");
 
     assertEquals(
         ArmPlant.HOME_ANGLE_RADIANS,
-        SimDriver.container().armPlant().measuredPositionRadians(),
+        result.measuredPositionRadiansWhenFinished,
         POSITION_TOLERANCE_RADIANS,
-        "The arm reached its reverse limit but measuredPositionRadians() does not read "
+        "homingCommand() finished at the reverse limit, but measuredPositionRadians() does not "
+            + "read "
             + ArmPlant.HOME_ANGLE_RADIANS
-            + " afterward. Call zeroHere() once atHomeLimit() is true.");
+            + " at that moment. Call zeroHere() once atHomeLimit() is true, not before.");
   }
 }

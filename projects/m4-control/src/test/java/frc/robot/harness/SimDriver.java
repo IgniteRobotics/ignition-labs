@@ -163,32 +163,69 @@ public final class SimDriver {
   }
 
   /**
-   * Schedules a fresh {@code homingCommand()} and runs the scheduler for {@code iterations} loops,
-   * stepping the arm's physics once per loop -- the same pairing {@code Robot} does.
+   * The outcome of {@link #runHomingLoop(int)}: whether {@code homingCommand()} finished within
+   * budget, and whether the arm was actually at its reverse limit at the exact moment it did.
+   *
+   * <p>Checking at the finish instant, rather than at the end of the loop's full iteration budget,
+   * catches a homing command that finishes <em>immediately</em> without ever driving anywhere -- at
+   * t=0 the arm is nowhere near the limit, so {@code atHomeLimitWhenFinished} is false. It does
+   * <b>not</b> catch a homing command that never drives at all but simply waits before zeroing:
+   * this arm's gravity carries an un-driven arm down to a stable rest exactly at the limit switch
+   * and it stays there, so any wait past the fall time reads as "arrived" by this check too.
+   * Distinguishing "actively driven here" from "gravity did it" would require instrumenting whether
+   * {@link ArmPlant#setVoltage} was ever called with a meaningfully nonzero value, which is outside
+   * what the pinned plant contract exposes to a test. Documented here rather than silently left for
+   * a future maintainer to rediscover.
    */
-  public static void runHomingLoop(int iterations) {
+  public static final class HomingResult {
+    public final boolean finishedWithinBudget;
+    public final boolean atHomeLimitWhenFinished;
+    public final double measuredPositionRadiansWhenFinished;
+
+    private HomingResult(
+        boolean finishedWithinBudget,
+        boolean atHomeLimitWhenFinished,
+        double measuredPositionRadiansWhenFinished) {
+      this.finishedWithinBudget = finishedWithinBudget;
+      this.atHomeLimitWhenFinished = atHomeLimitWhenFinished;
+      this.measuredPositionRadiansWhenFinished = measuredPositionRadiansWhenFinished;
+    }
+  }
+
+  /**
+   * Schedules a fresh {@code homingCommand()} and runs the scheduler for up to {@code iterations}
+   * loops, stepping the arm's physics once per loop -- the same pairing {@code Robot} does. Stops
+   * the instant the scheduler reports the command finished, and reports the arm's state at that
+   * exact tick rather than after however many more ticks the loop budget happens to allow.
+   */
+  public static HomingResult runHomingLoop(int iterations) {
     Command homing;
     try {
       homing = container().homingCommand();
     } catch (UnsupportedOperationException e) {
-      fail(
+      return fail(
           "homingCommand() in RobotContainer still throws UnsupportedOperationException. Return "
               + "a new command that drives to the reverse limit, then zeroes.");
-      return;
     }
     if (homing == null) {
-      fail("homingCommand() returned null. The harness needs a real command back.");
-      return;
+      return fail("homingCommand() returned null. The harness needs a real command back.");
     }
     try {
       CommandScheduler.getInstance().schedule(homing);
     } catch (IllegalArgumentException e) {
-      fail("homingCommand() could not be scheduled -- " + e.getMessage());
+      return fail("homingCommand() could not be scheduled -- " + e.getMessage());
     }
     for (int i = 0; i < iterations; i++) {
+      boolean wasScheduled = CommandScheduler.getInstance().isScheduled(homing);
       CommandScheduler.getInstance().run();
       armPlant().step(Constants.SIM_STEP_SECONDS);
       SimHooks.stepTiming(Constants.SIM_STEP_SECONDS);
+      boolean isScheduledNow = CommandScheduler.getInstance().isScheduled(homing);
+      if (wasScheduled && !isScheduledNow) {
+        return new HomingResult(
+            true, armPlant().atHomeLimit(), armPlant().measuredPositionRadians());
+      }
     }
+    return new HomingResult(false, armPlant().atHomeLimit(), armPlant().measuredPositionRadians());
   }
 }
