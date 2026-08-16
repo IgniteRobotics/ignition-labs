@@ -1,0 +1,114 @@
+plugins {
+    id "java"
+    id "com.diffplug.spotless" version "8.2.1"
+    id "edu.wpi.first.GradleRIO" version "2026.2.1"
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
+}
+
+spotless {
+    // Not enforced during build. Formatting is checked by CI (spotlessCheck) as a
+    // separate, deliberately failable step -- see teaching-repo-spec.md §4.3. Do not
+    // wire compileJava to spotlessApply: that reformats the tree on every build, which
+    // makes the formatting check structurally unable to fail.
+    enforceCheck false
+
+    java {
+        target 'src/**/*.java'
+        removeUnusedImports()
+        googleJavaFormat('1.19.2').reflowLongStrings()
+        trimTrailingWhitespace()
+        endWithNewline()
+    }
+}
+
+// This is a test-out fixture, not a robot project. A plant, a controller with two editable
+// gains, and a recorder that writes its response to plots/response.csv. GradleRIO is applied
+// for the same reason as in M1, M2, and T2: the toolchain and the JUnit wiring, so a student
+// runs the same ./gradlew commands here as everywhere else.
+def ROBOT_MAIN_CLASS = "frc.testout.t4.ResponseRecorder"
+
+deploy {
+    targets {
+        roborio(getTargetTypeClass('RoboRIO')) {
+            team = project.frc.getTeamOrDefault(6829)
+            debug = project.frc.getDebugOrDefault(false)
+
+            artifacts {
+                frcJava(getArtifactTypeClass('FRCJavaArtifact')) {
+                }
+            }
+        }
+    }
+}
+
+def deployArtifact = deploy.targets.roborio.artifacts.frcJava
+
+wpi.java.debugJni = false
+def includeDesktopSupport = true
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation wpi.java.deps.wpilib()
+    implementation wpi.java.vendor.java()
+
+    roborioDebug wpi.java.deps.wpilibJniDebug(wpi.platforms.roborio)
+    roborioDebug wpi.java.vendor.jniDebug(wpi.platforms.roborio)
+
+    roborioRelease wpi.java.deps.wpilibJniRelease(wpi.platforms.roborio)
+    roborioRelease wpi.java.vendor.jniRelease(wpi.platforms.roborio)
+
+    nativeDebug wpi.java.deps.wpilibJniDebug(wpi.platforms.desktop)
+    nativeDebug wpi.java.vendor.jniDebug(wpi.platforms.desktop)
+    simulationDebug wpi.sim.enableDebug()
+
+    nativeRelease wpi.java.deps.wpilibJniRelease(wpi.platforms.desktop)
+    nativeRelease wpi.java.vendor.jniRelease(wpi.platforms.desktop)
+    simulationRelease wpi.sim.enableRelease()
+
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.10.1'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+test {
+    useJUnitPlatform()
+    systemProperty 'junit.jupiter.extensions.autodetection.enabled', 'true'
+}
+
+jar {
+    from { configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) } }
+    from sourceSets.main.allSource
+    manifest edu.wpi.first.gradlerio.GradleRIOPlugin.javaManifest(ROBOT_MAIN_CLASS)
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE
+}
+
+deployArtifact.jarTask = jar
+wpi.java.configureExecutableTasks(jar)
+wpi.java.configureTestTasks(test)
+
+tasks.withType(JavaCompile) {
+    options.compilerArgs.add '-XDstringConcat=inline'
+}
+
+// The fixture's one runnable thing. Writes plots/response.csv (relative to this project
+// directory) from the shipped gains, and prints a one-line summary. Task 7 runs this to
+// (re)generate the committed plot -- see plots/README.md.
+tasks.register('generateResponse', JavaExec) {
+    group = 'training'
+    description = 'Runs the shipped BadlyTunedFlywheel and writes plots/response.csv.'
+    // FlywheelSim's discretization goes through Matrix.exp, which calls
+    // System.loadLibrary("wpimathjni") -- that needs java.library.path to point at the
+    // extracted native library, not just the classpath. extractReleaseNative is the
+    // NativeUtils task that puts it at build/jni/release; wpi.java.configureTestTasks(test)
+    // wires this same thing onto :test's java.library.path.
+    dependsOn 'extractReleaseNative'
+    classpath = sourceSets.main.runtimeClasspath
+    mainClass = 'frc.testout.t4.ResponseRecorder'
+    systemProperty 'java.library.path', "$buildDir/jni/release"
+}
