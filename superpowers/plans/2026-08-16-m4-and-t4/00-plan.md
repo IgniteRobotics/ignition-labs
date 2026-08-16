@@ -97,6 +97,25 @@ public final class PlotHarness {
 }
 ```
 
+### Plant physical parameters — pinned
+
+Both plants are Kraken X60 ×1 (`DCMotor.getKrakenX60(1)`; it lives in `wpimath` and needs no
+vendordep).
+
+| Plant | Parameters | Consequences |
+|---|---|---|
+| `FlywheelPlant` | `J = 0.0021` kg·m², `G = 1.5` | true kV `0.179 V/(rot/s)` → `7.16 V` at the 40 rot/s setpoint; **kP stability ceiling `1.496`** |
+| `ArmPlant` | `m = 8` kg, `L = 0.9` m, `G = 30`, `J = mL²/3 = 2.16` kg·m² | `V_hold = 1.99 V` at horizontal; max speed `1.75 rad/s`; kG-omitted distractor misses by `11.96°` |
+
+`ArmPlant`'s angle limits: minimum `HOME_ANGLE_RADIANS` (−30°, where the reverse limit switch
+sits), maximum `1.5708` (+90°).
+
+**`SingleJointedArmSim` takes no mass.** Its gravity term is `α = −3/2·g·cos(θ)/L`, which assumes
+`J = ⅓mL²`, so mass cancels and gravity depends only on arm length. `J` and `L` are separate
+constructor arguments but are not physically independent — if you change one, re-derive the other,
+and keep `m = 8` kg documented in the Javadoc so the next maintainer can. Design record §3.1 has
+the derivation and the numbers that were rejected.
+
 ### Constants the given tests and the student both use
 
 `frc.robot.Constants.FlywheelConstants.TARGET_ROTATIONS_PER_SECOND = 40.0`
