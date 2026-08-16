@@ -142,6 +142,50 @@ deliverable, not a one-off.
 The 60-minute pass criterion is diagnosis plus the explanation of *why* the original tuning was
 fragile. The given test gates the fix; the explanation stays mentor-verified, as §10 requires.
 
+### 6.1 The symptom the physics actually produces
+
+§10 and the milestone document both describe T4 as "reaches target, overshoots, oscillates." A
+parameter sweep run 2026-08-16 across four plants (NEO and Kraken, `J` from `0.0006` to `0.05`,
+gearings 1 and 3) and kP from `1.0` to `64.0` found **no configuration that overshoots strongly
+and also settles on the setpoint.** The best overshoot available anywhere in the space is `+2.9%`,
+and it comes with `-5.1%` steady-state error.
+
+That is not a tuning failure, it is the system order. **A flywheel velocity loop is first-order.**
+With the input voltage-saturated for the whole rise there is no stored momentum to carry the
+output past the setpoint, so the only overshoot mechanism is discrete-time gain-induced ringing —
+a negative closed-loop pole. Reaching that pole requires a kP close to the discrete stability
+edge, and the same kP is what bounds how small the feedforward-deficit offset can get. The two
+requirements pull in opposite directions.
+
+The shipped fixture (NEO, `J = 0.0006`, direct drive, kV at a third of truth, kP `1.5`, pole
+`-0.740`) therefore produces: a saturated rise, a peak of `41.15` rot/s, several visibly decaying
+rings, and a settle at `37.95` rot/s against a `40.0` setpoint.
+
+**The steady-state offset is the best clue in the plot, and the documents do not currently mention
+it.** It is the direct signature of feedback covering for feedforward: at equilibrium the P term
+must supply exactly the voltage the feedforward failed to, so the residual error is
+`(kV_true − kV_set) · setpoint / kP`. Step 9's docs-alignment edit adds "and settles a little short
+of the setpoint" to the symptom description in both places. Nothing about the diagnosis moves into
+student-facing text.
+
+### 6.2 Why the gate cannot be passed by the wrong diagnosis
+
+Verified numerically before the fixture was written:
+
+| Student's change | Overshoot | Steady state | Verdict |
+|---|---|---|---|
+| *(shipped)* kV ⅓, kP 1.5 | `+1.15` | `−2.05` | **FAIL** |
+| Fix kV, leave kP at 1.5 | `+1.99` | `0.00` | **FAIL** — overshoot |
+| Fix kV, retune kP to 0.5 | `0.00` | `0.00` | **PASS** |
+| Cheat: leave kV, raise kP to 1.7 | `+1.99` | `−1.82` | **FAIL** |
+| Cheat: leave kV, raise kP to 3.0 | `+4.49` | `−3.35` | **FAIL** |
+
+The second row is the pedagogically important one and it is deliberate: correcting the
+feedforward without re-tuning the proportional term still fails, because a kP chosen to paper
+over a bad model is the wrong kP for a good one. That is the milestone's stated lesson —
+"tune feedforward first, then a small amount of feedback" — enforced by the gate rather than
+asserted in prose. The fixture README describes the symptom; it never says which term is wrong.
+
 ## 7. Open items for later steps
 
 - The `Phoenix6` vendordep is pinned at `26.1.1` here, matching `Robot-2026` @ `28ce539` and
