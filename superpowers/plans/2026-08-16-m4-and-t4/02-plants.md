@@ -13,18 +13,33 @@ tests that step a plant 250 times and assert on where it ended up — rests on t
 loop being bit-identical across runs in one JVM. If it is not, stop and report rather than
 loosening a tolerance to paper over it.
 
-**A documentation note, not a contract change:** the design record's §3 says motor
-inversion and neutral mode are "honoured, because the plant reads them from the
-configuration it applied." The concrete code in that same section feeds physics from
-`commandedVolts` — the pre-invert value passed to `setVoltage` — not from anything read
-back off the `TalonFX`, and reading configuration back safely (without reintroducing the
-wall-clock dependency §2 spent four experiments ruling out) is not a small addition. This
-task implements the code as written in §3 and, for that reason, does **not** honour
-inversion or neutral mode — physics always uses the raw `commandedVolts`. Both plants'
-Javadoc says so, alongside the current-limit / voltage-compensation / ramp-rate
-limitation the design record already documents. This is a documentation-accuracy
-correction, not a contract change: the pinned API contract in `00-plan.md` says nothing
-about inversion, so nothing pinned is affected.
+**Inversion and neutral mode are inert, same as current limits, voltage compensation, and
+ramp rates.** Design record §3 was corrected on review to say this plainly (its earlier
+draft claimed the opposite, and the code snippet directly above that claim already
+contradicted it — physics is fed from `commandedVolts`, pre-inversion, never read back off
+the `TalonFX`). Both plants' Javadoc below states the limitation as corrected.
+
+**Arm parameters are pinned by design record §3.1, not chosen here.** `SingleJointedArmSim`
+takes no mass — its gravity term assumes `J = ⅓mL²`, so `J` and the arm length `L` are not
+independent, and picking them without deriving one from the other risks an unphysical arm.
+An earlier `J = 0.62`, `G = 100` pairing held horizontal on `0.257 V`, cheap enough that
+omitting `kG` entirely still lands within about 3° of target — the exact distractor Task
+4's `ArmGravityTest` exists to catch would have silently passed. The parameters below —
+`m = 8` kg, `L = 0.9` m, `G = 30`, `J = mL²/3 = 2.16` kg·m² — were checked against that
+failure mode and hold horizontal on `1.99 V`; a kG-omitted arm misses by roughly `12°`,
+comfortably past the test's tolerance. Keep `m = 8 kg` documented in the Javadoc even
+though the constructor never takes it, so a future change to `L` gets `J` re-derived
+rather than picked independently.
+
+**The flywheel has a kP ceiling, and it belongs in this task file, not in student-facing
+text.** With `J = 0.0021`, `G = 1.5`, design record §3.2 derives a discrete kP stability
+ceiling of `1.496` — kP `1.0` peaks at `41.42` rot/s and settles clean, kP `2.0` diverges.
+This number is a system-identification result (it falls straight out of kV/kA), so it must
+never appear in `README.md`, a Javadoc, or a test — Task 5's README already only says
+"too high oscillates," which is enough for a student tuning by feel to stay well clear of
+it without ever being told the boundary. It matters here because Task 4 Step 5's reference
+implementation and Task 8's solutions gains must both sit visibly inside the band, or
+whoever is verifying will misread a diverging loop as a broken plant.
 
 **Clamp in Java, call `setInput`, not `setInputVoltage`.** `FlywheelSim`/`SingleJointedArmSim`
 inherit `setInputVoltage(double)` from `LinearSystemSim`, which is `setInput(volts)` followed
@@ -187,6 +202,15 @@ depends on this distinction; do not collapse the two.
 plan was written against. That is what makes `atHomeLimit()`'s direct angle comparison
 reliable: a student driving into the limit cannot punch through it in simulation.
 
+**`J_KG_M2` is not a free choice — it is derived from `m` and `L`.** `SingleJointedArmSim`'s
+gravity term is `α = -3/2 · g · cos(θ) / L`, which assumes `J = ⅓mL²`; mass cancels out of
+the sim's own math, but a `J` that doesn't correspond to *some* physical mass at this length
+is not modelling a real arm. Design record §3.1 picked `m = 8` kg and `L = 0.9` m for the
+gravity-holding voltage they produce — `1.99 V`, large enough that a kG-omitted feedforward
+misses the target by roughly 12°, comfortably past `ArmGravityTest`'s tolerance — and
+`J = mL²/3 = 2.16` kg·m² follows from that. If `ARM_LENGTH_METERS` ever changes,
+`J_KG_M2` has to be re-derived the same way, not picked independently.
+
 Create `projects/m4-control/src/main/java/frc/robot/plant/ArmPlant.java`:
 
 ```java
@@ -207,6 +231,13 @@ import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
  * <p>Built from a moment of inertia, an arm length, and a gear reduction — {@link
  * LinearSystemId#createSingleJointedArmSystem} — never from a gravity-feedforward or PID gain.
  *
+ * <p>{@code SingleJointedArmSim} takes no mass; its gravity term assumes {@code J = m*L^2/3}, so
+ * {@link #J_KG_M2} is not independent of {@link #ARM_LENGTH_METERS} even though the constructor
+ * takes them as separate arguments. This plant models an 8kg arm at this length — that mass never
+ * appears in code because the simulator has no parameter for it, but it is the number {@link
+ * #J_KG_M2} was derived from, and it is the number to start from again if {@link
+ * #ARM_LENGTH_METERS} ever changes.
+ *
  * <p><b>What this simulates, and what it does not.</b> Same limitation as {@link FlywheelPlant}:
  * {@link #step} feeds physics from the voltage {@link #setVoltage} was last called with, not from
  * anything read back off the {@code TalonFX}. Current limits, voltage compensation, ramp rates,
@@ -226,11 +257,14 @@ public final class ArmPlant implements AutoCloseable {
   /** Radians from horizontal that a homed arm reads when it is sitting on the reverse limit. */
   public static final double HOME_ANGLE_RADIANS = -0.5236;
 
-  private static final double J_KG_M2 = 0.62;
-  private static final double GEARING = 100.0;
-  private static final double ARM_LENGTH_METERS = 0.75;
-  private static final double MIN_ANGLE_RADIANS = HOME_ANGLE_RADIANS;
-  private static final double MAX_ANGLE_RADIANS = 2.0944; // 120 degrees
+  // This plant models an 8kg arm -- SingleJointedArmSim has no mass parameter, so that
+  // number never appears below, but J_KG_M2 is derived from it (J = m*L^2/3, design record
+  // §3.1) and is not a free choice independent of ARM_LENGTH_METERS.
+  private static final double ARM_LENGTH_METERS = 0.9;
+  private static final double J_KG_M2 = 2.16; // = 8 kg * 0.9 m^2 / 3
+  private static final double GEARING = 30.0;
+  private static final double MIN_ANGLE_RADIANS = HOME_ANGLE_RADIANS; // -30 degrees
+  private static final double MAX_ANGLE_RADIANS = 1.5708; // 90 degrees
   private static final double STARTING_ANGLE_RADIANS = 0.2618; // 15 degrees; arbitrary
   private static final double ENCODER_BOOT_OFFSET_RADIANS = 1.0472; // 60 degrees; arbitrary
   private static final double LIMIT_SWITCH_TOLERANCE_RADIANS = 1.0e-3;
@@ -361,17 +395,24 @@ the file contains no numbers.
 
 - [ ] **Step 5: Confirm the physical parameters actually reach a plausible bandwidth**
 
-Sanity-check by hand, not by running a controller (none exists yet): a `DCMotor.getKrakenX60(1)`
-free speed is roughly 608 rad/s; at `GEARING = 1.5` the mechanism free speed caps near 405
-rad/s (≈64 rot/s), comfortably above the 40 rot/s flywheel target Task 4 will assert
-against. For the arm, `GEARING = 100.0` gives enormous torque authority relative to
-gravity's load at this length and mass — expect the arm to move quickly and to need real
-feedback to avoid overshoot, which is the lesson, not a defect. If Task 4's Step 5 (running
-a correct implementation) finds either mechanism cannot reasonably reach its target within
-the loop budget it plans to use, that is this step's approximation being wrong in practice
-— come back and adjust `J_KG_M2`, `GEARING`, or `ARM_LENGTH_METERS` here, and record the
-change in this task's commit message rather than papering over it with a looser test
-tolerance in Task 4.
+This step used to be a by-hand approximation; it is now confirming numbers design record
+§3.1/§3.2 already derived and verified, not deriving them fresh. Record does not mean
+re-run — reading the two sections and checking the plant's constants match is enough:
+
+- **Flywheel** (`J = 0.0021`, `G = 1.5`): true kV `0.179 V/(rot/s)`, so the 40 rot/s target
+  needs `7.16 V` — comfortable rail headroom. Discrete kP stability ceiling `1.496`.
+- **Arm** (`m = 8` kg, `L = 0.9` m, `G = 30`, `J = 2.16`): holds horizontal on `1.99 V`; max
+  speed `1.75 rad/s` (≈100°/s); a kG-omitted feedforward misses by about 12°.
+
+Confirm the constants in the file you just wrote match this table exactly. If Task 4's
+Step 5 (running a correct implementation against the real `FlywheelSim`/`SingleJointedArmSim`
+integrator, not the discrete-ZOH hand model these numbers come from) finds a real
+disagreement — not "tuning is fiddly," an actual mismatch like the arm holding on a
+noticeably different voltage than `1.99 V` — **report the discrepancy rather than quietly
+retuning to make a test pass.** These parameters were pinned specifically because an earlier,
+untested pairing would have shipped a gate that couldn't fail (the original `J = 0.62`,
+`G = 100` arm let a kG-omitted feedforward pass within 3° of target); silently drifting
+away from the verified numbers risks the same failure mode a second time.
 
 - [ ] **Step 6: Determinism proof — not optional**
 

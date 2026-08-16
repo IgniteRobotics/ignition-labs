@@ -438,27 +438,39 @@ cd projects/m4-control
 
 Paste the actual failure summary. Then temporarily fill in `RobotContainer.java` with a
 correct implementation -- feedforward first, then a modest kP, kD only if it overshoots,
-exactly the procedure the milestone teaches. **This file is never committed**; derive the
-gains yourself from the plants' physical constants and iteration, the same way a student
-is meant to. A starting point for each:
+exactly the procedure the milestone teaches. **This file is never committed.** Design
+record §3.1/§3.2 already derived and verified the numbers below by hand against a
+discrete-ZOH model of the real plants (Task 2 pinned the constants that produce them) --
+use them as a starting point, and confirm them against the real integrator rather than
+re-deriving from scratch:
 
-- **Flywheel feedforward.** `kV` (volts per mechanism rotation/second) starts near
-  `12.0 / freeSpeedOutputRotationsPerSecond`, where free speed output is `DCMotor.getKrakenX60(1)`'s
-  free speed converted through `FlywheelPlant`'s gearing. `kS` and `kA` can start at zero --
-  add `kS` only if the flywheel visibly stalls near zero velocity, `kA` only if the response
-  needs damping the P term can't provide cleanly.
-- **Flywheel feedback.** A small `kP` on top of a correct `kV` should be enough to close the
-  last bit of steady-state error. If `kP` alone (no feedforward) is doing the work, the
-  runaway or hold-window assertion will tell you.
-- **Arm feedforward.** `kG` starts near the torque needed to hold the arm level, converted
-  to volts through the same gearing reasoning as `kV` above; `ArmFeedforward` scales it by
-  `cos(angle)` for you. `kV`/`kA` matter less here than `kG` does.
+- **Flywheel feedforward.** True `kV` (volts per mechanism rotation/second) is `0.179` --
+  `7.16 V` at the 40 rot/s target, comfortable rail headroom. `kS` and `kA` can start at
+  zero.
+- **Flywheel feedback.** **Stay under kP `1.4`.** Design record §3.2's discrete stability
+  ceiling for this plant is `1.496` -- kP `1.0` peaks at `41.42` rot/s and settles clean;
+  kP `2.0` diverges outright. If your loop diverges, that is very likely this ceiling, not
+  a broken plant -- lower kP before suspecting anything else. **This number is a
+  characterization result and must never appear in `README.md`, a Javadoc, a test, or a
+  commit message that ships** -- it belongs only in this task file, the design record, and
+  your own scratch notes while tuning the throwaway implementation.
+- **Arm feedforward.** True `kG` (volts to hold the arm level) is `1.99 V`.
+  `ArmFeedforward` scales it by `cos(angle)` for you. `kV`/`kA` matter far less here than
+  `kG` does -- max arm speed at full voltage is only `1.75 rad/s`.
 - **Arm feedback.** `kP` large enough to close the gap `kG` alone leaves, `kD` only if it
   overshoots into oscillation. A `TrapezoidProfile` or `ProfiledPIDController` for the
   motion-profile requirement is real M4 content but is not exercised by
   `ArmGravityTest`/`ArmHomingTest` -- a plain `PIDController` is enough to make this step's
   suite pass; do not skip writing the profile in the actual student-facing README, only in
   this throwaway verification pass if time is short.
+
+If what you observe running against the real `FlywheelSim`/`SingleJointedArmSim` disagrees
+meaningfully with these numbers -- not "tuning took a few tries," an actual mismatch like
+the arm holding on a voltage nowhere near `1.99 V` -- **stop and report the discrepancy**
+rather than quietly retuning until the suite goes green. These parameters were pinned
+specifically because an earlier, unverified pairing would have shipped a test that passed
+even with `kG` omitted entirely; silently drifting away from the verified numbers now risks
+reintroducing exactly that.
 
 Run the suite:
 
@@ -492,7 +504,7 @@ the next row.
 |---|---|---|---|
 | 1 | `updateFlywheel()` uses a `kP`-only loop (`voltage = kP * (target - measured)`), no feedforward, with the same modest `kP` the correct implementation used alongside its feedforward | `FlywheelVelocityTest` | Without `kV`, a small `kP` alone cannot produce enough steady-state voltage to reach a nonzero velocity target — it settles well short, failing the hold-window assertion |
 | 2 | `updateFlywheel()`'s feedforward is computed against `flywheelPlant().velocityRotationsPerSecond() * FlywheelPlant`'s gearing (i.e. applies the 1.5x gear ratio a second time on top of a correctly-converted `kV`) | `FlywheelVelocityTest` | Systematically over- or under-commands voltage by the gearing factor; settles at the wrong velocity, failing the hold-window assertion. This is the trap `FlywheelPlant`'s Javadoc (Task 2) names directly: SysId characterizes rotor velocity, control targets mechanism velocity, and they are not the same number |
-| 3 | `updateArm()`'s feedforward omits the gravity term entirely (`kG = 0`, or a plain `SimpleMotorFeedforward` instead of `ArmFeedforward`) | `ArmGravityTest` | The arm sags below `SCORING_ANGLE_RADIANS` and settles there, well outside `POSITION_TOLERANCE_RADIANS` |
+| 3 | `updateArm()`'s feedforward omits the gravity term entirely (`kG = 0`, or a plain `SimpleMotorFeedforward` instead of `ArmFeedforward`) | `ArmGravityTest` | Design record §3.1 verified this arm's kG-omitted miss at roughly 12° -- the arm sags below `SCORING_ANGLE_RADIANS` and settles there, well outside `POSITION_TOLERANCE_RADIANS` (~3°). This margin is the reason Task 2's arm parameters were pinned rather than picked freely: an earlier, lighter arm held within 3° even with `kG = 0`, which would have made this exact row a false negative |
 | 4 | `homingCommand()` returns a command whose `initialize()` calls `armPlant().zeroHere()` immediately and whose `isFinished()` returns `true` right away — it never drives toward the limit at all | `ArmHomingTest` | `measuredPositionRadians()` reads `HOME_ANGLE_RADIANS` immediately (zeroing rebases wherever the arm already is), which is exactly why the test also asserts `atHomeLimit()` — the arm never physically moved, so the limit switch assertion fails even though the position assertion alone would have passed |
 
 Paste each distractor's actual failing assertion message — this is the read-every-failure-message
