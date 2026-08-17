@@ -44,7 +44,7 @@ M5's `frc.robot.plant.SwerveDriveSim`.
 
 ---
 
-- [ ] **Step 1: Copy the scaffold, add the one vendordep, write `build.gradle`**
+- [x] **Step 1: Copy the scaffold, add the one vendordep, write `build.gradle`**
 
 ```bash
 cd /Users/y0shi/workspace/ignite/docs
@@ -263,7 +263,7 @@ tasks.register('generateLog', JavaExec) {
 }
 ```
 
-- [ ] **Step 2: Write the given, locked drivetrain**
+- [x] **Step 2: Write the given, locked drivetrain**
 
 `src/main/java/frc/testout/t5/plant/T5DriveSim.java` — kinematic only, same reason M4's and
 T4's plants are built from physical quantities in code, not a vendor sim: nothing about *this*
@@ -367,7 +367,7 @@ public final class T5DriveSim {
 }
 ```
 
-- [ ] **Step 3: Write the recorder**
+- [x] **Step 3: Write the recorder**
 
 `src/main/java/frc/testout/t5/LogRecorder.java` — the pinned contract from `00-plan.md`,
 byte-for-byte on the public surface (`enum Fault`, `record(Fault, Path)`). Everything below the
@@ -380,6 +380,25 @@ just durations with start/end markers) rather than scheduled through
 `edu.wpi.first.wpilibj2.command.Command` — same reason T4's plant deliberately avoids the HAL
 (`T4FlywheelPlant.setVoltage`'s Javadoc): this fixture never initializes the HAL, and routing a
 named command through the real `CommandScheduler` would need it.
+
+> **Superseded — read the shipped file, not this listing.** The recorder was revised after this
+> step first ran, and `src/main/java/frc/testout/t5/LogRecorder.java` is the authoritative version.
+> Two things changed, both to close leaks this listing's design left open:
+>
+> 1. **Every recording is now a fixed 300 ticks (`TOTAL_RECORD_SECONDS = 6.0`)** whichever fault it
+>    carries, rather than ending when the routine ends. Under the listing below, the blocking run
+>    ran to a `MAX_STEP_SECONDS = 8.0` cap and the other two stopped at ~3.2 s, so the shipped files
+>    came out 83 KB against 26 KB — `ls -l` identified the blocking log without opening it. Phase
+>    lengths are now counted in ticks and timestamps derived from a tick counter, never accumulated
+>    in seconds, so all three faults land on identical timestamps.
+> 2. **`GYRO_DRIFT_RAD_PER_TICK` dropped from `0.012` to `0.0080`.** With the window fixed at 300
+>    ticks, the old rate accumulated 6.3 rad — a full turn — and `Rotation2d` normalizes to
+>    (-180, 180], so the one fault that is entirely about heading plotted as a sawtooth and ended
+>    with a final heading error of ~1°. The constant's Javadoc in the shipped file states the
+>    invariant (`rate × TOTAL_TICKS < π`) and why, because it is not visible from the constant.
+>
+> Step 5c's matrix below carries the shipped numbers. The listing that follows is kept as the
+> design record of the first pass, not as something to copy.
 
 ```java
 package frc.testout.t5;
@@ -653,7 +672,7 @@ public final class LogRecorder {
 }
 ```
 
-- [ ] **Step 4: Write the CLI wrapper**
+- [x] **Step 4: Write the CLI wrapper**
 
 `src/main/java/frc/testout/t5/GenerateLog.java` — takes the fault *and* the exact destination
 file as required arguments, on purpose: this is the seam that keeps the letter-to-fault mapping
@@ -695,7 +714,7 @@ public final class GenerateLog {
 }
 ```
 
-- [ ] **Step 5: The discrimination matrix — not optional, the single most important step in this plan**
+- [x] **Step 5: The discrimination matrix — not optional, the single most important step in this plan**
 
 `00-plan.md`'s self-review names this explicitly: for each of the three faults, confirm the
 *other two* causes can be ruled out from signals actually present in that recording. Design
@@ -766,6 +785,8 @@ public final class Inspect {
     double[] maxControllerError = {0};
     double[] maxTrueVsEst = {0};
     double[] lastTrueVsEst = {0};
+    double[] maxHeadingErrDeg = {0};
+    double[] lastHeadingErrDeg = {0};
 
     // Deliberately reader.forEach(...), not the for-each/Iterator protocol: DataLogIterator's
     // hasNext() requires (pos + 16 <= size), which silently drops a trailing record if it lands
@@ -800,6 +821,11 @@ public final class Inspect {
             double d = trueP.getTranslation().getDistance(estP.getTranslation());
             maxTrueVsEst[0] = Math.max(maxTrueVsEst[0], d);
             lastTrueVsEst[0] = d;
+            // Both max and last, because criterion 4 in 5c is that they are equal -- that is what
+            // proves the drift ramp never crossed the +/-180 wrap.
+            double h = Math.abs(estP.getRotation().minus(trueP.getRotation()).getDegrees());
+            maxHeadingErrDeg[0] = Math.max(maxHeadingErrDeg[0], h);
+            lastHeadingErrDeg[0] = h;
           }
           if (targetP != null && estP != null) {
             maxControllerError[0] =
@@ -818,6 +844,9 @@ public final class Inspect {
     System.out.printf(
         "  maxControllerError(target-vs-est)=%.3f m  maxTrueVsEst=%.3f m  lastTrueVsEst=%.3f m%n",
         maxControllerError[0], maxTrueVsEst[0], lastTrueVsEst[0]);
+    System.out.printf(
+        "  maxHeadingErr=%.1f deg  lastHeadingErr=%.1f deg%n",
+        maxHeadingErrDeg[0], lastHeadingErrDeg[0]);
   }
 
   private static Pose2d byName(Map<Integer, String> names, Map<Integer, Pose2d> last, String name) {
@@ -846,30 +875,39 @@ tasks.register('inspect', JavaExec) {
 ./gradlew inspect --console=plain
 ```
 
-**5c. Read the output against the discrimination table below.** These are the exact numbers this
-task's own spike produced against the code above — expect a close match; a large deviation means
-something was transcribed differently than Step 1–4 above and is worth stopping on before it
-becomes Task 7's problem.
+**5c. Read the output against the discrimination table below.** These are the exact numbers the
+shipped recorder produces — the ones the committed logs were generated from, re-measured after the
+revision described at the top of Step 3. A deviation means something changed in the recorder or the
+vendored sim stack, and it is worth stopping on before it becomes Task 7's problem.
 
-| Fault | events (count) | maxControllerError (target vs. estimate) | maxTrueVsEst | Rules out |
-|---|---|---|---|---|
-| `ODOMETRY_DRIFT` | 6 (path:start/end, step2:start/end, step3:start/end — routine completes normally) | 0.177 m — small | **2.318 m — large** | Mistuned controller (error small, so the controller is tracking its input fine) and blocking command (all six events present, on a normal ~3.2 s timeline) |
-| `MISTUNED_CONTROLLER` | 6 (routine completes normally) | **0.887 m — large, ~5× the other two faults' baseline** | 0.047 m — small | Odometry drift (estimate matches true pose throughout) and blocking command (all six events present, normal timeline) |
-| `BLOCKING_COMMAND` | **3 only** — `path:start`, `path:end`, `step2:start`; no `step2:end`, no `step3:start`, no `step3:end` | 0.177 m — small | 0.057 m — small | Odometry drift and mistuned controller (both pose signals agree closely right up to the point recording stops) |
+Every fault records exactly **300 samples** of `truePose` / `estimatedPose` / `pathTargetPose` /
+`moduleStates`, on identical timestamps. That is the point of the fixed window: sample count and
+file length carry no information about which fault a log holds, so the event markers do all the
+discriminating.
+
+| Fault | events (count) | maxControllerError (target vs. estimate) | maxTrueVsEst | maxHeadingErr | Rules out |
+|---|---|---|---|---|---|
+| `ODOMETRY_DRIFT` | 6 (path:start/end, step2:start/end, step3:start/end — routine completes normally) | 0.177 m — small | **1.559 m — large** | **137.5° — large, monotonic** | Mistuned controller (controller error sits at the healthy baseline, so it is tracking its input fine) and blocking command (all six events present, on a normal ~3.2 s timeline) |
+| `MISTUNED_CONTROLLER` | 6 (routine completes normally) | **0.887 m — large, ~5× the healthy baseline** | 0.047 m — small | 1.5° | Odometry drift (estimate matches true pose throughout) and blocking command (all six events present, normal timeline) |
+| `BLOCKING_COMMAND` | **3 only** — `path:start`, `path:end`, `step2:start`; no `step2:end`, no `step3:start`, no `step3:end` | 0.177 m — small | 0.057 m — small | 2.2° | Odometry drift and mistuned controller (both pose signals agree closely, and go on agreeing through the 3.7 s the robot sits parked after `step2:start`) |
 
 Confirm, reading the actual `inspect` output, not this table from memory:
-1. `ODOMETRY_DRIFT`'s `maxTrueVsEst` is an order of magnitude larger than its
-   `maxControllerError`, and both other faults' `maxTrueVsEst` stay under 0.06 m.
+1. `ODOMETRY_DRIFT`'s `maxTrueVsEst` is ~27× the other two faults' (which stay under 0.06 m) and
+   ~9× its own `maxControllerError`.
 2. `MISTUNED_CONTROLLER`'s `maxControllerError` is the largest of the three by a wide margin, and
    its `maxTrueVsEst` is the smallest.
-3. `BLOCKING_COMMAND` is the only one of the three with fewer than 6 `/t5/events` records, and its
-   `truePose`/`estimatedPose`/`pathTargetPose`/`moduleStates` record counts (515 each) are more
-   than 3× the other two faults' (159 each) — the recorder ran past the nominal ~3.2 s routine
-   length up to the `MAX_STEP_SECONDS` cap because `step2` never finished.
+3. `BLOCKING_COMMAND` is the only one of the three with fewer than 6 `/t5/events` records — and it
+   is the **only** signal that separates it, since all three logs now run the same number of ticks
+   and end with the robot parked and no further markers. A healthy run's trailing idle (2.8 s after
+   `step3:end`) and the blocked run's (3.7 s after `step2:start`) look alike by construction.
+4. `ODOMETRY_DRIFT`'s `maxHeadingErr` equals its `lastHeadingErr` — the drift ramp is monotonic and
+   never wraps. If these two diverge, the ramp crossed ±180° and the log now ends looking innocent;
+   see `GYRO_DRIFT_RAD_PER_TICK`'s Javadoc.
 
-If any of the three fails, the fixture is not ready — go back to Step 3's tunings
-(`GYRO_DRIFT_RAD_PER_TICK`, `GOOD_KP`/`BAD_KP`, `GOOD_KP_THETA`/`BAD_KP_THETA`) rather than
-loosening this check.
+If any of the four fails, the fixture is not ready — go back to the shipped recorder's tunings
+(`GYRO_DRIFT_RAD_PER_TICK`, `TOTAL_RECORD_SECONDS`, `GOOD_KP`/`BAD_KP`,
+`GOOD_KP_THETA`/`BAD_KP_THETA`) rather than loosening this check. Note that the first two are
+coupled — raising the window length without lowering the drift rate is what trips criterion 4.
 
 **5d. Determinism — regenerate each fault twice, confirm byte-identical.**
 
@@ -906,7 +944,7 @@ Paste the full `inspect` output from 5b/5c and the determinism results from 5d i
 report — a report that only asserts "logs discriminate" without the numbers is not this step
 done.
 
-- [ ] **Step 6: Format, verify nothing leaked, and commit**
+- [x] **Step 6: Format, verify nothing leaked, and commit**
 
 ```bash
 cd /Users/y0shi/workspace/ignite/docs/projects/testouts/t5-drifting-auto

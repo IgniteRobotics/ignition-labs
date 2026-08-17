@@ -43,8 +43,24 @@ import java.util.List;
  * believing it is on target. {@link Fault#MISTUNED_CONTROLLER} swaps in a proportional gain too low
  * to track the path's speed, producing a large, persistent gap between the path's target pose and
  * the estimate while the estimate itself stays accurate. {@link Fault#BLOCKING_COMMAND} makes
- * {@code step2} never report finished; the recorder caps total run time and stops, so {@code step3}
- * never starts and its markers never appear.
+ * {@code step2} never report finished, so {@code step2:end}, {@code step3:start} and {@code
+ * step3:end} never appear -- the recording window closes with the routine still waiting on it.
+ *
+ * <p><b>Every recording is exactly {@link #TOTAL_RECORD_SECONDS} long, whichever fault it
+ * carries.</b> A run whose routine finishes early keeps recording the robot sitting idle until the
+ * window closes. That is deliberate and it is not padding: those trailing ticks are real ticks of
+ * the same simulation, stepped and logged like every other tick, and a real robot's log does not
+ * stop the microsecond auto ends either. The reason it matters is that file length would otherwise
+ * identify the blocking run from {@code ls -l} alone, without opening the log -- a free giveaway,
+ * where the regeneration shortcut this fixture knowingly accepts (see {@code logs/README.md}) at
+ * least costs three Gradle runs and knowing the trick. With the window fixed, what separates a
+ * blocked run from a healthy one is the event markers, which is the signal the fixture means to
+ * test.
+ *
+ * <p>A fault stays injected for the whole window, not just the routine: {@link
+ * Fault#ODOMETRY_DRIFT} is a property of the gyro, and a biased gyro does not stop being biased
+ * because the routine ended. So the drift keeps accumulating through the idle tail, and the
+ * estimated heading keeps rotating while the true heading sits still.
  *
  * <p>The output file is always named {@code recording.wpilog} inside {@code outputDirectory} --
  * deliberately independent of which fault was recorded. Renaming it into {@code logs/} is the
@@ -59,15 +75,43 @@ public final class LogRecorder {
     BLOCKING_COMMAND
   }
 
+  /**
+   * Length of every recording, regardless of fault. See the class Javadoc for why this is fixed
+   * rather than "however long the routine took." Long enough that the blocking run reads as
+   * unmistakably stuck -- it spends 3.7 s parked after {@code step2:start}, longer than the entire
+   * 3.2 s routine -- and short enough to keep {@link #GYRO_DRIFT_RAD_PER_TICK} below the wrap
+   * ceiling described there. Those two pull in opposite directions, so neither constant can be
+   * changed without re-checking the other against the discrimination matrix.
+   */
+  private static final double TOTAL_RECORD_SECONDS = 6.0;
+
   private static final double DT_SECONDS = 0.02;
+  private static final long DT_MICROS = (long) (DT_SECONDS * 1_000_000);
   private static final double STEP2_NOMINAL_SECONDS = 0.5;
   private static final double STEP3_NOMINAL_SECONDS = 0.4;
-  private static final double MAX_STEP_SECONDS = 8.0;
-  private static final double GYRO_DRIFT_RAD_PER_TICK = 0.012;
+
+  /**
+   * Gyro bias accumulated per tick, applied for the whole window. <b>The product of this and {@link
+   * #TOTAL_TICKS} must stay under pi radians.</b> {@link edu.wpi.first.math.geometry.Rotation2d}
+   * normalizes to (-180, 180], so a run that accumulates more than half a turn plots the estimated
+   * heading as a sawtooth that snaps at the wrap point and lands back near the true heading -- a
+   * log whose final heading error reads as roughly zero for the one fault that is entirely about
+   * heading. At 0.0080 over 300 ticks the ramp ends at 137.5 degrees: monotonic, unmissable, and 42
+   * degrees clear of the ceiling.
+   */
+  private static final double GYRO_DRIFT_RAD_PER_TICK = 0.0080;
+
   private static final double GOOD_KP = 12.0;
   private static final double GOOD_KP_THETA = 10.0;
   private static final double BAD_KP = 2.5;
   private static final double BAD_KP_THETA = 2.0;
+
+  /**
+   * Total ticks in one recording. Every phase length below is counted in ticks rather than
+   * accumulated in seconds, so all three faults produce exactly this many samples per signal --
+   * summing 0.02 three hundred times would not.
+   */
+  private static final int TOTAL_TICKS = (int) Math.round(TOTAL_RECORD_SECONDS / DT_SECONDS);
 
   private LogRecorder() {}
 
@@ -99,7 +143,7 @@ public final class LogRecorder {
     // regenerations of the same fault differ byte-for-byte even though every value in them is
     // identical. Start one simulated tick in so every timestamp this method ever passes,
     // including each entry's own creation time, is the deterministic simulated clock.
-    long startMicros = (long) (DT_SECONDS * 1_000_000);
+    long startMicros = DT_MICROS;
 
     try (DataLogWriter log = new DataLogWriter(out.toString())) {
       StructLogEntry<Pose2d> truePoseLog =
@@ -113,13 +157,16 @@ public final class LogRecorder {
               log, "/t5/moduleStates", SwerveModuleState.struct, startMicros);
       StringLogEntry eventsLog = new StringLogEntry(log, "/t5/events", startMicros);
 
-      long micros = startMicros;
+      // The tick counter is the clock. micros is always derived from it, never accumulated, so
+      // every fault's samples land on exactly the same timestamps.
+      int tick = 0;
       double gyroDriftRad = 0.0;
 
-      eventsLog.append("path:start", micros);
+      eventsLog.append("path:start", startMicros);
       double pathEndSeconds = trajectory.getTotalTimeSeconds();
       double tSeconds = 0.0;
       while (tSeconds < pathEndSeconds) {
+        long micros = startMicros + (long) tick * DT_MICROS;
         PathPlannerTrajectoryState target = trajectory.sample(tSeconds);
         Pose2d estimated = odometry.getPoseMeters();
 
@@ -143,62 +190,105 @@ public final class LogRecorder {
         moduleStatesLog.append(drive.moduleStates(), micros);
 
         tSeconds += DT_SECONDS;
-        micros += (long) (DT_SECONDS * 1_000_000);
+        tick++;
       }
-      eventsLog.append("path:end", micros);
+      eventsLog.append("path:end", startMicros + (long) tick * DT_MICROS);
 
       Pose2d endPose = trajectory.getEndState().pose;
-      boolean step2Blocks = fault == Fault.BLOCKING_COMMAND;
-      eventsLog.append("step2:start", micros);
-      micros =
-          runHoldingStep(
-              drive,
-              odometry,
-              fault,
-              gyroDriftRad,
-              endPose,
-              micros,
-              truePoseLog,
-              estimatedPoseLog,
-              pathTargetPoseLog,
-              moduleStatesLog,
-              step2Blocks ? MAX_STEP_SECONDS : STEP2_NOMINAL_SECONDS);
-      if (step2Blocks) {
-        // step2 never reports finished. The recorder gives up after MAX_STEP_SECONDS, exactly as
-        // a mentor watching a real robot would eventually stop it -- step2:end and everything
-        // after it never gets written, because it never happened.
+      eventsLog.append("step2:start", startMicros + (long) tick * DT_MICROS);
+
+      if (fault == Fault.BLOCKING_COMMAND) {
+        // step2 never reports finished, so nothing after step2:start ever happened: no step2:end,
+        // no step3 markers. The robot holds where the path left it until the recording window
+        // closes, which is what the remaining ticks are.
+        runHoldingStep(
+            drive,
+            odometry,
+            fault,
+            gyroDriftRad,
+            endPose,
+            startMicros + (long) tick * DT_MICROS,
+            truePoseLog,
+            estimatedPoseLog,
+            pathTargetPoseLog,
+            moduleStatesLog,
+            TOTAL_TICKS - tick);
         log.flush();
         return out;
       }
-      eventsLog.append("step2:end", micros);
 
-      eventsLog.append("step3:start", micros);
-      micros =
+      int step2Ticks = ticksFor(STEP2_NOMINAL_SECONDS);
+      gyroDriftRad =
           runHoldingStep(
               drive,
               odometry,
               fault,
               gyroDriftRad,
               endPose,
-              micros,
+              startMicros + (long) tick * DT_MICROS,
               truePoseLog,
               estimatedPoseLog,
               pathTargetPoseLog,
               moduleStatesLog,
-              STEP3_NOMINAL_SECONDS);
-      eventsLog.append("step3:end", micros);
+              step2Ticks);
+      tick += step2Ticks;
+      eventsLog.append("step2:end", startMicros + (long) tick * DT_MICROS);
+
+      eventsLog.append("step3:start", startMicros + (long) tick * DT_MICROS);
+      int step3Ticks = ticksFor(STEP3_NOMINAL_SECONDS);
+      gyroDriftRad =
+          runHoldingStep(
+              drive,
+              odometry,
+              fault,
+              gyroDriftRad,
+              endPose,
+              startMicros + (long) tick * DT_MICROS,
+              truePoseLog,
+              estimatedPoseLog,
+              pathTargetPoseLog,
+              moduleStatesLog,
+              step3Ticks);
+      tick += step3Ticks;
+      eventsLog.append("step3:end", startMicros + (long) tick * DT_MICROS);
+
+      // Trailing idle telemetry. The routine is over; the log is not, because every recording is
+      // the same length whichever fault it carries. No further markers -- nothing further happens.
+      runHoldingStep(
+          drive,
+          odometry,
+          fault,
+          gyroDriftRad,
+          endPose,
+          startMicros + (long) tick * DT_MICROS,
+          truePoseLog,
+          estimatedPoseLog,
+          pathTargetPoseLog,
+          moduleStatesLog,
+          TOTAL_TICKS - tick);
 
       log.flush();
     }
     return out;
   }
 
+  /** Ticks in {@code seconds} of simulated time, rounded rather than accumulated. */
+  private static int ticksFor(double seconds) {
+    return (int) Math.round(seconds / DT_SECONDS);
+  }
+
   /**
    * Holds the robot at rest (a stand-in for a named command that does not move the drivetrain, such
-   * as an intake or shooter action) for {@code durationSeconds} of simulated time, logging every
-   * tick the same way the path-following phase does.
+   * as an intake or shooter action) for {@code ticks} ticks of simulated time, logging every tick
+   * the same way the path-following phase does.
+   *
+   * @return the accumulated gyro drift at the end of the step, so the caller can carry it into the
+   *     next one. A gyro bias is cumulative across a whole run; a drift that restarted from the
+   *     same value at every phase boundary would put a step in the estimated heading that no real
+   *     sensor produces, and this fixture is read by mentors looking for exactly that kind of
+   *     artifact.
    */
-  private static long runHoldingStep(
+  private static double runHoldingStep(
       T5DriveSim drive,
       SwerveDriveOdometry odometry,
       Fault fault,
@@ -209,11 +299,10 @@ public final class LogRecorder {
       StructLogEntry<Pose2d> estimatedPoseLog,
       StructLogEntry<Pose2d> pathTargetPoseLog,
       StructArrayLogEntry<SwerveModuleState> moduleStatesLog,
-      double durationSeconds) {
-    long micros = startMicros;
+      int ticks) {
     double gyroDriftRad = gyroDriftRadAtStart;
-    double elapsedSeconds = 0.0;
-    while (elapsedSeconds < durationSeconds) {
+    for (int i = 0; i < ticks; i++) {
+      long micros = startMicros + (long) i * DT_MICROS;
       drive.drive(new ChassisSpeeds());
       drive.step(DT_SECONDS);
 
@@ -228,11 +317,8 @@ public final class LogRecorder {
       estimatedPoseLog.append(odometry.getPoseMeters(), micros);
       pathTargetPoseLog.append(holdTargetPose, micros);
       moduleStatesLog.append(drive.moduleStates(), micros);
-
-      elapsedSeconds += DT_SECONDS;
-      micros += (long) (DT_SECONDS * 1_000_000);
     }
-    return micros;
+    return gyroDriftRad;
   }
 
   private static RobotConfig robotConfig() {
