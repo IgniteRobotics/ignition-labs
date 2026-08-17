@@ -148,8 +148,25 @@ public final class SimDriver {
   public static double[] runOdometryLoop(int iterations, boolean feedVision);
   /** Schedules a command, runs the scheduler stepped, returns whether it finished within budget. */
   public static boolean runCommandToCompletion(Command command, int maxIterations);
+
+  // Guarded accessors -- added 2026-08-17 during Task 4 verification. Every one of these wraps
+  // a RobotContainer method a given test reaches DIRECTLY, turning the stub's
+  // UnsupportedOperationException into a sentence. They exist because the first pass had the
+  // tests call container().autoRoutine(), container().mechanism(), container().resetEstimator()
+  // and container().acceptsMeasurement() straight through: three of the four given tests then
+  // failed against an untouched skeleton with a raw stack trace instead of guidance, which is
+  // precisely what §12.3 forbids and what SimDriver exists to prevent.
+  public static Command autoRoutine();
+  public static ScoringMechanism mechanism();
+  public static void resetEstimator(Pose2d pose);
+  public static boolean acceptsMeasurement(Pose2d visionPose, double timestampSeconds);
 }
 ```
+
+**A given test must never call `container().<student method>()` directly.** `container()` itself
+is public because a test needs the instance, but every route from there into student code belongs
+behind one of the guarded accessors above. Adding a given test that reaches a student method not
+in this list means adding a guarded accessor for it first.
 
 ### Constants
 

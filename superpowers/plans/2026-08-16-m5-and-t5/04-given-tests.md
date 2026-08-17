@@ -28,7 +28,7 @@ three given test files that gate the milestone.
 
 ---
 
-- [ ] **Step 1: Write `SimDriver`**
+- [x] **Step 1: Write `SimDriver`**
 
 The stepped loop, in one place — M4's equivalent, extended with a second loop shape for
 the drivetrain/vision half and a generic command-completion loop for the auto routine. Every
@@ -37,11 +37,11 @@ not call directly, gets a stub's `UnsupportedOperationException` turned into a s
 same rule M4's `SimDriver` established for `flywheelPlant()`/`armPlant()`.
 
 The camera-frame-to-candidate-pose conversion here is the **same given code** `Robot.java`
-uses (Task 3): a `PhotonPoseEstimator` built from `VisionSim.fieldLayout()` and
-`vision().robotToCamera()`, calling the non-deprecated
-`estimateLowestAmbiguityPose(PhotonPipelineResult)`. It is duplicated rather than shared
-because `Robot.java` lives in `src/main/` and this file lives in `src/test/harness/` — main
-cannot depend on test.
+uses (Task 3): `frc.robot.harness.VisionPoseHelper.candidatePose(...)` and
+`VisionPoseHelper.timestampSeconds(...)`, both calling the non-deprecated
+`PhotonPoseEstimator.estimateLowestAmbiguityPose(PhotonPipelineResult)` internally. `src/test`
+compiles against `src/main`'s output, so this file depending on a `src/main` helper is the
+normal case, not an obstacle — `SimDriver` builds no `PhotonPoseEstimator` of its own.
 
 `runOdometryLoop` resets both the drivetrain's true pose and your pose estimator to the
 same fixed starting pose **on every call**, so two calls in the same test method (one
@@ -69,11 +69,11 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
+import frc.robot.plant.ScoringMechanism;
 import frc.robot.plant.SwerveDriveSim;
 import frc.robot.plant.VisionSim;
 import java.util.Optional;
-import org.photonvision.EstimatedRobotPose;
-import org.photonvision.PhotonPoseEstimator;
+import org.photonvision.targeting.PhotonPipelineResult;
 
 /**
  * Given test support. Part of the milestone -- do not edit.
@@ -89,7 +89,6 @@ public final class SimDriver {
 
   private static RobotContainer container;
   private static AssertionError containerFailure;
-  private static PhotonPoseEstimator visionEstimator;
 
   private SimDriver() {}
 
@@ -184,12 +183,19 @@ public final class SimDriver {
     return vision;
   }
 
-  private static PhotonPoseEstimator visionEstimator() {
-    if (visionEstimator == null) {
-      visionEstimator =
-          new PhotonPoseEstimator(VisionSim.fieldLayout(), vision().robotToCamera());
+  private static ScoringMechanism mechanism() {
+    ScoringMechanism mechanism;
+    try {
+      mechanism = container().mechanism();
+    } catch (UnsupportedOperationException e) {
+      return fail(
+          "mechanism() in RobotContainer still throws UnsupportedOperationException. "
+              + "Construct a ScoringMechanism in your constructor and return it.");
     }
-    return visionEstimator;
+    if (mechanism == null) {
+      return fail("mechanism() returned null. The harness needs the real ScoringMechanism back.");
+    }
+    return mechanism;
   }
 
   /**
@@ -226,11 +232,11 @@ public final class SimDriver {
       }
 
       if (feedVision) {
-        Optional<EstimatedRobotPose> candidate =
-            visionEstimator().estimateLowestAmbiguityPose(vision().latestResult());
+        PhotonPipelineResult result = vision().latestResult();
+        Optional<Pose2d> candidate = VisionPoseHelper.candidatePose(result);
         if (candidate.isPresent()) {
-          Pose2d visionPose = candidate.get().estimatedPose.toPose2d();
-          double timestamp = candidate.get().timestampSeconds;
+          Pose2d visionPose = candidate.get();
+          double timestamp = VisionPoseHelper.timestampSeconds(result);
           boolean accepted;
           try {
             accepted = container().acceptsMeasurement(visionPose, timestamp);
@@ -269,8 +275,9 @@ public final class SimDriver {
 
   /**
    * Schedules {@code command} and runs the scheduler for up to {@code maxIterations} loops,
-   * stepping the drivetrain and vision once per loop -- the same pairing {@code Robot} does.
-   * Returns whether the scheduler reported the command finished within that budget.
+   * stepping the drivetrain, vision, and scoring mechanism once per loop -- the same pairing
+   * {@code Robot.simulationPeriodic()} does. Returns whether the scheduler reported the command
+   * finished within that budget.
    */
   public static boolean runCommandToCompletion(Command command, int maxIterations) {
     try {
@@ -283,6 +290,7 @@ public final class SimDriver {
       CommandScheduler.getInstance().run();
       drivetrain().step(Constants.SIM_STEP_SECONDS);
       vision().update(drivetrain().truePose());
+      mechanism().step(Constants.SIM_STEP_SECONDS);
       SimHooks.stepTiming(Constants.SIM_STEP_SECONDS);
       boolean isScheduledNow = CommandScheduler.getInstance().isScheduled(command);
       if (wasScheduled && !isScheduledNow) {
@@ -294,7 +302,7 @@ public final class SimDriver {
 }
 ```
 
-- [ ] **Step 2: Write `AutoTerminationTest`**
+- [x] **Step 2: Write `AutoTerminationTest`**
 
 Black-box by necessity: a given test cannot reach into the student's own named commands to
 literally inject a failure, so it verifies the necessary condition instead — the whole
@@ -303,6 +311,16 @@ step either finishes on its own (a path reaching its end) or is wrapped in
 `.withTimeout(...)` always finishes inside this budget; a composition with one unbounded
 step never does, regardless of whether that step happens to be "the one that fails" on any
 given run.
+
+**A second test in this file faults `ScoringMechanism` before running the routine.** Without
+it, this file only ever exercises an auto routine composed entirely of self-terminating
+PathPlanner path-follows — nothing in that composition can be made to hang, so nothing here
+would prove a student wrapped anything in `.withTimeout(...)`; it would just prove PathPlanner
+terminates, which was never in question. `ScoringMechanism` exists specifically so this class
+has something it can force to fail (`00-plan.md`'s contract note): with it faulted,
+`isDeployed()` can never become `true` for the rest of the run, so a routine composing a named
+command that waits on it can only still finish within budget if that step carries its own
+`.withTimeout(...)` — the same requirement the milestone's project step 7 states in prose.
 
 `autoRoutine()` is called directly, unwrapped — same precedent as M4's tests calling
 `setFlywheelTarget(...)` directly: the stub's own `UnsupportedOperationException` message
@@ -354,10 +372,40 @@ class AutoTerminationTest {
             + ".withTimeout(...). A step that can hang forever hangs your whole autonomous "
             + "period on a real robot, not just this test.");
   }
+
+  @Test
+  void autoRoutineTerminatesEvenWhenTheScoringMechanismIsFaulted() {
+    // Faulted before the routine is even built, so isDeployed() can never become true for the
+    // rest of this run -- PathPlanner's own path-follow always terminates on its own, so this
+    // is the one thing in the milestone that can actually be made to hang. SimDriver's
+    // RobotContainer is a single shared instance for the whole test run (not rebuilt per test),
+    // so the fault is always cleared in the finally block -- otherwise it would leak into
+    // whichever test runs next in this JVM.
+    SimDriver.container().mechanism().setFaulted(true);
+    try {
+      Command routine = SimDriver.container().autoRoutine();
+      assertNotNull(
+          routine, "autoRoutine() returned null. The harness needs a real command back.");
+
+      boolean finished = SimDriver.runCommandToCompletion(routine, BUDGET_ITERATIONS);
+
+      assertTrue(
+          finished,
+          "With the scoring mechanism faulted -- isDeployed() can never become true this run -- "
+              + "autoRoutine() never finished within "
+              + (BUDGET_ITERATIONS * Constants.SIM_STEP_SECONDS)
+              + " simulated seconds. PathPlanner's own path-following command always "
+              + "terminates on its own, so this can only happen if a named command is waiting "
+              + "on mechanism().isDeployed() with no .withTimeout(...) on it. Every step that "
+              + "depends on the mechanism needs its own bound, the same as every other step.");
+    } finally {
+      SimDriver.container().mechanism().setFaulted(false);
+    }
+  }
 }
 ```
 
-- [ ] **Step 3: Write `FusedPoseTest`**
+- [x] **Step 3: Write `FusedPoseTest`**
 
 Aggregate over a whole ten-second run, not a single frame — the design record's table is
 explicit about why this survives unseeded vision noise where a frame-exact assertion would
@@ -422,7 +470,7 @@ class FusedPoseTest {
 }
 ```
 
-- [ ] **Step 4: Write `BadTimestampTest`**
+- [x] **Step 4: Write `BadTimestampTest`**
 
 No camera in the loop at all — the synthetic pose is set to exactly the estimator's own
 current estimate, so a filter that only checks "is this pose close to where I already think
@@ -478,7 +526,7 @@ class BadTimestampTest {
 }
 ```
 
-- [ ] **Step 5: Compile, then run a CORRECT implementation against the suite**
+- [x] **Step 5: Compile, then run a CORRECT implementation against the suite**
 
 Compile first:
 
@@ -516,11 +564,13 @@ before every commit in this task.
   constant; pick a number in meters that rejects an obviously-wrong jump without rejecting
   normal correction, and be ready to defend it).
 - **Auto routine.** `AutoBuilder.followPath(PathPlannerPath.fromPathFile("Example Path"))`
-  composed with one or two placeholder named commands (e.g. `Commands.print("intake")`, or
-  anything that finishes on its own quickly) via `Commands.sequence(...)`, each wrapped with
-  a short `.withTimeout(...)` if it is not already guaranteed to finish. `autoChooser()`
-  returns a `new SendableChooser<Command>()` with at least `autoRoutine()` added as an
-  option.
+  composed with a named command that actually exercises `mechanism()` — e.g.
+  `Commands.runOnce(mechanism::startDeploy).andThen(Commands.waitUntil(mechanism::isDeployed)).withTimeout(2.0)`
+  — via `Commands.sequence(...)`. The mechanism step's `.withTimeout(...)` is not optional here
+  the way a self-terminating path's would be: it is the one step
+  `autoRoutineTerminatesEvenWhenTheScoringMechanismIsFaulted` (Step 2) can force to hang, and
+  without it that test fails even in a reference implementation. `autoChooser()` returns a
+  `new SendableChooser<Command>()` with at least `autoRoutine()` added as an option.
 
 Run the suite:
 
@@ -528,8 +578,8 @@ Run the suite:
 ./gradlew test --console=plain
 ```
 
-**Iterate until all three given tests are green — paste the actual `BUILD SUCCESSFUL`
-output with the test count.** If `FusedPoseTest` does not go green with a filter that
+**Iterate until all given tests are green (four test methods across the three files) —
+paste the actual `BUILD SUCCESSFUL` output with the test count.** If `FusedPoseTest` does not go green with a filter that
 accepts plausible measurements, check the distance threshold you picked is not so tight it
 rejects everything, and check `acceptsMeasurement`'s timestamp check is not so strict it
 rejects a real (if latent) camera frame — a timestamp a few hundred milliseconds old is
@@ -543,7 +593,7 @@ git checkout -- src/main/java/frc/robot/RobotContainer.java
 git status --short   # confirm RobotContainer.java is no longer modified
 ```
 
-- [ ] **Step 6: Run the DISTRACTORS — each must fail the test aimed at it**
+- [x] **Step 6: Run the DISTRACTORS — each must fail the test aimed at it**
 
 For each row: apply the change to `RobotContainer.java` (starting from the correct
 implementation you just deleted), run the named test, **read the actual failure message**,
@@ -552,14 +602,43 @@ moving to the next row.
 
 | # | Distractor | Test it must fail | Why it fails |
 |---|---|---|---|
-| 1 | `autoRoutine()` composes an unbounded step with no `.withTimeout(...)` (e.g. `Commands.idle()` appended plain to the sequence) | `AutoTerminationTest` | The scheduler never reports the routine finished, so `runCommandToCompletion` exhausts its 1000-iteration budget and returns `false` |
+| 1 | `autoRoutine()` composes an unbounded step with no `.withTimeout(...)` (e.g. `Commands.idle()` appended plain to the sequence) | Both `AutoTerminationTest` methods | The scheduler never reports the routine finished, so `runCommandToCompletion` exhausts its 1000-iteration budget and returns `false` regardless of whether the mechanism is faulted |
 | 2 | `acceptsMeasurement(...)` always returns `false` | `FusedPoseTest` | No vision measurement is ever fused regardless of quality, so the "fused" run is really a second odometry-only run — its mean error is not lower than the first, only approximately equal to it |
 | 3 | `acceptsMeasurement(...)` checks only `visionPose.getTranslation().getDistance(estimatedPose().getTranslation()) < 1.0`, ignoring `timestampSeconds` entirely | `BadTimestampTest` | `BadTimestampTest`'s synthetic pose is exactly the current estimate — distance `0.0` — so this filter accepts it, and the timestamp of `-1.0` is never examined |
+| 4 | The mechanism deploy-and-wait named command has no `.withTimeout(...)` (e.g. `Commands.runOnce(mechanism::startDeploy).andThen(Commands.waitUntil(mechanism::isDeployed))`, un-timed) | `autoRoutineTerminatesEvenWhenTheScoringMechanismIsFaulted` only | Unfaulted, the mechanism deploys in well under a second, so `autoRoutineTerminatesWithinABoundedBudget` still passes — only the faulted run ever waits on `isDeployed()` forever, which is exactly why Step 2 added that second test |
 
 Paste each distractor's actual failing assertion message — the read-every-failure-message
 discipline `CLAUDE.md` requires.
 
-- [ ] **Step 7: Confirm `FusedPoseTest` FAILS for odometry-only — not optional**
+**Measured result (2026-08-17).** Each distractor failed exactly the test aimed at it and no
+other — distractor 4 in particular failed only the faulted method while
+`autoRoutineTerminatesWithinABoundedBudget` stayed green, which is the evidence that Step 2's
+second test earns its place rather than duplicating the first.
+
+> **Two defects this step and Step 7 actually caught.** Both were live in the first pass and both
+> are the "check that passes while the thing it protects is broken" failure mode `CLAUDE.md` opens
+> its verification-discipline section with. Recorded here because the numbers are the only reason
+> anyone would believe the fix.
+>
+> 1. **`FusedPoseTest` asserted `fusedMean < odometryOnlyMean` with no margin, and passed against
+>    distractor 2.** With nothing fused, both runs are the same odometry-only run: the means agreed
+>    to 13 significant figures (`0.22519225698812773` vs `0.22519225698810286`) and the bare
+>    comparison went green on 2.5e-14 of floating-point noise. A student who computed vision poses
+>    correctly and then trusted none of them would have passed. Fixed by requiring a ratio
+>    (`REQUIRED_ERROR_RATIO = 0.5`); measured 0.165–0.211 across eight runs of a correct
+>    implementation against exactly 1.000 for never-fusing.
+> 2. **Three of the four given tests failed the untouched skeleton with a raw
+>    `UnsupportedOperationException`**, not a `fail()` message — the exact thing Step 8 says is a
+>    `SimDriver` bug. The tests were calling `container().autoRoutine()`,
+>    `container().mechanism()` and `container().resetEstimator()` straight through, past guards
+>    that existed but were private or absent. Fixed by adding the four guarded accessors now
+>    pinned in `00-plan.md`'s contract, and routing every test through them.
+>
+> A third, smaller one: `TagVisibilitySpikeTest.java` — a throwaway that says so in its own
+> Javadoc — was sitting in `src/test/`. Left alone it would have been locked into `tests.lock` and
+> shipped to students as a given test. Deleted.
+
+- [x] **Step 7: Confirm `FusedPoseTest` FAILS for odometry-only — not optional**
 
 The single easiest assertion in this milestone to get backwards, per `00-plan.md`'s
 self-review: a test that passes whether or not vision is wired proves nothing. This step is
@@ -587,7 +666,7 @@ git checkout -- src/main/java/frc/robot/RobotContainer.java
 git status --short
 ```
 
-- [ ] **Step 8: The clean-clone invariant, from an actual fresh clone**
+- [x] **Step 8: The clean-clone invariant, from an actual fresh clone**
 
 ```bash
 cd /Users/y0shi/workspace/ignite/docs/.worktrees/m5
@@ -608,7 +687,7 @@ assertion failures inside the three given tests — never from a compile error, 
 class, or an `UnsupportedOperationException` propagating past a `fail()` call uncaught. If
 it does, that is a bug in `SimDriver`, not in the milestone.
 
-- [ ] **Step 9: Confirm no filtering threshold leaked into the given tests**
+- [x] **Step 9: Confirm no filtering threshold leaked into the given tests**
 
 ```bash
 cd /Users/y0shi/workspace/ignite/docs/.worktrees/m5/projects/m5-auto-vision
@@ -617,7 +696,7 @@ grep -rniE 'MAX_TRUSTED_DISTANCE|max.?trusted|trust.?distance' src/test/
 
 Expected: no output.
 
-- [ ] **Step 10: Format and commit**
+- [x] **Step 10: Format and commit**
 
 ```bash
 cd /Users/y0shi/workspace/ignite/docs/.worktrees/m5/projects/m5-auto-vision
