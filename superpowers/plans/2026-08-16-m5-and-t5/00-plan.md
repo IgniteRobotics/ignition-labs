@@ -181,7 +181,9 @@ One auto, one drivetrain, three runs, one fault injected each. Recorded, not syn
 | `src/main/deploy/pathplanner/paths/Example Path.path` | The one given example path (§9.6) |
 | `src/main/java/frc/robot/plant/SwerveDriveSim.java` | **Given, locked.** Kinematic, deterministic |
 | `src/main/java/frc/robot/plant/VisionSim.java` | **Given, locked.** Real `VisionSystemSim` |
+| `src/main/java/frc/robot/plant/ScoringMechanism.java` | **Given, locked.** The one step `AutoTerminationTest` can force to fail |
 | `src/main/java/frc/robot/harness/M5Deliverables.java` | **Given, locked.** The seam |
+| `src/main/java/frc/robot/harness/VisionPoseHelper.java` | **Given, locked.** The one place the camera-frame-to-candidate-pose conversion lives |
 | `src/main/java/frc/robot/Main.java`, `Robot.java`, `Constants.java` | Given wiring |
 | `src/main/java/frc/robot/RobotContainer.java` | **Student territory.** Throwing stubs |
 | `src/test/java/frc/robot/AutoTerminationTest.java` | Given. Routine terminates when a step is forced to fail |

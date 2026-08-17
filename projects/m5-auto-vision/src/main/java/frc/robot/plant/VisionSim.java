@@ -37,7 +37,7 @@ public final class VisionSim {
 
   private static final String CAMERA_NAME = "M5_SimCamera";
 
-  private static final Transform3d ROBOT_TO_CAMERA =
+  public static final Transform3d ROBOT_TO_CAMERA =
       new Transform3d(
           new Translation3d(0.28, 0.0, 0.22), new Rotation3d(0.0, Math.toRadians(-15.0), 0.0));
 
