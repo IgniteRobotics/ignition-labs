@@ -1,0 +1,5 @@
+build/
+bin/
+.gradle/
+networktables.json
+simgui-window.json
