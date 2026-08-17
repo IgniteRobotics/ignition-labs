@@ -27,7 +27,7 @@ after Task 6's commit lands.
 
 ---
 
-- [ ] **Step 1: Generate the three recordings and assign letters without writing the mapping down**
+- [x] **Step 1: Generate the three recordings and assign letters without writing the mapping down**
 
 ```bash
 cd /Users/y0shi/workspace/ignite/docs/projects/testouts/t5-drifting-auto
@@ -39,30 +39,47 @@ done
 ```
 
 These three scratch files are fine to have fault-revealing names — they never get committed.
-Now assign each to a letter with a step that does not leave the assignment written down
-anywhere that gets committed: shuffle the three faults, and read off the letters in that order.
+Now assign each to a letter. Shuffle the three faults and do the copies **in one call that
+prints only a confirmation**, so the mapping is never rendered anywhere — not to a file, not
+to stdout, not into the terminal scrollback:
 
 ```bash
+mkdir -p logs
 python3 -c "
-import random
+import random, shutil
 faults = ['ODOMETRY_DRIFT', 'MISTUNED_CONTROLLER', 'BLOCKING_COMMAND']
 random.shuffle(faults)
-letters = ['a', 'b', 'c']
-for letter, fault in zip(letters, faults):
-    print(f'cp /tmp/t5-generated/{fault}.wpilog logs/{letter}-run.wpilog')
-" > /tmp/t5-assign.sh
-cat /tmp/t5-assign.sh   # read it before running it -- this is the one place the mapping is
-                        # ever visible in this terminal session
-bash /tmp/t5-assign.sh
-rm /tmp/t5-assign.sh    # gone once run -- do not paste its contents into the task report
-ls -la logs/
+for letter, fault in zip(['a', 'b', 'c'], faults):
+    shutil.copyfile(f'/tmp/t5-generated/{fault}.wpilog', f'logs/{letter}-run.wpilog')
+print('assigned 3 recordings to 3 letters; mapping not printed')
+"
+ls logs/
 ```
 
-**Do not paste `/tmp/t5-assign.sh`'s contents, or which fault ended up as which letter, into
-the task report or any commit message.** The report for this step should say the three files
-were generated and assigned, and nothing about which is which.
+**Why atomic, and not the write-a-script-then-`cat`-then-run form this step used to carry**
+(`python3 -c ... > /tmp/t5-assign.sh`, `cat`, `bash`, `rm`): for a *human* author, printing
+the script before running it is an ordinary eyeball check on a destructive-ish command, and
+the mapping landing in terminal scrollback costs nothing once the terminal closes. For an
+*agent* it inverts: an agent's context is not scrollback, it is the material the task report
+is written from, so displaying the mapping is the leak this whole step exists to prevent.
+Generating it into a file, printing it, and deleting the file leaves three separate copies —
+context, scrollback, and the file's lifetime — where the atomic form leaves none. The
+shuffle is unobserved by construction, which is stronger than observed-then-forgotten.
 
-- [ ] **Step 2: Write `logs/README.md` — mechanics only, never the mapping**
+Note `ls logs/` rather than `ls -la logs/`, for the same reason. The gross version of this leak
+is fixed in the recorder — every fault records the same 300 ticks, so the three files no longer
+come out 83 KB against 26 KB (see the superseded note at the top of Task 6 Step 3). What remains
+is a **47-byte** difference: the blocking run is short three event strings, so it is the smallest
+of the three by a margin invisible unless you go looking. That residual is not worth padding the
+logs to hide — it is strictly less of a giveaway than the `cmp`-against-a-regeneration shortcut
+`logs/README.md` documents on purpose — but it is still a reason not to render a long listing
+into an agent's context.
+
+**Do not put which fault ended up as which letter into the task report or any commit
+message.** The report for this step should say the three files were generated and assigned,
+and nothing about which is which.
+
+- [x] **Step 2: Write `logs/README.md` — mechanics only, never the mapping**
 
 `projects/testouts/t5-drifting-auto/logs/README.md`:
 
@@ -107,7 +124,7 @@ reliable way to recover the mapping without it ever being written down here — 
 key in `../ignite-training-solutions/` is the one place that mapping is recorded.
 ```
 
-- [ ] **Step 3: Regenerate all three from scratch and confirm they reproduce — not optional**
+- [x] **Step 3: Regenerate all three from scratch and confirm they reproduce — not optional**
 
 This is the check `00-plan.md` requires by name: "Task 7 Step 4 — regenerate all three logs
 from scratch and confirm they reproduce." Written here as a mapping-blind check — it proves
@@ -146,7 +163,7 @@ should stay that way too.
 rm -rf /tmp/t5-reproduce-check /tmp/t5-generated
 ```
 
-- [ ] **Step 4: Write the fixture `README.md`**
+- [x] **Step 4: Write the fixture `README.md`**
 
 Per §10's self-review, a mentor hands one student one specific log — the fixture ships all
 three so a mentor can rotate which one a given student sees, not so a student compares all
@@ -165,7 +182,7 @@ a recording of one autonomous routine, driven by one real (simulated) run, that
 drifts off its intended path partway through. Your job is to work out why.
 
 Open your assigned log in **AdvantageScope** or **DataLogTool** (both ship with
-WPILib — `~/wpilib/2026/tools/`). Every log carries the same six signal
+WPILib — `~/wpilib/2026/tools/`). Every log carries the same five signal
 streams:
 
 | Entry | What it is |
@@ -218,7 +235,7 @@ anything — it means log-reading under time pressure is where you start, which
 is exactly what this fixture exists to find out.
 ````
 
-- [ ] **Step 5: Confirm nothing leaks the mapping, then commit**
+- [x] **Step 5: Confirm nothing leaks the mapping, then commit**
 
 ```bash
 cd /Users/y0shi/workspace/ignite/docs/projects/testouts/t5-drifting-auto
