@@ -27,7 +27,7 @@ lane — stop and report back after Step 5.
 
 ---
 
-- [ ] **Step 1: Write `README.md`**
+- [x] **Step 1: Write `README.md`**
 
 Structure follows M4's: what's given vs. theirs, why the plant is shaped the way it is,
 the order, "what the given tests check and don't," a modelling limit, then "done when" —
@@ -181,7 +181,7 @@ The odometry-drift, bad-timestamp, multi-tag, PathPlanner-vs-Choreo, and allianc
 explanations are mentor-verified. No test can check them, and they are half the milestone.
 ```
 
-- [ ] **Step 2: Write `READING.md`**
+- [x] **Step 2: Write `READING.md`**
 
 Two files from `Robot-2026`, at the pinned commit this plan already cites everywhere else:
 `28ce5397d88275001d656dbb717d22cf9ac0150d`. Confirmed against a local checkout of
@@ -282,7 +282,7 @@ A mentor will ask. "I read it" is not an answer to any of them.
 Start `RobotContainer.java`. `README.md` has the order.
 ```
 
-- [ ] **Step 3: Confirm the pinned SHA and all three paths, once more, before shipping**
+- [x] **Step 3: Confirm the pinned SHA and all three paths, once more, before shipping**
 
 ```bash
 cd /Users/y0shi/workspace/ignite/Robot-2026
@@ -295,7 +295,7 @@ test -f src/main/java/frc/robot/statemachines/LaunchCalculator.java && echo OK
 All three `OK`s and the matching SHA are required before committing — a pinned reference
 that does not resolve is worse than no reference at all.
 
-- [ ] **Step 4: Confirm no filtering threshold or gain leaked into student-facing prose**
+- [x] **Step 4: Confirm no filtering threshold or gain leaked into student-facing prose**
 
 ```bash
 cd /Users/y0shi/workspace/ignite/docs/.worktrees/m5/projects/m5-auto-vision
@@ -306,7 +306,7 @@ Expected: no output. Mentions of "distance-based filtering," "a threshold," or "
 you picked" as concepts are fine and expected — the grep is tuned to catch a proposed
 concrete constant name or value, not the concept.
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 cd /Users/y0shi/workspace/ignite/docs/.worktrees/m5
