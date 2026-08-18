@@ -148,8 +148,25 @@ public final class SimDriver {
   public static double[] runOdometryLoop(int iterations, boolean feedVision);
   /** Schedules a command, runs the scheduler stepped, returns whether it finished within budget. */
   public static boolean runCommandToCompletion(Command command, int maxIterations);
+
+  // Guarded accessors -- added 2026-08-17 during Task 4 verification. Every one of these wraps
+  // a RobotContainer method a given test reaches DIRECTLY, turning the stub's
+  // UnsupportedOperationException into a sentence. They exist because the first pass had the
+  // tests call container().autoRoutine(), container().mechanism(), container().resetEstimator()
+  // and container().acceptsMeasurement() straight through: three of the four given tests then
+  // failed against an untouched skeleton with a raw stack trace instead of guidance, which is
+  // precisely what §12.3 forbids and what SimDriver exists to prevent.
+  public static Command autoRoutine();
+  public static ScoringMechanism mechanism();
+  public static void resetEstimator(Pose2d pose);
+  public static boolean acceptsMeasurement(Pose2d visionPose, double timestampSeconds);
 }
 ```
+
+**A given test must never call `container().<student method>()` directly.** `container()` itself
+is public because a test needs the instance, but every route from there into student code belongs
+behind one of the guarded accessors above. Adding a given test that reaches a student method not
+in this list means adding a guarded accessor for it first.
 
 ### Constants
 
@@ -181,7 +198,9 @@ One auto, one drivetrain, three runs, one fault injected each. Recorded, not syn
 | `src/main/deploy/pathplanner/paths/Example Path.path` | The one given example path (§9.6) |
 | `src/main/java/frc/robot/plant/SwerveDriveSim.java` | **Given, locked.** Kinematic, deterministic |
 | `src/main/java/frc/robot/plant/VisionSim.java` | **Given, locked.** Real `VisionSystemSim` |
+| `src/main/java/frc/robot/plant/ScoringMechanism.java` | **Given, locked.** The one step `AutoTerminationTest` can force to fail |
 | `src/main/java/frc/robot/harness/M5Deliverables.java` | **Given, locked.** The seam |
+| `src/main/java/frc/robot/harness/VisionPoseHelper.java` | **Given, locked.** The one place the camera-frame-to-candidate-pose conversion lives |
 | `src/main/java/frc/robot/Main.java`, `Robot.java`, `Constants.java` | Given wiring |
 | `src/main/java/frc/robot/RobotContainer.java` | **Student territory.** Throwing stubs |
 | `src/test/java/frc/robot/AutoTerminationTest.java` | Given. Routine terminates when a step is forced to fail |

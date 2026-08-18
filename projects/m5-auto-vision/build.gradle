@@ -1,0 +1,109 @@
+plugins {
+    id "java"
+    id "com.diffplug.spotless" version "8.2.1"
+    id "edu.wpi.first.GradleRIO" version "2026.2.1"
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
+}
+
+spotless {
+    // Not enforced during build. Formatting is checked by CI (spotlessCheck) as a
+    // separate, deliberately failable step -- see teaching-repo-spec.md §4.3. Do not
+    // wire compileJava to spotlessApply: that reformats the tree on every build, which
+    // makes the formatting check structurally unable to fail.
+    enforceCheck false
+
+    java {
+        target 'src/**/*.java'
+        removeUnusedImports()
+        googleJavaFormat('1.19.2').reflowLongStrings()
+        trimTrailingWhitespace()
+        endWithNewline()
+    }
+}
+
+// M5 carries four vendordeps -- Phoenix6, WPILibNewCommands, PathplannerLib, photonlib --
+// and none of the Gradle wiring below is specific to any of them: wpi.java.vendor.java()
+// and friends discover every vendordep from vendordeps/*.json automatically, exactly as
+// M4 discovered Phoenix6 with no build.gradle change. Dropping the two new JSONs into
+// vendordeps/ (Task 1 Step 3) is the whole story.
+def ROBOT_MAIN_CLASS = "frc.robot.Main"
+
+deploy {
+    targets {
+        roborio(getTargetTypeClass('RoboRIO')) {
+            team = project.frc.getTeamOrDefault(6829)
+            debug = project.frc.getDebugOrDefault(false)
+
+            artifacts {
+                frcJava(getArtifactTypeClass('FRCJavaArtifact')) {
+                }
+            }
+        }
+    }
+}
+
+def deployArtifact = deploy.targets.roborio.artifacts.frcJava
+
+wpi.java.debugJni = false
+def includeDesktopSupport = true
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    // Epilogue's annotation processor. Robot.java is annotated @Logged and calls
+    // Epilogue.bind(this); without this line the generated Epilogue class does not
+    // exist and Robot.java does not compile. Matches Robot-2026's build.gradle.
+    annotationProcessor wpi.java.deps.wpilibAnnotations()
+
+    implementation wpi.java.deps.wpilib()
+    implementation wpi.java.vendor.java()
+
+    roborioDebug wpi.java.deps.wpilibJniDebug(wpi.platforms.roborio)
+    roborioDebug wpi.java.vendor.jniDebug(wpi.platforms.roborio)
+
+    roborioRelease wpi.java.deps.wpilibJniRelease(wpi.platforms.roborio)
+    roborioRelease wpi.java.vendor.jniRelease(wpi.platforms.roborio)
+
+    nativeDebug wpi.java.deps.wpilibJniDebug(wpi.platforms.desktop)
+    nativeDebug wpi.java.vendor.jniDebug(wpi.platforms.desktop)
+    simulationDebug wpi.sim.enableDebug()
+
+    nativeRelease wpi.java.deps.wpilibJniRelease(wpi.platforms.desktop)
+    nativeRelease wpi.java.vendor.jniRelease(wpi.platforms.desktop)
+    simulationRelease wpi.sim.enableRelease()
+
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.10.1'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+test {
+    useJUnitPlatform()
+    systemProperty 'junit.jupiter.extensions.autodetection.enabled', 'true'
+}
+
+// Registers the simulator GUI and the simulated driver station as HAL extensions.
+// Without these, ./gradlew simulateJava starts the robot program headless -- it runs,
+// but no window opens, so there is nothing to map a joystick onto.
+wpi.sim.addGui().defaultEnabled = true
+wpi.sim.addDriverstation()
+
+jar {
+    from { configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) } }
+    from sourceSets.main.allSource
+    manifest edu.wpi.first.gradlerio.GradleRIOPlugin.javaManifest(ROBOT_MAIN_CLASS)
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE
+}
+
+deployArtifact.jarTask = jar
+wpi.java.configureExecutableTasks(jar)
+wpi.java.configureTestTasks(test)
+
+tasks.withType(JavaCompile) {
+    options.compilerArgs.add '-XDstringConcat=inline'
+}
