@@ -80,5 +80,5 @@ prompt you wrote to trap it, would you have flagged it?]
 
 The reason this is a done item and not a demo: **the failure mode is not that the tool is
 wrong, it is that wrong output looks exactly like right output.** There is no tell. Which
-is why every other rule in `ai-use-standard.md` is about verification rather than about
-detection — you cannot detect it, so you have to check it.
+is why `ai-use-standard.md`'s rules about trusting a tool's output are about verification
+rather than about detection — you cannot detect it, so you have to check it.

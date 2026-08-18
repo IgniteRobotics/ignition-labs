@@ -4,7 +4,7 @@
 real repository. A sandbox would defeat the one requirement that makes this milestone
 work: pick a real, useful feature, not a toy.
 
-Two to four sessions is normal.
+Two to three sessions is normal.
 
 ---
 
@@ -22,14 +22,18 @@ Two to four sessions is normal.
 
 Those four files are a **copy for reading**, not configuration for this repository.
 Nothing in this directory runs. The real versions are live on `Robot-2026`, where they
-review every pull request — including the one you are about to open. You will meet this
-tool as a reviewer of your own work, which is the only way the lesson lands.
+review every pull request into `main` or `development` — which is what yours will be.
+You will meet this tool as a reviewer of your own work, which is the only way the lesson
+lands.
 
 Read `reference/code-review-prompt.md` before you open your pull request. It is the
 prompt that generates the review you are about to receive, and one of this milestone's
 done items is being able to name two standards it holds you to. Knowing what a reviewer
 is looking for before it reviews you is not cheating; it is how code review is supposed
 to work.
+
+See `reference/README.md` for the pinned SHA, each file's original path in
+`Robot-2026`, and how to re-verify a copy is still faithful.
 
 ## Where the work happens
 

@@ -58,12 +58,14 @@ handling is two `System.out.println` calls.
 Be precise about what is and is not wrong here, because the obvious version of this
 feature is already done. `Robot.java` calls `DataLogManager.start()`, and console capture
 is on by default — so that `println` output **does** reach the `.wpilog`, as raw console
-text. The failure is not invisible.
+text, on a roboRIO. (`DataLogManager.startConsoleLog()` is guarded by
+`if (RobotBase.isReal())`, so in simulation it never reaches the log at all.) The failure
+is not invisible on the real robot.
 
 What it is not is *findable*. It lands interleaved with every other line of stdout under
-a single `console` key: no structured field, no count, nothing that appears in
-AdvantageScope's field list beside the vision telemetry you would be looking at when you
-went hunting. "Did this throw during match 4, and how often?" is a question the current
+a single `console` key: no structured field, no count — no field sitting alongside the
+vision telemetry you would be looking at when you went hunting in AdvantageScope's field
+list. "Did this throw during match 4, and how often?" is a question the current
 handler cannot answer without reading raw console text line by line.
 
 Work out what should be recorded, in what form, and justify it. The TODO says that

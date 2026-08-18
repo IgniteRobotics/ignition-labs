@@ -57,7 +57,7 @@ echo "--- 2. skeleton-integrity's discovery ---"
 find projects -mindepth 2 -maxdepth 3 -name settings.gradle -print | sed 's#/settings.gradle##' | sort
 ```
 
-Expected: the eight existing Gradle projects. **Neither `projects/m7-ai-assisted` nor `projects/m8-ownership` may appear.** They land in no branch of that workflow — not the regression gate, not the inverted check, not the skip branch — because discovery never reaches them.
+Expected: 12 projects — the same count as before this plan, unchanged by it. **Neither `projects/m7-ai-assisted` nor `projects/m8-ownership` may appear.** They land in no branch of that workflow — not the regression gate, not the inverted check, not the skip branch — because discovery never reaches them.
 
 ```bash
 echo "--- 3. no stray Gradle wrapper ---"

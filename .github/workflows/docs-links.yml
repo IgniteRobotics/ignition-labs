@@ -2,7 +2,7 @@ name: Check Documentation Links
 
 on:
   pull_request:
-    paths: ['**.md']
+    paths: ['**.md', 'templates/**', 'docs/**']
   schedule:
     - cron: '0 12 * * 1'
   workflow_dispatch:
@@ -17,6 +17,16 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Templates match their source regions
+        # tools/templates_sync.py is stdlib-only (re, sys, pathlib) -- this job has no
+        # Poetry setup, so plain python3 is correct here, same as given_tests_red.py in
+        # skeleton-integrity.yml.
+        #
+        # Runs before the lychee step on purpose: lychee has `fail: true`, and a flaky
+        # external URL (rate limit, transient outage) must not cause this guard to be
+        # skipped.
+        run: python3 tools/templates_sync.py verify
+
       - name: Check links
         uses: lycheeverse/lychee-action@v2
         with:
@@ -28,9 +38,3 @@ jobs:
             --exclude-path .superpowers
             './**/*.md'
           fail: true
-
-      - name: Templates match their source regions
-        # tools/templates_sync.py is stdlib-only (re, sys, pathlib) -- this job has no
-        # Poetry setup, so plain python3 is correct here, same as given_tests_red.py in
-        # skeleton-integrity.yml.
-        run: python3 tools/templates_sync.py verify

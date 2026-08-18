@@ -518,7 +518,7 @@ Almost no code. M7 ships a feature into a real repository with commit access —
 **Real repo:** branch on `Robot-2026` upstream. Commit access.
 
 **Tests cover:** nothing. M7's assessment is the defense review, by design.
-**Mentor verifies:** all five DoD items.
+**Mentor verifies:** all nine DoD items.
 
 ### 9.9 M8 — `projects/m8-ownership/` · fade: L0
 

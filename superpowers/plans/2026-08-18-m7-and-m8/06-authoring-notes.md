@@ -1,6 +1,6 @@
 # Task 6: Authoring notes for M7 and M8
 
-Every milestone ships with something in the solutions repository (§11.2: *a milestone shipped without its solution is not shipped*). M7 and M8 are the two where that something is **not** a reference implementation: §9.8 says M7's assessment is the defense review and tests cover nothing; §9.9 says M8 ships no skeleton code. There is nothing for `cross-check.sh` to overlay, and both will correctly report `SKIP (no reference solution)`.
+Every milestone ships with something in the solutions repository (§11.2: *a milestone shipped without its solution is not shipped*). M7 and M8 are the two where that something is **not** a reference implementation: §9.8 says M7's assessment is the defense review and tests cover nothing; §9.9 says M8 ships no skeleton code. There is nothing for `cross-check.sh` to overlay, and because its project discovery keys on `settings.gradle`, neither directory is enumerated at all — they produce no line in its output, not even `SKIP`. `m0-onboarding` does print `SKIP`, because it has a `settings.gradle`; that difference is why the analogy misleads.
 
 So the deliverable is authoring notes — the record of why these two milestones are shaped the way they are, so a future maintainer does not "fix" something load-bearing. The risk is writing notes that restate the milestone documents. Notes are for decisions and their reasons, not for content a reader can get from the thing itself.
 
