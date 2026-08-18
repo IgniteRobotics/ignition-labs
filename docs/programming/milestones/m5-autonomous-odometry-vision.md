@@ -104,6 +104,10 @@ Commands.sequence(
 
 ## Project
 
+**The skeleton is [`projects/m5-auto-vision/`](https://github.com/IgniteRobotics/ignition-labs/tree/main/projects/m5-auto-vision).** A simulated swerve drivetrain, a PhotonVision `VisionSystemSim` with configurable noise and latency, and a scoring mechanism you can make fail are given. Composing the routine and fusing vision into the estimate is the milestone.
+
+Path following in the training project runs against the drivetrain's **true** pose, not the pose estimator you write in Part 2. On a real robot — including `Robot-2026` — the follower runs against the estimate. The training project differs so that Part 1 works before Part 2 exists, and so a routine does not fail because your estimator is still a stub. If you notice the difference and it bothers you, that is the right instinct; do not copy this wiring into a season repository.
+
 **Two parts, both in simulation.**
 
 **Part 1 — an autonomous routine.**
@@ -113,7 +117,7 @@ Commands.sequence(
 4. Add timeouts so no step can hang
 5. Add it to a `SendableChooser`
 6. Run in simulation and watch it in AdvantageScope
-7. Deliberately make one step fail. Confirm the routine still terminates
+7. Deliberately make one step fail — the given `ScoringMechanism` has `setFaulted(true)`, which stops it ever reporting deployed. Confirm the routine still terminates
 
 **Part 2 — vision-corrected odometry.**
 1. Start with wheel odometry only. Drive around in sim and watch the estimate drift from truth

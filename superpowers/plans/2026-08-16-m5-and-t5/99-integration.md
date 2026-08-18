@@ -25,7 +25,7 @@ producing.
 
 ---
 
-- [ ] **Step 1: Merge both lanes**
+- [x] **Step 1: Merge both lanes**
 
 ```bash
 cd /Users/y0shi/workspace/ignite/docs
@@ -38,7 +38,7 @@ git status --short          # expect empty
 Conflicts here mean a lane touched a contended file. If one did, that is the bug — resolve toward
 this task owning the file, and note which lane violated it.
 
-- [ ] **Step 2: Confirm the three logs came across as binary, and check what they cost**
+- [x] **Step 2: Confirm the three logs came across as binary, and check what they cost**
 
 ```bash
 git ls-files -s projects/testouts/t5-drifting-auto/logs/
@@ -59,7 +59,7 @@ Note the total added to the repository. If the three together exceed a few MB, s
 they are committed binaries in a repository every student clones, and §16 says they get regenerated
 when the sim stack moves.
 
-- [ ] **Step 3: Regenerate `tests.lock`**
+- [x] **Step 3: Regenerate `tests.lock`**
 
 ```bash
 poetry run python tools/tests_lock.py write
@@ -87,7 +87,7 @@ there: T5 ships no tests, so there is no gate a tampered recorder could subvert.
 this by adding a pattern** — a new glob at the package root would sweep in every future test-out's
 main sources.
 
-- [ ] **Step 4: Prove the lock actually fails on tamper**
+- [x] **Step 4: Prove the lock actually fails on tamper**
 
 ```bash
 echo "// tamper" >> projects/m5-auto-vision/src/main/java/frc/robot/plant/VisionSim.java
@@ -98,7 +98,7 @@ poetry run python tools/tests_lock.py verify        # expect rc=0 again
 
 A lock nobody has seen fail is a lock nobody knows works. Paste both outcomes.
 
-- [ ] **Step 5: `CODEOWNERS` — confirm, expect no edit**
+- [x] **Step 5: `CODEOWNERS` — confirm, expect no edit**
 
 ```bash
 grep -nE "plant/|harness/|testouts/" .github/CODEOWNERS
@@ -109,7 +109,7 @@ everything under `projects/testouts/` is covered wholesale. Expect **no change**
 yourself adding a line, say why in the report — step 9 already generalized these patterns, and a
 new one means M5 put a given file somewhere no previous milestone did.
 
-- [ ] **Step 6: The docs-alignment edit** — `m5-autonomous-odometry-vision.md`
+- [x] **Step 6: The docs-alignment edit** — `m5-autonomous-odometry-vision.md`
 
 Four edits. The first two are the load-bearing ones.
 
@@ -141,7 +141,7 @@ Four edits. The first two are the load-bearing ones.
 **Leave the `## Test-out challenge` section alone.** It already describes T5 correctly, including
 the ruling-out pass criterion. Re-read it to confirm, and change nothing if it holds.
 
-- [ ] **Step 7: Status rows**
+- [x] **Step 7: Status rows**
 
 - `docs/programming/README.md:133` — the built-milestones paragraph. Add M5 and T5; the sentence
   currently ends "M5, M7, and M8 skeleton projects are not yet built." That becomes M7 and M8.
@@ -153,7 +153,7 @@ not** rename `t4-bad-kv`. All three are logged for the step 12 doc-correction pa
 in design record §4. This task ships what step 10 owns; it does not quietly edit the governing
 document's other claims.
 
-- [ ] **Step 8: Full gates**
+- [x] **Step 8: Full gates**
 
 ```bash
 export JAVA_HOME=~/wpilib/2026/jdk
@@ -166,7 +166,7 @@ poetry run python tools/site_guard.py _site
 `_site`**; they are the largest binaries this repository has ever published-adjacent, and the
 structural guarantee is that `docs_dir` cannot see them. Paste all three.
 
-- [ ] **Step 9: Clean-clone invariant, from a real clone — and note that the two projects differ**
+- [x] **Step 9: Clean-clone invariant, from a real clone — and note that the two projects differ**
 
 ```bash
 tmp=$(mktemp -d)
@@ -197,7 +197,7 @@ skeleton would mean the stubs are already satisfied.
 grep -rn "src/test" projects/testouts/t5-drifting-auto/ 2>/dev/null; ls projects/testouts/t5-drifting-auto/src/
 ```
 
-- [ ] **Step 10: `skeleton-integrity.yml` reachability — the step T5 makes non-obvious**
+- [x] **Step 10: `skeleton-integrity.yml` reachability — the step T5 makes non-obvious**
 
 M5 has `src/test` and no `regressions/`, so it takes the **inverted-check** branch: given tests must
 fail unmodified. T5 has no `src/test`, so it takes the **skip** branch — the same branch
@@ -214,7 +214,7 @@ regression-gate branch by accident. **If T5 lands in the inverted-check branch i
 workflow** — a project whose tests cannot fail because it has none — and that failure would arrive
 on `main`, not here.
 
-- [ ] **Step 11: Commit**
+- [x] **Step 11: Commit**
 
 ```bash
 git add -A
@@ -222,7 +222,7 @@ git status --short
 git commit -m "Integrate M5 + T5: tests.lock, docs alignment, status rows"
 ```
 
-- [ ] **Step 12: Report, then stop**
+- [x] **Step 12: Report, then stop**
 
 Report actual output for steps 2, 3, 4, 8, 9, and 10. **Do not merge to `main` and do not push** —
 that is Josh's call, and `finishing-a-development-branch` covers it.

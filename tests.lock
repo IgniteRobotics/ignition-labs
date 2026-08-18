@@ -22,6 +22,15 @@ c20d74021262b5ae83a5ef0735e5d76b6fb7064f84f4704538419fca982b6441  projects/m4-co
 60893fa82127fafc25dfdcca1b44a5bd219e96bc0346940d6448cd68eb3f0fce  projects/m4-control/src/test/java/frc/robot/ArmHomingTest.java
 9c2ab9ecc55be8179548796e163cfff2d0e6cfb45c465fdeb1a664d2a7831a30  projects/m4-control/src/test/java/frc/robot/FlywheelVelocityTest.java
 36d2ec5eb7c75ce3b4512c8a005913262193df8a51eb9c6f4a58c50b948af2cc  projects/m4-control/src/test/java/frc/robot/harness/SimDriver.java
+757ba8128925ac195cdf5b837c800ec113b4bde4a52e5e7248b322dc3860071c  projects/m5-auto-vision/src/main/java/frc/robot/harness/M5Deliverables.java
+08f2479c12bd043ca43a54ba745e6ac0cb7a1bd21df6e1b2b2133363a244ded2  projects/m5-auto-vision/src/main/java/frc/robot/harness/VisionPoseHelper.java
+cb3e6256888ce288f8f8f5dc3161ae6140198849fcf2aee6797e47821b7490c7  projects/m5-auto-vision/src/main/java/frc/robot/plant/ScoringMechanism.java
+2f37a68fb74f04e247f6ae407b7a40b539035cf5239f3d9c5bb34c6e2f8e19f5  projects/m5-auto-vision/src/main/java/frc/robot/plant/SwerveDriveSim.java
+54cb998a2e497c8f9745ef6a31cd7e73d7a709f8aef0ce8920d2ac71e5c2ea93  projects/m5-auto-vision/src/main/java/frc/robot/plant/VisionSim.java
+5efd9a7fce6686219b12858b47d78d456f68b3b1eb47ffb7e433d19f7cb77f4c  projects/m5-auto-vision/src/test/java/frc/robot/AutoTerminationTest.java
+036d7cb14437f1c00aa1990afd87295ffb2169b0faa5eeb1c7aeb5962ee44df6  projects/m5-auto-vision/src/test/java/frc/robot/BadTimestampTest.java
+3925bf51f20240821dd534102b356cf2a01024977ac21550569ee6bf75e9a9f0  projects/m5-auto-vision/src/test/java/frc/robot/FusedPoseTest.java
+ccb82a6efb0a6a7389da53a274b35166f7b1ab620fbf7c849237fa21123f6c11  projects/m5-auto-vision/src/test/java/frc/robot/harness/SimDriver.java
 6645ee07bde88438ca439bd7e0e02738b774f80f9b2625fd903a744a55913b69  projects/m6-testing/regressions/drop-gear-ratio.patch
 3f2878b9796ebc64f7bea7270ed22eb1132ee8883c574c244c30bbe686e49eb7  projects/m6-testing/regressions/flip-sign.patch
 86a924b2bd2529e024c998489f0e7dba9e51e08bb6634009e2aafd524a40a23f  projects/m6-testing/regressions/widen-tolerance.patch
@@ -38,3 +47,4 @@ aaec6016d387ef49d297bbb0acb8d3b3329138b1a576f8dc2e7f74d96ce791d8  projects/testo
 f9680a801cd39aa848a4fbedb8d08831d19f6d9c80a72a6713622cc94f7b2c79  projects/testouts/t3-scheduler-conflict/src/test/java/frc/robot/harness/SchedulerFixture.java
 5a57aedce796a059af1cc4304c5fa17b3b2c3abb1ac5a522c1eb6d07c193dac4  projects/testouts/t4-bad-kv/src/main/java/frc/testout/t4/plant/T4FlywheelPlant.java
 d089c768588c8f724ac5c51e0b16e02864b2aeacfcf84841baaa6113d26f4b6a  projects/testouts/t4-bad-kv/src/test/java/frc/testout/t4/FlywheelTuningTest.java
+75f638375ebb6aff301a8884437a138ce51923d0308bb148f45d9b219d432531  projects/testouts/t5-drifting-auto/src/main/java/frc/testout/t5/plant/T5DriveSim.java

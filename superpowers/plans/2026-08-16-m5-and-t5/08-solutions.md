@@ -36,7 +36,7 @@ archives the labs repo at a ref, so uncommitted work in a worktree is invisible 
 
 ---
 
-- [ ] **Step 1: Confirm both lanes are merged and committed**
+- [x] **Step 1: Confirm both lanes are merged and committed**
 
 ```bash
 cd /Users/y0shi/workspace/ignite/docs
@@ -47,7 +47,7 @@ git status --short                         # expect empty
 `cross-check.sh` extracts `HEAD` with `git archive`. A dirty tree or an unmerged lane means it
 silently tests something other than what you think.
 
-- [ ] **Step 2: Write `RobotContainer.java` implementing `M5Deliverables`**
+- [x] **Step 2: Write `RobotContainer.java` implementing `M5Deliverables`**
 
 Ten methods, in two groups. The whole point of the interface split is that Part 1 works before
 Part 2 exists, so write it in that order and run the suite between the two.
@@ -92,7 +92,7 @@ sounds like, and "4 meters because the answer key says 4 meters" is not one.
 `addVisionMeasurement` calls `acceptsMeasurement` first and drops the measurement when it is false.
 A filter the fusion path does not consult is a filter that passes review and does nothing.
 
-- [ ] **Step 3: Prove the suite is satisfiable — the step this task exists for**
+- [x] **Step 3: Prove the suite is satisfiable — the step this task exists for**
 
 ```bash
 cd ../ignite-training-solutions && ./tools/cross-check.sh 2>&1 | tail -40
@@ -104,7 +104,7 @@ If M5 is red here, **do not adjust the tests to make the solution pass.** Report
 failed and by how much. A tolerance moved to accommodate a solution is a tolerance that no longer
 measures anything, and it is the precise failure mode `CLAUDE.md`'s verification section names.
 
-- [ ] **Step 4: Measure `FusedPoseTest`'s margin, not just its colour**
+- [x] **Step 4: Measure `FusedPoseTest`'s margin, not just its colour**
 
 Green once is not evidence for an unseeded comparative assertion. Run the fused-versus-odometry-only
 comparison **ten times in one JVM** against this implementation and record the distribution of the
@@ -126,7 +126,7 @@ Report the ten margins. What you are looking for:
 This is the M5-specific analogue of step 9's "an arm too light for its own kG test to fail." A
 comparative test whose margin nobody measured is a test nobody knows the strength of.
 
-- [ ] **Step 5: Write `answer-keys/t5-drifting-auto.md`**
+- [x] **Step 5: Write `answer-keys/t5-drifting-auto.md`**
 
 **This file is the only place in either repository that records which letter carries which fault.**
 Task 7 generated the assignment and deliberately did not write it down. Recover it the way
@@ -175,7 +175,7 @@ listening for is the second column of that third column** — a student pointing
    two before assuming they read the log.** Do not treat the shortcut as cheating; treat it as
    having answered a different question than the one asked.
 
-- [ ] **Step 6: Write `authoring-notes/m5.md`**
+- [x] **Step 6: Write `authoring-notes/m5.md`**
 
 Follow `m4.md`'s shape. It must carry, so a future maintainer does not "simplify" something
 load-bearing:
@@ -204,7 +204,7 @@ load-bearing:
 - **Field layout is `k2026RebuiltWelded`.** The design record's spike used the 2025 field because
   that is what happened to load; anyone reading the spike must not copy it.
 
-- [ ] **Step 7: Commit in the solutions repository**
+- [x] **Step 7: Commit in the solutions repository**
 
 ```bash
 cd ../ignite-training-solutions
@@ -213,7 +213,7 @@ git add solutions/m5-auto-vision answer-keys/t5-drifting-auto.md authoring-notes
 git commit -m "Add M5 reference implementation, T5 answer key, and M5 authoring notes"
 ```
 
-- [ ] **Step 8: Confirm nothing leaked into the labs repository**
+- [x] **Step 8: Confirm nothing leaked into the labs repository**
 
 ```bash
 cd /Users/y0shi/workspace/ignite/docs
