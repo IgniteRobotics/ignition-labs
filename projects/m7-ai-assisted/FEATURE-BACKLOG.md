@@ -48,31 +48,38 @@ create `src/test/java/frc/robot/...` yourself.
 
 **One entry, and that is deliberate rather than an oversight — see the note under it.**
 
-### 1. Log the exception `grabVisionEstimateList()` currently swallows
+### 1. Give `grabVisionEstimateList()`'s swallowed exception a structured signal
 
 **Where:** `src/main/java/frc/robot/statemachines/DriveState.java:52`
 
 A bare `// TODO add to log` sits directly above a `catch (Exception e)` whose entire
-handling is two `System.out.println` calls. On a roboRIO, `System.out` reaches the
-console — it does not reach the `.wpilog`. So if that queue-draining loop ever throws
-during a match, the vision measurements for that cycle vanish and there is **no record
-anywhere a mentor can find afterwards.** The symptom is "vision looked flaky in match 4"
-and the evidence does not exist.
+handling is two `System.out.println` calls.
+
+Be precise about what is and is not wrong here, because the obvious version of this
+feature is already done. `Robot.java` calls `DataLogManager.start()`, and console capture
+is on by default — so that `println` output **does** reach the `.wpilog`, as raw console
+text. The failure is not invisible.
+
+What it is not is *findable*. It lands interleaved with every other line of stdout under
+a single `console` key: no structured field, no count, nothing that appears in
+AdvantageScope's field list beside the vision telemetry you would be looking at when you
+went hunting. "Did this throw during match 4, and how often?" is a question the current
+handler cannot answer without reading raw console text line by line.
 
 Work out what should be recorded, in what form, and justify it. The TODO says that
 something is missing, not what — deciding what is the interesting half, and it is the
 half you will be asked to defend.
 
-**Why it is a good M7 feature:** genuinely small; the failure it makes visible is real
-rather than hypothetical; the design questions have no single right answer (what does a
-mentor reading this after a match actually need? does an exception here mean one bad
-cycle or a broken camera? what does the handler cost if it fires every loop?); and it
-sits in the vision path, which is where this team's hardest debugging happens.
+**Why it is a good M7 feature:** genuinely small; the gap is real and you can demonstrate
+it; the design questions have no single right answer (a counter, a boolean, a timestamped
+message, or the exception class? what does a mentor reading this after a match actually
+need? what does it cost if it fires every loop?); and it sits in the vision path, where
+this team's hardest debugging happens.
 
-**Where you will be pushed in defense:** why this shape of record and not another, what
-question it lets someone answer six weeks later, whether swallowing the exception at all
-is the right behaviour once it is visible, and what happens if the same exception fires
-fifty times in one match.
+**Where you will be pushed in defense:** why this shape of record rather than another,
+what question it lets someone answer six weeks later that they cannot answer today,
+whether swallowing the exception at all is the right behaviour once it is visible, and
+what happens if the same exception fires fifty times in one match.
 
 ---
 
@@ -83,9 +90,13 @@ be implemented, and a student would have lost a session discovering that.
 
 **A mentor must add entries before assigning M7 to a cohort.** The selection criteria
 above are the tool for that, and they matter more than any entry under them. Verify every
-claim against the repository at the SHA you are pinning before you write it down —
-specifically, check every way a value could already be reaching telemetry, including
-WPILib Epilogue's `@Logged` annotations, which do not look like logging calls.
+claim against the repository at the SHA you are pinning before you write it down — and
+note that "this value is not being logged" is the single easiest claim to get wrong here,
+because WPILib publishes through at least two mechanisms that do not look like logging
+calls: Epilogue's `@Logged` annotations, which turn a plain private field into a
+NetworkTables entry, and `DataLogManager`'s console capture, which is enabled by default
+and tails stdout into the `.wpilog`. Both drafts of this file's first entry were wrong for
+exactly that reason, one for each mechanism.
 
 ## Done
 
