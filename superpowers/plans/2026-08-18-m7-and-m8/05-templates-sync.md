@@ -270,11 +270,16 @@ Paste all six outcomes. **Read the failure message itself** — a mentor or stud
 
 - [ ] **Step 5: Wire it into CI**
 
-`.github/workflows/docs-links.yml` already runs on documentation changes and has Poetry available. Add a step after the existing link check:
+`.github/workflows/docs-links.yml` already runs on documentation changes. **It does not set up Python or Poetry** — it runs only `actions/checkout` and `lycheeverse/lychee-action`. Do not use `poetry run` here; it fails with `poetry: command not found` on every Markdown pull request, which turns this guard into a permanent red rather than a check.
+
+`templates_sync.py` imports only `re`, `sys` and `pathlib`, so the runner's preinstalled interpreter is enough. `skeleton-integrity.yml` already does exactly this for `given_tests_red.py`, with a comment explaining why. Add a step after the existing link check:
 
 ```yaml
       - name: Templates match their source regions
-        run: poetry run python tools/templates_sync.py verify
+        # docs-links.yml has no setup-python or Poetry step, and this tool is
+        # stdlib-only, so plain python3 is correct here -- same as
+        # given_tests_red.py in skeleton-integrity.yml.
+        run: python3 tools/templates_sync.py verify
 ```
 
 Confirm the workflow's triggers actually cover both sides of the check — a guard that never runs when `templates/` changes is not a guard:
