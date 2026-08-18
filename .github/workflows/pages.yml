@@ -38,7 +38,12 @@ jobs:
         run: poetry install --only docs
 
       - name: Build site
-        run: poetry run mkdocs build
+        # --strict per teaching-repo-spec.md §16 item 7. It was deliberately off while
+        # robot-repo-ladder.md linked UNTESTED-TARGETS.md before that file existed;
+        # the file shipped at build-order step 8, so the warning is gone and the gate
+        # can be real. Without it a broken internal link is a silent 404 that neither
+        # lychee nor tools/site_guard.py can catch -- they check different failure modes.
+        run: poetry run mkdocs build --strict
 
       - name: Guard against published source files
         run: python tools/site_guard.py ./_site

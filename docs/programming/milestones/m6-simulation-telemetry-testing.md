@@ -26,7 +26,11 @@ Required before you commit to competition robot code.
 
 This is deliberate and it is the most opinionated decision in the curriculum, so here is the reasoning in full.
 
-Ignite's competition repositories currently contain, between them, **zero test files.** `Robot-2026` has JUnit 5 configured in `build.gradle` with a working `test { useJUnitPlatform() }` block and no `src/test` directory at all. `Robot-2025` has none. `Robot-2024` had exactly one, with four hardcoded assertions. Neither CI workflow runs `./gradlew test`, so even if tests existed they would not run. `Phoenix-2026` — a rig that exists specifically for simulated hardware work — has no tests either.
+When this curriculum was written, Ignite's competition repositories contained, between them, **zero test files.** `Robot-2026` has JUnit 5 configured in `build.gradle` with a working `test { useJUnitPlatform() }` block and no `src/test` directory at all. `Robot-2025` has none. `Robot-2024` had exactly one, with four hardcoded assertions. `Phoenix-2026` — a rig that exists specifically for simulated hardware work — has no tests either.
+
+The CI is not the obstacle, and the documents that said it was were wrong. `pr-build-check.yml` runs `./gradlew build`, and in the Gradle Java plugin `build` depends on `check`, which depends on `test` — so Ignite's CI already gates on tests. There are simply none to run. The first test anyone merges starts being enforced immediately, which is a much better starting position than having to stand CI up first.
+
+That count starts changing the moment the first M6 pull request lands, which is the point. What does not change is that most classes still have no coverage — which is why your target comes from [`UNTESTED-TARGETS.md`](../UNTESTED-TARGETS.md) rather than from being first.
 
 That is not a criticism of anyone. It is the normal state of FRC code and it is where most teams sit. But it means the team's most experienced programmers are precisely the people who have never written a robot test, and they are the ones who most want the AI tooling in M7. Handing agentic tools to a codebase with no verification layer produces velocity with no brakes.
 

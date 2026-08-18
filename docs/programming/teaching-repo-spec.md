@@ -348,7 +348,7 @@ Gate the canonical-only workflows with `if: github.repository == 'IgniteRobotics
 
 5. **Fork pull requests need no secrets.** `student-check.yml` runs on `pull_request` within the student's own fork; the default `GITHUB_TOKEN` suffices for commenting on their own PR. Never `pull_request_target`.
 
-> **Correction owed to three documents.** `curriculum-spec.md` §2.2, `tracks/track-d-frc-veteran-ai.md`, and `milestones/m6-simulation-telemetry-testing.md` all state "Neither CI workflow runs `./gradlew test`." Literally true — neither invokes `test` by name — but `pr-build-check.yml` runs `./gradlew build`, and in the Gradle Java plugin `build` → `check` → `test`. **Ignite's CI already gates on tests; there simply are none to run.** That is a materially better starting position than the docs claim, and the M6 argument gets stronger rather than weaker. Fix all three at build-order step 12.
+> **Corrected at build-order step 12.** `curriculum-spec.md` §2.2, `tracks/track-d-frc-veteran-ai.md`, and `milestones/m6-simulation-telemetry-testing.md` all used to state "Neither CI workflow runs `./gradlew test`." Literally true — neither invokes `test` by name — but `pr-build-check.yml` runs `./gradlew build`, and in the Gradle Java plugin `build` → `check` → `test`. **Ignite's CI already gates on tests; there simply are none to run.** That is a materially better starting position than the docs claimed, and the M6 argument gets stronger rather than weaker. All three now say so.
 
 ---
 
@@ -454,7 +454,7 @@ Also given: `SysIdRoutine` wiring (boilerplate, explicitly permitted under Yello
 
 **Student writes:** feedforward application, gains, PID, motion profile, homing sequence.
 
-**Vendordeps:** `Phoenix6` (26.1.0), `WPILibNewCommands`.
+**Vendordeps:** `Phoenix6` (26.1.1), `WPILibNewCommands`.
 **Real repo:** clone to read `ShooterSubsystem`; **fork and open a pull request** — see below.
 
 **Tests cover:** flywheel reaches and holds commanded velocity within tolerance and settling time; arm holds position against gravity; homing zeroes on limit-switch contact.
@@ -470,7 +470,7 @@ Building a swerve drivetrain is not M5's lesson. Composing autos and fusing visi
 
 **Student writes:** paths, named commands, the composition with timeouts, the chooser entries; pose-estimator fusion, timestamp handling, distance-based filtering.
 
-**Vendordeps:** `PathplannerLib` (2026.1.2), `photonlib`, `Phoenix6`, `WPILibNewCommands` — matching `Robot-2026` exactly.
+**Vendordeps:** `PathplannerLib` (2026.1.2), `photonlib` (v2026.2.1), `Phoenix6` (26.1.1), `WPILibNewCommands` (1.0.0) — matching `Robot-2026` exactly.
 **Real repo:** clone to read `vision/`, `LaunchCalculator`. Read-only.
 
 **Tests cover:** the routine terminates even when a step is forced to fail (the milestone's step 7); fused pose error is lower than odometry-only error over a run; a measurement submitted with a deliberately wrong timestamp is rejected by the student's filter.
@@ -616,7 +616,7 @@ Ordered by dependency, then by value. Each step is independently reviewable and 
 | **1** | **`programming/git-workflow.md` + `programming/robot-repo-ladder.md`** | §5 and §6 as student-facing prose. **Zero dependencies. Ships immediately** | Done |
 | **2** | Create the git remote; repository scaffold: four workflows, `tests.lock` tooling, `CODEOWNERS`, pull request template, `CONTRIBUTING.md`, `SETUP.md` (including the fork-Actions step) | — | Done |
 | **3** | Pages live | Proves the pipeline before there is much to publish | Done |
-| **4** | **M0** | Smallest, and the one every single student hits | **Done** |
+| **4** | **M0** | Smallest, and the one every single student hits | Done |
 | **5** | **M1** + T1 | Highest volume of students. L3 is the most authoring-heavy fade level per unit of content | Done |
 | **6** | **M2** + T2 | L2's contract test cannot name the class the student writes; `ContractProbe` is the reflective seam that solves it | Done |
 | **7** | **M3** + T3 | Largest milestone. The `M3Deliverables` harness is the risky part — build it first and validate against a throwaway solution | Done |
@@ -625,7 +625,7 @@ Ordered by dependency, then by value. Each step is independently reviewable and 
 | **9** | **M4** + T4 | Plant seam decided by spike: CTRE's simulated control loop and signal pipeline run on wall-clock time, so the student's loop is Java against given plants | Done |
 | **10** | **M5** + T5 | T5's three log sets are the single largest authoring cost in the spec | Done |
 | **11** | **M7**, **M8 templates** | Mostly documents | Done |
-| **12** | **Doc corrections.** The §7.3 CI claim in three files; M6's "first tests" → "a class that has none"; M4's required-PR DoD item; `curriculum-spec.md` §8 and `README.md` status tables; the `resources.md` seasonal re-verification list | — | — |
+| **12** | **Doc corrections.** The §7.3 CI claim in three files; M6's "first tests" → "a class that has none"; M4's required-PR DoD item; `curriculum-spec.md` §8 and `README.md` status tables; the `resources.md` seasonal re-verification list | — | Done |
 | **—** | Solutions repository, built continuously alongside steps 4–11, with the §11.2 cross-check job live from step 4 | Not a final step. A milestone shipped without its solution is not shipped. Backfilled late: steps 4–6 shipped without solutions, and each plan's verification implementation was written and then deleted rather than kept — from step 7 the solution ships with the milestone | M0–M6, T1–T5 done; M7–M8 notes only (no code to solve); cross-check live |
 
 **Timing.** 2026-08-07, kickoff roughly five months out. Steps 1–7 fit comfortably *if step 1 lands now*. Steps 1–3 are almost entirely writing and configuration — they do not wait on the toolchain being settled.
@@ -683,7 +683,8 @@ Each season, before the fall:
 4. Re-generate T4's plot and T5's logs if the sim stack changed
 5. Refresh `UNTESTED-TARGETS.md` against the new season's repository
 6. Bump and re-pin `mkdocs` and `mkdocs-material` in `pyproject.toml`. Material's own build already warns that MkDocs 2.0 removes the plugin system entirely and ships no migration path — treat that warning as live every season it appears, not a one-time notice, and require a full `mkdocs build` plus a passing `tools/site_guard.py` before merging the bump. A version number that resolves is not the same thing as a site that still builds
-7. Once `UNTESTED-TARGETS.md` exists (item 5 above), enable `mkdocs build --strict` in `pages.yml`. It is deliberately not strict today because `programming/robot-repo-ladder.md` links that one file before it exists, which is a legitimate warning, not a defect. Without `--strict`, a broken internal link is a silent 404 that neither `lychee` nor `tools/site_guard.py` can catch — both check different failure modes
+7. **Done at build-order step 12** — `pages.yml` now runs `mkdocs build --strict`. It was deliberately not strict while `programming/robot-repo-ladder.md` linked `UNTESTED-TARGETS.md` before that file existed, which was a legitimate warning rather than a defect. The file shipped at step 8. Without `--strict`, a broken internal link is a silent 404 that neither `lychee` nor `tools/site_guard.py` can catch — both check different failure modes.
+8. **Re-verify every link and claim in `programming/resources.md`.** It carries a `Last verified:` date and asserts that each listed resource was reachable and accurate on that date. Both go stale silently: `lychee` catches a dead URL but not a page that still resolves while describing a superseded API. Re-read each entry, confirm it still says what the table claims it says, and move the date.
 
 Order matters: bump first, then re-pin, then cross-check. A cross-check against an un-bumped skeleton proves nothing useful.
 

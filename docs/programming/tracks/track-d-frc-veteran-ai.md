@@ -16,7 +16,7 @@ Your instinct is that M7 is the milestone you want and M6 is a formality you can
 - `Robot-2025`: zero test files
 - `Robot-2024`: exactly one, with four hardcoded assertions and no derivation comments
 - `Phoenix-2026` — a rig that exists specifically for simulated hardware work — has no tests
-- **Neither CI workflow runs `./gradlew test`**, so even if tests existed they would not run
+- **CI already gates on tests** — `pr-build-check.yml` runs `./gradlew build`, and `build` → `check` → `test`. There are none to run, so the gate has never fired. The first test you merge is enforced from that moment on
 
 That is not a criticism of anyone, and it is roughly where most FRC teams sit. But it produces a specific situation: the people on this team with the most experience are also the people who have never written a robot test. And those are the people who most want agentic AI tooling.
 
