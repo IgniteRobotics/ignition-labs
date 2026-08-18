@@ -49,7 +49,7 @@ in this task means that path, not the main checkout.
 
 ---
 
-- [ ] **Step 1: Copy the scaffold from M4**
+- [x] **Step 1: Copy the scaffold from M4**
 
 ```bash
 cd /Users/y0shi/workspace/ignite/docs/.worktrees/m5
@@ -74,7 +74,7 @@ it; Gradle falls back to the directory name (`m5-auto-vision`). Do not add one.
 runtime artifact `.gitignore` already excludes, and creating an empty placeholder is a
 file nobody reads that Task 9's `git status --short` check has to look past.
 
-- [ ] **Step 2: Write `build.gradle`**
+- [x] **Step 2: Write `build.gradle`**
 
 Byte-for-byte M4's shape. The only content difference is the top comment.
 
@@ -192,7 +192,7 @@ tasks.withType(JavaCompile) {
 }
 ```
 
-- [ ] **Step 3: Write the two new vendordep JSONs, verbatim from `Robot-2026` @ `28ce539`**
+- [x] **Step 3: Write the two new vendordep JSONs, verbatim from `Robot-2026` @ `28ce539`**
 
 Create `projects/m5-auto-vision/vendordeps/PathplannerLib-2026.1.2.json`:
 
@@ -313,7 +313,7 @@ Create `projects/m5-auto-vision/vendordeps/photonlib.json`:
 }
 ```
 
-- [ ] **Step 4: Write the PathPlanner deploy directory**
+- [x] **Step 4: Write the PathPlanner deploy directory**
 
 `RobotConfig.fromGUISettings()` (Task 2) reads `settings.json` below at
 `SwerveDriveSim` construction time — get its geometry right now, because Task 2 does not
@@ -430,7 +430,7 @@ Create `projects/m5-auto-vision/src/main/deploy/pathplanner/paths/Example Path.p
 }
 ```
 
-- [ ] **Step 5: Verify the empty scaffold builds**
+- [x] **Step 5: Verify the empty scaffold builds**
 
 ```bash
 export JAVA_HOME=~/wpilib/2026/jdk
@@ -443,7 +443,7 @@ Green here confirms all four vendordeps resolve — `Phoenix6-26.1.1.json` and
 `photonlib.json` for the first time. `spotlessCheck`/`test` are not meaningful yet; there
 is no Java source and no test source until Tasks 2–4.
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit**
 
 ```bash
 cd /Users/y0shi/workspace/ignite/docs/.worktrees/m5

@@ -70,7 +70,7 @@ precedent, not an oversight of it.
 
 ---
 
-- [ ] **Step 1: Write `ScoringMechanism`**
+- [x] **Step 1: Write `ScoringMechanism`**
 
 Given, locked, pinned in `00-plan.md`. A fixed number of ticks after `startDeploy()`,
 `isDeployed()` becomes `true` — unless `setFaulted(true)` was called, in which case it never
@@ -159,7 +159,7 @@ public final class ScoringMechanism {
 }
 ```
 
-- [ ] **Step 2: Write `VisionPoseHelper`**
+- [x] **Step 2: Write `VisionPoseHelper`**
 
 Given, locked, pinned in `00-plan.md`. The single place the camera-frame-to-candidate-pose
 conversion lives — both `Robot.java` (Step 5, below) and Task 4's `SimDriver` call it, so a
@@ -231,7 +231,7 @@ public final class VisionPoseHelper {
 }
 ```
 
-- [ ] **Step 3: Write `M5Deliverables`**
+- [x] **Step 3: Write `M5Deliverables`**
 
 The seam. Given tests cannot name `RobotContainer`'s own pose-estimator field or filter
 logic because the student hasn't written it yet, so they reach it through these nine
@@ -347,7 +347,7 @@ public interface M5Deliverables {
 }
 ```
 
-- [ ] **Step 4: Write `Main.java`**
+- [x] **Step 4: Write `Main.java`**
 
 Byte-for-byte every prior milestone's — every WPILib project has one identical to this.
 
@@ -371,7 +371,7 @@ public final class Main {
 }
 ```
 
-- [ ] **Step 5: Write `Robot.java`**
+- [x] **Step 5: Write `Robot.java`**
 
 Given. Three things happen every 20ms: the scheduler runs (so `autoRoutine()` and any named
 command actually progress); `updateOdometry()` runs, unconditionally, for the
@@ -453,7 +453,7 @@ public class Robot extends TimedRobot {
 }
 ```
 
-- [ ] **Step 6: Write `Constants.java`**
+- [x] **Step 6: Write `Constants.java`**
 
 Exactly the one pinned constant, plus a documented, deliberately empty `VisionConstants` —
 present so a student who goes looking for a distance threshold finds a note explaining why
@@ -489,7 +489,7 @@ public final class Constants {
 }
 ```
 
-- [ ] **Step 7: Write the `RobotContainer` stub**
+- [x] **Step 7: Write the `RobotContainer` stub**
 
 Student territory. Every method a throwing stub, same as every prior milestone's
 `RobotContainer`. Four TODO regions instead of M4's three: plants (now including the given
@@ -601,7 +601,7 @@ public class RobotContainer implements M5Deliverables {
 }
 ```
 
-- [ ] **Step 8: Compile**
+- [x] **Step 8: Compile**
 
 ```bash
 export JAVA_HOME=~/wpilib/2026/jdk
@@ -612,7 +612,7 @@ cd /Users/y0shi/workspace/ignite/docs/.worktrees/m5/projects/m5-auto-vision
 The unmodified stub must compile clean — this is half of the clean-clone invariant, and
 Task 4 proves the other half (`test` red from assertions, not from a compile error).
 
-- [ ] **Step 9: Confirm no given file hands over an answer or a filtering threshold**
+- [x] **Step 9: Confirm no given file hands over an answer or a filtering threshold**
 
 ```bash
 cd /Users/y0shi/workspace/ignite/docs/.worktrees/m5/projects/m5-auto-vision
@@ -623,7 +623,7 @@ grep -rniE 'MAX_TRUSTED_DISTANCE|max.?trusted|trust.?distance' src/main/
 Expected: no output from either. `TODO(M5)` strings in `RobotContainer.java` are expected
 and are not a hit for the first grep — they name what to do, not the answer.
 
-- [ ] **Step 10: Format and commit**
+- [x] **Step 10: Format and commit**
 
 ```bash
 cd /Users/y0shi/workspace/ignite/docs/.worktrees/m5/projects/m5-auto-vision

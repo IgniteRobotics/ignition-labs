@@ -44,7 +44,7 @@ signatures verbatim.
 
 ---
 
-- [ ] **Step 1: Write `SwerveDriveSim`**
+- [x] **Step 1: Write `SwerveDriveSim`**
 
 Module geometry is `±0.3m` in both axes (0.6m track width, 0.6m wheelbase) — this is the
 exact number Task 1's `settings.json` was sized to match (`flModuleX`/`flModuleY`/etc.).
@@ -249,7 +249,7 @@ public final class SwerveDriveSim {
 }
 ```
 
-- [ ] **Step 2: Write `VisionSim`**
+- [x] **Step 2: Write `VisionSim`**
 
 Wraps PhotonVision's real `VisionSystemSim` — spike A confirmed it produces results
 headless (100/100 frames with targets, no coprocessor, no NT server needed beyond the
@@ -394,7 +394,7 @@ public final class VisionSim {
 }
 ```
 
-- [ ] **Step 3: Compile**
+- [x] **Step 3: Compile**
 
 ```bash
 export JAVA_HOME=~/wpilib/2026/jdk
@@ -409,7 +409,7 @@ fix the call site — the physical shape (kinematic integration, given fixed-rat
 real `VisionSystemSim`, `AutoBuilder` wired to this plant's own ground truth) is what must
 not change, not the exact overload.
 
-- [ ] **Step 4: Confirm no vision filtering threshold leaked in**
+- [x] **Step 4: Confirm no vision filtering threshold leaked in**
 
 ```bash
 cd /Users/y0shi/workspace/ignite/docs/.worktrees/m5/projects/m5-auto-vision
@@ -420,7 +420,7 @@ Expected: no output. `SwerveDriveSim` and `VisionSim` are the plant, not the fil
 filter, and any distance threshold it uses, is Task 3's `RobotContainer` stub, and it is
 the student's to choose in Part 2. Neither plant should reference or hint at one.
 
-- [ ] **Step 5: Confirm the field layout and module geometry**
+- [x] **Step 5: Confirm the field layout and module geometry**
 
 ```bash
 cd /Users/y0shi/workspace/ignite/docs/.worktrees/m5/projects/m5-auto-vision
@@ -432,7 +432,7 @@ Confirm `k2026RebuiltWelded` appears and `k2025...` does not, and that both modu
 constants read `0.6` — matching Task 1's `settings.json` `robotTrackwidth`/`flModuleX`/etc.
 exactly.
 
-- [ ] **Step 6: Determinism proof — not optional, and prove it fails without `pauseTiming` too**
+- [x] **Step 6: Determinism proof — not optional, and prove it fails without `pauseTiming` too**
 
 This is the property the milestone's given tests rest on, and it has two halves that must
 both be shown, not just asserted:
@@ -573,7 +573,7 @@ Then delete the spike — it is a proof, not a shipped test:
 rm projects/m5-auto-vision/src/test/java/frc/robot/plant/DeterminismSpikeTest.java
 ```
 
-- [ ] **Step 7: Format and commit**
+- [x] **Step 7: Format and commit**
 
 ```bash
 cd /Users/y0shi/workspace/ignite/docs/.worktrees/m5/projects/m5-auto-vision
