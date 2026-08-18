@@ -26,7 +26,7 @@ S=28ce5397d88275001d656dbb717d22cf9ac0150d
 VS=src/main/java/frc/robot/subsystems/vision/VisionSubsystem.java
 
 echo "--- counters declared (expect 12) ---"
-git -C $R show $S:$VS | grep -cE "private long .*(Accepted|Rejected)"
+git -C $R show $S:$VS | grep -cE "private long (front|left|right)Camera.*(Accepted|Rejected)"
 
 echo "--- public accessors for them (expect 0) ---"
 git -C $R show $S:$VS | grep -cE "public .*(Accepted|Rejected)"
@@ -44,7 +44,9 @@ echo "--- but the harness is wired ---"
 git -C $R show $S:build.gradle | grep -E "junit-jupiter|useJUnitPlatform"
 ```
 
-Expected: 12, 0, one path (`VisionSubsystem.java` only), the `// TODO add to log` line, 0, and two matching build lines. If any differs, the entry it supports must be rewritten or dropped rather than shipped as-is.
+Expected: 12, 0, one path (`VisionSubsystem.java` only), the `// TODO add to log` line, 0, and two matching build lines.
+
+**The counter pattern is deliberately scoped to `(front|left|right)Camera`.** A looser `private long .*(Accepted|Rejected)` also matches `outliersRejected` at line 83 — a real field, but not per-camera and not something the backlog claims — and returns 13, which reads as a failed check when nothing is wrong. If any differs, the entry it supports must be rewritten or dropped rather than shipped as-is.
 
 - [ ] **Step 2: Write `FEATURE-BACKLOG.md`**
 
