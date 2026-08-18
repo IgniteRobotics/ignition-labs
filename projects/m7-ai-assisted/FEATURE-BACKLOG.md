@@ -46,47 +46,46 @@ create `src/test/java/frc/robot/...` yourself.
 
 ## Open
 
-### 1. Publish `VisionSubsystem`'s rejection counters to telemetry
+**One entry, and that is deliberate rather than an oversight — see the note under it.**
 
-**Where:** `src/main/java/frc/robot/subsystems/vision/VisionSubsystem.java`
-
-`VisionSubsystem` keeps twelve counters — accepted, rejected-total,
-rejected-due-to-ambiguity, and rejected-due-to-jumping, for each of the front, left, and
-right cameras. Their Javadoc says they are *"Used for telemetry"* and *"Tracks telemetry
-for monitoring."*
-
-**Nothing publishes them.** They are `private`, they have no accessors, and no other file
-in the repository reads them. They are incremented every loop and thrown away.
-
-That means nobody can answer "is the vision filter rejecting anything, and why" without
-attaching a debugger. Which camera is dropping frames, and for which reason, is exactly
-the question you want answered from a log after a match rather than guessed at in the
-pit.
-
-**Why it is a good M7 feature:** small and self-contained; obviously useful; the design
-questions are real but answerable (raw counts or rates? per-camera or aggregate? what
-happens to the numbers when the robot is disabled?); and it is testable without hardware,
-because you can drive the counters through the subsystem's own accept and reject paths.
-
-**Where you will be pushed in defense:** why these names, why this grouping, what a
-reviewer reading the log six weeks from now would need, and what the numbers mean if
-nobody ever resets them.
-
-*If you are doing M5 or have just finished it, you have already read this file — it is
-what `READING.md` sends you to. You are improving code you have studied.*
-
-### 2. Log the drive state that is currently marked unlogged
+### 1. Log the exception `grabVisionEstimateList()` currently swallows
 
 **Where:** `src/main/java/frc/robot/statemachines/DriveState.java:52`
 
-A bare `// TODO add to log` sits on state that never reaches the log. Work out what
-should be logged there, in what form, and justify it — the TODO says *that* something is
-missing, not *what*, and deciding what is the interesting half.
+A bare `// TODO add to log` sits directly above a `catch (Exception e)` whose entire
+handling is two `System.out.println` calls. On a roboRIO, `System.out` reaches the
+console — it does not reach the `.wpilog`. So if that queue-draining loop ever throws
+during a match, the vision measurements for that cycle vanish and there is **no record
+anywhere a mentor can find afterwards.** The symptom is "vision looked flaky in match 4"
+and the evidence does not exist.
 
-**Where you will be pushed in defense:** why this field and not its neighbours, what
-question the log entry lets someone answer later, and what it costs every loop.
+Work out what should be recorded, in what form, and justify it. The TODO says that
+something is missing, not what — deciding what is the interesting half, and it is the
+half you will be asked to defend.
+
+**Why it is a good M7 feature:** genuinely small; the failure it makes visible is real
+rather than hypothetical; the design questions have no single right answer (what does a
+mentor reading this after a match actually need? does an exception here mean one bad
+cycle or a broken camera? what does the handler cost if it fires every loop?); and it
+sits in the vision path, which is where this team's hardest debugging happens.
+
+**Where you will be pushed in defense:** why this shape of record and not another, what
+question it lets someone answer six weeks later, whether swallowing the exception at all
+is the right behaviour once it is visible, and what happens if the same exception fires
+fifty times in one match.
 
 ---
+
+**This backlog is under-filled on purpose rather than by accident.** It shipped with one
+verified entry because a candidate that does not survive checking is worse than no
+candidate — the first draft of this file led with a feature that turned out to already
+be implemented, and a student would have lost a session discovering that.
+
+**A mentor must add entries before assigning M7 to a cohort.** The selection criteria
+above are the tool for that, and they matter more than any entry under them. Verify every
+claim against the repository at the SHA you are pinning before you write it down —
+specifically, check every way a value could already be reaching telemetry, including
+WPILib Epilogue's `@Logged` annotations, which do not look like logging calls.
 
 ## Done
 
