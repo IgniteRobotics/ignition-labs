@@ -27,6 +27,7 @@ Everything a subsystem owner produces during a season, with templates you fill i
 
 Save as `docs/subsystems/[subsystem-name].md`.
 
+<!-- template:subsystem-readme start -->
 ```markdown
 # [Subsystem Name]
 
@@ -85,6 +86,7 @@ out the hard way.]
 [Honest list. This is the most valuable section for whoever inherits
 this and the easiest one to skip. Do not skip it.]
 ```
+<!-- template:subsystem-readme end -->
 
 **A worked example already exists in this repo:** `docs/vision-subsystem.md`. Read it before writing yours.
 
@@ -98,6 +100,7 @@ this and the easiest one to skip. Do not skip it.]
 
 Save as `docs/tuning/[subsystem-name]-tuning.md`. Newest entry at the top.
 
+<!-- template:tuning-log start -->
 ```markdown
 # [Subsystem] — Tuning Log
 
@@ -129,6 +132,7 @@ in docs/tuning/images/ and link it.]
 **Still wrong / next time:**
 [What you did not get to, or what you suspect.]
 ```
+<!-- template:tuning-log end -->
 
 **Minimum bar:** if you changed a number on the robot, there is an entry. Even "raised kP, it oscillated, put it back" is worth recording — it stops the next person repeating it.
 
@@ -138,6 +142,7 @@ in docs/tuning/images/ and link it.]
 
 Required on every PR. The AI disclosure block is mandatory at Yellow and Green tiers — see `ai-use-standard.md` §6.
 
+<!-- template:pr-description start -->
 ```markdown
 ## What this changes
 
@@ -169,6 +174,7 @@ How I verified it:
 [Where you are unsure. This is not a weakness — it is the most
 useful thing you can tell a reviewer.]
 ```
+<!-- template:pr-description end -->
 
 **"How I verified it" is the field that matters.** "I read it and it looked right" is not verification. "Tests pass," "checked against the CTRE docs," "ran in sim and watched it reach setpoint" are.
 
@@ -178,6 +184,7 @@ useful thing you can tell a reviewer.]
 
 Competitions are where good practice collapses. Two failure modes, both real, both cost matches: uncommitted field changes, and no known-good state to fall back to.
 
+<!-- template:competition-week-checklist start -->
 ### Before leaving for the event
 
 - [ ] Everything committed and pushed. `git status` is clean
@@ -197,6 +204,7 @@ Competitions are where good practice collapses. Two failure modes, both real, bo
 
 - [ ] Tag it: `git tag post-[event-name] && git push --tags`
 - [ ] Write down what broke and what you changed — feeds the retro
+<!-- template:competition-week-checklist end -->
 
 ### The rule underneath all of it
 
@@ -210,6 +218,7 @@ Competitions are where good practice collapses. Two failure modes, both real, bo
 
 Keep it to one page. Print it. Put it in the pit.
 
+<!-- template:pit-documentation start -->
 ```markdown
 # [Subsystem] — Pit Card
 
@@ -241,6 +250,7 @@ enable? What LED, what sound, what motion?]
 [The safe fallback. Disable the subsystem? Run a degraded mode? What
 lets the robot still play a match?]
 ```
+<!-- template:pit-documentation end -->
 
 **That last section is the most important one** and the one people leave out. A robot that plays a match with one mechanism disabled scores more than a robot that does not leave the pit.
 
@@ -252,6 +262,7 @@ Written within two weeks of the last event, while it is still accurate. Whole su
 
 Save as `docs/retro-[year].md`.
 
+<!-- template:post-season-retro start -->
 ```markdown
 # [Year] Programming Retro
 
@@ -292,6 +303,7 @@ things that took a week to work out.]
 gaps? This is how the curriculum improves — it does not improve on
 its own.]
 ```
+<!-- template:post-season-retro end -->
 
 **The curriculum feedback section is not filler.** A cross-team teaching resource has been attempted in FRC before and did not sustain, because nobody maintained it. This section is the maintenance mechanism.
 
