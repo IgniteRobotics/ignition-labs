@@ -10,13 +10,27 @@ import argparse
 import json
 import sys
 from collections.abc import Iterable
-from pathlib import PurePosixPath
+from pathlib import Path, PurePosixPath
 
 PROJECTS_ROOT = "projects"
 TESTOUTS = "testouts"
+REPO_ROOT = Path(__file__).resolve().parents[1]
 
 
-def milestone_dirs(changed_paths: Iterable[str]) -> list[str]:
+def _is_gradle_project(root: Path, rel: str) -> bool:
+    """A standalone Gradle project has its own settings.gradle (spec §4.2).
+
+    Checked against the filesystem rather than inferred from the path, because
+    projects/m7-ai-assisted/ and projects/m8-ownership/ are directories of documents --
+    the first entries under projects/ that are not Gradle projects at all. Selecting one
+    puts a directory with no gradlew into student-check.yml's build matrix, where the
+    first step is `chmod +x gradlew` and the failure reads like a broken toolchain to
+    the student whose Markdown change triggered it.
+    """
+    return (root / rel / "settings.gradle").is_file()
+
+
+def milestone_dirs(changed_paths: Iterable[str], root: Path = REPO_ROOT) -> list[str]:
     """Return the sorted, deduplicated set of standalone Gradle projects to build."""
     selected: set[str] = set()
     for raw in changed_paths:
@@ -33,7 +47,7 @@ def milestone_dirs(changed_paths: Iterable[str]) -> list[str]:
             continue
         if len(parts) >= 3:
             selected.add(f"{PROJECTS_ROOT}/{parts[1]}")
-    return sorted(selected)
+    return sorted(d for d in selected if _is_gradle_project(root, d))
 
 
 def main() -> int:
