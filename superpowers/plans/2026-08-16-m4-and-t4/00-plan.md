@@ -1,5 +1,12 @@
 # M4 Control + T4 `bad-kv` Implementation Plan
 
+> **Renamed 2026-08-18.** The fixture this plan builds as `projects/testouts/t4-bad-kv/`
+> now ships as `projects/testouts/t4-ringing-flywheel/`. The old name announced the fault
+> before a student opened anything — the same leak class T5's log file sizes carried. This
+> plan is left in its original wording as the record of what was built and when; only the
+> directory moved. Three published documents that also stated the fault outright were
+> corrected at the same time.
+
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans. Steps use checkbox (`- [ ]`) syntax for tracking.
 >
 > This is a **split plan** per [`superpowers/plan-conventions.md`](../../plan-conventions.md). Read this file plus the one task file you were handed. Do not read sibling task files — each is self-sufficient, and reading them all is the cost this layout exists to remove.

@@ -9,7 +9,7 @@ Two commands, from the repository root:
 
 ```bash
 export JAVA_HOME=~/wpilib/2026/jdk
-cd projects/testouts/t4-bad-kv
+cd projects/testouts/t4-ringing-flywheel
 ./gradlew generateResponse --console=plain
 cd ../../..
 poetry run python tools/gen_t4_plot.py

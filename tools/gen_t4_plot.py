@@ -2,8 +2,8 @@
 
     poetry run python tools/gen_t4_plot.py
 
-reads projects/testouts/t4-bad-kv/plots/response.csv and overwrites
-projects/testouts/t4-bad-kv/plots/response.png. The CSV itself comes from running the T4
+reads projects/testouts/t4-ringing-flywheel/plots/response.csv and overwrites
+projects/testouts/t4-ringing-flywheel/plots/response.png. The CSV itself comes from running the T4
 fixture's own ResponseRecorder (see plots/README.md) -- this script only turns that data into
 the picture, and only that half needs Python.
 """
@@ -21,8 +21,8 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt  # noqa: E402 -- backend must be selected first
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
-DEFAULT_CSV = REPO_ROOT / "projects" / "testouts" / "t4-bad-kv" / "plots" / "response.csv"
-DEFAULT_PNG = REPO_ROOT / "projects" / "testouts" / "t4-bad-kv" / "plots" / "response.png"
+DEFAULT_CSV = REPO_ROOT / "projects" / "testouts" / "t4-ringing-flywheel" / "plots" / "response.csv"
+DEFAULT_PNG = REPO_ROOT / "projects" / "testouts" / "t4-ringing-flywheel" / "plots" / "response.png"
 
 
 def read_response(csv_path: Path) -> tuple[list[float], list[float], list[float]]:

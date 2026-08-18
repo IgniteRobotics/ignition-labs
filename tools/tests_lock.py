@@ -62,7 +62,7 @@ PATTERNS = [
     "projects/testouts/*/src/main/java/**/harness/*.java",
     # Test-out fixtures nest one directory deeper than milestones, so the
     # `projects/*/...plant/...` pattern above does not reach them. Without this line
-    # `t4-bad-kv`'s T4FlywheelPlant is unlocked, and a student can make the fixture
+    # `t4-ringing-flywheel`'s T4FlywheelPlant is unlocked, and a student can make the fixture
     # pass by editing the plant instead of fixing the gains -- which is the whole
     # exercise. Its README tells them the plant is locked; this is what makes that true.
     "projects/testouts/*/src/main/java/**/plant/*.java",

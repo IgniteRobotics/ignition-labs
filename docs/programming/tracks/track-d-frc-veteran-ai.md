@@ -52,7 +52,7 @@ They are diagnostic, and a couple of them are genuinely worth your time.
 
 **M3** — add a command requiring two subsystems, bind it, and explain what happens if it is scheduled while another command already requires one of them. The answer is that the running command is interrupted and its `end(true)` fires. If you have been writing FRC code without a precise model of the scheduler, this is where you find out.
 
-**M4** — a simulated mechanism with a kV far too low and a kP compensating. Diagnose from the plot, fix it, and explain why the original tuning was fragile. **This is the one most veterans have to think about**, because a lot of working FRC code is exactly this: a big kP papering over a bad model, tuned at one setpoint on a full battery.
+**M4** — a simulated flywheel with deliberately wrong gains. Diagnose from the plot, fix it, and explain why the original tuning was fragile. **This is the one most veterans have to think about**, because a lot of working FRC code is exactly this shape: feedback tuned to paper over a model nobody characterized, at one setpoint on a full battery.
 
 **M5** — an auto that drifts. Determine from logs whether the cause is odometry drift, a mistuned path controller, or a blocking named command, *and* what rules out the other two. Guessing right without evidence does not pass — the skill is log-driven diagnosis.
 

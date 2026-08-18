@@ -126,7 +126,7 @@ ignition-labs/                   IgniteRobotics/ignition-labs — the repository
 │       ├── t1-find-the-bug/
 │       ├── t2-supplier-swap/
 │       ├── t3-scheduler-conflict/
-│       ├── t4-bad-kv/
+│       ├── t4-ringing-flywheel/
 │       └── t5-drifting-auto/
 ├── templates/                   M8 deliverables as real copyable files — unpublishable, same reason
 │   ├── SUBSYSTEM-README.md
@@ -540,7 +540,7 @@ The track axis, per D5. Each fixture is a standalone project under `projects/tes
 | **`t1-find-the-bug/`** | M1 | B, C, D | **Three rotating variants** — off-by-one, inverted comparison, integer truncation. Each is one short method plus a failing test. Mentor picks one |
 | **`t2-supplier-swap/`** | M2 | C, D | An interface with two implementations. Add a third and wire it in; then convert one method from `double` to `DoubleSupplier`. Given tests cover the third implementation; the supplier explanation is mentor-verified |
 | **`t3-scheduler-conflict/`** | M3 | C, D | A working `RobotContainer` with three subsystems. Add a command requiring two, bind it, explain interruption. The code half is test-covered; the explanation is the pass criterion and is mentor-verified |
-| **`t4-bad-kv/`** | M4 | D | A simulated mechanism with kV far too low and kP compensating, shipping with a pre-generated response plot. Reaches target, overshoots, oscillates |
+| **`t4-ringing-flywheel/`** | M4 | D | A flywheel velocity controller inherited from "last season," shipping with a pre-generated response plot. It reaches the setpoint, overshoots, rings for a few cycles, and settles short. Which gain is wrong is in the answer key, not here |
 | **`t5-drifting-auto/`** | M5 | D | **Three pre-recorded log sets**, one per root cause: odometry drift, mistuned path controller, blocking named command. Mentor picks one |
 
 **Why the rotating variants.** A single fixed T1 leaks: the second student to attempt it hears the answer from the first. Three variants and a mentor's choice cost little to author and make the fixture reusable across a cohort. The same logic drives T5's three log sets.

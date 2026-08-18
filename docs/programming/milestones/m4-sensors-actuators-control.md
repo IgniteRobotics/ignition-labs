@@ -18,7 +18,7 @@ Required before you commit to competition robot code.
 
 ## Test-out challenge
 
-You are given a simulated mechanism with deliberately wrong gains: a kV far too low, and a kP compensating for it. The mechanism reaches its target, overshoots, oscillates — and then settles a little *short* of the setpoint rather than on it. That last part is the most useful thing in the plot.
+You are given a simulated flywheel velocity controller with deliberately wrong gains. It reaches its target, overshoots, oscillates — and then settles a little *short* of the setpoint rather than on it. That last part is the most useful thing in the plot.
 
 1. Diagnose which term is wrong, from the response plot alone
 2. Fix it
