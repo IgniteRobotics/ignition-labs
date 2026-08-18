@@ -85,10 +85,20 @@ poetry run python tools/site_guard.py _site; echo "site_guard rc=$? (expect 0)"
 Then confirm the publishing boundary held against the two directories that are new:
 
 ```bash
-find _site -path "*templates*" -o -path "*m7-ai-assisted*" -o -path "*m8-ownership*" | head
+find _site \( -name "subsystem-readme*" -o -name "tuning-log*" -o -name "pr-description*" \
+   -o -name "competition-week-checklist*" -o -name "pit-documentation*" \
+   -o -name "post-season-retro*" -o -iname "*FEATURE-BACKLOG*" \
+   -o -iname "*DEFENSE-REVIEW*" -o -iname "*MISCALIBRATION*" \) | head
 ```
 
 Expected: no output. `templates/` and `projects/` are both outside `docs_dir` and unpublishable structurally — the markers Task 4 added to a published document must not have changed that.
+
+**Name the artifacts, not a path substring.** An earlier version of this check globbed
+`-path "*m7-ai-assisted*"` and appeared to fail: it matches
+`_site/programming/milestones/m7-ai-assisted-development/`, which is the milestone's
+published *prose* page, lives inside `docs_dir`, and is supposed to be there. The
+milestone document and the project directory share a name prefix, so a substring match
+cannot tell a leak from a correctly published page.
 
 - [ ] **Step 5: Status rows**
 
