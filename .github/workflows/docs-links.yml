@@ -28,3 +28,9 @@ jobs:
             --exclude-path .superpowers
             './**/*.md'
           fail: true
+
+      - name: Templates match their source regions
+        # tools/templates_sync.py is stdlib-only (re, sys, pathlib) -- this job has no
+        # Poetry setup, so plain python3 is correct here, same as given_tests_red.py in
+        # skeleton-integrity.yml.
+        run: python3 tools/templates_sync.py verify
