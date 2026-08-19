@@ -1,5 +1,6 @@
 package frc.robot.plant;
 
+import com.ctre.phoenix6.controls.ControlRequest;
 import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.sim.TalonFXSimState;
@@ -22,10 +23,13 @@ import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
  * #J_KG_M2} was derived from, and it is the number to start from again if {@link
  * #ARM_LENGTH_METERS} ever changes.
  *
- * <p><b>What this simulates, and what it does not.</b> Same limitation as {@link FlywheelPlant}:
- * {@link #step} feeds physics from the voltage {@link #setVoltage} was last called with, not from
- * anything read back off the {@code TalonFX}. Current limits, voltage compensation, ramp rates, and
- * any inversion or neutral-mode configuration applied through {@link #motor()} are inert.
+ * <p><b>How voltage reaches the physics.</b> Same path as {@link FlywheelPlant}: {@link #step}
+ * feeds the simulation from the voltage request the {@code TalonFX} is currently holding — {@code
+ * motor.getAppliedControl()} — so every {@link VoltageOut} that reaches this motor reaches the arm,
+ * whether it came from your control loop or from a SysId sweep. The same modelling limit applies
+ * too: it is the request that is simulated, not the device's response to it, so current limits,
+ * voltage compensation, ramp rates, and any inversion or neutral-mode configuration applied through
+ * {@link #motor()} are inert.
  *
  * <p><b>Homing exists because {@link #measuredPositionRadians()} boots wrong.</b> A relative
  * encoder reads zero — or here, an arbitrary offset — wherever the mechanism happens to be at
@@ -57,7 +61,6 @@ public final class ArmPlant implements AutoCloseable {
   private final TalonFXSimState simState;
   private final SingleJointedArmSim sim;
   private final VoltageOut voltageRequest = new VoltageOut(0.0);
-  private double commandedVolts;
   private double encoderOffsetRadians = ENCODER_BOOT_OFFSET_RADIANS;
 
   public ArmPlant(int canId) {
@@ -78,13 +81,21 @@ public final class ArmPlant implements AutoCloseable {
 
   /**
    * Commands a voltage. Clamped to the battery rail, and sent to the real {@code TalonFX} as a
-   * {@link VoltageOut}.
+   * {@link VoltageOut} — which is also how it reaches the physics, since {@link #step} reads the
+   * device's current request back.
    *
    * @param volts commanded voltage; positive drives the arm toward {@link #MAX_ANGLE_RADIANS}
    */
   public void setVoltage(double volts) {
-    commandedVolts = MathUtil.clamp(volts, -12.0, 12.0);
-    motor.setControl(voltageRequest.withOutput(commandedVolts));
+    motor.setControl(voltageRequest.withOutput(MathUtil.clamp(volts, -12.0, 12.0)));
+  }
+
+  /** The voltage the device has been asked for, clamped to the battery rail. */
+  private double appliedVolts() {
+    ControlRequest request = motor.getAppliedControl();
+    return request instanceof VoltageOut voltageOut
+        ? MathUtil.clamp(voltageOut.Output, -12.0, 12.0)
+        : 0.0;
   }
 
   /**
@@ -128,7 +139,7 @@ public final class ArmPlant implements AutoCloseable {
    * @param dtSeconds timestep, seconds
    */
   public void step(double dtSeconds) {
-    sim.setInput(commandedVolts);
+    sim.setInput(appliedVolts());
     sim.update(dtSeconds);
     double rotorRotations = sim.getAngleRads() / (2.0 * Math.PI) * GEARING;
     simState.setRawRotorPosition(rotorRotations);
@@ -137,8 +148,9 @@ public final class ArmPlant implements AutoCloseable {
   }
 
   /**
-   * @return the underlying {@code TalonFX}, for configuration practice. No configuration you apply
-   *     through it changes what {@link #step} simulates — see the class Javadoc.
+   * @return the underlying {@code TalonFX}, for configuration practice and for wiring SysId. A
+   *     voltage request sent through it drives this mechanism; configuration applied through it
+   *     does not change what {@link #step} simulates — see the class Javadoc.
    */
   public TalonFX motor() {
     return motor;
