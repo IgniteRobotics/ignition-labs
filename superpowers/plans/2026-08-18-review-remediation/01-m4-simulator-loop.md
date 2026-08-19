@@ -15,7 +15,9 @@ the student was never going to write.
 - Modify (if a CAN ID or step constant is needed): `projects/m4-control/src/main/java/frc/robot/Constants.java`
 - Test: `projects/m4-control/src/test/**` — read, do not edit
 
-**Consumes:** decision **D-1** from `00-plan.md`. Do not start without it.
+**Consumes:** decision **D-1**, resolved 2026-08-18 as **option A** — route the device's
+applied output into the plant. Read D-1 in `00-plan.md` for the reasoning and the risk it
+accepts before starting.
 **Produces:** a `projects/m4-control/` in which a student can run a SysId sweep in
 `simulateJava` and watch a homing command execute. Task 2 documents whatever this produces.
 **Lane:** `m4`
@@ -58,24 +60,46 @@ signal is permanently zero.
       Expected: `commandedVolts` written only in `setVoltage`; zero `CommandScheduler` and
       zero controller references under `src/main/`. Paste both outputs into the task report.
 
-- [ ] **Step 2: Implement the chosen D-1 option.**
-      Under **option A**, the shape is:
-      - `FlywheelPlant.step()` / `ArmPlant.step()` take their input from the device's applied
-        output (`simState.getMotorVoltage()` or equivalent) rather than a cached field, so
-        *any* control request — the student's loop or a SysId sweep — reaches the physics
-        through one path.
-      - A given seam that suspends the student's loop while a characterization routine owns
-        the mechanism. A `Subsystem` per mechanism with the SysId routine declaring it as a
-        requirement is the idiomatic form and is what the real robot does.
-      - `Robot.robotPeriodic()` runs `CommandScheduler.getInstance().run()` **before** the
-        student's update calls, matching M5's `Robot.java`.
-      - A `CommandXboxController` constructed in `RobotContainer`, with the SysId bindings
-        left as a marked TODO region — the binding is the student's, the controller is not.
-      - `FlywheelPlant.step()` publishes rotor position as well as velocity.
+- [ ] **Step 2: Implement option A.** Five pieces:
 
-      Under **option B** or **C**, follow `00-plan.md`'s description instead and skip the
-      scheduler/controller work only if the chosen option genuinely does not need it —
-      `homingCommand()` still has to be runnable in the simulator either way.
+      1. **One input path.** `FlywheelPlant.step()` and `ArmPlant.step()` take their input
+         from `simState.getMotorVoltage()` instead of the cached `commandedVolts` field.
+         Verified present on the pinned Phoenix 26.1.1:
+         ```
+         public final double getMotorVoltage();
+         ```
+         `setVoltage()` already calls `motor.setControl(voltageRequest.withOutput(...))`, so
+         the device genuinely receives the student's command — the cached field is pure
+         redundancy today and should go, not be kept in parallel. Two paths into the physics
+         is how this broke in the first place.
+
+      2. **Rotor position on the flywheel.** `FlywheelPlant.step()` publishes
+         `setRotorVelocity(...)` but no position; `ArmPlant` publishes both. Add
+         `setRawRotorPosition(...)` so the flywheel `TalonFX`'s Position signal is real —
+         SysId's analysis and any student inspecting the device both need it.
+
+      3. **Scheduler.** `Robot.robotPeriodic()` calls `CommandScheduler.getInstance().run()`
+         **before** the student's `updateFlywheel()`/`updateArm()` calls, matching M5's
+         `Robot.java`. Mandatory independently of SysId — `homingCommand()` is unreachable
+         without it (finding C2).
+
+      4. **A `Subsystem` per mechanism**, given, minimal. `SysIdRoutine.Mechanism` requires
+         one, and requirements are what let a sweep take the mechanism away from the
+         student's loop — which is the correct mechanism for suspending it, not a boolean
+         flag. This is the M3 interruption lesson doing real work one milestone later; say so
+         in a comment.
+
+      5. **A `CommandXboxController`** constructed in `RobotContainer`, with the SysId
+         bindings left as a marked TODO region. The controller is given; the binding is the
+         student's.
+
+      **Update the plants' class Javadoc in the same commit.** Both currently document the
+      old behaviour explicitly — *"`step` feeds the physics from the voltage `setVoltage` was
+      last called with — not from anything read back off the `TalonFX`… current limits,
+      voltage compensation, ramp rates… are all inert here."* That paragraph becomes false the
+      moment step 2.1 lands. Leaving it is worse than the original bug, because a student who
+      reads it will disbelieve their own correct plot. Task 2 owns the matching README
+      section.
 
 - [ ] **Step 3: Hold the line on fade level.**
       Re-read `docs/programming/teaching-repo-spec.md` §8's L1 row, then read your own diff
@@ -100,8 +124,21 @@ signal is permanently zero.
          `GEARING = 1.5`, Kraken X60).
       3. Schedule `homingCommand()` in the simulator and watch it drive to the limit and
          zero.
+      4. **Run the given suite against that reference implementation and confirm it is
+         green.** This is the check D-1 explicitly accepts risk on: option A changes the
+         plants' input path, and therefore the dynamics `FlywheelVelocityTest` and
+         `ArmGravityTest` were tuned against. A suite no right answer passes is as broken as
+         one every wrong answer passes.
+
       Report the actual numbers and the actual observed behaviour. "It works" is not a
       completed step.
+
+      **If the given tests fail against a correct implementation**, re-tune the *test*
+      thresholds to the new dynamics and say exactly what moved and why. One hard limit: if
+      the fix requires **loosening** a tolerance, stop and escalate rather than committing.
+      A looser gate means the new plant behaves worse than the old one, which would be
+      evidence against option A itself — and quietly widening a bound until it passes is the
+      precise failure this repository keeps producing.
 
 - [ ] **Step 5: Confirm the clean-clone invariant still holds.**
       ```bash

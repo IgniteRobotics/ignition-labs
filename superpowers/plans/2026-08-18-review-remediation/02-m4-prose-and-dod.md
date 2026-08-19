@@ -48,9 +48,30 @@ the spec allows and a student following it gets a harder bar than the curriculum
 
 - [ ] **Step 2: Rewrite the README's characterization instructions.**
       `projects/m4-control/README.md`, Part 1 step 2 and Part 2 step 2. They must name the
-      real seam, the real command, and the real artifact. If task 1 chose D-1 option B or C,
-      the word "SysId" may need to leave these steps entirely — say what the student does
-      instead, and say why, in one sentence.
+      real seam, the real command, and the real artifact. D-1 resolved as **option A**, so
+      SysId stays — the student really does bind the routines, run `simulateJava`, sweep, and
+      feed the log to the analyser. What changes is that it now works, plus whatever task 1
+      added that the student has to bind themselves (a `Subsystem`, a controller already
+      constructed for them).
+
+      **Then rewrite the section option A invalidates.** `projects/m4-control/README.md`
+      carries a section headed *"A modelling limit, on purpose"*:
+      > "Both plants integrate the voltage you command them with directly — they do not read
+      > it back through the `TalonFX`'s own simulation. One consequence: supply-current
+      > limits, voltage compensation, and ramp rates you configure through `motor()` are inert
+      > in this simulation. If you configure a current limit and see no change in your plot,
+      > you have not found a bug — you have found the edge of what this model represents."
+
+      After task 1 this is false in both directions: the plants *do* read the device back, and
+      a configured current limit *will* change the plot. Leaving it is worse than the original
+      defect, because a student who reads it will disbelieve a correct result. Task 1 fixed
+      the matching plant Javadoc; this is the README half.
+
+      Do not simply delete it. The honest replacement is stronger than what it replaces — the
+      plants now model what you configure, so configuration is worth getting right, which is
+      exactly the CAN-and-configuration lesson this milestone already teaches. Say that,
+      briefly, and note any limit that genuinely remains after task 1 (check the diff rather
+      than assuming there are none).
 
 - [ ] **Step 3: Fix the README's DoD item.**
       Replace *"You opened the stretch pull request against `Robot-2026`"* with the
@@ -62,9 +83,9 @@ the spec allows and a student following it gets a harder bar than the curriculum
       `docs/programming/milestones/m4-sensors-actuators-control.md`:
       - The **SysId** concept section (*"Stop guessing gains… Do it in simulation first. The
         workflow is identical and you cannot break anything"*) must be true of this project.
-      - The DoD item *"You ran SysId yourself and used the numbers it produced"* must
-        describe something the student can do. If D-1(C) was chosen, replace it with the
-        manual-characterization item and say plainly what changed.
+      - The DoD item *"You ran SysId yourself and used the numbers it produced"* now
+        describes something the student can actually do. Keep it; verify the surrounding
+        instructions match task 1's seam.
       - Leave the AI-posture line *"never ask an AI for a gain value"* exactly as it is. It
         is the best sentence on the page.
 

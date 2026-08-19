@@ -42,18 +42,33 @@ one file moving.
 
 Answer these before the tasks that depend on them. Each task names its blocker.
 
-**D-1 — how M4 gets a working SysId path.** Blocks task 1.
+**D-1 — how M4 gets a working SysId path. ✅ RESOLVED 2026-08-18 — option A.** Josh's call.
 
-| Option | Shape | Cost |
-|---|---|---|
-| **A. Route the device output into the plant** | `step()` reads the `TalonFX`'s applied voltage through `simState` instead of a cached `commandedVolts`; add a "characterizing" flag that suspends `updateFlywheel()`/`updateArm()`; add a `Subsystem` + controller + `CommandScheduler.run()` | Highest fidelity, closest to the real robot, most new given code at L1 |
-| **B. Give SysId its own harness entry point** | Keep the plants as they are; add a given `CharacterizationHarness` that sweeps voltage through `plant.setVoltage()` and writes a CSV the WPILib SysId analyser can ingest | Smaller, testable, but diverges from the real SysId workflow the milestone claims to teach |
-| **C. Drop SysId from M4's DoD** | Replace with a manual characterization procedure the plants already support (command known voltages, read steady-state velocity, derive kV) | Zero new code; loses "stop guessing gains — run the tool," which is the milestone's headline |
+**Route the device's applied output into the plant.** `FlywheelPlant.step()` and
+`ArmPlant.step()` take their input from `simState.getMotorVoltage()` rather than a cached
+`commandedVolts`, so *any* control request — the student's loop or a SysId sweep — reaches
+the physics through one path. Confirmed available on the pinned Phoenix 26.1.1.
 
-Recommendation: **A**, with the scheduler and a single `Subsystem` added as given wiring. The
-milestone already promises the real workflow, and B/C both make the promise smaller rather
-than making it true. But A adds given code at a fade level (L1) that is supposed to be
-thinning, so this is Josh's call, not a worker's.
+**Why A rather than B or C.** This is not added complexity; it is the canonical CTRE
+simulation pattern — read the device's applied output, step the physics, write position and
+velocity back — and the current code is the deviation from it. Done properly, SysId works as
+a *consequence* rather than as a feature anyone builds. It also retires the plants'
+documented modelling limit: current limits, voltage compensation, and ramp rates stop being
+inert, which is a real gain at the milestone where CAN configuration is the lesson.
+
+**The scheduler was never part of this decision.** `Robot.java` must call
+`CommandScheduler.getInstance().run()` regardless — `homingCommand()` returns a `Command` and
+nothing schedules it today (finding C2), and M3 and M5 both already do this. Given that
+baseline, plus the `Subsystem` that `SysIdRoutine.Mechanism` requires, A's marginal cost is
+roughly one method body per plant.
+
+**The risk this accepts, and it is the real one.** Changing the input path changes the
+dynamics the given tests were tuned against. `FlywheelVelocityTest` and `ArmGravityTest`
+assert reach-and-hold within a loose tolerance so they will probably survive — *probably* is
+not good enough, and the M4 reference implementation in `ignite-training-solutions` has to be
+re-run against the new plants. Task 1 step 5 and task 9 step 8 both gate on it. If the given
+tests need re-tuning, that is expected work, not a signal to abandon A; if they need
+*loosening*, stop and say so, because that would mean the new dynamics are worse.
 
 **D-2 — `Phoenix-2026` visibility. ✅ RESOLVED 2026-08-18 — Josh made the repository public.**
 Verified anonymously the same day: repository root, the pinned tree
