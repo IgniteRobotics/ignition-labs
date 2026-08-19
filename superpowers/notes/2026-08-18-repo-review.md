@@ -426,3 +426,80 @@ first-time mentor that the red block is expected.
 
 P1, P3, and P4 are judgement calls rather than defects; the plan proposes an option for
 each and does not assume the answer.
+
+
+---
+
+## Outcome — 2026-08-19
+
+Remediated by `superpowers/plans/2026-08-18-review-remediation/`, executed across three
+lanes plus a serialized integration task. Every claim below was verified by running
+something; the commands and their output are in the lane commits.
+
+### Closed
+
+| Finding | How |
+|---|---|
+| **C1, C2** | M4's plants take one input path through the device, and `Robot.robotPeriodic()` runs the scheduler and suspends the student's loop per mechanism. A SysId sweep moves the mechanism and `homingCommand()` is reachable. Verified headlessly: kV = 0.17902 V/(rot/s) fitted over 2004 samples against 0.17902 analytic |
+| **C3, C4** | Every CI sentence in `CONTRIBUTING.md` and M0 was re-derived by running the tool. The fabricated AI-reviewer workflow and the false spotless-on-compile claim are gone |
+| **C5** | `git-workflow.md`'s `git reset --hard` recipe replaced with branch-and-escalate |
+| **C6** | Closed upstream by D-2; `.lycheeignore`'s blanket removed, so CI now notices if it regresses |
+| **C7** | Both specs say Executed, dated |
+| **C8** | Re-measured, not copied: 46 Java files, Phoenix 26.1.1, seven lowercase templates, M5's chooser is a TODO |
+| **C9** | M4's stretch item is a stretch item again |
+| **C10** | M6 ships a given `Robot.java`/`Main.java`; the `@Logged` item has a vehicle, verified end to end by toggling the annotation and reading the `.wpilog` |
+| **C11** | `docs-links.yml` covers `projects/`, `.lycheeignore` is deleted, `site_guard` requires 13 pages instead of 6 |
+| **C12** | The expiring "zero tests" framing is dated or rewritten wherever it appears |
+| **P2 (M6 half)** | Dissolved by D-4 rather than mitigated — see below |
+| **P3** | D-3: both mentor docs re-homed under For Mentors with audience banners |
+| **S1, S2, S3, S5** | `SETUP.md` now covers accounts, identity, credentials, and Python tooling; the `JAVA_HOME` failure is a pre-flight check rather than a footnote; `.gitattributes` added |
+| **S4** | teaching-repo-spec §16.1, a dated prerequisite ledger with an owner per row |
+
+### Decisions
+
+- **D-1** (Josh) — route the device's applied output into the plant. **Shipped as
+  `getAppliedControl()`, not `getMotorVoltage()`**: the literal form reads 0.0 rot/s in a
+  stepped test because Phoenix advances that signal on wall-clock time. The bonus D-1
+  predicted — current limits and ramp rates becoming live — **did not happen**, and the
+  decision record was corrected before any prose was written from it.
+- **D-2** (Josh) — `Phoenix-2026` made public.
+- **D-3** (Josh) — mentor docs re-homed; `vision-subsystem.md` stays student-facing.
+- **D-4** (Josh) — **there is no queue.** Every student may open a pull request against any
+  class; duplication is fine. This retired a model asserted in **four** files, not the two
+  the plan scoped — the two it missed were both in the governing spec, one of them a §14
+  acceptance criterion that would have certified the retired model as correctly built.
+
+### Not fixed, deliberately
+
+- **P1** — M4 being the real complexity cliff. Tasks 1 and 2 make M4 completable; whether it
+  should be split is a curriculum question for a design session.
+- **P4** — no clickable link from the site to the code it cites.
+- **P5** — M0's mentor support. S1/S2/S3 removed the setup failures; the staffing question
+  is unchanged.
+- **P2 (M7 half)** — `FEATURE-BACKLOG.md` is still one entry and still unowned. Features
+  cannot be duplicated between students the way test targets can, so D-4 does not reach it.
+  Now recorded as the largest unmitigated risk in §15 and as the only open row in §16.1.
+
+### Open, found during remediation
+
+1. **M4's plants read only `VoltageOut`.** Any other request — `DutyCycleOut`,
+   `VelocityVoltage` — is silently 0.0 V: no exception, no log line, a motionless mechanism,
+   at the milestone whose lesson is CTRE configuration. Documented in both plants' Javadoc
+   and M4's README, which is the correct fix at L1. **Undecided:** whether a plant should
+   say so at runtime. Needs Josh.
+2. **`@IgniteRobotics/mentors` has one member.** CODEOWNERS is live, but one reviewer for
+   every protected path, who cannot approve their own pull request, is a bottleneck of one.
+3. **The `SETUP.md` screenshot has never existed.** §14 has asked for it since the spec was
+   written. Capture one or amend the criterion.
+4. **`.lycheeignore` is gone**, so a link rotting in `Robot-2026` or `Phoenix-2026` now
+   turns this repository's CI red. Correct, and new.
+
+### Verification run on the merged tree
+
+```
+pytest 137 passed · tests_lock verify rc=0 · templates_sync verify rc=0
+mkdocs build --strict rc=0 · site_guard rc=0 · lychee 275/275 OK
+cross-check: 10 of 10 solutions pass  (M4's needed re-syncing to get there)
+clean clone, 12 projects x 4 tasks: 38 green, 10 red — every red the expected one
+regression gate: drop-gear-ratio caught; flip-sign and widen-tolerance uncaught, as designed
+```

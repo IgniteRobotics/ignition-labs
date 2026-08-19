@@ -18,7 +18,7 @@ It runs **after every lane has landed**, on the merged branch, not on any single
 
 ---
 
-- [ ] **Step 1: Regenerate `tests.lock`.**
+- [x] **Step 1: Regenerate `tests.lock`.**
       Task 1 changed files under `projects/m4-control/src/main/java/frc/robot/plant/` and
       `harness/`, both of which are in the manifest. Task 6 may have touched M6's.
       ```bash
@@ -30,7 +30,7 @@ It runs **after every lane has landed**, on the merged branch, not on any single
       lane reported changing. An unexplained entry means something was edited that should not
       have been — that is the entire point of the mechanism, and it applies to us.
 
-- [ ] **Step 2: Fix the status line on both specs.**
+- [x] **Step 2: Fix the status line on both specs.**
       Both currently read:
       > `**Status:** Approved spec, not yet executed`
 
@@ -38,7 +38,7 @@ It runs **after every lane has landed**, on the merged branch, not on any single
       Every row of teaching-repo-spec §13's build-order table is `Done`, all nine milestone
       projects exist, and the site is live. Replace with an accurate status and a date.
 
-- [ ] **Step 3: Tick the acceptance criteria, honestly.**
+- [x] **Step 3: Tick the acceptance criteria, honestly.**
       teaching-repo-spec §14 and curriculum-spec §9.1 are entirely unchecked. Walk each box
       and mark it — checked, unchecked, or annotated with what is missing. Several are
       verifiable right now and several are not:
@@ -54,7 +54,7 @@ It runs **after every lane has landed**, on the merged branch, not on any single
         D7/D10 moved publication to MkDocs. Replace it with the MkDocs equivalent or delete
         it.
 
-- [ ] **Step 4: Retire the verified-facts drift.** All in the two specs.
+- [x] **Step 4: Retire the verified-facts drift.** All in the two specs.
 
       | Claim | Where | Correct value |
       |---|---|---|
@@ -72,7 +72,7 @@ It runs **after every lane has landed**, on the merged branch, not on any single
       cd ~/workspace/ignite/Robot-2026 && git ls-tree -r --name-only HEAD | grep -c '\.java$'
       ```
 
-- [ ] **Step 4b: Fix the surviving copy of the M0 CI claim in `resources.md`.**
+- [x] **Step 4b: Fix the surviving copy of the M0 CI claim in `resources.md`.**
       Surfaced by the `student-docs` lane after task 4, outside that task's file list and
       unowned by any lane. `docs/programming/resources.md` describes
       `Robot-2026/.github/workflows/pr-build-check.yml` as *"The CI students' PRs must
@@ -105,7 +105,7 @@ It runs **after every lane has landed**, on the merged branch, not on any single
       it into line with task 4's committed version rather than writing a third phrasing.
       Nobody can observe whether a mentor helped, which is why it went.
 
-- [ ] **Step 4c: Retire the reservation model from `teaching-repo-spec.md`.**
+- [x] **Step 4c: Retire the reservation model from `teaching-repo-spec.md`.**
       Found 2026-08-19 by a tree-wide sweep, after the plan scoped D-4's fix to
       `UNTESTED-TARGETS.md` and `projects/m7-ai-assisted/` alone. That scoping was wrong:
       the governing document asserts the retired model in three places, all verified
@@ -129,7 +129,7 @@ It runs **after every lane has landed**, on the merged branch, not on any single
       whatever task 7 lands in `UNTESTED-TARGETS.md`. Four files now describe this model and
       they must not describe it four different ways.
 
-- [ ] **Step 5: Create a prerequisite ledger.**
+- [x] **Step 5: Create a prerequisite ledger.**
       Three separate one-line operational facts live in three places with nothing tracking
       which are done:
       - `.github/CODEOWNERS` warns in its own header that `@IgniteRobotics/mentors` must be
@@ -150,7 +150,7 @@ It runs **after every lane has landed**, on the merged branch, not on any single
       `docs/programming/OPERATIONS.md` if it grows past a handful. One place, each row
       dated, each row either done or naming who owns it.
 
-- [ ] **Step 6: Update the built-milestones status row.**
+- [x] **Step 6: Update the built-milestones status row.**
       `docs/programming/README.md`'s Status table. The current entry is one ~250-word
       sentence — it has been appended to at every build-order step and is now the least
       readable paragraph in the repository. Rewrite it as a table with one row per milestone
@@ -160,7 +160,7 @@ It runs **after every lane has landed**, on the merged branch, not on any single
       Also refresh teaching-repo §13's status column if anything in this plan changed a
       step's state.
 
-- [ ] **Step 7: Run every gate, on the merged tree.**
+- [x] **Step 7: Run every gate, on the merged tree.**
       ```bash
       export JAVA_HOME=~/wpilib/2026/jdk
       poetry run pytest
@@ -190,12 +190,12 @@ It runs **after every lane has landed**, on the merged branch, not on any single
 
       And the regression gate, all three patches, confirming a clean tree afterward.
 
-- [ ] **Step 8: Re-run the solutions cross-check.**
+- [x] **Step 8: Re-run the solutions cross-check.**
       `../ignite-training-solutions`, `tools/cross-check.sh`. Spec §11.2: a milestone shipped
       without a passing solution is not shipped. Task 1 changed M4's given code, so the M4
       solution is the one most likely to have broken. Report actual output.
 
-- [ ] **Step 9: Read the whole diff for leaked answers and stray files.**
+- [x] **Step 9: Read the whole diff for leaked answers and stray files.**
       ```bash
       git diff main --stat
       git status --short
@@ -205,7 +205,7 @@ It runs **after every lane has landed**, on the merged branch, not on any single
       never-commit-a-reference-implementation rule applies to this task as much as to any
       other, and this is the task most likely to be carrying someone else's leftovers.
 
-- [ ] **Step 10: Write the review record.**
+- [x] **Step 10: Write the review record.**
       Append a short outcome section to
       `superpowers/notes/2026-08-18-repo-review.md`: which findings are closed, which were
       deliberately not fixed and why, and which decisions (D-1 … D-4) were taken and by whom.
