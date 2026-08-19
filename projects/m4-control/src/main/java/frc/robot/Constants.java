@@ -17,6 +17,13 @@ public final class Constants {
    */
   public static final double SIM_STEP_SECONDS = 0.020;
 
+  public static final class OperatorConstants {
+    private OperatorConstants() {}
+
+    /** USB port the driver's controller is plugged into, as the driver station numbers them. */
+    public static final int DRIVER_CONTROLLER_PORT = 0;
+  }
+
   public static final class FlywheelConstants {
     private FlywheelConstants() {}
 
