@@ -14,10 +14,11 @@ d05456923d2eadb9a079e64df29cb5d7c932e3464830dec7f0f3ed18a81cd550  projects/m3-co
 a03a9a05362df0c2fbd02cedd60b3344cd9a48015d792b7263ef2caa2beaaa2c  projects/m3-command-based/src/test/java/frc/robot/SchedulerInterruptionTest.java
 c8a2add7f8c508b19841938ab65ff3bf9c613d426f6d3a56cc32c0631b1fc131  projects/m3-command-based/src/test/java/frc/robot/harness/DeliverablesFixture.java
 c6773a773353cecb5abd8ffcfbf5a5e0e6c583bc8966eaf29b4bd321ba570e41  projects/m4-control/src/main/java/frc/robot/harness/M4Deliverables.java
+69cd7317782ea9497ff2d59ed6d662b87989044f9fc24581b58e17c3e42abcaf  projects/m4-control/src/main/java/frc/robot/harness/MechanismSubsystem.java
 14cb48790913df1a210bb32ae663fa49f208343c857408f04e81141e95ae06c8  projects/m4-control/src/main/java/frc/robot/harness/PlotHarness.java
-8eab5336923de4f3aafc0bb3d82d1097b6c014be04aaf78e3eec725d666f41cf  projects/m4-control/src/main/java/frc/robot/harness/SysIdWiring.java
-361e5915288f2f0c25f9f2f31e9165fb48051a9fd158fe7178f9578595a3474e  projects/m4-control/src/main/java/frc/robot/plant/ArmPlant.java
-d0158318945409c3aba6d33b1c8ea51051cb75a821f3110ec1491a1350e34f42  projects/m4-control/src/main/java/frc/robot/plant/FlywheelPlant.java
+6b9652a18363263589083a11284c1967118e9e3c177da5f835c548f7c418788c  projects/m4-control/src/main/java/frc/robot/harness/SysIdWiring.java
+b5f2e8ab619255d4deb262c1f40b27474da5b6e75835d7e79cb2b0fd20712ba0  projects/m4-control/src/main/java/frc/robot/plant/ArmPlant.java
+9bb3e1b1fb958ca2b3e76033a455b6f3aa351e7fe30c27b869b2090b23f71c3a  projects/m4-control/src/main/java/frc/robot/plant/FlywheelPlant.java
 c20d74021262b5ae83a5ef0735e5d76b6fb7064f84f4704538419fca982b6441  projects/m4-control/src/test/java/frc/robot/ArmGravityTest.java
 60893fa82127fafc25dfdcca1b44a5bd219e96bc0346940d6448cd68eb3f0fce  projects/m4-control/src/test/java/frc/robot/ArmHomingTest.java
 9c2ab9ecc55be8179548796e163cfff2d0e6cfb45c465fdeb1a664d2a7831a30  projects/m4-control/src/test/java/frc/robot/FlywheelVelocityTest.java
