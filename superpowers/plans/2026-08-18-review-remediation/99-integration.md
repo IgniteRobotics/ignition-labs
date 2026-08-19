@@ -72,6 +72,63 @@ It runs **after every lane has landed**, on the merged branch, not on any single
       cd ~/workspace/ignite/Robot-2026 && git ls-tree -r --name-only HEAD | grep -c '\.java$'
       ```
 
+- [ ] **Step 4b: Fix the surviving copy of the M0 CI claim in `resources.md`.**
+      Surfaced by the `student-docs` lane after task 4, outside that task's file list and
+      unowned by any lane. `docs/programming/resources.md` describes
+      `Robot-2026/.github/workflows/pr-build-check.yml` as *"The CI students' PRs must
+      pass — build plus `spotlessCheck`"*, tagged **M0**. That is the same false claim task
+      4 removed from `m0-tooling-and-git.md`: an M0 pull request lands in `ignition-labs`
+      and is gated by this repository's own `student-check.yml`, not by `Robot-2026`'s
+      workflow. The row is worth keeping — the file is genuinely worth reading — but the
+      description and the milestone tag both have to change. Check task 4's committed
+      wording on `lane/rr-student-docs` first and match it rather than inventing a second
+      phrasing.
+
+      **Reassigned 2026-08-19 to the `student-docs` lane**, which still held task 4's
+      context. This step is therefore a **verification**, not an edit: confirm the row is
+      fixed on the merged tree and that no third copy of the claim survives anywhere under
+      `docs/`. If the lane did not land it, do it here.
+
+      **The sweep found a third copy, in a file only this task may touch.**
+      `curriculum-spec.md` §4.2, M0's Resources line (~line 182), carries the same
+      `pr-build-check.yml` reference under M0 with the same false framing. Fix it here, and
+      match the wording the lane committed in `3ebaf9d` — which keeps the row, states
+      plainly that it is `Robot-2026`'s CI and not this repository's, names
+      `student-check.yml` as what gates an M0 pull request, and re-tags it **M4** on the
+      grounds that M4 is a student's first real pull request to `Robot-2026`
+      (`robot-repo-ladder.md`; M2 and M3 are read-only clones). Check that reasoning before
+      copying the tag — if it is wrong, it is now wrong in two files.
+
+      **Same section, same origin:** `curriculum-spec.md` line ~177 still carries the
+      unverifiable M0 Definition-of-Done item *"`spotlessCheck` passed without a mentor
+      fixing it for them"*, which task 4 already replaced in `m0-tooling-and-git.md`. Bring
+      it into line with task 4's committed version rather than writing a third phrasing.
+      Nobody can observe whether a mentor helped, which is why it went.
+
+- [ ] **Step 4c: Retire the reservation model from `teaching-repo-spec.md`.**
+      Found 2026-08-19 by a tree-wide sweep, after the plan scoped D-4's fix to
+      `UNTESTED-TARGETS.md` and `projects/m7-ai-assisted/` alone. That scoping was wrong:
+      the governing document asserts the retired model in three places, all verified
+      verbatim. No lane may touch this file, so all three land here.
+
+      | Line | Current text | Why it contradicts D-4 |
+      |---|---|---|
+      | 112 | `UNTESTED-TARGETS.md  ← mentor-maintained M6 queue (§6.5)` | calls it a queue in the tree legend |
+      | 300 | *"…checked off as pull requests land. Turns a one-shot bragging right into a queue."* | asserts depletion as the file's entire purpose |
+      | 655 | `- [ ] UNTESTED-TARGETS.md exists, has an owner, and is checked off as M6 pull requests land` | makes depletion an acceptance criterion |
+
+      **Line 300 carries a second defect** — "`Robot-2026`'s 47 Java files" — which step 4's
+      table already corrects to **46**. Fix both in one edit; do not fix the count and leave
+      the queue framing, which is what reading these tables separately would produce.
+
+      Line 666's risk-table row (*"`UNTESTED-TARGETS.md` goes stale and M6 loses its target
+      list"*) was checked and is **innocent** — a shortlist can still go stale, and the row
+      is about ownership, not reservation. Leave it.
+
+      Match the language the lanes committed, in `b6d3be5` (`robot-repo-ladder.md`) and
+      whatever task 7 lands in `UNTESTED-TARGETS.md`. Four files now describe this model and
+      they must not describe it four different ways.
+
 - [ ] **Step 5: Create a prerequisite ledger.**
       Three separate one-line operational facts live in three places with nothing tracking
       which are done:
@@ -153,3 +210,16 @@ It runs **after every lane has landed**, on the merged branch, not on any single
       `superpowers/notes/2026-08-18-repo-review.md`: which findings are closed, which were
       deliberately not fixed and why, and which decisions (D-1 … D-4) were taken and by whom.
       A review whose outcome is not written down gets re-run from scratch next season.
+
+      **Carry this forward as an open item, found 2026-08-19 while reviewing task 2.**
+      `FlywheelPlant.appliedVolts()` and `ArmPlant`'s equivalent return `0.0` for any
+      request that is not a `VoltageOut` — `request instanceof VoltageOut ? clamp(...) :
+      0.0`. A student who tries `DutyCycleOut`, or reaches for `VelocityVoltage` to feel
+      what on-device control does, gets a motionless mechanism with no exception, no
+      warning, and no log line, at the milestone whose lesson is CTRE configuration. Task 2
+      documents it in the README and the plants' Javadoc already state it, which is the
+      correct fix at L1 and is done. What is **not** decided is whether the plants should
+      say so at runtime — a one-line warning on the first non-`VoltageOut` request would
+      turn a silent dead end into a sentence. That is a code change to given files, it is
+      not in this plan's scope, and it wants Josh's call on whether an M4 plant is allowed
+      to talk. Record it; do not implement it here.
