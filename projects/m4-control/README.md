@@ -142,6 +142,13 @@ change in your plot, you have not found a bug — you have found the edge of wha
 represents. `FlywheelPlant`'s and `ArmPlant`'s Javadoc say the same thing, in the file you'll
 actually be reading.
 
+There is a second edge in that same path, and it is easier to hit by accident: the plant only
+reads a `VoltageOut` request back. Send the motor anything else — a `DutyCycleOut`, a
+`VelocityVoltage` if you go looking for what an on-device closed loop feels like — and this
+plant reads zero volts. No exception, no log line, just a mechanism that sits still. Your own
+`setVoltage(...)` and a SysId sweep both happen to send `VoltageOut`, which is the only reason
+either one moves anything.
+
 ---
 
 ## Definition of done
