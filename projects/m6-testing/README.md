@@ -28,6 +28,7 @@ beat an abandoned attempt at full coverage.
 |---|---|
 | `plant/LaunchProfile.java` | The practice target. Real launch math, no hardware. Read it — you cannot test a contract you have not read |
 | `plant/ShooterFlywheel.java` | One motor, and the reason `AutoCloseable` matters |
+| `Robot.java`, `Main.java` | Runs `ShooterFlywheel` under simulation so you have something to log. Given, complete — the one exception is described in `Robot.java`'s Javadoc and in Part 4 below |
 | `src/test/.../WorkedExampleTest.java` | The one worked example. Read it, then write your own. **Do not edit it** |
 | `src/test/.../support/PhoenixTestSupport.java` | The CTRE simulation timing setup. It stays here — see below |
 | `regressions/` | Deliberate one-line breaks. [`regressions/README.md`](regressions/README.md) |
@@ -66,6 +67,17 @@ that is what `AutoCloseable` buys you.
 
 Two different recorders, two different failure pictures. Knowing which one you're looking
 at is part of the exercise.
+
+**Part 4 — produce a log yourself.** `Robot.java` is given: it runs `ShooterFlywheel` under
+simulation, logging nothing yet — its class Javadoc says exactly which field to change.
+
+```bash
+./gradlew simulateJava     # enable the robot from the Sim GUI, let it run a few seconds
+```
+
+Open the log it just wrote in AdvantageScope — nothing to find yet. Swap the field's
+`@NotLogged` for `@Logged` in `Robot.java`, run it again, and find the signal this time. Put
+the annotation back afterward; nothing else in the file changes.
 
 ---
 
@@ -106,7 +118,7 @@ Mechanically checked:
 Mentor verifies:
 
 - [ ] Both log questions answered **with evidence**, and the alternative ruled out
-- [ ] You added `@Logged` to something and saw it appear in the log
+- [ ] You added `@Logged` to a field in `Robot.java`, ran `./gradlew simulateJava`, and saw the signal appear in the log
 - [ ] You can explain why not to instantiate `TimedRobot` in a test
 - [ ] You can explain the difference between what simulation proves and what it does not
 

@@ -158,12 +158,20 @@ Part 1 step 4 is the point of the whole exercise. A test you have never seen fai
 **Part 2 — test against simulated hardware.**
 1. Write one test that constructs a simulated Phoenix device and asserts on its behavior
 2. Get the timing right using CTRE's documented setup
-3. Make the subsystem `AutoCloseable` and confirm two tests in the same file both pass
+3. Make the class under test `AutoCloseable` and confirm two tests in the same file both pass
 
 **Part 3 — diagnose from a real log.**
 1. Open the logs shipped in `projects/m6-testing/logs/` in AdvantageScope — `logs/QUESTIONS.md` says which log answers which question
 2. Answer a specific question a mentor gives you — did the shooter reach setpoint before it fired? did the auto routine follow its path? when did the intake stall?
 3. Show the evidence, not just the answer
+
+**Part 4 — produce a log yourself.** `projects/m6-testing/src/main/java/frc/robot/Robot.java` is
+given: it runs the sandbox's `ShooterFlywheel` under simulation, but logs nothing yet — see the
+class Javadoc for exactly which field to change.
+1. Run `./gradlew simulateJava` and enable the robot from the Sim GUI
+2. Open the log it just wrote in AdvantageScope. There is nothing to find yet
+3. Swap the field's `@NotLogged` for `@Logged`, run it again, and find the signal this time
+4. Put the annotation back — this file is otherwise given, and nothing else in it changes
 
 ## Definition of done
 
@@ -171,9 +179,9 @@ Part 1 step 4 is the point of the whole exercise. A test you have never seen fai
 - [ ] `./gradlew test` runs green locally
 - [ ] You demonstrated a test failing on an introduced regression, then passing after the fix
 - [ ] One test runs against a simulated Phoenix device with correct timing
-- [ ] A subsystem implements `AutoCloseable` and two tests in one file both pass
+- [ ] The class under test implements `AutoCloseable` and two tests in one file both pass
 - [ ] You answered a diagnostic question from a real match log, with evidence
-- [ ] You added `@Logged` to something and saw it appear in the log
+- [ ] You added `@Logged` to a field in `Robot.java`, ran `./gradlew simulateJava`, and saw the signal appear in the log
 - [ ] You can explain why not to instantiate `TimedRobot` in a test
 - [ ] You can explain the difference between what simulation proves and what it does not
 
