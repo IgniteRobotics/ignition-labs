@@ -22,11 +22,11 @@ This is the only pull request you will ever open against `IgniteRobotics/ignitio
 # 1. Fork IgniteRobotics/ignition-labs on github.com  →  <your-handle>/ignition-labs
 
 # 2. Clone YOUR fork, not the team's
-git clone git@github.com:<your-handle>/ignition-labs.git
+git clone https://github.com/<your-handle>/ignition-labs.git
 cd ignition-labs
 
 # 3. Point "upstream" at the team repository so you can pull updates later
-git remote add upstream git@github.com:IgniteRobotics/ignition-labs.git
+git remote add upstream https://github.com/IgniteRobotics/ignition-labs.git
 
 # 4. Branch. Never work on main.
 git checkout -b add-<your-handle>-contributor
@@ -97,9 +97,9 @@ At M4 and M6 you also work in `Robot-2026`. Same shape as M0, different reposito
 
 ```bash
 # Fork IgniteRobotics/Robot-2026 on github.com — once. You keep it.
-git clone git@github.com:<your-handle>/Robot-2026.git
+git clone https://github.com/<your-handle>/Robot-2026.git
 cd Robot-2026
-git remote add upstream git@github.com:IgniteRobotics/Robot-2026.git
+git remote add upstream https://github.com/IgniteRobotics/Robot-2026.git
 git checkout -b m6-launchcalculator-tests
 # ...work...
 git push -u origin m6-launchcalculator-tests
@@ -116,7 +116,7 @@ See [the real-repo ladder](robot-repo-ladder.md) for what you do in that reposit
 Once you have cleared the Kickoff Readiness Gate you have write access to `Robot-2026`. No fork, no `upstream` remote — you clone the team repository directly and branch on it, like every other member of the team.
 
 ```bash
-git clone git@github.com:IgniteRobotics/Robot-2026.git
+git clone https://github.com/IgniteRobotics/Robot-2026.git
 cd Robot-2026
 git checkout -b intake-current-limiting
 ```
@@ -134,6 +134,16 @@ The git ritual and the commit-access policy are the same boundary. That is delib
 ## When it goes wrong
 
 **"My pull request has no checks."** Actions are not enabled on your fork. See the warning in the M0 section.
+
+**`git push` asks for a username and password, and my GitHub password does not work.** Expected, once. Every URL here is `https://`, which means **reading** needs nothing — you can clone any of these repositories with no setup at all — but **pushing** needs to prove who you are, and GitHub stopped accepting account passwords for this in 2021.
+
+Do it once, with the GitHub CLI, and never think about it again:
+
+```bash
+gh auth login        # choose GitHub.com, then HTTPS, then log in with a browser
+```
+
+That stores a credential git uses automatically from then on. If you do not have `gh`, the alternative is a **personal access token** used in place of the password — ask a mentor rather than pasting one from a tutorial, because a token is a password and the tutorials are careless about where you put it.
 
 **"Git says my branch is behind."** Someone updated the team repository. `git fetch upstream && git merge upstream/main`.
 

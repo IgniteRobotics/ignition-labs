@@ -198,8 +198,8 @@ This repository is the only thing a student forks at M0, because it is the only 
 
 ```
 fork IgniteRobotics/ignition-labs  →  jsmith/ignition-labs
-git clone git@github.com:jsmith/ignition-labs.git
-git remote add upstream git@github.com:IgniteRobotics/ignition-labs.git
+git clone https://github.com/jsmith/ignition-labs.git
+git remote add upstream https://github.com/IgniteRobotics/ignition-labs.git
 git checkout -b add-jsmith-contributor
     …create contributors/jsmith.md, run spotlessApply on FormatMe.java…
 PR: jsmith/ignition-labs:add-jsmith-contributor → IgniteRobotics/ignition-labs:main
