@@ -47,13 +47,52 @@ def missing_pages(site_root: Path, required: list[str]) -> list[str]:
     return sorted(missing)
 
 
+# Deliberately hardcoded, not derived from mkdocs.yml's nav: at runtime.
+#
+# Derivation from nav: was tried and rejected. `mkdocs build` (even --strict)
+# renders every .md file under docs_dir into its site path regardless of
+# whether nav: references it -- a page removed from nav still gets an
+# index.html at its usual slug, as an unlinked orphan. That means a
+# nav-derived REQUIRED_PAGES shrinks in lockstep with a bad nav edit and can
+# never observe the failure it exists to catch: a page silently dropped from
+# nav (finding C11b). A static list stays a page short when nav does,
+# independent of whatever nav currently says, which is the only way this
+# check can fail on a real regression. Verified by dropping a milestone's
+# nav: entry and rebuilding -- the orphaned page still renders, and only a
+# hardcoded REQUIRED_PAGES catches the drop (tests/test_site_guard.py has
+# the regression test).
+#
+# Update this list by hand when a milestone or track page is added, renamed,
+# or removed on purpose -- keep it in step with mkdocs.yml's nav:.
 REQUIRED_PAGES = [
-    "programming/git-workflow",
-    "programming/robot-repo-ladder",
-    "programming",  # renders programming/README.md -> programming/index.html
-    "programming/teaching-repo-spec",
+    "",  # Home: index.md -> _site/index.html
     "SETUP",
     "CONTRIBUTING",
+    "programming",  # renders programming/README.md -> programming/index.html
+    "programming/git-workflow",
+    "programming/robot-repo-ladder",
+    "programming/UNTESTED-TARGETS",
+    "programming/ai-use-standard",
+    "programming/student-deliverables",
+    "programming/resources",
+    "programming/tracks/track-a-new-to-programming",
+    "programming/tracks/track-b-non-oo-programmer",
+    "programming/tracks/track-c-oo-no-frc",
+    "programming/tracks/track-d-frc-veteran-ai",
+    "programming/milestones/m0-tooling-and-git",
+    "programming/milestones/m1-java-fundamentals",
+    "programming/milestones/m2-oop-interfaces-lambdas",
+    "programming/milestones/m3-wpilib-command-based",
+    "programming/milestones/m4-sensors-actuators-control",
+    "programming/milestones/m5-autonomous-odometry-vision",
+    "programming/milestones/m6-simulation-telemetry-testing",
+    "programming/milestones/m7-ai-assisted-development",
+    "programming/milestones/m8-in-season-deliverables",
+    "VISION_GUIDE",
+    "vision-subsystem",
+    "field-boundary-speed-limiting",
+    "programming/curriculum-spec",
+    "programming/teaching-repo-spec",
 ]
 
 

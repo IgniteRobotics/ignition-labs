@@ -104,3 +104,37 @@ def test_present_setup_and_contributing_pages_are_not_reported(tmp_path):
         tmp_path, ["SETUP/index.html", "CONTRIBUTING/index.html"]
     )
     assert missing_pages(site, ["SETUP", "CONTRIBUTING"]) == []
+
+
+def test_required_pages_include_all_nine_milestones_and_four_tracks():
+    # This is the regression test for C11b: REQUIRED_PAGES used to list six
+    # pages, so nine milestone pages and four track pages were never
+    # required to render.
+    for n in range(9):
+        assert any(
+            f"m{n}-" in slug or slug.endswith(f"m{n}") for slug in REQUIRED_PAGES
+        ), f"no required page for milestone {n}"
+    for letter in "abcd":
+        assert any(
+            f"track-{letter}-" in slug for slug in REQUIRED_PAGES
+        ), f"no required page for track {letter}"
+
+
+def test_page_dropped_from_nav_and_disk_is_reported(tmp_path):
+    # REQUIRED_PAGES is a static, hand-maintained list rather than derived
+    # from mkdocs.yml's nav: at runtime -- see the comment above
+    # REQUIRED_PAGES in tools/site_guard.py for why: mkdocs still renders a
+    # page dropped from nav: as an unlinked orphan, so a nav-derived list
+    # would shrink in lockstep with the bad edit and could never observe
+    # this failure. A static list stays a page short of REQUIRED_PAGES when
+    # the page (and its nav: entry) are both removed, which is what actually
+    # catches C11b's "silently dropped from nav" scenario.
+    site = _make_site(
+        tmp_path,
+        [f"{slug}/index.html" if slug else "index.html" for slug in REQUIRED_PAGES],
+    )
+    assert missing_pages(site, REQUIRED_PAGES) == []
+
+    dropped = "programming/milestones/m4-sensors-actuators-control"
+    (site / dropped / "index.html").unlink()
+    assert missing_pages(site, REQUIRED_PAGES) == [dropped]

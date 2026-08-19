@@ -1,6 +1,0 @@
-# Created by Plan 3 (M6) alongside UNTESTED-TARGETS.md. Remove this line then.
-.*UNTESTED-TARGETS\.md
-# Requires authentication; verified manually each season.
-https://github\.com/IgniteRobotics/.*
-# Not live until GitHub Pages is enabled (see superpowers/notes/2026-08-07-ignition-labs-handoff.md).
-https://igniterobotics\.github\.io/ignition-labs/
