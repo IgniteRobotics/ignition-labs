@@ -59,6 +59,23 @@ a *consequence* rather than as a feature anyone builds. It also retires the plan
 documented modelling limit: current limits, voltage compensation, and ramp rates stop being
 inert, which is a real gain at the milestone where CAN configuration is the lesson.
 
+**⚠️ As built (2026-08-18, commit `e0b8fdd`) — the letter changed and the bonus did not
+happen.** Task 1 implemented A's principle, one input path through the device, but via
+`motor.getAppliedControl()` rather than `simState.getMotorVoltage()`. The literal version
+does not work: `TalonFXSimState.getMotorVoltage()` is advanced by Phoenix's wall-clock device
+simulation, not by a test's stepped loop, so a *correct* reference implementation reads
+`0.0` rot/s after five simulated seconds at full command. Three identical 250-tick runs at
+6.0 V differing only in real time elapsed produced 0.0000, 33.5122, and 33.5122 rot/s.
+Phoenix exposes no hook to advance that simulation from a test, and it is the same wall-clock
+coupling M4's README already cites as why this milestone writes its loop in Java rather than
+on the TalonFX. `getAppliedControl()` returns the request `setControl` caches synchronously,
+so it behaves identically in a stepped test and in `simulateJava`.
+
+**Consequence for anyone writing prose from this decision:** current limits, voltage
+compensation, and ramp rates **remain inert**. The paragraph above claiming they "stop being
+inert" describes the version that was not shippable. The plants' Javadoc states the real
+limit; task 2's README section must match the Javadoc, not this paragraph.
+
 **The scheduler was never part of this decision.** `Robot.java` must call
 `CommandScheduler.getInstance().run()` regardless — `homingCommand()` returns a `Command` and
 nothing schedules it today (finding C2), and M3 and M5 both already do this. Given that
