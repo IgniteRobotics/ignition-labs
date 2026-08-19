@@ -171,7 +171,7 @@ Internal references. Paths are relative to `~/workspace/ignite/`. These are not 
 | `Robot-2026/src/main/java/frc/robot/subsystems/vision/VisionSubsystem.java` | PhotonVision integration and pose fusion. Also one of only two well-documented files in the repo | M5 |
 | `Robot-2026/src/main/java/frc/robot/subsystems/drive/DriveMotorConfigs.java` | **A deliberate teaching target.** Four near-identical `create*Slot0Configs()` methods where CTRE's `.clone()` pattern would cut real duplication. Safe, small, real refactor | M4 |
 | `Robot-2026/build.gradle` | JUnit 5 is configured and entirely unused. The M6 starting point | M6 |
-| `Robot-2026/.github/workflows/pr-build-check.yml` | The CI students' PRs must pass — build plus `spotlessCheck` | M0 |
+| `Robot-2026/.github/workflows/pr-build-check.yml` | The CI your Robot-2026 pull requests must pass — build plus `spotlessCheck`. Not this repository's CI: `ignition-labs` runs its own `student-check.yml`, which is what your M0 pull request is checked by | M4 |
 | `Robot-2026/.github/prompts/code-review-prompt.md` | Ignite's coding standards. Currently only a bot reads them | M3–M7 |
 | `Robot-2026/src/main/java/frc/robot/preferences/` | `RobotPreference<T>` — an abstract generic class implementing `Supplier<T>`, with four concrete subclasses. Generics, abstraction, inheritance, and the supplier idea in five short files | M2 |
 | `Robot-2026/src/main/java/frc/robot/Constants.java` and `.../intake/IntakeConstants.java` | `static final` in production — and three different naming conventions across two files, none of them written down | M1 |

@@ -135,24 +135,19 @@ The git ritual and the commit-access policy are the same boundary. That is delib
 
 **"My pull request has no checks."** Actions are not enabled on your fork. See the warning in the M0 section.
 
-**`git push` asks for a username and password, and my GitHub password does not work.** Expected, once. Every URL here is `https://`, which means **reading** needs nothing — you can clone any of these repositories with no setup at all — but **pushing** needs to prove who you are, and GitHub stopped accepting account passwords for this in 2021.
-
-Do it once, with the GitHub CLI, and never think about it again:
-
-```bash
-gh auth login        # choose GitHub.com, then HTTPS, then log in with a browser
-```
-
-That stores a credential git uses automatically from then on. If you do not have `gh`, the alternative is a **personal access token** used in place of the password — ask a mentor rather than pasting one from a tutorial, because a token is a password and the tutorials are careless about where you put it.
+**`git push` asks for a username and password, and my GitHub password does not work.** You skipped the authentication step. See [Setup](../SETUP.md), step 3.
 
 **"Git says my branch is behind."** Someone updated the team repository. `git fetch upstream && git merge upstream/main`.
 
-**"I committed to main by accident."** Common, fixable, not a big deal. Make a branch at your current position, then reset main back:
+**"I committed to main by accident."** Common, fixable, not a big deal. Make a branch at your current position — this is the whole fix, and it is not destructive:
 
 ```bash
 git branch m3-command-based        # save your work on a new branch
-git reset --hard upstream/main     # put main back where it belongs
-git checkout m3-command-based      # carry on
 ```
+
+Main still has the extra commit sitting on it after that. Putting main back uses a
+command that can destroy uncommitted work (`reset --hard`), and it is not on M0's
+command list for exactly that reason — show a mentor and do it together the first
+time.
 
 **"I have a merge conflict."** Stop and ask a mentor. Conflicts are the one git situation genuinely worth learning with someone next to you, and nobody will think less of you for it.

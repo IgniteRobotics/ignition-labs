@@ -61,7 +61,7 @@ Do it now rather than at M6. M6's pull request is assessed; this one is practice
 
 **Your deliverable is a merged pull request adding tests to `Robot-2026`.** The `projects/m6-testing/` project is the warm-up that makes it writable; the real pull request is what you are actually graded on.
 
-Pick your target from [`UNTESTED-TARGETS.md`](UNTESTED-TARGETS.md) — a list of classes in `Robot-2026` that have no test coverage yet. Cross it off when your pull request merges.
+Pick your target from [`UNTESTED-TARGETS.md`](UNTESTED-TARGETS.md) — a shortlist of classes in `Robot-2026` worth testing. It is not a queue: nothing is reserved, and it is fine if another student picks the same class you did. If you both land on the same one, whoever merges second rebases and merges their test cases into the class the first student already added, rather than either of you fighting over who called it first.
 
 ### "Wait, isn't that circular?"
 

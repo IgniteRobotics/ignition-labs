@@ -28,12 +28,45 @@ java -version
 Expected: version 17. If you see something else, VS Code is not using the bundled
 JDK — ask a mentor rather than installing another Java.
 
-## 3. Fork and clone this repository
+## 3. Git and GitHub
+
+You need four things before the next step, and nothing more:
+
+1. **A GitHub account.** Free, at [github.com](https://github.com).
+2. **Git, installed and working.** The WPILib installer does **not** ship git.
+   ```bash
+   git --version
+   ```
+   macOS gets it from the Xcode Command Line Tools (`xcode-select --install` if the
+   command above fails). Windows gets it from
+   [Git for Windows](https://gitforwindows.org/), which also gives you a terminal.
+3. **Your identity.** Every commit records who made it:
+   ```bash
+   git config --global user.name "Your Name"
+   git config --global user.email "you@example.com"
+   ```
+4. **Authentication for pushing.** Every repository in this curriculum is public, so
+   **cloning and reading need no credentials at all.** Pushing your own commits does —
+   GitHub has not accepted your account password for that since 2021. Do this once:
+   ```bash
+   gh auth login        # choose GitHub.com, then HTTPS, then log in with a browser
+   ```
+   No `gh`? A **personal access token** works in place of a password. A token is a
+   password — ask a mentor rather than pasting one in from a tutorial.
+
+What it looks like when you skip one of these:
+
+> `remote: Support for password authentication was removed`, or a username-and-password
+> prompt on `git push` — you skipped step 4. Run `gh auth login`.
+>
+> `Author identity unknown` / `Please tell me who you are` — you skipped `git config`.
+
+## 4. Fork and clone this repository
 
 Follow [the git workflow](programming/git-workflow.md), M0 section. It has the
 exact commands.
 
-## 4. ⚠️ Enable Actions on your fork
+## 5. ⚠️ Enable Actions on your fork
 
 **Do this before you open your first pull request.**
 
@@ -48,7 +81,19 @@ broken, and it isn't.
 If you have already opened a pull request without doing this, enable Actions and
 then push any new commit to that branch — the checks will run.
 
-## 5. Verify the build
+## 6. Verify the build
+
+Before you build anything, check the JDK the WPILib installer bundled is actually the
+one in use — this is the single most likely build failure on a machine that already
+had a JDK on it:
+
+```bash
+java -version        # must say 17
+echo $JAVA_HOME       # if this points anywhere but the WPILib JDK, that is your problem
+```
+
+If GradleRIO's actual error is *"Dependency requires at least JVM runtime version
+17,"* this is why — you landed here for a reason.
 
 ```bash
 cd projects/m0-onboarding
@@ -62,7 +107,7 @@ If it fails, copy the **whole** error — not a screenshot of part of it — and
 it to a mentor. Build errors are diagnosable from their text and nearly impossible
 to guess at from a description.
 
-## 6. Verify the simulator
+## 7. Verify the simulator
 
 In VS Code: `Ctrl+Shift+P` (`Cmd+Shift+P` on macOS) → **"WPILib: Simulate Robot Code"** → check
 **"Sim GUI"** → OK.
@@ -86,8 +131,15 @@ work on something else, come back. Later builds are cached.
 **"Could not resolve all files for configuration."** Usually a network problem
 mid-download. Run it again before assuming anything is broken.
 
-**"Gradle rejects Java version at configuration time."** If your shell has a custom
+**"Gradle rejects Java version at configuration time," or GradleRIO says
+*"Dependency requires at least JVM runtime version 17."*** If your shell has a custom
 `JAVA_HOME` pointing to Java 11 or earlier (from `jenv`, `sdkman`, or similar),
 GradleRIO fails before any build task runs. Check `java -version` and `echo $JAVA_HOME`
-in the same terminal where the build fails. Either unset `JAVA_HOME` to use the
-WPILib bundled JDK, or point it explicitly to the WPILib one.
+in the same terminal where the build fails — step 6 above runs this same check before
+you hit it. Either unset `JAVA_HOME` to use the WPILib bundled JDK, or point it
+explicitly to the WPILib one.
+
+**Windows: git complains about line endings, or `gradlew` won't run in Git Bash.**
+The repository ships a `.gitattributes` that normalizes line endings for you — make
+sure `git --version` is recent enough to honor it (any Git for Windows install is) and
+re-clone if you set up your clone before it existed.

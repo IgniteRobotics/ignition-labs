@@ -78,14 +78,28 @@ Deliberately narrower than all of git. This mirrors a pattern used by other FRC 
 
 A pull request proposes merging your branch into `main`. It is where code review happens — and code review is not a judgment of you. It is how the team catches things and how you learn faster than by yourself.
 
-Ignite's CI runs automatically on every PR (`.github/workflows/student-check.yml`). It does two things:
+Ignite's CI (`.github/workflows/student-check.yml`) runs in two stages, and which one
+you see depends on what you changed:
 
-- `./gradlew build` — does the code compile?
-- `spotlessCheck` — is it formatted per Google Java Format?
+- **Every pull request** runs a matrix job: it checks that the given tests are
+  unmodified and validates contributor files. This always runs, including on your M0
+  pull request.
+- **The build-and-format job runs only for the milestone project your pull request
+  touches** — `./gradlew build` (does it compile?) and `spotlessCheck` (is it
+  formatted per Google Java Format?). A pull request that only touches
+  `contributors/<your-handle>.md`, which is what M0 asks you to open, changes no
+  milestone project, so **this job does not run at all.** That is expected, not a
+  broken setup — and it is exactly why enabling Actions on your fork matters so much
+  at M0: with Actions off, a pull request shows *no checks at all* too, and the two
+  look identical unless you already know which one you're looking at.
+
+From M1 onward your pull request touches exactly one project, so the build-and-format
+job runs and checks it.
 
 **Why formatting is enforced by a robot.** So nobody argues about it, and so diffs show real changes instead of whitespace noise. If `spotlessCheck` fails, run `./gradlew spotlessApply` and commit the result. It is not a criticism, it is a rule that applies identically to everyone including mentors.
 
-There is also a second workflow that runs an AI reviewer against every PR diff. Its comments are suggestions, not orders. Read them, and push back when it is wrong — it is frequently wrong.
+`Robot-2026` runs a second workflow that AI-reviews every pull request diff. You meet
+it at M7 — it is not part of `ignition-labs`.
 
 ## Project
 
@@ -113,7 +127,7 @@ The change deliberately does not need to be impressive. The point is the pipelin
 - [ ] WPILib VS Code installed; `./gradlew build` succeeds on your machine
 - [ ] The simulator launches and you can identify the Robot State panel
 - [ ] A merged pull request exists under your GitHub account
-- [ ] `spotlessCheck` passed without a mentor fixing it for you
+- [ ] You ran `spotlessApply` on `FormatMe.java`, read the diff, reverted it, and can say what the formatter changed
 - [ ] You can explain what a branch is without using the word "branch"
 - [ ] You can point at the first line of a stack trace that refers to our code
 - [ ] Copilot or equivalent is disabled in your editor
@@ -149,4 +163,4 @@ See `resources.md` for the full library. For this milestone:
 - **Robot Code CI with GitHub Actions** — what the PR check is doing
 - **Team 3255 FRC Java Tutorial** — a second explanation of environment setup if ours did not land
 - **Chief Delphi: "How does your team use git and GitHub?"** — where the curated command list comes from
-- **Ignite:** `Robot-2026/.github/workflows/pr-build-check.yml` — the CI your PR must pass
+- **Ignite:** `ignition-labs/.github/workflows/student-check.yml` — the CI your M0 pull request must pass
