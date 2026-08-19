@@ -1,6 +1,8 @@
 # Ignite Robotics — Teaching Repository Spec
 
-**Status:** Approved spec, not yet executed
+**Status:** Executed. Every build-order step in §13 is complete, all nine milestone
+projects and their test-outs exist, and the site is live. Revisions from here are
+maintenance (§16), not construction. · **Status revised:** 2026-08-19
 **Owner:** Josh Reddick
 **Created:** 2026-08-06 · **Revised:** 2026-08-07
 **Team:** FRC 6829 Ignite Robotics
@@ -109,7 +111,7 @@ ignition-labs/                   IgniteRobotics/ignition-labs — the repository
 │       ├── resources.md         │
 │       ├── git-workflow.md      ← the §5 ritual, student-facing
 │       ├── robot-repo-ladder.md ← the §6 matrix, student-facing
-│       ├── UNTESTED-TARGETS.md  ← mentor-maintained M6 queue (§6.5)
+│       ├── UNTESTED-TARGETS.md  ← mentor-maintained M6 shortlist (§6.5)
 │       ├── milestones/m0…m8.md  │ rendered
 │       └── tracks/              ┘
 ├── projects/                    a sibling of docs/, not inside it — unpublishable,
@@ -129,9 +131,13 @@ ignition-labs/                   IgniteRobotics/ignition-labs — the repository
 │       ├── t4-ringing-flywheel/
 │       └── t5-drifting-auto/
 ├── templates/                   M8 deliverables as real copyable files — unpublishable, same reason
-│   ├── SUBSYSTEM-README.md
-│   ├── TUNING-LOG.md
-│   └── PIT-DOC.md
+│   ├── subsystem-readme.md
+│   ├── tuning-log.md
+│   ├── pit-documentation.md
+│   ├── competition-week-checklist.md
+│   ├── post-season-retro.md
+│   ├── pr-description.md
+│   └── CONTRIBUTOR.md
 ├── contributors/                M0 output, one file per student handle — unpublishable, same reason
 ├── tools/                       verification scripts the CI workflows call, incl. site_guard.py
 ├── tests/                       tests for tools/
@@ -297,7 +303,7 @@ This is a rule, not a guideline. It belongs in `CONTRIBUTING.md` and in the M6 m
 
 Track D's pitch and M6's prose both lean on *zero test files across three seasons*. Student #1 lands the pull request in October and that framing is dead — students #2–15 are adding to an existing suite.
 
-**Fix:** `programming/UNTESTED-TARGETS.md`, mentor-maintained, listing which of `Robot-2026`'s 47 Java files still have no coverage, checked off as pull requests land. Turns a one-shot bragging right into a queue. Same maintenance shape as M7's `FEATURE-BACKLOG.md` — and the same owner problem, which §16 flags as unassigned.
+**Fix:** `programming/UNTESTED-TARGETS.md`, mentor-maintained, listing which of `Robot-2026`'s 46 Java files still have no coverage. Turns a one-shot bragging right into a standing shortlist. It is deliberately **not** a queue: nothing is reserved, targets are not checked off as pull requests land, and two students testing the same class is a documented, acceptable outcome — the second merges their cases into the test class the first added. See decision D-4, 2026-08-18. Same maintenance shape as M7's `FEATURE-BACKLOG.md` — and the same owner problem, which §16 flags as unassigned.
 
 Milestone prose changes from "the first tests" to "tests for a class that has none," which stays true all season.
 
@@ -315,7 +321,7 @@ Built with **MkDocs Material** (`mkdocs` 1.6.1, `mkdocs-material` 9.7.7, pinned 
 
 `docs_dir: docs` in `mkdocs.yml` is what makes publication scope structural rather than enforced. MkDocs reads nothing outside `docs_dir`, so Java, Gradle, and vendordep files under `projects/`, and the design records under `superpowers/`, are never candidates for publication — not because anything filters them out, but because the builder cannot accidentally see them. Every published page is also named explicitly in `mkdocs.yml`'s `nav:` rather than discovered by scanning for markdown files, so a stray file dropped into `docs/` renders but stays out of navigation until someone adds it. `tools/site_guard.py` still verifies the result — every required page rendered, nothing forbidden leaked through — because a structural boundary proves what the builder can't reach, not what a particular build actually produced.
 
-> **Prerequisite.** `IgniteRobotics/ignition-labs` had **no git remote configured** as of 2026-08-07. Creating it blocks every workflow below.
+> **Prerequisite — resolved.** `IgniteRobotics/ignition-labs` had no git remote configured as of 2026-08-07; it does now (`origin` → `IgniteRobotics/ignition-labs`), the repository is public, and the site is live. Nothing below is blocked. Kept because the ordering it forced is why the workflows landed in the sequence they did.
 
 ### 7.2 Four workflows, running in three places
 
@@ -464,7 +470,7 @@ Also given: `SysIdRoutine` wiring (boilerplate, explicitly permitted under Yello
 
 ### 9.6 M5 — `projects/m5-auto-vision/` · fade: L1
 
-**Given:** a working simulated swerve drivetrain with `AutoBuilder` already configured; the AprilTag field layout; a `VisionSim` harness built on PhotonVision's `VisionSystemSim` with **configurable noise and latency** so the student can make it worse on purpose; a `SendableChooser` already wired; one example path file.
+**Given:** a working simulated swerve drivetrain with `AutoBuilder` already configured; the AprilTag field layout; a `VisionSim` harness built on PhotonVision's `VisionSystemSim` with **configurable noise and latency** so the student can make it worse on purpose; one example path file. The `SendableChooser` is **not** given — `autoChooser()` is a `TODO` throw and the student builds and populates it.
 
 Building a swerve drivetrain is not M5's lesson. Composing autos and fusing vision is.
 
@@ -636,24 +642,28 @@ Ordered by dependency, then by value. Each step is independently reviewable and 
 
 ## 14. Acceptance criteria
 
-- [ ] `programming/git-workflow.md` states the §5.1 rule and gives copy-pasteable commands for M0 and for M1–M6
-- [ ] `programming/robot-repo-ladder.md` contains the §6.1 matrix and explains the M6 non-circularity
-- [ ] A student clones `projects/m1-java-fundamentals/`, runs `./gradlew assemble`, and it is green before they write a line
-- [ ] Every milestone's mechanical DoD items are covered by a given test; every explanation item is documented as mentor-verified, in the milestone file, unchanged
-- [ ] `skeleton-integrity.yml` passes on `main`, including the inverted check that each skeleton's tests fail unmodified
-- [ ] A student fork's `student-check.yml` produces a single green check a mentor can read without opening the code
-- [ ] `pages.yml`, `skeleton-integrity.yml`, and `docs-links.yml` are skipped — not failed — on a fork
-- [ ] The Pages site renders every prose file and **zero** files from `projects/`
-- [ ] `SETUP.md` documents enabling Actions on a fork, with a screenshot
-- [ ] No skeleton references pre-2026 Ignite code, and every referenced path is pinned to a commit SHA
-- [ ] Every project completes in simulation with no hardware
-- [ ] Every test-out fixture has an answer key that explains the distractors, not just the answer
-- [ ] The solutions cross-check job is green
-- [ ] `tests.lock` verification correctly fails a pull request that modifies a given test, with a message that invites disagreement
-- [ ] The M6 regression check demonstrably fails for a student whose tests pass but catch nothing
-- [ ] Every M4 student has opened at least one pull request against a real robot repository
-- [ ] `UNTESTED-TARGETS.md` exists, has an owner, and is checked off as M6 pull requests land
-- [ ] No real-repo test introduced by a student depends on timing, simulation, or hardware
+**Walked and marked 2026-08-19.** A box is checked only where it was verified by running
+something; where it cannot be verified from this repository, it says so rather than being
+ticked optimistically.
+
+- [x] `programming/git-workflow.md` states the §5.1 rule and gives copy-pasteable commands for M0 and for M1–M6
+- [x] `programming/robot-repo-ladder.md` contains the §6.1 matrix and explains the M6 non-circularity
+- [x] A student clones `projects/m1-java-fundamentals/`, runs `./gradlew assemble`, and it is green before they write a line — verified from a fresh clone, not the working tree
+- [x] Every milestone's mechanical DoD items are covered by a given test; every explanation item is documented as mentor-verified, in the milestone file, unchanged — M6's logging item was the last orphan and got its vehicle 2026-08-19
+- [x] `skeleton-integrity.yml` passes on `main`, including the inverted check that each skeleton's tests fail unmodified
+- [ ] A student fork's `student-check.yml` produces a single green check a mentor can read without opening the code — **unverifiable from this repository.** It needs a real student fork with Actions enabled; nothing here can assert it. Verify once, by hand, with the first student fork of the season
+- [x] `pages.yml`, `skeleton-integrity.yml`, and `docs-links.yml` are skipped — not failed — on a fork
+- [x] The Pages site renders every prose file and **zero** files from `projects/` — `tools/site_guard.py` now requires all nine milestones and four tracks, up from six pages
+- [ ] `SETUP.md` documents enabling Actions on a fork, **with a screenshot** — the step exists and is correct; **there is no screenshot and this criterion has never been met.** Either capture one or amend the criterion; do not tick it as written
+- [x] No skeleton references pre-2026 Ignite code, and every referenced path is pinned to a commit SHA — the seven surviving `Robot-2025`/`2025-Robotics-Intro` mentions are all historical claims in prose ("`Robot-2025` has zero tests"), not paths sending a student anywhere. §1.2 forbids the latter
+- [x] Every project completes in simulation with no hardware
+- [x] Every test-out fixture has an answer key that explains the distractors, not just the answer — in `ignite-training-solutions`, mentor-only
+- [x] The solutions cross-check job is green — **10 of 10, re-run 2026-08-19** against this tree. M4's solution had to be re-synced with task 1's new given wiring to get there; it did not pass on the first run
+- [x] `tests.lock` verification correctly fails a pull request that modifies a given test, with a message that invites disagreement
+- [x] The M6 regression check demonstrably fails for a student whose tests pass but catch nothing — all four patch invocations exercised 2026-08-19
+- [ ] Every M4 student has opened at least one pull request against a real robot repository — **operational, per-student, per-season.** Not assertable by this repository at any time; it belongs on the roster checklist with the Kickoff Gate
+- [x] `UNTESTED-TARGETS.md` exists and has a named owner. It is **not** checked off as pull requests land — D-4 (2026-08-18) retired the reservation model; a shortlist does not deplete
+- [ ] No real-repo test introduced by a student depends on timing, simulation, or hardware — **cannot be pre-verified**; enforced per pull request by review and by §6.5's pure-logic rule. True today only because no student test has merged yet
 
 ---
 
@@ -663,7 +673,7 @@ Ordered by dependency, then by value. Each step is independently reviewable and 
 |---|---|---|
 | Fork Actions disabled → M0 shows no CI, reads as broken | **High** | Explicit, screenshotted step in `SETUP.md`; mentor checklist item at M0 (§9.1) |
 | A flaky student test blocks team pull requests in-season | **High** | §6.5 hard rule: pure logic only in real-repo tests |
-| `UNTESTED-TARGETS.md` goes stale and M6 loses its target list | Medium | Same unassigned-owner problem as `FEATURE-BACKLOG.md`. Assign both to one person — §16 |
+| `UNTESTED-TARGETS.md` goes stale and M6 loses its target list | Medium | **Owned as of 2026-08-18: Joshua Reddick (`@y0shi`), named in the file.** `FEATURE-BACKLOG.md` is still unowned — assign it — §16 |
 | Student forks of `Robot-2026` drift once the season starts | Medium | The ladder puts fork-and-PR milestones before kickoff by design; M7/M8 branch on upstream |
 | Skeletons rot against next season's WPILib | Medium | Seasonal re-verification pass, §16. Order preserved: bump, re-pin, cross-check |
 | Solutions repository silently diverges from the skeletons | Medium | §11.2 cross-check, live from build step 4 |
@@ -690,7 +700,28 @@ Order matters: bump first, then re-pin, then cross-check. A cross-check against 
 
 **Investigated, not adopted: `lychee --include-fragments`.** `docs-links.yml` does not pass it, so a dead in-page anchor (the class of bug fixed in `VISION_GUIDE.md`) is invisible to link checking. Tried locally against `mkdocs build --strict`'s two now-correct MkDocs anchors (`#7-filtering-validation`, `#10-recommended-fixes-improvements`): lychee's own fragment slugifier is GitHub-style, not MkDocs-style, and reports "Cannot find fragment" on exactly the anchors that are correct against the built site. Adopting the flag would fail CI permanently on headings containing `&`, with no fix available that does not re-break the real site. Revisit only if lychee ships an MkDocs-aware slugifier.
 
-**In-season, continuously:** `FEATURE-BACKLOG.md` (M7) and `UNTESTED-TARGETS.md` (M6). Both go stale fast, both have a milestone that stops working when they do, and **neither has an owner.** This is the single largest unmitigated risk in the document.
+**In-season, continuously:** `FEATURE-BACKLOG.md` (M7) and `UNTESTED-TARGETS.md` (M6). Both go stale fast, and both have a milestone that stops working when they do. `UNTESTED-TARGETS.md` **now has a named owner** — Joshua Reddick (`@y0shi`), recorded in the file as of 2026-08-18 — and D-4 removed its reservation model, so it depletes no further. `FEATURE-BACKLOG.md` remains **unowned and single-entry**, and M7 scarcity is real in a way M6's is not: two students cannot ship the same feature the way they can both test the same class. That is now the largest unmitigated risk here, and it is half the size the unowned pair was.
+
+### 16.1 Operational prerequisite ledger
+
+One-line facts the repository depends on that live outside it, and that nothing in CI can
+assert on its own. Each was verified on the date shown. A row going false breaks something
+silently, which is the reason this table exists rather than a comment in the file that
+depends on it.
+
+| Prerequisite | State | Verified | If it goes false |
+|---|---|---|---|
+| `@IgniteRobotics/mentors` team exists | **Done** — exists, 1 member | 2026-08-19 | Every rule in `.github/CODEOWNERS` is **silently ignored**: no error, no warning, no review requirement on given tests, plants, or harnesses. GitHub does not report a CODEOWNERS entry naming a non-existent team |
+| `ignition-labs` git remote configured | **Done** — `origin`, public | 2026-08-19 | §7.1's whole workflow sequence is blocked |
+| GitHub Pages live | **Done** — Pages enabled, site serving | 2026-08-19 | Every published link in the curriculum 404s |
+| `Phoenix-2026` public (D-2) | **Done** — public 2026-08-18 | 2026-08-18 | **M3's reading assignment breaks** — the opening instruction of the largest milestone in the Kickoff Gate block. Any admin can flip visibility back with nothing here noticing. *Mitigated:* `.lycheeignore`'s `IgniteRobotics/.*` blanket is gone, so `docs-links.yml` now fails on the unreachable URL |
+| `Robot-2026` public | **Done** | 2026-08-18 | M2, M4, M5, M6, and M7 all read or contribute to it. Same mitigation as above |
+| `FEATURE-BACKLOG.md` has an owner | **Not done** | 2026-08-19 | M7 has one entry and nobody refreshing it. Unlike M6's shortlist, features cannot be duplicated between students, so this depletes for real — see §15 |
+
+**Membership is not the same as existence.** The `mentors` team exists and has one member.
+One member means one reviewer for every protected path in `CODEOWNERS`, and that reviewer
+cannot approve their own pull request. Add a second before the season, or accept that
+mentor review is a bottleneck of exactly one person.
 
 ---
 

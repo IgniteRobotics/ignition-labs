@@ -1,6 +1,8 @@
 # Ignite Robotics — Programming Curriculum Spec
 
-**Status:** Approved spec, not yet executed
+**Status:** Executed. All nine milestones are built and published; see
+[`teaching-repo-spec.md`](teaching-repo-spec.md) §13 for the build-order record.
+Revisions from here are maintenance (§16), not construction. · **Status revised:** 2026-08-19
 **Owner:** Josh Reddick
 **Created:** 2026-08-05
 **Team:** FRC 6829 Ignite Robotics
@@ -174,12 +176,12 @@ The project is deliberately not about code quality — it is about surviving the
 - [ ] WPILib VS Code installed; `./gradlew build` succeeds locally
 - [ ] Simulator launches and the student can identify the Robot State panel
 - [ ] A merged PR exists under the student's GitHub account
-- [ ] `spotlessCheck` passed without a mentor fixing it for them
+- [ ] The student ran `spotlessApply` on `FormatMe.java`, read the diff, reverted it, and can say what the formatter changed
 - [ ] Student can explain what a branch is without using the word "branch"
 
 **AI posture:** 🔴 Red — AI as explainer only. Students may ask an AI what a stack trace means. They may not have it generate git commands to paste blindly.
 
-**Resources.** [WPILib Zero to Robot](https://docs.wpilib.org/en/stable/docs/zero-to-robot/introduction.html) · [WPILib Git Version Control Introduction](https://docs.wpilib.org/en/stable/docs/software/basic-programming/git-getting-started.html) · [Robot Code CI with GitHub Actions](https://docs.wpilib.org/en/stable/docs/software/advanced-gradlerio/robot-code-ci.html) · Ignite reference: `Robot-2026/.github/workflows/pr-build-check.yml`
+**Resources.** [WPILib Zero to Robot](https://docs.wpilib.org/en/stable/docs/zero-to-robot/introduction.html) · [WPILib Git Version Control Introduction](https://docs.wpilib.org/en/stable/docs/software/basic-programming/git-getting-started.html) · [Robot Code CI with GitHub Actions](https://docs.wpilib.org/en/stable/docs/software/advanced-gradlerio/robot-code-ci.html) · Ignite reference: `ignition-labs/.github/workflows/student-check.yml` — the CI an M0 pull request is actually checked by. `Robot-2026/.github/workflows/pr-build-check.yml` is that repository's own CI and is first met for real at M4
 
 ### 4.3 M1 — Java Fundamentals
 
@@ -531,7 +533,7 @@ Full content in `student-deliverables.md`. Required artifacts:
 | No README in any Ignite repo | **Partially addressed** | M8 ships the subsystem README as a real fill-in-the-blank file (`templates/subsystem-readme.md`) rather than a description of one, so the habit has a starting artifact; the repo-level READMEs remain unwritten |
 | Ignite's standards live only in a bot prompt | **Addressed indirectly** | `.github/prompts/code-review-prompt.md` is the best existing draft of Ignite's conventions and should be mined when writing M3–M6 content. Converting it to a human-facing doc is out of scope here |
 | Romi / XRP practice robots | **Optional enrichment only** | Not selected as a hardware floor; no milestone depends on them |
-| `Phoenix-2026` benchtop rig | **Promoted: M3 depends on it as reading material** | Reclassified from optional enrichment. It is on WPILib 2026.2.1, Phoenix 6 26.1.0, PathPlanner 2026.1.2 and photonlib — the same stack as `Robot-2026` — with both CI workflows, Spotless, and `useJUnitPlatform()` configured, in **22 Java files versus `Robot-2026`'s 48**. It is the only current Ignite repo containing an explicit `Command` subclass. M3 now assigns it as a read-end-to-end target with `Robot-2026` as the full-complexity reference. Its *hardware* use remains optional — the M4 hardware variant is still enrichment |
+| `Phoenix-2026` benchtop rig | **Promoted: M3 depends on it as reading material** | Reclassified from optional enrichment. It is on WPILib 2026.2.1, Phoenix 6 26.1.1, PathPlanner 2026.1.2 and photonlib — the same stack as `Robot-2026` — with both CI workflows, Spotless, and `useJUnitPlatform()` configured, in **22 Java files versus `Robot-2026`'s 46**. It is the only current Ignite repo containing an explicit `Command` subclass. M3 now assigns it as a read-end-to-end target with `Robot-2026` as the full-complexity reference. Its *hardware* use remains optional — the M4 hardware variant is still enrichment |
 | Tracking site / LMS | **Explicitly excluded** | A peer resource drew real criticism for collecting student names and emails without a deletion path. If Ignite ever builds one, that is a separate project with its own privacy review |
 
 ---
@@ -550,13 +552,15 @@ Work proceeds in this order. Each step is independently reviewable.
 
 ### 9.1 Acceptance criteria for the curriculum as a whole
 
-- [ ] A student with no programming experience can self-route to Track A and start unaided
-- [ ] A returning veteran can test out through M5 in one session and know exactly what they still owe
-- [ ] A mentor can verify any milestone's definition of done without having taught it
-- [ ] Every project is completable with simulation alone
-- [ ] Every external link resolves
-- [ ] Every file imports cleanly into Notion with no manual fixup
-- [ ] The AI standard can adjudicate a real disputed case without further interpretation
+**Walked and marked 2026-08-19.**
+
+- [ ] A student with no programming experience can self-route to Track A and start unaided — **needs a real student.** The routing exists and reads correctly; whether it works is observed in the fall, not asserted here
+- [x] A returning veteran can test out through M5 in one session and know exactly what they still owe — all five test-out fixtures exist and are cross-checked; T5 is a log-diagnosis fixture with no tests by design
+- [x] A mentor can verify any milestone's definition of done without having taught it — every mechanical item is a command with an exit code; every explanation item is labelled mentor-verified
+- [x] Every project is completable with simulation alone
+- [x] Every external link resolves — `docs-links.yml` now checks `projects/` too, and `.lycheeignore` is gone entirely, so every pinned-SHA reading URL is checked for the first time. 275/275 OK on 2026-08-19
+- [x] ~~Every file imports cleanly into Notion with no manual fixup~~ — **superseded.** D7/D10 moved publication to MkDocs; Notion is not the publication target. The live equivalent: `mkdocs build --strict` succeeds and `tools/site_guard.py` passes over the built site, both of which gate every pull request
+- [ ] The AI standard can adjudicate a real disputed case without further interpretation — **untested by construction.** It has not yet met a real disputed case. First one is the test; write down what it did
 
 ---
 

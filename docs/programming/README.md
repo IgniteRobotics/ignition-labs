@@ -117,7 +117,7 @@ Start with [`curriculum-spec.md`](curriculum-spec.md) — it records every desig
 
 The three most likely to generate friction:
 
-1. **Track D enters at M6, not M7** (spec §2.2). Veterans write tests before they get agentic tooling. This is the most contested decision in the curriculum and the reasoning is measured, not asserted — our repos contain zero test files across three seasons
+1. **Track D enters at M6, not M7** (spec §2.2). Veterans write tests before they get agentic tooling. This is the most contested decision in the curriculum and the reasoning is measured, not asserted — as of 2026-08-18 our repos contained zero test files across three seasons. Expect that to stop being true: the first merged M6 pull request ends it, which is the point of M6, not a defect in the argument
 2. **Red tier forbids all code generation through M2** (`ai-use-standard.md` §4). Students who know these tools work will find this arbitrary. The reasoning is in the standard and it is worth explaining rather than enforcing
 3. **The Kickoff Gate gates commit access.** It only works if someone maintains the roster checklist and it is announced in the fall
 
@@ -130,7 +130,17 @@ The three most likely to generate friction:
 | Piece | State |
 |---|---|
 | Spec, resources, AI standard, all nine milestones, deliverables, tracks | **Written** |
-| Teaching repository for M0–M8 projects | **M0–M8 built** — `projects/m0-onboarding/` builds from a clean clone and its simulator starts, and `projects/m1-java-fundamentals/`, `projects/m2-oop/`, `projects/m3-command-based/`, `projects/m4-control/`, and `projects/m5-auto-vision/` with their test-out fixtures `projects/testouts/t1-find-the-bug/`, `t2-supplier-swap/`, `t3-scheduler-conflict/`, and `t4-ringing-flywheel/` assemble green and test red, and `projects/testouts/t5-drifting-auto/` ships three recorded logs and no tests at all — it is a log-diagnosis fixture, so its `test` task is green by design, alongside the process docs, verification tooling, four CI workflows, and the Pages pipeline already in this repository. `projects/m6-testing/` and `docs/programming/UNTESTED-TARGETS.md` are also built — M6 is deliberately out of numeric order (it is the M7 gate), and the Kickoff Gate block below is still M0–M3, not M0–M4+M6. **The Kickoff Gate block (M0–M3) is complete.** `projects/m7-ai-assisted/` and `projects/m8-ownership/` are also built, and are deliberately unlike every project above them: no Gradle build, no tests, no skeleton code. M7 ships five documents and a pinned reference copy of `Robot-2026`'s AI review pipeline, because its assessment is a defense review on a real pull request; M8 ships a pointer at `templates/`; six of its seven fill-in-the-blank files are M8's deliverables (the seventh, `CONTRIBUTOR.md`, is M0's). Both are verified by conversation, not by CI |
+| Teaching repository for M0–M8 projects | **All nine built.** Per-milestone state below |
+| **M0** `m0-onboarding` | Built. Builds from a clean clone, simulator starts. `spotlessCheck` fails by design — `FormatMe.java` is the exercise |
+| **M1** `m1-java-fundamentals` + T1 | Built. Assembles green, tests red |
+| **M2** `m2-oop` + T2 | Built. Assembles green, tests red |
+| **M3** `m3-command-based` + T3 | Built. Assembles green, tests red. **Completes the Kickoff Gate block (M0–M3)** |
+| **M4** `m4-control` + T4 | Built. Assembles green, tests red. SysId and homing are runnable in `simulateJava` as of 2026-08-19 |
+| **M5** `m5-auto-vision` + T5 | Built. Assembles green, tests red. T5 ships three recorded logs and no tests — a log-diagnosis fixture, green by design |
+| **M6** `m6-testing` | Built, deliberately out of numeric order: it is the M7 gate. Tests green by design, protected by the regression gate |
+| **M7** `m7-ai-assisted` | Built. No Gradle build, no tests, no skeleton — five documents and a pinned copy of `Robot-2026`'s AI review pipeline. Assessed by defense review on a real pull request |
+| **M8** `m8-ownership` | Built. A pointer at `templates/`; six of its seven fill-in-the-blank files are M8 deliverables (the seventh, `CONTRIBUTOR.md`, is M0's). Verified by conversation, not CI |
+| Supporting | Process docs, verification tooling, four CI workflows, and the Pages pipeline, all live |
 | `CommandTemplate` rewrite | **Out of scope** — see spec §8. Still the highest-leverage single fix, and it is still on WPILib 2025.2.1 |
 | Repo-level READMEs | **Not written** — M8 creates the habit per subsystem |
 | Code references | **All 2026.** `Phoenix-2026` is the reading-scale repo, `Robot-2026` the full-complexity one. No milestone cites pre-2026 Ignite code |
