@@ -177,6 +177,7 @@ Batching matters for CAN bandwidth, and `waitForAll` matters for odometry, where
 
 ## Definition of done
 
+- [ ] `./gradlew test` is green
 - [ ] Flywheel reaches and holds commanded velocity in simulation
 - [ ] Arm holds position against simulated gravity
 - [ ] Arm homes correctly at startup

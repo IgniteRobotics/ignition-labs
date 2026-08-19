@@ -13,12 +13,13 @@ Five to seven sessions is normal. Nothing here is a race.
 | Given | Why |
 |---|---|
 | `Main.java` | Never edit it. Every WPILib project has one and they are all identical |
-| `Robot.java` | Runs your two control loops every 20ms, and steps both plants' physics while simulating. Read it before you start |
-| `Constants.java` | CAN IDs and the two setpoints the given tests use. No gain lives here — that is yours to add, and it is the milestone |
+| `Robot.java` | Runs the command scheduler, then your two control loops, every 20ms, and steps both plants' physics while simulating. Read it before you start |
+| `Constants.java` | CAN IDs, the two setpoints the given tests use, and the driver controller's USB port. No gain lives here — that is yours to add, and it is the milestone |
 | `plant/FlywheelPlant.java`, `plant/ArmPlant.java` | The simulated mechanisms. Read their Javadoc — it states what each method measures and what the simulation does and does not model. It does not state a gain |
 | `harness/M4Deliverables.java` | How the tests, and `Robot`, reach your work. Read it before you start |
+| `harness/MechanismSubsystem.java` | One given instance per mechanism, already constructed in `RobotContainer`. Pass it as the `requirement` when you build `SysIdWiring.forMotor(...)` — that's what keeps a sweep and your own control loop from driving the same motor at once |
 | `harness/PlotHarness.java` | Records a setpoint-vs-measurement history and writes it to `build/plots/<name>.csv`. Use it yourself — see Part 1 step 4 |
-| `harness/SysIdWiring.java` | Wires a `SysIdRoutine` to a `TalonFX`, logging through CTRE's `SignalLogger`. Bind it to buttons in your own `RobotContainer` |
+| `harness/SysIdWiring.java` | Wires a `SysIdRoutine` to a `TalonFX`, logging through CTRE's `SignalLogger`. Bind its four commands to buttons on the given `driver` controller in your own `RobotContainer` |
 | `src/test/` | The given tests. Do not edit them |
 
 Yours: **two plants constructed and wired, a feedforward and a PID loop for each
@@ -55,10 +56,14 @@ files from `Robot-2026`, at the exact commit this milestone was written against.
 
 1. Construct a `FlywheelPlant` in your constructor, using `Constants.FlywheelConstants.CAN_ID`.
    Return it from `flywheelPlant()`.
-2. Characterize it. Bind `SysIdWiring.forMotor(...)`'s routines to controller buttons,
-   run `./gradlew simulateJava`, and run each of quasistatic-forward, quasistatic-reverse,
-   dynamic-forward, dynamic-reverse. WPILib's SysId analyzer tool turns the log into kS,
-   kV, and kA.
+2. Characterize it. In your constructor, build `SysIdWiring.forMotor(<plant>.motor(), "<name>",
+   flywheelMechanism)` — the given `flywheelMechanism` is the requirement, and passing it is
+   what keeps a sweep and your own control loop from driving the motor at once — then bind all
+   four of its commands to buttons on the given `driver` controller. Run `./gradlew
+   simulateJava`, and run each of quasistatic-forward, quasistatic-reverse, dynamic-forward,
+   dynamic-reverse in turn. Every one of those requests reaches the plant exactly the way your
+   own `setVoltage` calls do, so the sweep really moves the flywheel. WPILib's SysId analyzer
+   tool turns the log into kS, kV, and kA.
 3. Write `setFlywheelTarget`/`updateFlywheel`. Apply feedforward alone first — with your
    PID's P at zero, confirm the flywheel roughly holds a commanded speed with `plant.setVoltage`
    fed only by the feedforward term.
@@ -72,8 +77,9 @@ files from `Robot-2026`, at the exact commit this milestone was written against.
 
 1. Construct an `ArmPlant` in your constructor, using `Constants.ArmConstants.CAN_ID`.
    Return it from `armPlant()`.
-2. Characterize it the same way. `ArmPlant`'s gravity term means the SysId run matters
-   more here — a flywheel has no preferred direction, an arm does.
+2. Characterize it the same way, using the given `armMechanism` as the requirement.
+   `ArmPlant`'s gravity term means the SysId run matters more here — a flywheel has no
+   preferred direction, an arm does.
 3. Write `setArmTarget`/`updateArm`. Confirm feedforward alone — gravity compensation
    included — holds the arm roughly level with P at zero. Add kP, then kD only if it
    overshoots.
@@ -122,12 +128,19 @@ or the other.
 
 ## A modelling limit, on purpose
 
-Both plants integrate the voltage you command them with directly — they do not read it
-back through the `TalonFX`'s own simulation. One consequence: supply-current limits,
-voltage compensation, and ramp rates you configure through `motor()` are inert in this
-simulation. If you configure a current limit and see no change in your plot, you have not
-found a bug — you have found the edge of what this model represents. `FlywheelPlant`'s and
-`ArmPlant`'s Javadoc say the same thing, in the file you'll actually be reading.
+Both plants feed the physics from the same request your control loop sends —
+`motor.getAppliedControl()`, the voltage the `TalonFX` is currently holding. There is
+exactly one path in, and it's why the SysId workflow above actually moves the mechanism:
+a sweep reaches the plant the same way your own `plant.setVoltage(...)` calls do.
+
+What that path does not simulate is the *device's response* to the request. Supply-current
+limits, voltage compensation, and ramp rates you configure through `motor()`, along with any
+inversion or neutral-mode setting, would change how a real `TalonFX` answers a voltage
+request — none of that changes what the plant simulates here, because the physics reads the
+request itself, not the device's reaction to it. If you configure a current limit and see no
+change in your plot, you have not found a bug — you have found the edge of what this model
+represents. `FlywheelPlant`'s and `ArmPlant`'s Javadoc say the same thing, in the file you'll
+actually be reading.
 
 ---
 
@@ -144,7 +157,9 @@ found a bug — you have found the edge of what this model represents. `Flywheel
 - [ ] You ran SysId yourself and used the numbers it produced
 - [ ] Motion profile demonstrated, with a before/after plot
 - [ ] You can explain what happens when a CAN device stops hearing the roboRIO
-- [ ] You opened the stretch pull request against `Robot-2026`
+- [ ] You opened at least one pull request against a real robot repository — the refactor
+      above is the recommended vehicle, not a requirement; see the milestone page for what
+      counts
 
 The kS/kV/kA/kG explanations, the feedforward-before-kP and kI-stays-at-zero
 explanations, and reading your own plots are mentor-verified. No test can check them, and
