@@ -23,9 +23,10 @@ the §16 seasonal pass and it is a separate, ordered ritual.
 
 ## Architecture
 
-No new mechanisms. The M4 fix is the only one with design content in it, and it is a choice
-between two shapes — see decision **D-1** below. Everything else is prose, configuration, or
-one file moving.
+No new mechanisms. The M4 fix is the only one with design content in it, and its shape is
+settled — decision **D-1**, option A: the plants take their input from the device's applied
+output rather than a cached field. Everything else is prose, configuration, or nav entries
+moving.
 
 | Area | Files |
 |---|---|
@@ -38,9 +39,11 @@ one file moving.
 | Queues | `docs/programming/UNTESTED-TARGETS.md`, `projects/m7-ai-assisted/{README.md,FEATURE-BACKLOG.md}` |
 | ~~M3 reading access~~ | ~~`projects/m3-command-based/READING.md`~~ — no file change needed; D-2 resolved upstream |
 
-## Open decisions
+## Decisions
 
-Answer these before the tasks that depend on them. Each task names its blocker.
+**All four are resolved as of 2026-08-18. No task is blocked.** Kept in full
+rather than collapsed to a verdict: the reasoning is what a future maintainer needs when
+something here looks arbitrary, and two of these reverse an earlier premise.
 
 **D-1 — how M4 gets a working SysId path. ✅ RESOLVED 2026-08-18 — option A.** Josh's call.
 
@@ -85,26 +88,51 @@ blanket can go, and every pinned-SHA reading URL in the repository becomes CI-ch
 the first time — which is exactly the re-pin drift teaching-repo-spec §16 item 2 schedules a
 manual seasonal pass for.
 
-**D-3 — the three non-curriculum docs in the site nav** (finding P3). Options: leave them
-(they are cited from `resources.md`, M4, M5, M8); move them under a "Reference / For
-Mentors" nav section; or add an audience banner to each. Blocks the optional step in task 5.
-Not a defect — do nothing is a legitimate answer.
+**D-3 — the non-curriculum docs in the site nav. ✅ RESOLVED 2026-08-18.** Move
+`VISION_GUIDE.md` and `field-boundary-speed-limiting.md` under the existing **For Mentors**
+nav section, and give each a one-line audience banner. `vision-subsystem.md` **stays** under
+Vision — it is student-readable and M8 explicitly models the subsystem-README deliverable on
+it. Task 5 step 5 is now a definite step, not an optional one. Citations from `resources.md`,
+M4, M5, and M8 are by path and are unaffected.
 
-**D-4 — queue capacity** (finding P2). `UNTESTED-TARGETS.md` holds three targets and
-`FEATURE-BACKLOG.md` one, against a cohort of ~15. Task 7 records the gap and proposes a
-cadence; it cannot invent targets. Someone has to sit with `Robot-2026` and add them.
+**D-4 — M6 queue capacity. ✅ RESOLVED 2026-08-18 — there is no queue.** Josh's call:
+**every student may open their own pull request against any class.** Targets are not
+reserved, duplication between students is explicitly fine, and the `claimed by` column and
+the reasoning behind it come out of `UNTESTED-TARGETS.md`.
+
+This dissolves finding P2's M6 half rather than mitigating it. The file stops being a
+first-come queue and becomes what it should have been — a **shortlist of classes worth
+testing**, which does not deplete.
+
+Measured against the §6.5 pure-logic rule on 2026-08-18, the viable set is about six:
+the two `LaunchRequestBuilder` implementations; `LaunchCalculator` (caveated — singleton
+reaching `DriveState.getInstance()`); `DriveMotorConfigs` and `SteerMotorConfigs` (clean —
+`Slot0Configs` is their only import, no HAL, and they are already M4's stretch refactor
+target); and `ShiftState` (real boundary logic in `getShiftFromMatchTime` and the countdown
+formatting, behind a `DriverStation` seam). Under D-4 that is ample.
+
+**The one practical consequence to document, not to solve by policy.** Two students testing
+the same class will collide on the test file — most sharply if both create
+`LaunchCalculatorTest.java`, which is a duplicate class in one package, not a merge
+conflict. The second student rebases and merges their cases into the existing class. Task 7
+says so in the file rather than leaving it to be discovered in review. It is also a decent
+lesson: M0 taught them what a conflict is.
+
+**Still open, and not covered by this decision:** M7's `FEATURE-BACKLOG.md` (one entry). Two
+students cannot both ship the same *feature* the way they can both test the same class, so
+the M7 half of P2 stands. See task 7 step 2.
 
 ## Task graph
 
 | Task | File | Depends on | Touches | Lane |
 |---|---|---|---|---|
-| 1 | `01-m4-simulator-loop.md` | D-1 | `projects/m4-control/src/**` | m4 |
+| 1 | `01-m4-simulator-loop.md` | — (D-1 resolved) | `projects/m4-control/src/**` | m4 |
 | 2 | `02-m4-prose-and-dod.md` | 1 | `projects/m4-control/README.md`, `docs/.../m4-*.md` | m4 |
 | 3 | `03-first-hour-setup.md` | — | `docs/SETUP.md`, `docs/programming/git-workflow.md`, `.gitattributes` | student-docs |
 | 4 | `04-ci-truth.md` | — | `docs/CONTRIBUTING.md`, `docs/.../m0-tooling-and-git.md` | student-docs |
-| 5 | `05-link-and-render-gates.md` | D-3 (optional step only) | `.github/workflows/docs-links.yml`, `.lycheeignore`, `tools/site_guard.py`, `tests/test_site_guard.py`, `mkdocs.yml` | gates |
+| 5 | `05-link-and-render-gates.md` | — (D-3 resolved) | `.github/workflows/docs-links.yml`, `.lycheeignore`, `tools/site_guard.py`, `tests/test_site_guard.py`, `mkdocs.yml` | gates |
 | 6 | `06-m6-logging-dod.md` | — | `projects/m6-testing/**`, `docs/.../m6-*.md` | content |
-| 7 | `07-queue-capacity.md` | D-4 | `docs/programming/UNTESTED-TARGETS.md`, `projects/m7-ai-assisted/**` | content |
+| 7 | `07-queue-capacity.md` | — (D-4 resolved) | `docs/programming/UNTESTED-TARGETS.md`, `projects/m7-ai-assisted/**` | content |
 | ~~8~~ | ~~`08-phoenix-access.md`~~ | — | — | **deleted — D-2 resolved upstream; residue folded into task 5** |
 | 9 | `99-integration.md` | all | `tests.lock`, `docs/programming/README.md`, both specs, prerequisite ledger | integration |
 
@@ -151,12 +179,17 @@ discipline. Read it. Only what is specific to *this* plan is restated here:
 
 ## Self-review
 
-**The thing most likely to go wrong** is task 1 under option D-1(A): adding a scheduler, a
-subsystem, and a controller to M4 is enough new given surface to quietly change the
-milestone's fade level. The task carries an explicit budget and a step that re-reads the
-diff against §8's L1 definition before committing.
+**The thing most likely to go wrong** is task 1's plant change silently invalidating the
+given tests. Option A alters the dynamics `FlywheelVelocityTest` and `ArmGravityTest` were
+tuned against, and those tests will still *run* — they will just be measuring a slightly
+different mechanism. Task 1 step 4 runs a reference implementation against the suite for
+exactly this reason, and forbids loosening a tolerance to make it pass.
 
-**The second** is that task 1 changes files under `tests.lock` while four other lanes run.
+**The second** is fade-level creep: adding a scheduler, a subsystem, and a controller to M4
+is enough new given surface to quietly move it off L1. Task 1 step 3 re-reads the diff
+against §8's L1 definition and greps it for anything resembling a gain before committing.
+
+**The third** is that task 1 changes files under `tests.lock` while three other lanes run.
 Nothing else touches `projects/m4-control/`, so the only conflict surface is the manifest —
 which is why no lane regenerates it.
 

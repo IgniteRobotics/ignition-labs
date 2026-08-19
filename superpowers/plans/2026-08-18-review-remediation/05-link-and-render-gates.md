@@ -139,15 +139,32 @@ current implementation) and `field-boundary-speed-limiting.md` (948 lines, carry
       confirm `site_guard.py` exits non-zero and names the page. Restore it. Paste both runs.
       A gate nobody has watched fail is a gate nobody knows works.
 
-- [ ] **Step 5 (D-3 only — skip unless the decision says otherwise): re-home the three
-      reference documents in `mkdocs.yml`.**
-      Move `VISION_GUIDE.md`, `vision-subsystem.md`, and `field-boundary-speed-limiting.md`
-      under a nav section that names their audience, and/or add a one-line audience banner at
-      the top of each. If the decision is "leave them," record that in the task report and
-      move on — this is a judgement call, not a defect.
+- [ ] **Step 5: Re-home two reference documents (D-3, resolved 2026-08-18).**
 
-      Regardless of D-3, do fix one thing: `field-boundary-speed-limiting.md` carries a blank
-      **"Assigned to: ______"** line on a public site. Either fill it in or delete the line.
+      In `mkdocs.yml`, move **`VISION_GUIDE.md`** and **`field-boundary-speed-limiting.md`**
+      out of the top-level `Vision:` section and into the existing **`For Mentors:`** section,
+      alongside the two specs.
+
+      **`vision-subsystem.md` stays under `Vision:`.** It is student-readable and M8
+      explicitly models the subsystem-README deliverable on it (*"an existing, genuinely good
+      subsystem document. Model yours on it"*). Do not move it. `Vision:` having one entry is
+      fine.
+
+      Then add a one-line audience banner to the top of each moved document, in the shape:
+      > **Who this is for:** mentors, and students at M5 or beyond. It assumes you already
+      > know what a pose estimator is — if you are before M5, read the milestone first.
+
+      Write `field-boundary-speed-limiting.md`'s to match what it actually is: an assignable
+      design project, not a reference.
+
+      The citations in `resources.md`, M4, M5, and M8 are by repository path rather than by
+      nav position, so none of them break. Confirm that rather than assuming:
+      ```bash
+      grep -rn "VISION_GUIDE\|field-boundary" docs/programming/
+      ```
+
+      **Independent of D-3, fix this:** `field-boundary-speed-limiting.md` carries a blank
+      **"Assigned to: ______"** line on a public site. Fill it in or delete it.
 
 - [ ] **Step 6: Fix the nav spelling.**
       `mkdocs.yml` says *"Track D — FRC Veteran, Levelling Up With AI"*; the page title says
