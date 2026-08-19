@@ -120,7 +120,7 @@ Note the boundary carefully: Yellow still applies *during* M6. The tests that un
 
 **Why M6 is the gate and not something softer.** M6 is where you learn simulation, telemetry, and testing. Those are the things that tell you an AI's output is wrong before the robot does. Without them you have velocity and no brakes.
 
-This applies to veterans too, and we know that is annoying. If you have been programming for Ignite for three seasons, you can test out of M1 through M5 in an afternoon. You still write the tests. Right now our competition repos have JUnit configured in `build.gradle` and **zero test files** — not a small suite, zero — and CI does not run tests even if they existed. We are not handing agentic tooling to a codebase in that state.
+This applies to veterans too, and we know that is annoying. If you have been programming for Ignite for three seasons, you can test out of M1 through M5 in an afternoon. You still write the tests. Our competition repos have JUnit configured in `build.gradle`, CI already gates on it (`pr-build-check.yml` runs `./gradlew build`, which depends on `test`), and most classes still have no coverage. We are not handing agentic tooling to a codebase that thin on verification.
 
 ---
 
