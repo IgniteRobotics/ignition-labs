@@ -47,7 +47,7 @@ nav:
       - Track A — New to Programming: programming/tracks/track-a-new-to-programming.md
       - Track B — Programmed, Not Object-Oriented: programming/tracks/track-b-non-oo-programmer.md
       - Track C — OO Experience, No FRC: programming/tracks/track-c-oo-no-frc.md
-      - Track D — FRC Veteran, Levelling Up With AI: programming/tracks/track-d-frc-veteran-ai.md
+      - Track D — FRC Veteran, Leveling Up With AI: programming/tracks/track-d-frc-veteran-ai.md
   - Milestones:
       - M0 — Tooling, Git & the Build: programming/milestones/m0-tooling-and-git.md
       - M1 — Java Fundamentals: programming/milestones/m1-java-fundamentals.md
@@ -59,9 +59,9 @@ nav:
       - M7 — AI-Assisted Development: programming/milestones/m7-ai-assisted-development.md
       - M8 — In-Season Deliverables: programming/milestones/m8-in-season-deliverables.md
   - Vision:
-      - Vision Guide: VISION_GUIDE.md
       - Vision Subsystem: vision-subsystem.md
-      - Field Boundary Speed Limiting: field-boundary-speed-limiting.md
   - For Mentors:
+      - Vision Guide: VISION_GUIDE.md
+      - Field Boundary Speed Limiting: field-boundary-speed-limiting.md
       - Curriculum Spec: programming/curriculum-spec.md
       - Teaching Repository Spec: programming/teaching-repo-spec.md

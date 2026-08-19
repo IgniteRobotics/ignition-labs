@@ -35,12 +35,11 @@ them here.
 
 ## A note before you start
 
-`Robot-2026` has **no tests at all** — there is no `src/test/` directory. Its
-`build.gradle` is already wired for them (`org.junit.jupiter:junit-jupiter:5.10.1` and
-`useJUnitPlatform()`, the same versions the training projects pin), so nothing is
-blocking you, but your feature's test may well be the first test in the repository. Plan
-for that: prefer a feature whose logic can be exercised without the HAL, and expect to
-create `src/test/java/frc/robot/...` yourself.
+`Robot-2026`'s `build.gradle` is already wired for tests (`org.junit.jupiter:junit-jupiter:5.10.1`
+and `useJUnitPlatform()`, the same versions the training projects pin), and M6 pull requests
+are adding coverage a class at a time — but most of the codebase still has none. If
+`src/test/` does not exist yet on your branch, create it. Either way: prefer a feature
+whose logic can be exercised without the HAL.
 
 ---
 
@@ -85,10 +84,13 @@ what happens if the same exception fires fifty times in one match.
 
 ---
 
-**This backlog is under-filled on purpose rather than by accident.** It shipped with one
-verified entry because a candidate that does not survive checking is worse than no
-candidate — the first draft of this file led with a feature that turned out to already
-be implemented, and a student would have lost a session discovering that.
+**This backlog is under-filled on purpose rather than by accident, and it still is as of
+2026-08-18.** It shipped with one verified entry because a candidate that does not survive
+checking is worse than no candidate — the first draft of this file led with a feature that
+turned out to already be implemented, and a student would have lost a session discovering
+that. D-4 (`docs/programming/UNTESTED-TARGETS.md` can be a shortlist that does not deplete)
+does not solve this half of the problem: a feature, unlike a test target, cannot be shipped
+by two students at once, so a short backlog here is a real scarcity, not a cosmetic one.
 
 **A mentor must add entries before assigning M7 to a cohort.** The selection criteria
 above are the tool for that, and they matter more than any entry under them. Verify every

@@ -46,9 +46,9 @@ do not have it yet.
    of that file, because you will eventually be asked to add entries to it yourself
 2. **Use AI assistance genuinely and substantially.** This is the one milestone where
    that is the assignment rather than a concession
-3. **Write or verify tests covering the new behaviour.** They must pass. Note that
-   `Robot-2026` has no tests yet — yours may be the first, and `build.gradle` is already
-   wired for them
+3. **Write or verify tests covering the new behaviour.** They must pass. `build.gradle` is
+   already wired for JUnit, most classes still have no coverage, and if `src/test/` does
+   not exist yet on your branch, you create it
 4. **Open the pull request** using `pull-request-template.md`, disclosure block filled
    in. "How I verified it" must be specific
 5. **Defend the diff in review** — every decision, unaided, to a mentor or a peer who

@@ -25,13 +25,13 @@ spotless {
     }
 }
 
-// M6 is a testing sandbox, not a robot. There is no RobotBase subclass here on purpose:
-// this milestone's first documented pitfall is "do not instantiate the whole robot in a
-// test" (TimedRobot is not designed to ever exit, so a test that constructs one leaves
-// background threads running and hangs CI). Shipping a TimedRobot in the project whose
-// lesson is not to construct one invites the mistake. ROBOT_MAIN_CLASS only names the
-// jar manifest's main class; nothing runs it. Same arrangement as M2.
-def ROBOT_MAIN_CLASS = "frc.robot.plant.LaunchProfile"
+// M6 is a testing sandbox, not a robot, but it ships one TimedRobot (Robot.java) anyway --
+// the vehicle for the logging Definition-of-Done item, run by hand via
+// ./gradlew simulateJava, same as M3/M4/M5. This milestone's first documented pitfall is
+// still "do not instantiate the whole robot in a test" (TimedRobot is not designed to ever
+// exit, so a test that constructs one leaves background threads running and hangs CI);
+// that rule holds unconditionally in src/test/, which never references Robot or Main.
+def ROBOT_MAIN_CLASS = "frc.robot.Main"
 
 deploy {
     targets {
@@ -74,6 +74,11 @@ dependencies {
     nativeRelease wpi.java.vendor.jniRelease(wpi.platforms.desktop)
     simulationRelease wpi.sim.enableRelease()
 
+    // Epilogue's annotation processor. Robot.java is annotated @Logged and calls
+    // Epilogue.bind(this); without this line the generated Epilogue class does not
+    // exist and Robot.java does not compile. Matches Robot-2026's build.gradle.
+    annotationProcessor wpi.java.deps.wpilibAnnotations()
+
     testImplementation 'org.junit.jupiter:junit-jupiter:5.10.1'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
@@ -92,6 +97,13 @@ jar {
 
 deployArtifact.jarTask = jar
 wpi.java.configureExecutableTasks(jar)
+
+// Registers the simulator GUI and the simulated driver station as HAL extensions.
+// Without these, ./gradlew simulateJava starts the robot program headless -- it runs,
+// but no window opens, so there is nothing to map a joystick onto or enable the robot
+// from.
+wpi.sim.addGui().defaultEnabled = true
+wpi.sim.addDriverstation()
 
 // This is what supplies the desktop natives to the test JVM -- WPILib's HAL and, new in
 // M6, Phoenix's simulation libraries. Without it every Phoenix test dies with

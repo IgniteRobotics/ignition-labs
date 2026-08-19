@@ -1,5 +1,8 @@
 # PhotonVision Setup, Configuration & Best Practices Guide
 
+> **Who this is for:** mentors, and students at M5 or beyond. It assumes you already know
+> what a pose estimator is — if you are before M5, read the milestone first.
+
 **Target Audience:** Experienced FRC developers
 **Hardware:** 3x Arducam OV9281 cameras on Orange Pi 5 coprocessors
 **Season:** 2026 Rebuilt

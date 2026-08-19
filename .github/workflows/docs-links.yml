@@ -33,7 +33,6 @@ jobs:
           args: >-
             --no-progress
             --accept 200,206,403,429
-            --exclude-path projects
             --exclude-path superpowers
             --exclude-path .superpowers
             './**/*.md'

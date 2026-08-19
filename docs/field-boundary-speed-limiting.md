@@ -1,8 +1,10 @@
 # Field Boundary Speed Limiting System - Design Document
 
+> **Who this is for:** mentors assigning a design project, and the student or pair who
+> picks it up. This is not reference material to read — it is a spec to implement.
+
 **Purpose**: Guide for implementing a system that protects the robot from wall collisions by gradually reducing speed near field boundaries.
 
-**Assigned to**: _________________
 **Estimated complexity**: Medium (4 new files, 1 modification)
 
 ---
