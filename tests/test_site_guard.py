@@ -2,7 +2,13 @@
 
 from pathlib import Path
 
-from tools.site_guard import REQUIRED_PAGES, forbidden_files, missing_pages
+from tools.site_guard import (
+    REQUIRED_ASSETS,
+    REQUIRED_PAGES,
+    forbidden_files,
+    missing_assets,
+    missing_pages,
+)
 
 
 def _make_site(tmp_path: Path, files: list[str]) -> Path:
@@ -138,3 +144,29 @@ def test_page_dropped_from_nav_and_disk_is_reported(tmp_path):
     dropped = "programming/milestones/m4-sensors-actuators-control"
     (site / dropped / "index.html").unlink()
     assert missing_pages(site, REQUIRED_PAGES) == [dropped]
+
+
+def test_team_gitflow_is_a_required_page():
+    # A page in mkdocs.yml's nav: but not in REQUIRED_PAGES renders today and
+    # is guarded by nothing -- the exact C11b failure the hardcoded list
+    # exists to catch. team-gitflow.md is M0 reading and M7 procedure; it
+    # must actually publish.
+    assert "programming/team-gitflow" in REQUIRED_PAGES
+
+
+def test_missing_required_asset_is_reported(tmp_path):
+    site = _make_site(tmp_path, ["index.html"])
+    assert missing_assets(site, ["images/gitflow.png"]) == ["images/gitflow.png"]
+
+
+def test_present_required_asset_is_not_reported(tmp_path):
+    site = _make_site(tmp_path, ["index.html", "images/gitflow.png"])
+    assert missing_assets(site, ["images/gitflow.png"]) == []
+
+
+def test_gitflow_diagram_is_a_required_asset():
+    # The diagram is the only thing on team-gitflow.md that a student cannot
+    # get from the prose. mkdocs copies docs/images/ without ever checking
+    # the result, so a rename or a deleted file publishes a broken-image
+    # icon on a build that exits 0.
+    assert "images/gitflow.png" in REQUIRED_ASSETS

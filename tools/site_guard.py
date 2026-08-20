@@ -47,6 +47,16 @@ def missing_pages(site_root: Path, required: list[str]) -> list[str]:
     return sorted(missing)
 
 
+def missing_assets(site_root: Path, required: list[str]) -> list[str]:
+    """Return required non-page assets that did not publish, sorted.
+
+    Images are not pages: missing_pages() looks for <slug>/index.html and can
+    never observe a dropped image. An image that fails to copy renders as a
+    broken-image icon on a site build that exits 0.
+    """
+    return sorted(rel for rel in required if not (site_root / rel).is_file())
+
+
 # Deliberately hardcoded, not derived from mkdocs.yml's nav: at runtime.
 #
 # Derivation from nav: was tried and rejected. `mkdocs build` (even --strict)
@@ -70,6 +80,7 @@ REQUIRED_PAGES = [
     "CONTRIBUTING",
     "programming",  # renders programming/README.md -> programming/index.html
     "programming/git-workflow",
+    "programming/team-gitflow",
     "programming/robot-repo-ladder",
     "programming/UNTESTED-TARGETS",
     "programming/ai-use-standard",
@@ -95,6 +106,13 @@ REQUIRED_PAGES = [
     "programming/teaching-repo-spec",
 ]
 
+# Site-relative paths to non-page files that must publish. Hand-maintained for
+# the same reason REQUIRED_PAGES is: nothing derives it, so nothing shrinks it
+# to match a mistake.
+REQUIRED_ASSETS = [
+    "images/gitflow.png",
+]
+
 
 def main(argv: list[str]) -> int:
     if len(argv) != 2:
@@ -103,11 +121,14 @@ def main(argv: list[str]) -> int:
     site_root = Path(argv[1])
     leaked = forbidden_files(site_root)
     absent = missing_pages(site_root, REQUIRED_PAGES)
+    absent_assets = missing_assets(site_root, REQUIRED_ASSETS)
     for path in leaked:
         print(f"PUBLISHED SOURCE FILE: {path}", file=sys.stderr)
     for slug in absent:
         print(f"MISSING PAGE: {slug}", file=sys.stderr)
-    if leaked or absent:
+    for rel in absent_assets:
+        print(f"MISSING ASSET: {rel}", file=sys.stderr)
+    if leaked or absent or absent_assets:
         print(
             "\nThe published site does not match spec §14. "
             "If files under projects/ are being copied, switch the Pages build "

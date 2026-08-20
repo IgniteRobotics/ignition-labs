@@ -38,6 +38,7 @@ nav:
   - Programming Curriculum:
       - Overview: programming/README.md
       - Git Workflow: programming/git-workflow.md
+      - Team Gitflow: programming/team-gitflow.md
       - Real-Repo Ladder: programming/robot-repo-ladder.md
       - Untested Targets: programming/UNTESTED-TARGETS.md
       - AI Use Standard: programming/ai-use-standard.md

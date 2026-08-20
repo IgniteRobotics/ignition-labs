@@ -118,8 +118,13 @@ Once you have cleared the Kickoff Readiness Gate you have write access to `Robot
 ```bash
 git clone https://github.com/IgniteRobotics/Robot-2026.git
 cd Robot-2026
-git checkout -b intake-current-limiting
+git checkout -b feature/intake-current-limiting
 ```
+
+This is where [the team gitflow](team-gitflow.md) stops being background reading and starts
+being what you do: your branch is `feature/<name>`, your pull request targets `development`
+rather than `main`, and `main` is competition code you never push to directly. You read that
+page at M0 — read it again now, because from here it describes your week.
 
 ---
 
