@@ -17,6 +17,35 @@ This installs a bundled JDK 17, a bundled VS Code, and the WPILib extension.
 Use the VS Code it installs — not one you already had. The bundled one knows
 where the JDK is.
 
+## 1b. Install three extensions
+
+The installer already gave you the WPILib extension and Java language support. Add three
+more. All three exist for the same reason: git is much easier to understand when you can
+see it.
+
+| Extension | Marketplace ID | What it gives you |
+|---|---|---|
+| **GitLens** | `eamodio.gitlens` | The name of whoever last changed a line, shown on the line, with the commit message. "Why is this here?" becomes a question you can answer yourself. |
+| **Git Graph** | `mhutchie.git-graph` | Your branches and merges, drawn. This is the same picture as [the team gitflow](programming/team-gitflow.md) diagram, except it is your actual history. |
+| **Live Share** | `ms-vsliveshare.vsliveshare` | A mentor can join your editor and help without standing behind you, including from home. |
+
+Install them from the Extensions view — `Ctrl+Shift+X` (`Cmd+Shift+X` on macOS), paste the
+ID, click **Install**. Or open `projects/m0-onboarding` as a folder and VS Code will offer
+all three at once; the repository ships the recommendation.
+
+**None of these is required.** The build, the deploy, and every CI check work without them.
+If you are on a locked-down laptop that will not install extensions, you can still complete
+every milestone — say so to a mentor rather than quietly falling behind.
+
+> **⚠️ Live Share shares your screen's contents, not just a file.** Whoever joins can see
+> your files and your terminal. A mentor starts the session, you accept it, and **you end it
+> when you are done** — check that the Live Share panel shows no active session before you
+> close your laptop.
+
+**Not on this list: Copilot, or any other AI autocomplete.** M0 through M2 are 🔴 Red tier
+and inline AI completion is turned off for all three. If your editor came with it, disable it
+now — see [the AI use standard](programming/ai-use-standard.md).
+
 ## 2. Verify Java
 
 Open the WPILib VS Code, then a terminal inside it (`` Ctrl+` ``):

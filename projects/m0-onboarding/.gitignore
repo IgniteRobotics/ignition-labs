@@ -6,3 +6,5 @@ ctre_sim/
 networktables.json
 simgui-window.json
 *.log
+.vscode/*
+!.vscode/extensions.json
