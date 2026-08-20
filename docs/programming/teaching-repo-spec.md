@@ -37,6 +37,8 @@ It is not a course-in-a-box that replaces mentors. Every milestone retains expla
 
 **2026-08-07.** Merged in the skeleton-projects design session. Changes: skeletons moved from a proposed `ignite-training` repository into this one (D1); the git ritual specified end to end (D2, §5); the real-repo ladder added (D8, §6); M6's deliverable changed from a sandbox exercise to a real pull request (D9, §9.7); GitHub Pages publication added (D7, §7); the multi-project GradleRIO spike deleted as obviated (§4.2); build order revised (§13). The originating design document is preserved at `../superpowers/specs/2026-08-07-skeleton-projects-design.md`.
 
+**2026-08-20.** Merged in the M0 VS Code and team-git design session. Changes: team gitflow specified as M0 literacy and M7 practice (§5.7); documentation ownership across the four git documents made governing (§5.7); M0's given inventory gains `.vscode/extensions.json` and `team-gitflow.md`, and its mentor-verified list gains two items (§9.1). The originating design document is preserved at `../superpowers/specs/2026-08-19-m0-vscode-and-git-design.md`.
+
 ---
 
 ## 2. Research basis
@@ -245,6 +247,41 @@ The git ritual and the commit-access policy are the same boundary. That is not a
 | Write access on this repository, branch directly | Contradicts the Kickoff Gate outright, and puts every student's in-progress work in the repository that publishes the site |
 | Students PR solutions upstream | Thirty students' solutions in the canonical repository, and every solution publicly visible to the next cohort |
 
+### 5.7 Team gitflow, and where it enters
+
+`Robot-2026` runs a simplified gitflow — `main` ← `development` ← `feature/*`, `hotfix/<comp>`
+branched from `main` at competition and merged back into both, `release/<comp>` tags, no
+release branches. That is the team's own standard, maintained on Notion; `team-gitflow.md` is
+the curriculum's copy of it.
+
+**M0 teaches it as literacy only.** The student reads the diagram and can say what
+`development` is for. They do not practise it, because until M7 they have no repository to
+practise it in — §5.2 and §5.3 put every student pull request on a fork whose only long-lived
+branch is `main`.
+
+**M7 is where it becomes practice**, when the Kickoff Readiness Gate grants commit access and
+§5.4 has the student branching directly on `Robot-2026`. Gitflow therefore lands on the far
+side of the §5.5 invariant, and for the same reason the invariant exists: it is the point at
+which the team has decided this student can be trusted with the competition robot's code.
+
+The literacy step is not optional politeness. A student clones `Robot-2026` read-only at M2
+(§6.3) and finds a `development` branch that `git-workflow.md` never mentions. Without §5.7's
+page that reads as a documentation contradiction, and the Notion guidelines' own *"Branch
+directly in the Ignite repo. No need to fork"* reads as a direct instruction to abandon §5.2.
+
+**Documentation ownership.** Four documents now discuss git. Each owns exactly one question
+and must not contain the others' content:
+
+| Document | Owns | Never contains |
+|---|---|---|
+| `SETUP.md` | *Is my machine ready?* — install, authentication, extensions | Any workflow. No branching, no pull requests |
+| `git-workflow.md` | *What do I type, this week?* — the exact commands per milestone | Rationale beyond a line; team process |
+| `milestones/m0-tooling-and-git.md` | *What does git mean?* — the model, the allow-list, the GUI mapping | Per-milestone command sequences; links out instead |
+| `team-gitflow.md` | *How does the team work, and why?* — gitflow, and when it becomes yours | Anything a student does before M7 |
+
+Without this table the fourth git document becomes the third place someone adds a `git push`
+example, and the set drifts within one season.
+
 ---
 
 ## 6. The real-repo ladder
@@ -384,12 +421,12 @@ Each entry lists what ships, which DoD items the tests cover, and which stay men
 
 M0 is not about code. The skeleton exists so the pull request has something real to change.
 
-**Given:** a complete, working, minimal `TimedRobot` project that builds and whose simulator launches. `CONTRIBUTING.md` with the curated command set from `curriculum-spec.md` §4.2 — `clone`, `checkout -b`, `add -u`, `commit -m`, `fetch --all`, `merge`, `push` — and nothing else. `student-check.yml`. A deliberately mis-formatted `FormatMe.java`. `FormatMe.java` is the conventional name for a formatting-exercise file and, by that convention, is the one file `skeleton-integrity.yml`'s formatting check exempts.
+**Given:** a complete, working, minimal `TimedRobot` project that builds and whose simulator launches. `CONTRIBUTING.md` with the curated command set from `curriculum-spec.md` §4.2 — `clone`, `checkout -b`, `add -u`, `commit -m`, `fetch --all`, `merge`, `push` — and nothing else. `student-check.yml`. A deliberately mis-formatted `FormatMe.java`. `FormatMe.java` is the conventional name for a formatting-exercise file and, by that convention, is the one file `skeleton-integrity.yml`'s formatting check exempts. `.vscode/extensions.json` recommending `eamodio.gitlens`, `mhutchie.git-graph` and `ms-vsliveshare.vsliveshare` — M0 only, since extensions install at user level and the prompt is useful exactly once. `team-gitflow.md` and its diagram, as required reading per §5.7.
 
 **Student authors:** `contributors/<github-handle>.md` from a template, and runs `./gradlew spotlessApply` on `FormatMe.java` locally to see the fix — then **reverts it**, and opens one pull request containing only the contributor file, upstream, per §5.2. The formatting fix is never committed: its entire value is in running it and reading the diff once, and a fix that landed on `main` would leave the next student's `FormatMe.java` already correctly formatted, with nothing left to fix.
 
 **Tests cover:** the contributor file's schema, when one is present — GitHub line, no placeholder text, no accidental email disclosure. Because the pull request touches only `contributors/`, `student-check.yml`'s build-and-`spotlessCheck` job never runs for it at all — that job is gated on `projects/**` having changed (§7.3, mechanic 2), and by design it has not.
-**Mentor verifies:** the contributor file exists for this student's PR (the checker cannot know which student authored a given pull request, so it cannot enforce this — an empty `contributors/` directory still exits 0); simulator launches and the student can point at the Robot State panel; can explain a branch without using the word "branch"; **Actions are enabled on their fork** (§7.3, mechanic 3).
+**Mentor verifies:** the contributor file exists for this student's PR (the checker cannot know which student authored a given pull request, so it cannot enforce this — an empty `contributors/` directory still exits 0); simulator launches and the student can point at the Robot State panel; can explain a branch without using the word "branch"; **Actions are enabled on their fork** (§7.3, mechanic 3). The three recommended extensions are installed and the student can find the Source Control panel; the student can point at `development` on the team gitflow diagram and say what it is for (§5.7).
 
 ### 9.2 M1 — `projects/m1-java-fundamentals/` · fade: L3
 
