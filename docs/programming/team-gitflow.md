@@ -34,10 +34,11 @@ nothing you do on one can hurt anybody.
 went to a specific event. When someone asks what we were running at Gwinnett, the tag is the
 answer, and it is the only reliable one.
 
-**The drawing simplifies the hotfix.** It shows `hotfix/gwinnett` merging back into `main`
-only. In practice it merges into `development` as well — otherwise the fix somebody made at
-competition is missing from every feature branched after it, and someone re-breaks it in
-March.
+**The hotfix comes back in two hops, not one.** `hotfix/gwinnett` merges into `main`, and
+then `main` merges down into `development`. Both hops are drawn — follow the line from that
+second orange commit on `main` down to the next `development` commit. It matters that the
+second hop happens: without it the fix somebody made at competition is missing from every
+feature branched after it, and someone re-breaks it in March.
 
 ---
 
@@ -46,7 +47,7 @@ March.
 | Branch | What it holds | Who writes to it |
 |---|---|---|
 | `main` | Competition-ready code, and nothing else | Nobody directly. Only merges, from `development` or a `hotfix` |
-| `development` | Features merged together so they can be tested as a set | Nobody directly. Only merges, from `feature/*` |
+| `development` | Features merged together so they can be tested as a set | Nobody directly. Only merges — from `feature/*`, and from `main` after a hotfix |
 | `feature/<name>` | One feature or fix. One, 95% of the time | You |
 | `hotfix/<comp>` | Changes made at a competition, branched from `main` | Whoever is at the event |
 
@@ -86,7 +87,9 @@ We do not use `release` branches. Code goes from `development` straight to `main
      them up automatically.
 5. **We tag a release before each competition**, named `release/<comp>`, and immediately cut
    a `hotfix/<comp>` branch from `main` for changes at the event.
-6. **After the competition the hotfix merges back into both `main` and `development`.**
+6. **After the competition the hotfix merges into `main`, and then `main` merges into
+   `development`.** Two hops. The second one is what keeps the fix from vanishing off every
+   branch cut after the event.
 7. **No `release` branches.** `development` goes straight to `main`.
 
 **One exception, before you have commit access.** At M4 and M6 you open a pull request into

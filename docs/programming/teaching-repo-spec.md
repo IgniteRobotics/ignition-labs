@@ -252,8 +252,8 @@ The git ritual and the commit-access policy are the same boundary. That is not a
 ### 5.7 Team gitflow, and where it enters
 
 `Robot-2026` runs a simplified gitflow — `main` ← `development` ← `feature/*`, `hotfix/<comp>`
-branched from `main` at competition and merged back into both, `release/<comp>` tags, no
-release branches. That is the team's own standard, maintained on Notion; `team-gitflow.md` is
+branched from `main` at competition and merged back into `main`, which then merges into
+`development`, `release/<comp>` tags, no release branches. That is the team's own standard, maintained on Notion; `team-gitflow.md` is
 the curriculum's copy of it.
 
 **M0 teaches it as literacy only.** The student reads the diagram and can say what
