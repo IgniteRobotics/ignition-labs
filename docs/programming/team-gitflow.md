@@ -89,6 +89,12 @@ We do not use `release` branches. Code goes from `development` straight to `main
 6. **After the competition the hotfix merges back into both `main` and `development`.**
 7. **No `release` branches.** `development` goes straight to `main`.
 
+**One exception, before you have commit access.** At M4 and M6 you open a pull request into
+`Robot-2026` from a fork, without commit access — a contribution from outside the team's
+branch structure rather than work inside it. [The git workflow](git-workflow.md) says where
+that pull request targets. If what it says disagrees with what GitHub actually lets you open,
+the repository is right and the page is stale — ask a mentor.
+
 ---
 
 ## When this becomes yours

@@ -30,8 +30,9 @@ see it.
 | **Live Share** | `ms-vsliveshare.vsliveshare` | A mentor can join your editor and help without standing behind you, including from home. |
 
 Install them from the Extensions view — `Ctrl+Shift+X` (`Cmd+Shift+X` on macOS), paste the
-ID, click **Install**. Or open `projects/m0-onboarding` as a folder and VS Code will offer
-all three at once; the repository ships the recommendation.
+ID, click **Install**. Or, once you have cloned the repository in step 4, open
+`projects/m0-onboarding` as a folder and VS Code will offer all three at once; the repository
+ships the recommendation.
 
 **None of these is required.** The build, the deploy, and every CI check work without them.
 If you are on a locked-down laptop that will not install extensions, you can still complete

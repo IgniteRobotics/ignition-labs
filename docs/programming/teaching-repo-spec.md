@@ -104,6 +104,7 @@ ignition-labs/                   IgniteRobotics/ignition-labs — the repository
 │   ├── VISION_GUIDE.md          │
 │   ├── vision-subsystem.md      │ rendered
 │   ├── field-boundary-speed-limiting.md
+│   ├── images/                  │ rendered — gitflow.png (§5.7). images/, not assets/
 │   └── programming/             ┘
 │       ├── README.md            │
 │       ├── curriculum-spec.md   │
@@ -112,6 +113,7 @@ ignition-labs/                   IgniteRobotics/ignition-labs — the repository
 │       ├── student-deliverables.md
 │       ├── resources.md         │
 │       ├── git-workflow.md      ← the §5 ritual, student-facing
+│       ├── team-gitflow.md      ← the §5.7 team standard, student-facing
 │       ├── robot-repo-ladder.md ← the §6 matrix, student-facing
 │       ├── UNTESTED-TARGETS.md  ← mentor-maintained M6 shortlist (§6.5)
 │       ├── milestones/m0…m8.md  │ rendered
@@ -256,8 +258,10 @@ the curriculum's copy of it.
 
 **M0 teaches it as literacy only.** The student reads the diagram and can say what
 `development` is for. They do not practise it, because until M7 they have no repository to
-practise it in — §5.2 and §5.3 put every student pull request on a fork whose only long-lived
-branch is `main`.
+practise it in — §5.2 and §5.3 put every student pull request into `ignition-labs` on a fork
+whose only long-lived branch is `main`. The M4 and M6 upstream pull requests into
+`Robot-2026` (§6.1) are contributions from outside the team's branch structure rather than
+work inside it; `git-workflow.md` states where each one targets.
 
 **M7 is where it becomes practice**, when the Kickoff Readiness Gate grants commit access and
 §5.4 has the student branching directly on `Robot-2026`. Gitflow therefore lands on the far
@@ -275,7 +279,7 @@ and must not contain the others' content:
 | Document | Owns | Never contains |
 |---|---|---|
 | `SETUP.md` | *Is my machine ready?* — install, authentication, extensions | Any workflow. No branching, no pull requests |
-| `git-workflow.md` | *What do I type, this week?* — the exact commands per milestone | Rationale beyond a line; team process |
+| `git-workflow.md` | *What do I type, this week?* — the exact commands per milestone | Rationale beyond a line; team process beyond a one-line pointer |
 | `milestones/m0-tooling-and-git.md` | *What does git mean?* — the model, the allow-list, the GUI mapping | Per-milestone command sequences; links out instead |
 | `team-gitflow.md` | *How does the team work, and why?* — gitflow, and when it becomes yours | Anything a student does before M7 |
 
@@ -732,6 +736,7 @@ Each season, before the fall:
 6. Bump and re-pin `mkdocs` and `mkdocs-material` in `pyproject.toml`. Material's own build already warns that MkDocs 2.0 removes the plugin system entirely and ships no migration path — treat that warning as live every season it appears, not a one-time notice, and require a full `mkdocs build` plus a passing `tools/site_guard.py` before merging the bump. A version number that resolves is not the same thing as a site that still builds
 7. **Done at build-order step 12** — `pages.yml` now runs `mkdocs build --strict`. It was deliberately not strict while `programming/robot-repo-ladder.md` linked `UNTESTED-TARGETS.md` before that file existed, which was a legitimate warning rather than a defect. The file shipped at step 8. Without `--strict`, a broken internal link is a silent 404 that neither `lychee` nor `tools/site_guard.py` can catch — both check different failure modes.
 8. **Re-verify every link and claim in `programming/resources.md`.** It carries a `Last verified:` date and asserts that each listed resource was reachable and accurate on that date. Both go stale silently: `lychee` catches a dead URL but not a page that still resolves while describing a superseded API. Re-read each entry, confirm it still says what the table claims it says, and move the date.
+9. **Re-click every path in M0's *In VS Code* column** (`programming/milestones/m0-tooling-and-git.md`) against the season's WPILib VS Code build. VS Code moves menu items between releases, and where the application and the table disagree the application is right. The column shipped without a click-through — this pass is the only thing that verifies it
 
 Order matters: bump first, then re-pin, then cross-check. A cross-check against an un-bumped skeleton proves nothing useful.
 

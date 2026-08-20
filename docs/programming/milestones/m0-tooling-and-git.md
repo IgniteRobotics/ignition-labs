@@ -61,7 +61,7 @@ Deliberately narrower than all of git. This mirrors a pattern used by other FRC 
 rookies an explicit allow-list rather than the whole tool.
 
 The third column is the same command, done by clicking. Neither one is the "real" way — the
-panel is running exactly these commands. Learn them as one thing, because when something goes
+panel is running git for you, and mostly these exact commands. Learn them as one thing, because when something goes
 wrong you will need to describe it to a mentor, and "the checkmark is greyed out" is much
 harder to help with than "`git commit` says nothing is staged."
 
@@ -70,11 +70,15 @@ harder to help with than "`git commit` says nothing is staged."
 | `git clone <url>` | Copy a repository to your machine, once | `Ctrl+Shift+P` → **Git: Clone** |
 | `git checkout -b <name>` | Make a new branch and switch to it | Branch name in the status bar (bottom left) → **Create new branch** |
 | `git status` | What have I changed? Run this constantly | The Source Control panel's file list **is** `git status` |
-| `git add -u` | Stage the files you have modified | **+** on the **Changes** header |
+| `git add -u` | Stage the files you have modified | **+** on a single file stages that file. **+** on the **Changes** header stages *everything*, including files git has never seen before — which `git add -u` does not do |
 | `git commit -m "message"` | Save a snapshot with a note | Type the message in the box, then **✓ Commit** |
-| `git push` | Send your commits to GitHub | **Sync Changes**, or the ⟳ in the status bar |
+| `git push` | Send your commits to GitHub | **Sync Changes**, or the ⟳ in the status bar. Sync pulls before it pushes; on a branch you have not pushed before the button reads **Publish Branch** |
 | `git fetch --all` | Get everyone else's commits, without applying them | Source Control **⋯** → **Fetch** → **Fetch From All Remotes** |
 | `git merge origin/main` | Apply main's changes to your branch | Source Control **⋯** → **Branch** → **Merge** |
+
+**VS Code moves these menu items between releases.** If a path here does not match what you
+see, the application is right and this table is stale — tell a mentor so it gets fixed. You
+have not done anything wrong and you are not lost.
 
 **Not on this list: `rebase`, `reset`, `cherry-pick`, `force push`.** They are useful and you
 will learn them eventually. They can also destroy work irrecoverably, and you should not meet

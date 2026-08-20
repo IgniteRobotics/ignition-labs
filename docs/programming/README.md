@@ -100,6 +100,7 @@ FIRST has no rule about this and no other FRC team has published a policy. This 
 |---|---|
 | [`README.md`](README.md) | This page |
 | [`git-workflow.md`](git-workflow.md) | How you use git at every milestone — clone, fork, and branch, and when each applies |
+| [`team-gitflow.md`](team-gitflow.md) | How the team works on the competition robot — gitflow, and when that becomes how you work. M0 reading, M7 procedure |
 | [`robot-repo-ladder.md`](robot-repo-ladder.md) | The four levels of access to the real robot repositories, and which milestone unlocks each |
 | [`curriculum-spec.md`](curriculum-spec.md) | The design document. Why the curriculum is shaped this way. For mentors and anyone editing it |
 | [`teaching-repo-spec.md`](teaching-repo-spec.md) | Spec for the skeleton source code students start each project from. For mentors and anyone building it |
