@@ -57,20 +57,33 @@ Do not start with commands. Start with the model.
 
 ### The commands you actually need
 
-Deliberately narrower than all of git. This mirrors a pattern used by other FRC teams: hand rookies an explicit allow-list rather than the whole tool.
+Deliberately narrower than all of git. This mirrors a pattern used by other FRC teams: hand
+rookies an explicit allow-list rather than the whole tool.
 
-| Command | What it does |
-|---|---|
-| `git clone <url>` | Copy a repository to your machine, once |
-| `git checkout -b <name>` | Make a new branch and switch to it |
-| `git status` | What have I changed? Run this constantly |
-| `git add -u` | Stage the files you have modified |
-| `git commit -m "message"` | Save a snapshot with a note |
-| `git push` | Send your commits to GitHub |
-| `git fetch --all` | Get everyone else's commits, without applying them |
-| `git merge origin/main` | Apply main's changes to your branch |
+The third column is the same command, done by clicking. Neither one is the "real" way — the
+panel is running exactly these commands. Learn them as one thing, because when something goes
+wrong you will need to describe it to a mentor, and "the checkmark is greyed out" is much
+harder to help with than "`git commit` says nothing is staged."
 
-**Not on this list: `rebase`, `reset`, `cherry-pick`, `force push`.** They are useful and you will learn them eventually. They can also destroy work irrecoverably, and you should not meet them before you can recover from them. If you think you need one, ask a mentor.
+| Command | What it does | In VS Code |
+|---|---|---|
+| `git clone <url>` | Copy a repository to your machine, once | `Ctrl+Shift+P` → **Git: Clone** |
+| `git checkout -b <name>` | Make a new branch and switch to it | Branch name in the status bar (bottom left) → **Create new branch** |
+| `git status` | What have I changed? Run this constantly | The Source Control panel's file list **is** `git status` |
+| `git add -u` | Stage the files you have modified | **+** on the **Changes** header |
+| `git commit -m "message"` | Save a snapshot with a note | Type the message in the box, then **✓ Commit** |
+| `git push` | Send your commits to GitHub | **Sync Changes**, or the ⟳ in the status bar |
+| `git fetch --all` | Get everyone else's commits, without applying them | Source Control **⋯** → **Fetch** → **Fetch From All Remotes** |
+| `git merge origin/main` | Apply main's changes to your branch | Source Control **⋯** → **Branch** → **Merge** |
+
+**Not on this list: `rebase`, `reset`, `cherry-pick`, `force push`.** They are useful and you
+will learn them eventually. They can also destroy work irrecoverably, and you should not meet
+them before you can recover from them. If you think you need one, ask a mentor.
+
+**That exclusion applies to the menus too.** The Source Control **⋯** menu contains `rebase`,
+`reset` and force-push, and a menu item destroys work exactly as thoroughly as a typed
+command — faster, in fact, because you did not have to think about spelling it. The list
+above is the whole allow-list, whichever way you drive it.
 
 **Commit messages.** Explain *why*, not *what*. The diff already shows what. "Fixed bug" is useless six weeks later; "Fix indexer stalling when a game piece is already loaded at init" is not.
 
@@ -101,6 +114,21 @@ job runs and checks it.
 `Robot-2026` runs a second workflow that AI-reviews every pull request diff. You meet
 it at M7 — it is not part of `ignition-labs`.
 
+### How the team works, and when you join it
+
+Everything above is how *you* work right now: fork, branch, one pull request. The team
+itself, on the competition robot's code, works differently — `main` is competition-ready code
+only, features merge into a `development` branch first, and competitions get `hotfix`
+branches and release tags.
+
+You do not do any of that yet, and you do not have a repository to do it in. But you will
+clone `Robot-2026` read-only at M2, and you will find a `development` branch that nothing in
+[the git workflow](../git-workflow.md) mentions. Read [the team gitflow](../team-gitflow.md)
+now so that is recognition rather than confusion.
+
+It becomes what you actually do at **M7**, when clearing the Kickoff Readiness Gate gets you
+commit access.
+
 ## Project
 
 **Ship a real pull request.**
@@ -126,9 +154,11 @@ The change deliberately does not need to be impressive. The point is the pipelin
 
 - [ ] WPILib VS Code installed; `./gradlew build` succeeds on your machine
 - [ ] The simulator launches and you can identify the Robot State panel
+- [ ] GitLens, Git Graph and Live Share are installed, and you can find the Source Control panel
 - [ ] A merged pull request exists under your GitHub account
 - [ ] You ran `spotlessApply` on `FormatMe.java`, read the diff, reverted it, and can say what the formatter changed
 - [ ] You can explain what a branch is without using the word "branch"
+- [ ] You can point at `development` on the team gitflow diagram and say why it exists
 - [ ] You can point at the first line of a stack trace that refers to our code
 - [ ] Copilot or equivalent is disabled in your editor
 
@@ -163,4 +193,5 @@ See `resources.md` for the full library. For this milestone:
 - **Robot Code CI with GitHub Actions** — what the PR check is doing
 - **Team 3255 FRC Java Tutorial** — a second explanation of environment setup if ours did not land
 - **Chief Delphi: "How does your team use git and GitHub?"** — where the curated command list comes from
+- **Ignite:** `docs/programming/team-gitflow.md` — how the team works on the competition robot, and when that becomes how you work
 - **Ignite:** `ignition-labs/.github/workflows/student-check.yml` — the CI your M0 pull request must pass
