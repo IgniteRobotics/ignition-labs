@@ -125,6 +125,30 @@ Measure<Voltage> voltage = Volts.of(12.0);
 double height = 1.5; // What units? Meters? Inches?
 ```
 
+> **[Editorial note — not part of the standard.]** The three "Good" lines above do not compile
+> against WPILib 2026, the version this document names. On 2026, `Distance`, `LinearVelocity` and
+> `Voltage` are *measures* living in `edu.wpi.first.units.measure`, and only the *units* —
+> `DistanceUnit`, `VoltageUnit` — live in `edu.wpi.first.units`. `Measure<U>` is declared
+> `Measure<U extends Unit>`, so `Measure<Distance>` is rejected twice over: the name does not
+> resolve under the import shown, and a measure is not a unit. `Meters.of(1.5)` already returns
+> `Distance`, so the type parameter has nothing left to do. The current form is:
+>
+> ```java
+> import edu.wpi.first.units.measure.*;
+> import static edu.wpi.first.units.Units.*;
+>
+> Distance height = Meters.of(1.5);
+> LinearVelocity velocity = MetersPerSecond.of(2.0);
+> Voltage voltage = Volts.of(12.0);
+> ```
+>
+> The *Why* below inherits the same staleness: read `Measure<Angle>` there as `Angle`.
+> `Robot-2026` already writes the modern idiom in its own source — `IntakeConstants.java:130` is
+> `Measure<CurrentUnit>`, parameterized on a unit, not on a measure. The example is reproduced
+> verbatim because the pinned source is the source of truth for this document; the fix belongs
+> upstream in `Robot-2026`'s prompt, followed by a re-copy of the reference file — not a
+> hand-patch here.
+
 *Why:* a `double` that means radians and a `double` that means degrees are the same type, so
 the compiler cannot help you. A `Measure<Angle>` and a raw `double` are not the same type, so
 it can.
@@ -339,6 +363,27 @@ config.CurrentLimits.SupplyCurrentLimitEnable = true;
 motor.getConfigurator().apply(config);
 ```
 
+> **[Editorial note — not part of the standard.]** `SupplyCurrentThreshold` and
+> `SupplyTimeThreshold` no longer exist on Phoenix 6's `CurrentLimitsConfigs`; the example above
+> does not compile against the pinned vendor version. Their replacements are
+> `SupplyCurrentLowerLimit` and `SupplyCurrentLowerTime` — **and the rename inverted which field
+> holds which number.** `SupplyCurrentLimit` is now the *peak* current allowed; after
+> `SupplyCurrentLowerTime` at that peak, the limit drops to `SupplyCurrentLowerLimit`. Renaming
+> the fields in place would silently swap the sustained and peak values. The form that preserves
+> what the example above intends — 40 A sustained, 60 A tolerated for 0.1 s — is:
+>
+> ```java
+> TalonFXConfiguration config = new TalonFXConfiguration();
+> config.CurrentLimits.SupplyCurrentLimit = 60.0;      // peak
+> config.CurrentLimits.SupplyCurrentLowerLimit = 40.0; // sustained, after the time below
+> config.CurrentLimits.SupplyCurrentLowerTime = 0.1;
+> config.CurrentLimits.SupplyCurrentLimitEnable = true;
+> motor.getConfigurator().apply(config);
+> ```
+>
+> Reproduced verbatim for the same reason as the note above: the fix belongs upstream in
+> `Robot-2026`'s prompt, followed by a re-copy of the reference file.
+
 *Why:* a stalled motor draws its full stall current until something stops it — which is either
 a current limit you configured or a breaker trip that takes the whole mechanism offline
 mid-match. The limit is also what keeps one stalled mechanism from browning out the rest of the
@@ -436,11 +481,23 @@ reviewer should not focus on) and lines 301–311 (the review's output format) a
 for conducting a review, not statements about what good code looks like. They stay with the
 prompt.
 
-**One example carries an editorial note.** The `createSoftLimitConigs()` example under
-*Mechanism limits* sets both enable flags to `false` in the pinned source, contradicting the
-standard it illustrates. It is reproduced verbatim with a marked editorial note beside it. The
-note is commentary, not a standard, and the correction belongs upstream in `Robot-2026`
-followed by a re-copy of the reference file.
+**Three examples carry editorial notes.** Each is reproduced verbatim with a marked note beside
+it. The notes are commentary, not standards, and every correction belongs upstream in
+`Robot-2026` followed by a re-copy of the reference file — never a hand-patch here.
+
+| Example | What is wrong with it |
+|---|---|
+| `createSoftLimitConigs()`, under *Mechanism limits* | Sets both enable flags to `false` in the pinned source, contradicting the standard it illustrates. A semantic defect; the API is current |
+| Type-safe units, under *Team conventions* | Does not compile on WPILib 2026. `Measure<Distance>`, `Measure<Velocity<Distance>>` and `Measure<Voltage>` all name measure types where `Measure<U extends Unit>` requires unit types, and none of the three resolve under the import shown. The 2026 form is the bare measure type |
+| Current limiting, under *Safety and error handling* | Does not compile on the pinned Phoenix 6. `SupplyCurrentThreshold` and `SupplyTimeThreshold` were replaced by `SupplyCurrentLowerLimit` and `SupplyCurrentLowerTime`, and the replacement inverted which field carries the peak and which the sustained value |
+
+The last two are the same class of error and worth naming as one: the promotion audit checked
+that every standard in the source has a home here, which is a structural check and cannot tell
+whether the code inside a standard still compiles. Every code example in this document was
+subsequently checked against the pinned toolchain — WPILib `2026.2.1` and Phoenix 6 `26.1.x` —
+by inspecting the shipped jars. The remaining examples are either plain Java or use API that is
+still current. A reader who finds a fourth should add a note in this same form rather than
+editing the example.
 
 **Status.** This document is a **draft** until a season lead ratifies it. Draft means the
 standards in it are Ignite's current practice as written down for the first time, not that they
