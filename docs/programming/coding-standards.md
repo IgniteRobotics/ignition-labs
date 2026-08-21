@@ -81,9 +81,32 @@ one long method you can only test by running the whole auto.
 what makes a question answerable by anyone else on the team. Picking a different trajectory
 library for one subsystem costs everyone else the ability to help you debug it.
 
+### No blocking loops in commands or subsystems
+
+Avoid the use of `while` loops within commands or subsystems.
+
+*Why:* every subsystem's `periodic()` and every command's `execute()` runs on the same thread,
+once every 20 ms, one after another. A loop that spins until something becomes true does not
+wait — it stops the entire robot program, including the code that would have made the condition
+true. Waiting is what `Commands.waitUntil()`, a command's `isFinished()`, and a state machine
+are for.
+
 ---
 
 ## Team conventions
+
+### Naming conventions
+
+- `camelCase` for variables and methods
+- `PascalCase` for classes
+- lowercase for package names
+- `UPPER_SNAKE_CASE` for constants
+
+*Why:* these carry information no other part of the syntax does — seeing `MAX_HEIGHT` tells you
+the value never changes, and seeing `Elevator` tells you it is a type before you have looked
+anything up. They are worth having mostly because they are the *same* everywhere: a codebase
+with three conventions in it costs every reader a moment on every identifier, forever, and no
+one convention was ever worth that.
 
 ### Type-safe units
 
@@ -280,6 +303,14 @@ public static SoftwareLimitSwitchConfigs createSoftLimitConigs(){
         }
 ```
 
+> **[Editorial note — not part of the standard.]** In the source this example is copied from,
+> both enable flags read `false`, as reproduced above. As written the example configures two
+> thresholds and then leaves them switched off, which is the opposite of what the standard above
+> it says to do. This looks like a defect in `Robot-2026`, not an intended standard: **enable
+> the limits you configure.** The example is reproduced verbatim because the pinned source is
+> the source of truth for this document; the fix belongs upstream in `Robot-2026`, followed by
+> a re-copy of the reference file — not a hand-patch here.
+
 If no built in limits, then enforce software limits:
 
 ```java
@@ -371,9 +402,34 @@ here first, and the review prompt is what changes to match — never the other w
 **What was dropped from lines 53–300:** nothing. Every standard in that range has a home above,
 in the source's own order and grouping.
 
-**What was not promoted, and why:** lines 1–52 (tone, review scope, and what a reviewer should
-not focus on) and lines 301–311 (the review's output format) are instructions for conducting a
-review, not statements about what good code looks like. They stay with the prompt.
+**Two standards promoted from *outside* lines 53–300** — so that anyone diffing the two
+documents by eye does not read them as drift:
+
+| Promoted | Source line | Landed at |
+|---|---|---|
+| Naming conventions — camelCase / PascalCase / lowercase packages / `UPPER_SNAKE_CASE` | 19 | Team conventions → Naming conventions |
+| No `while` loops in commands or subsystems | 45 | Architecture → No blocking loops in commands or subsystems |
+
+Both sit inside the review prompt's *What to Review* section, which is otherwise review scope
+rather than standards. They were promoted anyway, by ruling, for two reasons. The design
+record's ownership boundary states that this document owns "patterns, units, **naming**,
+safety" — naming is explicitly ours, and its landing in a scope section of the prompt is an
+accident of where a heading fell. And the `while`-loop rule passes the same test everything
+else here passes: it describes what good code looks like, not how a review is conducted.
+
+M1 raises the naming question directly — three conventions in one codebase, and nobody wrote
+the rule down. This is where it is written down.
+
+**What was not promoted, and why:** the rest of lines 1–52 (tone, review scope, and what a
+reviewer should not focus on) and lines 301–311 (the review's output format) are instructions
+for conducting a review, not statements about what good code looks like. They stay with the
+prompt.
+
+**One example carries an editorial note.** The `createSoftLimitConigs()` example under
+*Mechanism limits* sets both enable flags to `false` in the pinned source, contradicting the
+standard it illustrates. It is reproduced verbatim with a marked editorial note beside it. The
+note is commentary, not a standard, and the correction belongs upstream in `Robot-2026`
+followed by a re-copy of the reference file.
 
 **Status.** This document is a **draft** until a season lead ratifies it. Draft means the
 standards in it are Ignite's current practice as written down for the first time, not that they
