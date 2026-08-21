@@ -348,35 +348,109 @@ Scoped deliberately small. Nothing here has been done.
 
 ### `Robot-2026` (separate repository — needs its own change)
 
-- **Specs ship** (decision 2). Every M7 spec commits into the season repo as
-  `openspec/changes/<feature>/proposal.md`, archived to `openspec/changes/archive/` on
-  merge. Two consequences worth naming: the archive becomes a growing record of how
-  Ignite students reason about features, which is a recruiting and mentoring asset nobody
-  currently has — and it is a layout change to a repository other people live in, so it
-  needs the season lead's agreement before M7 text depends on it.
+**Specs ship** (decision 2). Every M7 spec commits into the season repo as
+`openspec/changes/<feature>/proposal.md`, archived to `openspec/changes/archive/` on merge.
+The archive becomes a growing record of how Ignite students reason about features, which is
+a mentoring and recruiting asset the team currently has no version of.
 
-### The draft constitution (decision 4 — new scope, own deliverable)
+**But the scaffolding must not arrive with the first student's pull request**, and this
+corrects the first draft of this report, which assumed it would. `openspec init` does not
+only create `openspec/`. It also writes **outside** it, into tool-specific hidden
+directories chosen by whichever agent the student selected:
+
+```
+openspec/{specs,changes}/, openspec/config.yaml
+.claude/skills/        if claude selected
+.cursor/skills/        if cursor selected
+.cursor/commands/      if delivery includes commands
+.agents/skills/        shared, for AGENTS.md-compatible tools
+```
+
+Three problems follow if the first PR carries that:
+
+1. **The first student's tool choice gets baked into the season repo**, and the second
+   student on a different tool adds theirs on top. Over a season `Robot-2026` accumulates
+   skills and command shims for tools most of the team does not use. That is the opposite
+   of the vendor-neutrality that made OpenSpec the pick in §5.
+2. **The first student does setup work nobody else does.** On a milestone where session
+   budget is the scarce resource, that is an uneven milestone — and their pull request
+   mixes scaffolding with feature work, which makes the one assessment that matters
+   noisier for exactly the student who had the least to go on.
+3. **It is a layout decision about a shared repository made by whoever happened to go
+   first.** That is how repositories end up with three conventions and no rule, which is
+   the complaint M1 already makes about `Constants.java`.
+
+**Fix: a mentor seeds it once, before any student starts M7.** One commit on
+`Robot-2026`: `openspec init` against the generic **`agents`** target, which writes
+`.agents/skills/` and an `AGENTS.md` rather than anything vendor-specific, plus the empty
+`openspec/specs/` and `openspec/changes/` folders. After that, decision 2 behaves exactly
+as assumed — **every student pull request contains only `openspec/changes/<feature>/` and
+their Java.** Students who want their own tool's shims run `openspec init --tools <tool>`
+locally and leave those files uncommitted.
+
+That seeding commit is a prerequisite task in the implementation plan, not a step in the
+milestone.
+
+### The constitution (decision 4 — new scope, own deliverable)
 
 Promote `Robot-2026/.github/prompts/code-review-prompt.md` out of a bot prompt into a real
-standards document. M7's own text already says this file is "the closest thing the team has
-to a style guide" and that only a bot reads it; decision 4 fixes that.
+standards document, **make it the source of truth, and have code review enforce it.**
+
+**The gap is named in three separate milestones and closed in none of them.** M1, teaching
+naming conventions, points at `Robot-2026/.../Constants.java` and says it uses three
+conventions at once — "Nobody wrote the rule down. This is what inconsistency costs, and
+you will meet more of it." M7 says the standards file "is the closest thing the team has to
+a style guide" and that only a bot reads it. M8 says the same thing again, verbatim: "the
+team's actual coding standards live in exactly one place: `.github/prompts/code-review-prompt.md`,
+a file whose only reader is a bot." Three milestones complain; nothing fixes it. The
+constitution fixes it, and it turns M1's line from an unanswered grievance into a setup
+that pays off six milestones later.
 
 - **New `docs/programming/coding-standards.md`**, drafted *from* the review prompt:
   Superstructure pattern, type-safe units, command factory methods, homing state machines,
   thread priority, current limiting, fault detection. Marked **draft** until a season lead
   ratifies it.
-- **Adopting the constitution concept does not mean adopting Spec Kit.** A constitution is
-  a standards document that agents and humans both read; Spec Kit popularised the name, not
-  the idea. Nothing here changes the §5 recommendation.
-- **The direction of truth needs deciding, and this report does not decide it.** Either the
-  document becomes the source and the review prompt is generated from it, or the prompt
-  stays authoritative and the document is a rendering. Two copies with no stated owner is
-  the failure `teaching-repo-spec.md` §5.7 already fixed once for the git documents.
-- **Downstream in M7:** the done item "read `reference/code-review-prompt.md` and can name
-  two standards in it" retargets at the constitution, and the constitution becomes the
-  standing context a student hands their agent alongside their spec — which is the actual
-  payoff, and the reason this belongs in the same change as the spec work rather than
-  after it.
+- **Direction of truth: resolved.** "Code review should enforce it" settles the question
+  the first draft of this report left open. **The document is the source; the review prompt
+  is downstream of it** — either generated from it or reduced to a thin wrapper that points
+  at it. Anything else recreates the two-copies-no-owner failure that
+  `teaching-repo-spec.md` §5.7 already had to fix once for the four git documents.
+  Mechanically the cheapest honest version is a prompt that names the constitution as the
+  standard it reviews against, so there is exactly one place a standard is written.
+- **Adopting the constitution concept does not mean adopting Spec Kit.** Spec Kit
+  popularised the name — "high-level immutable principles that apply to every change across
+  every session" — not the idea. Nothing here changes the §5 recommendation.
+- **This does not overlap M8.** M8's documentation deliverable is per-subsystem READMEs and
+  tuning logs — it maps the codebase. The constitution states the rules. They are adjacent
+  and M8 should reference it, but neither replaces the other.
+- **Still needs an owner and a ratifier.** Same shape as the `FEATURE-BACKLOG.md` problem,
+  and it must not get the same answer of "unassigned."
+
+### The constitution in the curriculum (decision 4, second half)
+
+**Not covered anywhere today** — the word appears zero times in `docs/`. It should, and it
+belongs in the same new M7 Concepts section as the spec, because the two are the same idea
+at two scales:
+
+> **A spec is the decisions for this change. A constitution is the decisions that hold
+> across every change.** Both are things you write down *so the agent cannot make them for
+> you.*
+
+That framing costs one paragraph, makes the spec easier to explain rather than harder, and
+generalises past whatever tooling exists in 2028. The Yellow-tier rule from §6 extends to
+it cleanly and should be stated: a student does not get to have an agent write the team's
+standards either.
+
+Concrete milestone effects:
+
+- **M7**'s done item "read `reference/code-review-prompt.md` and can name two standards in
+  it" retargets at the constitution.
+- **M7** gains the standing-context practice: hand the agent the constitution alongside
+  your spec. This is the actual payoff of decision 4 and the reason it belongs in the same
+  change as the spec work rather than after it.
+- **M1**'s `Constants.java` note gains a forward reference — the rule is written down now,
+  and here is where.
+- **M8** references it rather than restating the gap as open.
 
 ### Repo-level (contended files — integration task only, per `CLAUDE.md`)
 
@@ -433,9 +507,9 @@ All four open questions answered. §7 above is written to match; a design record
 | # | Question | Decision | Effect |
 |---|---|---|---|
 | 1 | Green's conditions: three or four? | **Four.** The spec is its own condition, not folded into the M6 note | `ai-use-standard.md` §4 gains a condition; it sorts first, being the only one that precedes the code |
-| 2 | Spec in the PR description, or committed? | **Ship all specs.** Committed to `Robot-2026`, archived on merge | Layout change to the season repo — needs the season lead's agreement |
+| 2 | Spec in the PR description, or committed? | **Ship all specs.** Committed to `Robot-2026`, archived on merge | A mentor seeds the scaffolding once; student PRs then carry only `openspec/changes/<feature>/` |
 | 3 | CLI optional, required, or forbidden? | **Optional, and document both paths** | Manual folder path written first; CLI path second. No new pinned version |
-| 4 | Pick up the constitution project? | **Yes — draft it now**, from `code-review-prompt.md` | New deliverable in the same change; see §7 |
+| 4 | Pick up the constitution project? | **Yes**, and code review enforces it | The constitution is the source, the review prompt is downstream; the concept enters M7 alongside the spec |
 
 **Decisions 1 and 2 reinforce each other**, which is worth noticing: a condition that says
 *ship a spec* is only checkable because decision 2 puts the spec in the repository with a
@@ -443,11 +517,18 @@ timestamp. Either alone is weaker than the pair. Decision 1 also overrides the l
 argued for — folding kept the tier structure stable, but a folded rule is a rule people
 skim past, and this one is load-bearing.
 
-**Decision 4 is the largest scope change here.** It is also the one with the most value
-outside M7: Ignite's coding standards currently exist in exactly one place, readable by
-exactly one reader, and it is a bot. Two things it needs that this report does not supply
-— an owner, and a stated direction of truth between the document and the review prompt.
-Both belong in the design record.
+**Decision 4 is the largest scope change here**, and the one with the most value outside
+M7. "Code review should enforce it" also answers the direction-of-truth question this
+report left open: the constitution is the source and the review prompt derives from it.
+What decision 4 still lacks is an **owner and a ratifier**, which belongs in the design
+record.
+
+**Decision 2 needed a correction rather than an answer.** The assumption that `openspec/`
+arrives with the first student pull request is right about *specs* and wrong about
+*scaffolding* — `openspec init` writes vendor-specific skill and command directories
+outside `openspec/`, so "whoever goes first picks the team's tooling." A one-commit mentor
+seeding task against the generic `agents` target removes the problem and makes the
+assumption true. Details in §7.
 
 ### Still open, and not created by these decisions
 
@@ -455,6 +536,9 @@ Both belong in the design record.
   Untouched by everything above, and slightly worsened by a longer per-feature runway.
 - **Who ratifies the constitution, and who owns it in-season.** Same shape as the backlog
   problem, and it should not get the same answer of "unassigned."
+- **Whether the review prompt is generated from the constitution or merely points at it.**
+  Both satisfy "code review enforces it"; the second is cheaper and harder to desynchronise.
+  An implementation detail, but one the design record should state rather than discover.
 
 ---
 
@@ -476,6 +560,9 @@ Both belong in the design record.
 - Ignite: `docs/programming/milestones/m7-ai-assisted-development.md`,
   `docs/programming/ai-use-standard.md`, `docs/programming/teaching-repo-spec.md` §9.8 and
   §15, `projects/m7-ai-assisted/*`, `superpowers/plan-conventions.md` — primary
+- Ignite: `docs/programming/milestones/m1-java-fundamentals.md` (the `Constants.java`
+  three-conventions note) and `m8-in-season-deliverables.md` ("a file whose only reader is
+  a bot") — the two other places the curriculum names the standards gap — primary
 
 **Secondary — analysis and evidence**
 
@@ -500,7 +587,7 @@ Both belong in the design record.
 - [*Computing Education When Writing Code Is No Longer the Challenge*, CACM](https://cacm.acm.org/opinion/computing-education-when-writing-code-is-no-longer-the-challenge/)
   — the competency-shift framing — secondary, opinion column
 
-**Audit.** Queries sent: 6. Sources received: ~45. Sources fetched and read: 6. Sources
-cited: 17. Tool failures: 0. Routing: general-research fallback — no specialist matched.
+**Audit.** Queries sent: 6. Sources received: ~45. Sources fetched and read: 7. Sources
+cited: 19. Tool failures: 0. Routing: general-research fallback — no specialist matched.
 Not verified independently: the BMAD monthly-cost figure, and Superpowers' harness count
 (taken from its own README).
