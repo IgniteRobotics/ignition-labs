@@ -59,6 +59,20 @@ This gets modeled live by a mentor rather than described. The differences that m
 
 **Give it the docs.** These models are stale on WPILib. Pasting the current API surface changes the output quality substantially.
 
+### Writing it down first
+
+Everything above fires *after* the agent has already decided. In a think-aloud study of nineteen students, the introductory ones issued low-context prompts at roughly three times the rate of the experienced ones, spent most of their prompts debugging rather than building, and four of them restarted the whole project outright once the accumulated complexity got away from them. That last one is drifting, measured. The fix is not a better prompt — it is writing the decisions down before you prompt at all, at two scales:
+
+> **A spec is the decisions for this change. A constitution is the decisions that hold across every change.** Both are things you write down *so the agent cannot make them for you.*
+
+Ignite's constitution is [`coding-standards.md`](../coding-standards.md): read it once, hand it to the agent every time. Your spec is one change folder in `Robot-2026`, written and committed before you start.
+
+**Where Ignite stops.** Three levels exist. *Spec-first:* the spec guides the build, then you are done with it. *Spec-anchored:* it survives into maintenance. *Spec-as-source:* the spec is the artifact, the code is generated, and the tooling marks it `DO NOT EDIT`. Ignite does spec-first, and stops there on principle — a student who never edits code is a student who did not learn to write code, which is exactly the failure `ai-use-standard.md` §1 exists to prevent. You will meet spec-as-source tooling within a season, and the line should be yours before a vendor draws it for you.
+
+**A two-line fix does not get a spec.** Over-specifying is its own failure: a small bug inflated into four user stories and sixteen acceptance criteria, *"like using a sledgehammer to crack a nut."* You are writing one spec, for one real feature, at the scale of the feature.
+
+**From `ai-use-standard.md`: the spec is Yellow-tier work, even at Green.** You may ask an agent what your spec missed. You may not ask it to write your spec. You have lived the parallel already — at M6 you wrote the tests that unlocked Green. Here you write the constraints that constrain the agent.
+
 ### AI as reviewer, not author
 
 The pattern with the best support in the education research: the tool answers conceptual questions, explains code, and points at mistakes without handing over the answer. Systems built this way shifted students "away from using it to generate code for them and toward using it as a learning assistant."
@@ -68,7 +82,7 @@ The pattern with the best support in the education research: the tool answers co
 Two things worth noticing about that setup:
 
 1. It is AI in the reviewer seat, which is the safe seat
-2. **That prompt file is currently the only place Ignite's coding standards are written down.** It covers the Superstructure pattern, type-safe units, command factory methods, homing state machines, thread priority, current limiting, fault detection — real, good standards that only a bot reads. Read it. It is the closest thing the team has to a style guide
+2. **That prompt file is where Ignite's standards get enforced. It is not where they live.** The standards it checks — the Superstructure pattern, type-safe units, command factory methods, homing state machines, thread priority, current limiting, fault detection — are written down for humans in [`coding-standards.md`](../coding-standards.md), and that document is the source. Read the constitution first, then read the prompt to see what enforcing a written standard actually looks like
 
 The bot is frequently wrong. Push back on it. Learning to disagree with an automated reviewer is part of this milestone.
 
@@ -105,11 +119,12 @@ A checklist that works:
 **Ship a real feature, AI-assisted, under the Green tier — then defend it.**
 
 1. Pick a real, useful feature. Not a toy
-2. Use AI assistance genuinely and substantially. This is the one milestone where that is the assignment
-3. **Write or verify tests covering the new behavior.** They must pass
-4. Open a PR with the disclosure block filled in — see `ai-use-standard.md` §6. The "how I verified it" field must be specific
-5. **Defend the diff in review.** Walk a mentor or an M7-completed peer through every decision. Expect: why this control mode? what if this sensor reads zero? where does this number come from? what happens if this is interrupted halfway?
-6. **Anything you cannot defend comes out and gets rewritten by you.** Not the whole PR — just that part. No penalty. Finding the gap is the point
+2. **Write the spec, and commit it before you start.** One change folder in `Robot-2026`: `openspec/changes/<your-feature>/proposal.md`. What is changing, why, the technical approach, and the cases that must hold. `SPEC-TEMPLATE.md` is a worked example. The folder is already there — a mentor set it up
+3. **Use AI assistance genuinely and substantially, against the spec you wrote.** This is the one milestone where that is the assignment rather than a concession
+4. **Write or verify tests covering the new behavior.** They must pass
+5. Open a PR with the disclosure block filled in — see `ai-use-standard.md` §6. The "how I verified it" field must be specific
+6. **Defend the diff in review.** Walk a mentor or an M7-completed peer through every decision. Expect: why this control mode? what if this sensor reads zero? where does this number come from? what happens if this is interrupted halfway? And: **where did the build diverge from your spec, and why?** Divergence is expected and is the interesting part — if you report none, you either picked something too small or are not looking
+7. **Anything you cannot defend comes out and gets rewritten by you.** Not the whole PR — just that part. No penalty. Finding the gap is the point
 
 **Then, deliberately, break something.** Ask an AI for something you know it will get wrong — a kP for your shooter, or a WPILib API from three seasons ago. Look closely at how confident and plausible the wrong answer is. That calibration is worth more than any amount of being told it happens.
 
@@ -121,13 +136,17 @@ A checklist that works:
 - [ ] Anything you could not defend was removed and rewritten by you
 - [ ] You can name shepherding and drifting and describe a time you did one
 - [ ] You deliberately elicited a confidently wrong answer and can describe what made it convincing
-- [ ] You read `.github/prompts/code-review-prompt.md` and can name two standards in it
+- [ ] You read the coding standards (`coding-standards.md`) and can name two standards in it
 - [ ] You have read and signed the AI-use standard
 - [ ] You can explain the difference between interface-level and decision-level trust
+- [ ] Your spec was committed before your first implementation commit
+- [ ] You can name one place the implementation diverged from your spec, and say why
 
 ## Common failure modes
 
 **Skipping straight here.** M6 is the prerequisite because tests are what make Green safe. There is no version of this that works without them.
+
+**Spec theatre.** Writing the spec after the code, to satisfy the checklist. It is checkable — the commit timestamps say so, which is why the item is about ordering and not about existence. The same mistake points the other way too: sixteen acceptance criteria for a two-file change is a session spent on a document nobody will read.
 
 **Treating disclosure as absolution.** It is not. "The AI wrote it" explains what happened; it does not transfer responsibility. Responsibility always sits with a human.
 
@@ -164,5 +183,7 @@ See `resources.md` for the full library. For this milestone:
 - **FIRST: Expanding the FIRST Toolbox with AI** — FIRST's only official position
 - **Chief Delphi: Student written code** — the vendor-library argument you should be able to answer
 - **Chief Delphi: The Next Revolution: AI in FRC (254)** — the most credentialed programming team in FRC, going public with heavy AI use
-- **Ignite:** `Robot-2026/.github/prompts/code-review-prompt.md` — our standards, currently read only by a bot
+- **Böckeler, *Understanding Spec-Driven Development*** — the source of the spec-first / spec-anchored / spec-as-source ladder, and the sledgehammer warning. On this list *because* it is skeptical, not despite it
+- **OpenSpec** — the spec format M7 uses. Four folders and a markdown file. The CLI is optional and you can complete the milestone without installing anything
+- **Ignite:** [`coding-standards.md`](../coding-standards.md) — the constitution. Our standards, in one place, written to be read by a person
 - **Ignite:** `Robot-2026/.github/workflows/ai-code-review.yml` — AI in the reviewer seat
