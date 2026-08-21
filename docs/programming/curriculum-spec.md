@@ -455,11 +455,12 @@ Modeled on MIT Course 6, where AI policy varies by what a specific course is try
 
 *Rationale:* the excluded categories are precisely the engineering decisions these milestones exist to teach. The included categories are the ones where community practice already sits — inline autocomplete on three near-identical `stop*()` methods is a convenience, not a substitute for understanding.
 
-**🟢 Green — on completion of M6, and thereafter.** Yellow still applies *during* M6 itself; the tests that unlock Green are written by the student, not generated. Once M6 is signed off, full agentic use is permitted, gated on three conditions, all of which must hold:
+**🟢 Green — on completion of M6, and thereafter.** Yellow still applies *during* M6 itself; the tests that unlock Green are written by the student, not generated. Once M6 is signed off, full agentic use is permitted, gated on four conditions, all of which must hold:
 
-1. Tests exist, cover the new behavior, and pass
-2. AI use is disclosed in the PR description, naming the tool and what it did
-3. The author defends every decision in the diff during review
+1. A spec is written and committed before the first implementation commit
+2. Tests exist, cover the new behavior, and pass
+3. AI use is disclosed in the PR description, naming the tool and what it did
+4. The author defends every decision in the diff during review
 
 *Rationale:* M6 supplies the verification layer that makes velocity safe. The defense review is the actual enforcement mechanism — it is the one check that cannot be gamed by a tool.
 

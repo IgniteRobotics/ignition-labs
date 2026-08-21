@@ -19,6 +19,7 @@ held it." Not "it works."]
 ## AI use
 
 AI use: [none | assisted | generated]
+Spec: [path to the committed spec, or n/a below Green]
 Tool:
 What it did:
 How I verified it:

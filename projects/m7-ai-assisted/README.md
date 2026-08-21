@@ -29,8 +29,9 @@ lands.
 
 Read `reference/code-review-prompt.md` before you open your pull request. It is the
 prompt that generates the review you are about to receive. The standards it enforces are
-written down for humans in `coding-standards.md`, and that document — not the prompt — is
-the source; naming two standards out of it is one of this milestone's done items. Knowing
+written down for humans in `coding-standards.md` (**Draft, not ratified**), and that
+document — not the prompt — is the source; naming two standards out of it is one of this
+milestone's done items. Knowing
 what a reviewer is looking for before it reviews you is not cheating; it is how code
 review is supposed to work.
 
@@ -50,7 +51,9 @@ change, `proposal.md` inside it. Nothing in this training repository runs OpenSp
 **By hand (works everywhere).** On your branch, create
 `openspec/changes/<your-feature>/` and put `proposal.md` in it, copied from
 `SPEC-TEMPLATE.md`. That is the whole setup. The folder structure is already in the
-repository — a mentor set it up.
+repository — a mentor set it up. Do not see `openspec/` on your branch? Ask a mentor
+before you create it. Seeding it is deliberately a mentor's job, so that one student's
+tool choice does not become the season repo's.
 
 **With the CLI (optional).** If you have Node 20.19 or newer and want `openspec validate`,
 `openspec list`, and the dashboard: `npm install -g @fission-ai/openspec`, then

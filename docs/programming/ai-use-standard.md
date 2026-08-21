@@ -122,6 +122,8 @@ Note the boundary carefully: Yellow still applies *during* M6. The tests that un
 
 The spec is first because it is the only one of the four that happens before the code exists. It is where the decisions live — what the feature does, what it does not do, and what has to hold when it is finished — and §3 is the reason the decisions are the part you have to own.
 
+A spec carries the decisions for *one* change. The decisions that hold across every change are written down separately, in [`coding-standards.md`](coding-standards.md) — Ignite's coding standards. This document says what you may use a tool for; that one says what the code it produces has to look like. Hand your agent both.
+
 > **The spec is Yellow-tier work, even at Green.** You may use AI to explain API surface, to critique a spec you wrote, and to point at cases you missed. You may not ask it to write the spec, or to decide what the feature should do. You do not get to use the agent to write the constraints that constrain the agent — for the same reason you did not get to use it to write the tests that unlocked Green.
 
 **Why M6 is the gate and not something softer.** M6 is where you learn simulation, telemetry, and testing. Those are the things that tell you an AI's output is wrong before the robot does. Without them you have velocity and no brakes.
@@ -158,14 +160,16 @@ What it did:
 How I verified it:
 ```
 
-**Definitions, so people use the same words:**
+`Spec:` is the path or link to the committed spec this change implements. Below Green, where no
+spec is required, write `n/a`.
+
+**Definitions of the `AI use:` values, so people use the same words:**
 
 | Value | Meaning |
 |---|---|
 | `none` | No AI involvement beyond the editor's ordinary non-AI autocomplete |
 | `assisted` | AI helped — explained something, wrote boilerplate, caught a bug — but you wrote the logic |
 | `generated` | AI produced code that is in this diff substantially as it wrote it |
-| `Spec:` | The path or link to the committed spec this change implements, or `n/a` below Green, where no spec is required |
 
 **A filled-in example:**
 
