@@ -415,10 +415,21 @@ rather than standards. They were promoted anyway, by ruling, for two reasons. Th
 record's ownership boundary states that this document owns "patterns, units, **naming**,
 safety" — naming is explicitly ours, and its landing in a scope section of the prompt is an
 accident of where a heading fell. And the `while`-loop rule passes the same test everything
-else here passes: it describes what good code looks like, not how a review is conducted.
+else here passes: it describes what good code looks like, not how a review is conducted. The
+two do not rest equally well: naming is named in the ownership boundary, while the
+`while`-loop rule is promoted on the weaker argument that it reads as a standard — the
+asymmetry was seen, not missed, and a future reader narrowing this document should reopen the
+second before the first.
 
 M1 raises the naming question directly — three conventions in one codebase, and nobody wrote
 the rule down. This is where it is written down.
+
+**Cosmetic corrections were made while promoting.** Typos were fixed ("Subsytems" →
+"Subsystems"), a marketing adjective dropped ("Revolutionary logging framework" → "Logging
+framework"), title-cased fragments sentence-cased ("Vision Processing" → "Vision processing"),
+doubled spaces collapsed, terminal punctuation made consistent, and code identifiers put in
+backticks. These are the deltas a reader diffing the two documents by eye will find that no
+table above explains; none of them changes what any standard requires.
 
 **What was not promoted, and why:** the rest of lines 1–52 (tone, review scope, and what a
 reviewer should not focus on) and lines 301–311 (the review's output format) are instructions

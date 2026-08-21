@@ -88,7 +88,7 @@ The short version: your tier is set by the milestones you have completed.
 |---|---|---|
 | 🔴 **Red** | M0–M2 | Explanation only. **No code generation. Turn Copilot off** |
 | 🟡 **Yellow** | M3–M5 | Boilerplate, Javadoc, stack-trace triage. **Not** control logic, subsystem design, or gains. Disclosure required |
-| 🟢 **Green** | After M6 | Full agentic use — gated on tests passing, disclosure, and defending the diff in review |
+| 🟢 **Green** | After M6 | Full agentic use — gated on a committed spec written first, tests passing, disclosure, and defending the diff in review |
 
 FIRST has no rule about this and no other FRC team has published a policy. This is ours, we own it, and it is written to be argued with. If you think a tier boundary is wrong, bring the argument.
 
@@ -105,6 +105,7 @@ FIRST has no rule about this and no other FRC team has published a policy. This 
 | [`curriculum-spec.md`](curriculum-spec.md) | The design document. Why the curriculum is shaped this way. For mentors and anyone editing it |
 | [`teaching-repo-spec.md`](teaching-repo-spec.md) | Spec for the skeleton source code students start each project from. For mentors and anyone building it |
 | [`ai-use-standard.md`](ai-use-standard.md) | The AI policy. Required reading, signed at M7 |
+| [`coding-standards.md`](coding-standards.md) | What good Ignite code looks like — the standards code review enforces. M7 reading |
 | [`student-deliverables.md`](student-deliverables.md) | Fill-in-the-blank templates for everything you produce in-season |
 | [`resources.md`](resources.md) | Every external link in the curriculum, with notes on what each is good for |
 | [`tracks/`](tracks/track-a-new-to-programming.md) | The four entry-point guides, starting with Track A |

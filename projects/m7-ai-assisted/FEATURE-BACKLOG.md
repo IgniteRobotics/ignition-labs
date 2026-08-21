@@ -45,10 +45,14 @@ whose logic can be exercised without the HAL.
 
 ## Open
 
-**Four entries, after a second mining pass on 2026-08-21 — see the note at the end of
-this section for why it shipped with one.**
+**Four entries after a second mining pass on 2026-08-21, three of them pickable — entry 1's
+spec is published as the worked example. See the note at the end of this section for why this
+file shipped with one.**
 
 ### 1. Give `grabVisionEstimateList()`'s swallowed exception a structured signal
+
+**Not available as a student pick — its spec is published.** `SPEC-TEMPLATE.md` in this
+directory works this entry end to end as M7's worked example; read it, then pick another.
 
 **Where:** `src/main/java/frc/robot/statemachines/DriveState.java:52`
 

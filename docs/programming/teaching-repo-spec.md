@@ -39,6 +39,8 @@ It is not a course-in-a-box that replaces mentors. Every milestone retains expla
 
 **2026-08-20.** Merged in the M0 VS Code and team-git design session. Changes: team gitflow specified as M0 literacy and M7 practice (§5.7); documentation ownership across the four git documents made governing (§5.7); M0's given inventory gains `.vscode/extensions.json` and `team-gitflow.md`, and its mentor-verified list gains two items (§9.1). The originating design document is preserved at `../superpowers/specs/2026-08-19-m0-vscode-and-git-design.md`.
 
+**2026-08-21.** Merged in the M7 spec-driven-development design session. Changes: spec-first development added to M7, with the spec written and committed before the first implementation commit (§9.8); that spec made Green's *fourth* condition in `ai-use-standard.md` §4 rather than milestone advice, which takes that standard to v1.1 and means anyone who acknowledged v1.0 signs again; `coding-standards.md` added as a governing document — Ignite's constitution, the counterpart to a spec — with a documentation-ownership boundary across the standards set (§5.7); `SPEC-TEMPLATE.md` added to M7's given inventory as L0's one piece of scaffolding (§9.8); M7's mentor-verified count raised from nine to eleven DoD items (§9.8). §13 gains no numbered step — this is content added to shipped step 11. The originating design document is preserved at `../superpowers/specs/2026-08-21-m7-spec-driven-development-design.md`.
+
 ---
 
 ## 2. Research basis
@@ -285,6 +287,26 @@ and must not contain the others' content:
 
 Without this table the fourth git document becomes the third place someone adds a `git push`
 example, and the set drifts within one season.
+
+**The same boundary, for the standards set.** Four documents now discuss what may be written
+and how it must look. `coding-standards.md` (added 2026-08-21, §1.3) is the newest of them and
+the one the other three most easily bleed into. It owns exactly one question too:
+
+| Document | Owns | Never contains |
+|---|---|---|
+| `ai-use-standard.md` | *What may I use a tool for, at my tier?* — policy, tiers, disclosure, defense review | Java conventions. Anything specific to one mechanism |
+| `coding-standards.md` | *What does good Ignite code look like?* — patterns, units, naming, safety | AI policy. Per-subsystem detail. Anything true of one season only |
+| `Robot-2026/.github/prompts/code-review-prompt.md` | *Enforcement.* Points at the constitution and adds nothing normative | Any standard not in the constitution |
+| `templates/subsystem-readme.md` (M8) | *What is this subsystem, and how do I not break it?* | Team-wide rules. Links to the constitution instead |
+
+The direction of truth runs one way: a standard is written in `coding-standards.md` first, and
+the review prompt is what changes to match. Without this table `coding-standards.md` becomes
+the third place someone writes a convention — after the prompt and after a subsystem README —
+and the set drifts within one season, exactly as the git set would.
+
+`coding-standards.md` carries an owner, a ratifier, and a review date in its own header,
+mirroring `ai-use-standard.md` §11. An unowned constitution is `FEATURE-BACKLOG.md` again, and
+§15 already names that as the largest unmitigated risk in this document.
 
 ---
 
@@ -560,12 +582,12 @@ A student can satisfy a test-count check with three assertions on `true`. They c
 
 Almost no code. M7 ships a feature into a real repository with commit access — building a sandbox for it would defeat the "pick a real, useful feature, not a toy" requirement.
 
-**Given:** `ai-code-review.yml`, copied from `Robot-2026`, so students meet AI-as-reviewer as a running thing rather than a description. A pull request template with the disclosure block from `ai-use-standard.md` §6. `FEATURE-BACKLOG.md` — a mentor-maintained list of real, small, shippable features, so nobody spends their M7 session choosing one. `DEFENSE-REVIEW.md` — the mentor-side question bank, published openly because a defense review students can prepare for is still a defense review. `MISCALIBRATION.md` — the deliberate-wrong-answer exercise, with a place to paste what the tool confidently said.
+**Given:** `ai-code-review.yml`, copied from `Robot-2026`, so students meet AI-as-reviewer as a running thing rather than a description. A pull request template carrying the disclosure block from `ai-use-standard.md` §6 as that section currently stands — five lines, the added `Spec:` naming the committed spec, or `n/a` below Green. `SPEC-TEMPLATE.md` — a worked spec for a feature the student will not ship, and L0's one piece of scaffolding: the fade curve says a student writes everything at M7, and a form to fill in would be the thing that writes it for them. `coding-standards.md` (§5.7) is the standing context a student hands their agent alongside that spec — the constitution to the spec's one change. `FEATURE-BACKLOG.md` — a mentor-maintained list of real, small, shippable features, so nobody spends their M7 session choosing one. `DEFENSE-REVIEW.md` — the mentor-side question bank, published openly because a defense review students can prepare for is still a defense review. `MISCALIBRATION.md` — the deliberate-wrong-answer exercise, with a place to paste what the tool confidently said.
 
-**Real repo:** branch on `Robot-2026` upstream. Commit access.
+**Real repo:** branch on `Robot-2026` upstream. Commit access. M7's specs commit there too, as `openspec/changes/<feature>/`, and that `openspec/` scaffolding is **mentor-seeded once** rather than created by the first student's pull request — a student's first commit to the competition repository is not the place to invent a convention the whole team then inherits.
 
 **Tests cover:** nothing. M7's assessment is the defense review, by design.
-**Mentor verifies:** all nine DoD items.
+**Mentor verifies:** all eleven DoD items.
 
 ### 9.9 M8 — `projects/m8-ownership/` · fade: L0
 
@@ -742,7 +764,7 @@ Order matters: bump first, then re-pin, then cross-check. A cross-check against 
 
 **Investigated, not adopted: `lychee --include-fragments`.** `docs-links.yml` does not pass it, so a dead in-page anchor (the class of bug fixed in `VISION_GUIDE.md`) is invisible to link checking. Tried locally against `mkdocs build --strict`'s two now-correct MkDocs anchors (`#7-filtering-validation`, `#10-recommended-fixes-improvements`): lychee's own fragment slugifier is GitHub-style, not MkDocs-style, and reports "Cannot find fragment" on exactly the anchors that are correct against the built site. Adopting the flag would fail CI permanently on headings containing `&`, with no fix available that does not re-break the real site. Revisit only if lychee ships an MkDocs-aware slugifier.
 
-**In-season, continuously:** `FEATURE-BACKLOG.md` (M7) and `UNTESTED-TARGETS.md` (M6). Both go stale fast, and both have a milestone that stops working when they do. `UNTESTED-TARGETS.md` **now has a named owner** — Joshua Reddick (`@y0shi`), recorded in the file as of 2026-08-18 — and D-4 removed its reservation model, so it depletes no further. `FEATURE-BACKLOG.md` remains **unowned and single-entry**, and M7 scarcity is real in a way M6's is not: two students cannot ship the same feature the way they can both test the same class. That is now the largest unmitigated risk here, and it is half the size the unowned pair was.
+**In-season, continuously:** `FEATURE-BACKLOG.md` (M7) and `UNTESTED-TARGETS.md` (M6). Both go stale fast, and both have a milestone that stops working when they do. `UNTESTED-TARGETS.md` **now has a named owner** — Joshua Reddick (`@y0shi`), recorded in the file as of 2026-08-18 — and D-4 removed its reservation model, so it depletes no further. `FEATURE-BACKLOG.md` remains **unowned**, though a mining pass on 2026-08-21 took it from one entry to four, three of them pickable — the fourth is the one `SPEC-TEMPLATE.md` works as M7's example (§1.3). A restock is not a maintainer, and M7 scarcity is real in a way M6's is not: two students cannot ship the same feature the way they can both test the same class. That is now the largest unmitigated risk here, and it is half the size the unowned pair was.
 
 ### 16.1 Operational prerequisite ledger
 
@@ -758,7 +780,7 @@ depends on it.
 | GitHub Pages live | **Done** — Pages enabled, site serving | 2026-08-19 | Every published link in the curriculum 404s |
 | `Phoenix-2026` public (D-2) | **Done** — public 2026-08-18 | 2026-08-18 | **M3's reading assignment breaks** — the opening instruction of the largest milestone in the Kickoff Gate block. Any admin can flip visibility back with nothing here noticing. *Mitigated:* `.lycheeignore`'s `IgniteRobotics/.*` blanket is gone, so `docs-links.yml` now fails on the unreachable URL |
 | `Robot-2026` public | **Done** | 2026-08-18 | M2, M4, M5, M6, and M7 all read or contribute to it. Same mitigation as above |
-| `FEATURE-BACKLOG.md` has an owner | **Not done** | 2026-08-19 | M7 has one entry and nobody refreshing it. Unlike M6's shortlist, features cannot be duplicated between students, so this depletes for real — see §15 |
+| `FEATURE-BACKLOG.md` has an owner | **Not done** | 2026-08-21 | Restocked to four entries on 2026-08-21, three of them pickable — but a one-off mining pass is not a maintainer, and nobody is refreshing it. Unlike M6's shortlist, features cannot be duplicated between students, so this depletes for real — see §15 |
 
 **Membership is not the same as existence.** The `mentors` team exists and has one member.
 One member means one reviewer for every protected path in `CODEOWNERS`, and that reviewer

@@ -106,7 +106,7 @@ Also read `../ai-use-standard.md` §10, which is written for mentors but applies
 
 Three things you can read in twenty minutes that are probably new:
 
-**`Robot-2026/.github/prompts/code-review-prompt.md`** — the team's actual coding standards. Superstructure pattern, type-safe units, command factory methods, homing state machines, current limiting, fault detection. It is good, and **its only reader is a bot.** Most of it is not implemented in the codebase it reviews.
+**[`coding-standards.md`](../coding-standards.md)** — the team's actual coding standards. Superstructure pattern, type-safe units, command factory methods, homing state machines, current limiting, fault detection. It is good, and **most of it is not implemented in the codebase it governs.** It was pulled out of `Robot-2026/.github/prompts/code-review-prompt.md`, which is now downstream of it: the document is the source, the bot enforces it. You are handed both at M7.
 
 **`DriveMotorConfigs.java`** — four near-identical `create*Slot0Configs()` methods, one per swerve corner, each rebuilding the same five-field config. CTRE's `.clone()` pattern collapses them. Assigned as an M4 stretch project; it is a twenty-minute PR and a good one.
 
