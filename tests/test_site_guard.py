@@ -154,6 +154,14 @@ def test_team_gitflow_is_a_required_page():
     assert "programming/team-gitflow" in REQUIRED_PAGES
 
 
+def test_coding_standards_is_a_required_page():
+    # Same C11b failure as team-gitflow: a page added to mkdocs.yml's nav: but
+    # not to REQUIRED_PAGES renders today and is guarded by nothing.
+    # coding-standards.md is the team's constitution -- M1, M7 and M8 all point
+    # at it and M7 hands it to an agent as standing context; it must publish.
+    assert "programming/coding-standards" in REQUIRED_PAGES
+
+
 def test_missing_required_asset_is_reported(tmp_path):
     site = _make_site(tmp_path, ["index.html"])
     assert missing_assets(site, ["images/gitflow.png"]) == ["images/gitflow.png"]

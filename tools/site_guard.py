@@ -84,6 +84,7 @@ REQUIRED_PAGES = [
     "programming/robot-repo-ladder",
     "programming/UNTESTED-TARGETS",
     "programming/ai-use-standard",
+    "programming/coding-standards",
     "programming/student-deliverables",
     "programming/resources",
     "programming/tracks/track-a-new-to-programming",
