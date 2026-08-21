@@ -171,14 +171,18 @@ How I verified it:
 
 ```
 AI use: assisted
-Spec: openspec/changes/indexer-limit-switch/proposal.md
+Spec: openspec/changes/indexer-jam-recovery/proposal.md
 Tool: Claude
-What it did: Wrote the Javadoc for the four public methods on
+What it did: Explained the Debouncer API I used for the stall
+  detector, wrote the Javadoc for the four public methods on
   IndexerSubsystem, and caught that I had the limit switch
-  polarity inverted in isLoaded().
+  polarity inverted in isLoaded(). I decided the recovery states
+  and picked the stall threshold myself.
 How I verified it: Read every Javadoc line against what the method
-  actually does. Confirmed the polarity fix against the wiring
-  diagram and by running the indexer sim test.
+  actually does. Checked the Debouncer explanation against the
+  current WPILib docs. Confirmed the polarity fix against the wiring
+  diagram, and ran the indexer sim test with a stalled-motor fixture
+  to watch the reverse-and-retry actually fire.
 ```
 
 **"How I verified it" is the field that matters.** The other three are bookkeeping. If you cannot fill in the verification line with something specific, you are not ready to open the PR. "I read it and it looked right" is not verification. "The tests pass" is verification. "I checked it against the CTRE docs" is verification. "I ran it in sim and watched the flywheel reach setpoint" is verification.
