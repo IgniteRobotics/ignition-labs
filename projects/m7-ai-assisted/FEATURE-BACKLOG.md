@@ -45,7 +45,8 @@ whose logic can be exercised without the HAL.
 
 ## Open
 
-**One entry, and that is deliberate rather than an oversight — see the note under it.**
+**Four entries, after a second mining pass on 2026-08-21 — see the note at the end of
+this section for why it shipped with one.**
 
 ### 1. Give `grabVisionEstimateList()`'s swallowed exception a structured signal
 
@@ -84,13 +85,143 @@ what happens if the same exception fires fifty times in one match.
 
 ---
 
-**This backlog is under-filled on purpose rather than by accident, and it still is as of
-2026-08-18.** It shipped with one verified entry because a candidate that does not survive
-checking is worse than no candidate — the first draft of this file led with a feature that
-turned out to already be implemented, and a student would have lost a session discovering
-that. D-4 (`docs/programming/UNTESTED-TARGETS.md` can be a shortlist that does not deplete)
-does not solve this half of the problem: a feature, unlike a test target, cannot be shipped
-by two students at once, so a short backlog here is a real scarcity, not a cosmetic one.
+### 2. Give the lemon-cluster centroid marker a name that actually clears it
+
+**Where:** `src/main/java/frc/robot/subsystems/lemon_hunter/LemonHunterSubsystem.java:99`
+and `:104`
+
+`periodic()` has two branches that publish to the `Field2d` shown on the dashboard. When
+no lemons are detected, it resets `lemonField.getObject("Cluser Centroid Position")` —
+misspelled — to the origin. When lemons are found, it writes the real reading to
+`lemonField.getObject("Cluster Centroid Position")` — spelled correctly. `Field2d.getObject`
+keys each call to a distinct entry by that string, so these are two different objects, not
+one being reset and then set. The result: once the robot has found and then lost a
+cluster, the dashboard's centroid marker keeps showing wherever it last saw one,
+indefinitely, because nothing ever writes into the object the widget is actually bound to.
+
+Be precise about what is and is not affected. `lemonList`, `bestClusterSize`, and the
+"Lemon Positions" `Field2d` object all reset correctly on the empty branch — none of them
+depend on a string key matching across two call sites the way the centroid marker does.
+This is a single, narrow key mismatch, not a general problem with the reset logic.
+
+Work out what the empty case should actually publish, and why. Matching the spelling is
+necessary but is not, on its own, the interesting decision: today's "reset" writes
+`(0, 0)`, which — once the key mismatch stops hiding it — reads on the dashboard as a
+phantom lemon sitting at the field origin, not as "no target." Whatever you land on,
+structure the decision so it can be exercised as a unit test without a connected camera —
+`LemonHunterConstants.lemonHunterCamera` and `periodic()`'s frame-reading are not what is
+broken here, and pulling the fix into something callable and testable keeps the two apart.
+
+**Why it is a good M7 feature:** genuinely small; the bug is real and reproducible by
+inspection, not invented; it is dashboard-facing, so a driver or mentor is the one who
+loses signal; and "what should this render as instead" has no single obviously-right
+answer, which is exactly the kind of decision this milestone asks a student to defend.
+
+**Where you will be pushed in defense:** why the origin, or whatever you replace it with,
+is the right placeholder for "nothing detected"; why the fix is structured to be testable
+without a camera rather than only provable by watching the dashboard; and what a driver
+would actually infer from each version of the marker mid-match.
+
+---
+
+### 3. Decide what `LemonHunterSubsystem` returns when there is no cluster
+
+**Where:** `src/main/java/frc/robot/subsystems/lemon_hunter/LemonHunterSubsystem.java:209`
+(`getNearestLemonInCluster`) and `:225` (`getClusterCentroid`); the unguarded call site is
+`src/main/java/frc/robot/RobotContainer.java:345`.
+
+Both methods return `null` when `bestCluster` is empty — which is the routine state every
+cycle the robot has not clustered a lemon, not a rare edge case. `RobotContainer`'s private
+`getDriveToLemonRequest()` calls `hunter.getClusterCentroid(...)` and calls
+`.getTranslation()` on the result on the very next line, with no null check anywhere in
+between.
+
+Be exact about what is and is not already firing. `getDriveToLemonRequest()` is not bound
+to any trigger on this commit — `configureBindings()` never calls it, so this is not a bug
+a driver hits today. What is real: `DriveConstants.LEMON_HUNTING_REQUEST` and
+`DriveConstants.HUNT_SPEED` exist already, used nowhere except inside this same method,
+which reads as work left mid-wire rather than a hypothetical. The contract gap is sitting
+in checked-in, main-branch code, and it becomes a live crash the moment anyone finishes
+wiring it to a control. `getNearestLemonInCluster()` has the identical return-null-on-empty
+shape and no caller at all yet — the same question applies to it before it gets one.
+
+Work out what "no cluster" should mean to a caller of each method — and pick one contract
+that both methods and `getDriveToLemonRequest()`'s eventual caller can rely on
+consistently, rather than patching the one call site that happens to exist today.
+
+**Why it is a good M7 feature:** real — this is present-tense code in `main`, not a
+scenario built for the exercise; small — two methods, one existing call site; useful — it
+closes a crash before it ships rather than after; defensible — `Optional`, a documented
+null contract enforced at the call site, a sentinel value, and "guard the call site instead
+of the method" are all legitimate and not equivalent; and testable without hardware —
+`bestCluster` is a public field, so a test sets it directly and calls the accessor, no
+camera and no HAL involved.
+
+**Where you will be pushed in defense:** why this contract beats the alternatives; what
+still breaks if the chosen contract is "return null, caller must check" and a future caller
+does not; why the fix covers both methods instead of only the one with a caller today; and
+what your test asserts, and why it does not need a camera to do it.
+
+---
+
+### 4. Name the commands that already fire on driver input
+
+**Where:** `src/main/java/frc/robot/RobotContainer.java:258`, `:265`, `:275`
+
+Three `.onFalse(...)` bindings schedule a command with no `.withName()` anywhere in the
+chain. Two are identical `shooter.stopFlywheelCommand().andThen(shooter.stowHood())`
+sequences — one bound to `leftTrigger()` release, the other to `rightBumper()` release. The
+third is `vision.stopResetPose()` alone, bound to `start()` release. The two commands
+composed inside each sequence are individually named ("Stop Spinning Flywheel", "Stow
+Hood"), but the composite scheduled at each binding is not, and an unnamed
+`SequentialCommandGroup` reports its class name rather than anything binding-specific — so
+both triggers' releases schedule something that looks identical in the command scheduler,
+Shuffleboard, or a match log. There is no way to tell which binding fired from that name
+alone. `vision.stopResetPose()` is a single `runOnce` with no name at the method or the
+binding.
+
+This is the same "already handled, not yet findable" problem entry 1 is built around, on a
+different seam: nothing here is scheduling incorrectly. The gap is entirely in what a
+mentor sees when reconstructing what happened during a match after the fact.
+
+Work out where the name belongs and what it should say. Naming each `.andThen()` chain at
+its binding site is not the same decision as naming it to distinguish the two triggers from
+each other, and both are different from pushing a name onto `vision.stopResetPose()` inside
+`VisionSubsystem` so it carries one everywhere it is ever bound. Any of the three closes the
+gap described above; they are not interchangeable once you ask what a mentor actually needs
+to be able to tell apart.
+
+**Why it is a good M7 feature:** small; real — these bindings already run in every match;
+useful — this is exactly the kind of gap that costs someone a match-log investigation later;
+defensible — the naming options above are genuinely different answers, not stylistic
+variants; and testable without hardware — `Command.getName()` is a plain assertion against
+the object you built, no HAL and no simulation involved.
+
+**Where you will be pushed in defense:** why your naming choice over the others; what a
+mentor could tell apart from a log with the fix that they could not before; and why the fix
+does or does not also touch `VisionSubsystem.stopResetPose()`'s own definition rather than
+only the binding site.
+
+---
+
+**This backlog was under-filled on purpose rather than by accident, and it was still that
+way as of 2026-08-18.** It shipped with one verified entry because a candidate that does
+not survive checking is worse than no candidate — the first draft of this file led with a
+feature that turned out to already be implemented, and a student would have lost a session
+discovering that. D-4 (`docs/programming/UNTESTED-TARGETS.md` can be a shortlist that does
+not deplete) does not solve this half of the problem: a feature, unlike a test target,
+cannot be shipped by two students at once, so a short backlog here is a real scarcity, not
+a cosmetic one. **That changed 2026-08-21** — a second mining pass verified three more
+candidates against the same pinned commit and added them above, so the backlog is no
+longer running at zero spare capacity. Restocking stays real work each time: see the
+selection criteria and the caution in the next paragraph, both of which applied just as
+much to this pass as to the first.
+
+**Last mining sweep: 2026-08-21, against `Robot-2026` @
+`28ce5397d88275001d656dbb717d22cf9ac0150d`** — the same commit already pinned at the top of
+this file. Entries 2–4 above came from this sweep. The next person restocking should
+re-clone or re-fetch at a newer commit, pin it explicitly, and note the new SHA and date
+here rather than assuming this one still reflects `main`.
 
 **A mentor must add entries before assigning M7 to a cohort.** The selection criteria
 above are the tool for that, and they matter more than any entry under them. Verify every
