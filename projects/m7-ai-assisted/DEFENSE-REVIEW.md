@@ -6,7 +6,9 @@ list has done its job — that is the outcome it exists to produce, not a leak.
 
 **For the mentor:** this is a bank, not a script. Pick the questions the diff actually
 raises. The pass condition is not "answered all of them," it is that the student can
-account for their own code without help.
+account for their own code without help. **Divergence between the spec and the diff is
+expected, not a fault** — a student who reports none either picked something too small or
+did not look, and either of those is a conversation, not a failure.
 
 ---
 
@@ -19,6 +21,26 @@ The rule that makes it work: **anything the student cannot defend comes out and 
 rewritten by them.** Not the whole pull request, just that part. There is no penalty for
 this, and a review that removes something is a successful review, not a failed one.
 Finding the gap is the entire point.
+
+## Questions about the spec
+
+**Asked first.** Walk the spec before the diff — `openspec/changes/<your-feature>/proposal.md`
+open on the screen — because the diff is read *against* it, not on its own.
+
+- **Why.** What was wrong before? Say it without naming your solution.
+- **Approach.** Why this approach? What did you write under *Rejected*, and what would have
+  had to be true for the rejected one to win instead?
+- **Scenarios.** Which scenario was hardest to write, and what made it hard? (Usually the
+  hard one is where you had to decide what the correct behaviour *was*, not how to word it.)
+- **Out of scope.** What did you deliberately leave out? Point at one thing a reviewer might
+  reasonably have expected in scope, and say why the line fell where it did.
+- **Divergence.** Where did the implementation end up different from the spec? Was the spec
+  wrong, or was the build wrong? (This one is on the done list, and "nowhere" is not an
+  answer that ends the conversation.)
+- **What the agent did with it.** Which part of the spec did the tool ignore, over-read, or
+  quietly reinterpret? Show me the line and what it produced instead.
+- **Hindsight.** What would you specify differently now? Which scenario would you add, and
+  which one turned out to be worth nothing?
 
 ## Questions about the code
 
@@ -56,9 +78,9 @@ Each maps to a Definition-of-done item and can be asked directly:
   generous.)
 - **Interface-level versus decision-level trust.** What is the difference, and which one
   did you extend to the tool in this diff?
-- **The review prompt.** You read `reference/code-review-prompt.md`. Name two standards
-  it holds this repository to. (Two is a low bar on purpose — the point is that the
-  student opened it.)
+- **The coding standards.** You read `coding-standards.md`. Name two standards it holds
+  this repository to. (Two is a low bar on purpose — the point is that the student opened
+  it.)
 - **Miscalibration.** Show me the wrong answer you elicited. What made it convincing?
 
 ## What a pass sounds like

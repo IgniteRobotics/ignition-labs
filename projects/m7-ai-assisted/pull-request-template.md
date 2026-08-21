@@ -24,10 +24,15 @@ what would have told you it was broken?]
 
 ```
 AI use: [none | assisted | generated]
+Spec:
 Tool:
 What it did:
 How I verified it:
 ```
+
+[`Spec:` is the path to the spec you committed before you started --
+`openspec/changes/<your-feature>/proposal.md`. `ai-use-standard.md` §6 has a
+filled-in example of the whole block.]
 
 ## Anything reviewers should look at closely
 
