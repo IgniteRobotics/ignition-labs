@@ -164,11 +164,12 @@ A checklist that works:
 
 ## AI posture — 🟢 Green
 
-Full agentic use, gated on three conditions that must all hold:
+Full agentic use, gated on four conditions that must all hold:
 
-1. Tests exist, cover the new behavior, and pass
-2. AI use is disclosed in the PR
-3. You defend the diff in review
+1. Your spec is written and committed before your first implementation commit
+2. Tests exist, cover the new behavior, and pass
+3. AI use is disclosed in the PR
+4. You defend the diff in review
 
 See `ai-use-standard.md` §4 for the full tier and §7 for how a defense review runs.
 

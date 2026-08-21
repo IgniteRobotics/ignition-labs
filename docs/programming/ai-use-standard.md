@@ -2,7 +2,8 @@
 
 **Applies to:** All programming subteam members and mentors, FRC 6829 Ignite Robotics
 **Covers:** Robot code, scouting tools, internal tooling, and anything else the programming subteam ships
-**Version:** 1.0
+**Version:** 1.1
+**Revised:** 2026-08-21 — v1.1 adds a fourth condition to Green: a spec, written and committed before the first implementation commit (§4), which means anyone who acknowledged v1.0 signs again.
 **Effective:** 2026-08-05
 **Expires:** End of the 2027 build season — see §11
 
@@ -112,11 +113,16 @@ An instructor who taught rookie programming for two years put it more bluntly: s
 
 Note the boundary carefully: Yellow still applies *during* M6. The tests that unlock Green are written by you, not generated. You do not get to use the agent to build the safety net that makes the agent safe.
 
-**Allowed:** essentially everything, including agentic tools that write, run, and iterate on code — subject to three conditions that must **all** hold:
+**Allowed:** essentially everything, including agentic tools that write, run, and iterate on code — subject to four conditions that must **all** hold:
 
-1. **Tests exist, cover the new behavior, and pass.** Not "the code looks right." Tests.
-2. **AI use is disclosed in the pull request.** See §6.
-3. **You defend the diff in review.** See §7.
+1. **You wrote a spec before you started, and it is committed.** Not a paragraph in the pull request — a file, dated before your first implementation commit.
+2. **Tests exist, cover the new behavior, and pass.** Not "the code looks right." Tests.
+3. **AI use is disclosed in the pull request.** See §6.
+4. **You defend the diff in review.** See §7.
+
+The spec is first because it is the only one of the four that happens before the code exists. It is where the decisions live — what the feature does, what it does not do, and what has to hold when it is finished — and §3 is the reason the decisions are the part you have to own.
+
+> **The spec is Yellow-tier work, even at Green.** You may use AI to explain API surface, to critique a spec you wrote, and to point at cases you missed. You may not ask it to write the spec, or to decide what the feature should do. You do not get to use the agent to write the constraints that constrain the agent — for the same reason you did not get to use it to write the tests that unlocked Green.
 
 **Why M6 is the gate and not something softer.** M6 is where you learn simulation, telemetry, and testing. Those are the things that tell you an AI's output is wrong before the robot does. Without them you have velocity and no brakes.
 
@@ -146,6 +152,7 @@ Required on every pull request at Yellow and Green. Put this block in the PR des
 
 ```
 AI use: [none | assisted | generated]
+Spec:
 Tool:
 What it did:
 How I verified it:
@@ -158,11 +165,13 @@ How I verified it:
 | `none` | No AI involvement beyond the editor's ordinary non-AI autocomplete |
 | `assisted` | AI helped — explained something, wrote boilerplate, caught a bug — but you wrote the logic |
 | `generated` | AI produced code that is in this diff substantially as it wrote it |
+| `Spec:` | The path or link to the committed spec this change implements, or `n/a` below Green, where no spec is required |
 
 **A filled-in example:**
 
 ```
 AI use: assisted
+Spec: openspec/changes/indexer-limit-switch/proposal.md
 Tool: Claude
 What it did: Wrote the Javadoc for the four public methods on
   IndexerSubsystem, and caught that I had the limit switch
@@ -190,6 +199,9 @@ Expect questions like:
 - Why is this in the subsystem rather than the command?
 - What happens if this command is interrupted halfway through?
 - Where does this number come from?
+- Where did the implementation diverge from your spec, and why?
+
+That last one is the review's spine. The spec was written before the code, so it is the only record of what you intended that the code cannot quietly rewrite. Every real project diverges from its spec — so "it didn't" is itself information, and usually means the feature was too small to be worth specifying or that nobody has looked closely.
 
 **How long it takes.** Ten minutes for a small diff. It is not an inquisition and it is not a test you can fail in front of the team.
 
@@ -234,6 +246,8 @@ For adjudicating real situations. If your case is not here, reason from §3.
 | M5 student asks an AI to structure their three-piece autonomous routine | Yellow | **Not allowed.** Routine structure is a decision, and it is what M5 teaches |
 | M5 student asks an AI to help read a stack trace from a failing path-following command | Yellow | **Allowed.** Triage |
 | M6 student uses an agent to write the tests for their subsystem | Yellow during M6 | **Not allowed.** You write the tests that unlock Green |
+| M7 student asks an agent to draft the spec for their feature | Green | **Not allowed.** The spec is the decisions. See §4 |
+| M7 student writes the spec, then asks an agent which cases it missed | Green | **Allowed.** Disclose as `assisted`. This is the highest-value prompt shape in the milestone |
 | M7 student uses an agent to implement a full new subsystem, writes tests, discloses, defends in review | Green | **Allowed.** This is the system working as designed |
 | M7 student uses an agent, tests pass, but cannot explain why a particular timeout value was chosen | Green | **That part comes out.** Rest of the PR can proceed |
 | Any student pastes our scouting data into a chatbot | All | **Not allowed.** See §5, rule 2 |
@@ -275,7 +289,7 @@ I have read this standard. Specifically, I understand that:
 
 - I am responsible for every line of code I submit, regardless of what wrote it
 - My tier is set by the milestones I have completed, not by what I feel ready for
-- If I cannot explain and defend it, it does not ship
+- If I cannot explain and defend it, it does not ship — and at Green, I write the spec before the agent writes the code
 - Disclosing AI use is required, and being honest about it is never held against me
 
 **Name:** ______________________________
