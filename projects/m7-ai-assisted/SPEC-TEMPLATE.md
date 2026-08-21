@@ -30,19 +30,20 @@ what the drivetrain does with the result changes.
 ## Approach
 
 Publish both values as Epilogue-logged fields on `DriveState`, which `RobotContainer`
-already holds and already annotates for logging. Epilogue is the mechanism `Robot-2026`
-uses for telemetry, and `coding-standards.md` (**Draft, not ratified**) names Epilogue for
-subsystems and telemetry under Core Libraries, so this adds no new logging path.
+already holds — though `DriveState` carries no `@Logged` of its own yet, so annotating it is
+part of this change. Epilogue is the mechanism `Robot-2026` uses for telemetry, and
+`coding-standards.md` (**Draft, not ratified**) names Epilogue for subsystems and telemetry
+under Core Libraries, so this adds no new logging path.
 
-**Rejected: `DriverStation.reportError` on each catch.** It is the obvious answer, it is
+**Rejected: `DriverStation.reportWarning` on each catch.** It is the obvious answer, it is
 what the coding standards' Fault detection example reaches for, and it is wrong here. That
 example guards a hardware fault that is checked once per `periodic()`; this handler sits in
-the vision path and can fire on every loop. Fifty identical errors in one match buries the
-Driver Station in exactly the noise this feature exists to remove, and DS errors are not a
+the vision path and can fire on every loop. Fifty identical warnings in one match buries the
+Driver Station in exactly the noise this feature exists to remove, and DS messages are not a
 field you can plot or filter later. A count is queryable and costs one number no matter how
 often it fires.
 
-Naming follows `coding-standards.md`'s conventions — `camelCase` fields, no abbreviation.
+Both fields are `camelCase`, per `coding-standards.md`'s naming conventions.
 
 ## Scenarios
 
