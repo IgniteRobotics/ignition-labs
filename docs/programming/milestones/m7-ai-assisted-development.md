@@ -67,6 +67,8 @@ Everything above fires *after* the agent has already decided. In a think-aloud s
 
 Ignite's constitution is [`coding-standards.md`](../coding-standards.md): read it once, hand it to the agent every time. Your spec is one change folder in `Robot-2026`, written and committed before you start.
 
+**Why the folder is called `changes`.** `Robot-2026` is forty-odd files you did not write. A format that made you describe the whole system before touching it would cost more than the feature is worth, so OpenSpec has you write only the *delta* — what this change adds, alters, or removes, against whatever is there now. Settled behaviour lives in `openspec/specs/`; a proposal in `openspec/changes/` is a diff against it. That is the whole reason this format suits a team whose codebase already exists, and it is why your spec can be one screen instead of forty.
+
 **Where Ignite stops.** Three levels exist. *Spec-first:* the spec guides the build, then you are done with it. *Spec-anchored:* it survives into maintenance. *Spec-as-source:* the spec is the artifact, the code is generated, and the tooling marks it `DO NOT EDIT`. Ignite does spec-first, and stops there on principle — a student who never edits code is a student who did not learn to write code, which is exactly the failure `ai-use-standard.md` §1 exists to prevent. You will meet spec-as-source tooling within a season, and the line should be yours before a vendor draws it for you.
 
 **A two-line fix does not get a spec.** Over-specifying is its own failure: a small bug inflated into four user stories and sixteen acceptance criteria, *"like using a sledgehammer to crack a nut."* You are writing one spec, for one real feature, at the scale of the feature.
@@ -185,6 +187,6 @@ See `resources.md` for the full library. For this milestone:
 - **Chief Delphi: Student written code** — the vendor-library argument you should be able to answer
 - **Chief Delphi: The Next Revolution: AI in FRC (254)** — the most credentialed programming team in FRC, going public with heavy AI use
 - **Böckeler, *Understanding Spec-Driven Development*** — the source of the spec-first / spec-anchored / spec-as-source ladder, and the sledgehammer warning. On this list *because* it is skeptical, not despite it
-- **OpenSpec** — the spec format M7 uses. Four folders and a markdown file. The CLI is optional and you can complete the milestone without installing anything
+- **OpenSpec** ([docs](https://github.com/Fission-AI/OpenSpec/tree/main/docs)) — the spec format M7 uses. Settled behaviour in `openspec/specs/`, one folder per in-flight change in `openspec/changes/`, and merged changes moved to `openspec/changes/archive/`. You write one `proposal.md` in the middle folder; the CLI is optional and you can complete the milestone without installing anything. **Ignite uses a deliberately reduced subset** — see `SPEC-TEMPLATE.md`, and read the upstream docs for the full shape rather than assuming ours is all of it
 - **Ignite:** [`coding-standards.md`](../coding-standards.md) — the constitution. Our standards, in one place, written to be read by a person
 - **Ignite:** `Robot-2026/.github/workflows/ai-code-review.yml` — AI in the reviewer seat

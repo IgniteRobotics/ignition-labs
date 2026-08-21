@@ -55,11 +55,20 @@ repository — a mentor set it up. Do not see `openspec/` on your branch? Ask a 
 before you create it. Seeding it is deliberately a mentor's job, so that one student's
 tool choice does not become the season repo's.
 
-**With the CLI (optional).** If you have Node 20.19 or newer and want `openspec validate`,
-`openspec list`, and the dashboard: `npm install -g @fission-ai/openspec`, then
-`openspec init --tools <your-tool>` in your clone. **Do not commit what that writes
-outside `openspec/`** — the `.claude/`, `.cursor/` and `.agents/` directories it creates
-are yours, not the team's.
+**With the CLI (optional).** If you have Node 20.19 or newer and want `openspec list` to
+show the changes in flight, `openspec view` to read one, and the dashboard:
+`npm install -g @fission-ai/openspec`, then `openspec init --tools <your-tool>` in your
+clone. Documentation is at <https://github.com/Fission-AI/OpenSpec/tree/main/docs>.
+**Do not commit what that writes outside `openspec/`** — the `.claude/`, `.cursor/` and
+`.agents/` directories it creates are yours, not the team's.
+
+**Expect `openspec validate` to complain about `SPEC-TEMPLATE.md`'s shape, and do not
+chase it.** Upstream OpenSpec puts requirement scenarios in delta-spec files under
+`changes/<name>/specs/`, and its `proposal.md` runs to intent, scope, and approach.
+Ignite's template deliberately collapses that into one file, because the point of this
+milestone is writing decisions down before you prompt, not learning a tool's file layout.
+A validation error against our template is the tool disagreeing with our simplification —
+not a defect in your spec. If you want the full shape, the docs above have it.
 
 **The CLI is optional, and nothing in this milestone requires it.** No done item, no
 review question and no mentor check asks whether you installed it. A student on a lab

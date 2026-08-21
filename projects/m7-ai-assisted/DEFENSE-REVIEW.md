@@ -10,6 +10,14 @@ account for their own code without help. **Divergence between the spec and the d
 expected, not a fault** — a student who reports none either picked something too small or
 did not look, and either of those is a conversation, not a failure.
 
+**After the pull request merges, move the change folder to
+`openspec/changes/archive/<date>-<feature>/`.** The mentor who sat the review does this,
+because they are the one who knows it passed. It is a `git mv` and a commit. Ignite keeps
+the archive for a reason: it becomes the standing record of how Ignite students reason
+about features, which the team has no version of today, and it is what the next student
+reads to see what an M7-sized spec actually looked like. A spec that stays in `changes/`
+after merging leaves the folder describing work that is already done.
+
 ---
 
 ## How this works
