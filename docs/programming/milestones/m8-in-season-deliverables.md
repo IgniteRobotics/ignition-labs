@@ -34,7 +34,7 @@ Right now, Ignite's repositories have essentially no documentation. `Robot-2026`
 
 Ignite's conventions — per-subsystem constants, the `preferences/` pattern, `statemachines/`, why the codebase is laid out the way it is — exist only in the heads of the people who wrote them and in git history. A new student has no map.
 
-Meanwhile the team's actual coding standards live in exactly one place: `.github/prompts/code-review-prompt.md`, a file whose only reader is a bot.
+Meanwhile the team's actual coding standards now live in [`coding-standards.md`](../coding-standards.md), and code review enforces them. That document deliberately stops short of subsystem-specific knowledge — what *this* subsystem is, and how not to break it.
 
 **That is the gap this milestone closes**, one subsystem at a time. Nobody is going to write all of it at once. But if every subsystem owner writes their own, the team has documentation by the end of a season.
 
@@ -163,5 +163,5 @@ See `resources.md` for the full library. For this milestone:
 - **Team 254 FRC-2025-Public** — the README to model yours on: setup, a prose code walkthrough, naming conventions
 - **Chief Delphi: How does your team use git and GitHub?** — where competition tagging comes from
 - **Chief Delphi: Biding Time for Programmers** — what to do in Week 0–1
-- **Ignite:** `Robot-2026/.github/prompts/code-review-prompt.md` — the standards your subsystem should meet
+- **Ignite:** [`coding-standards.md`](../coding-standards.md) — the standards your subsystem should meet; this milestone's deliverables are what it doesn't cover
 - **Ignite:** `docs/vision-subsystem.md` — an existing, genuinely good subsystem document. Model yours on it
