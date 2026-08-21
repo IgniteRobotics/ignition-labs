@@ -119,7 +119,7 @@ A checklist that works:
 **Ship a real feature, AI-assisted, under the Green tier — then defend it.**
 
 1. Pick a real, useful feature. Not a toy
-2. **Write the spec, and commit it before you start.** One change folder in `Robot-2026`: `openspec/changes/<your-feature>/proposal.md`. What is changing, why, the technical approach, and the cases that must hold. `SPEC-TEMPLATE.md` is a worked example. The folder is already there — a mentor set it up
+2. **Write the spec, and commit it before you start.** One change folder in `Robot-2026`: `openspec/changes/<your-feature>/proposal.md`. What is changing, why, the technical approach, and the cases that must hold. `SPEC-TEMPLATE.md` is a worked example. The folder is already there — a mentor set it up. If you get there first and it is not, ask a mentor rather than creating it yourself; which tool the season repo standardizes on is not a decision the first student to arrive should make
 3. **Use AI assistance genuinely and substantially, against the spec you wrote.** This is the one milestone where that is the assignment rather than a concession
 4. **Write or verify tests covering the new behavior.** They must pass
 5. Open a PR with the disclosure block filled in — see `ai-use-standard.md` §6. The "how I verified it" field must be specific

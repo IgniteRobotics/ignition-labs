@@ -83,8 +83,10 @@ Both fields are `camelCase`, per `coding-standards.md`'s naming conventions.
 
 Your spec goes in `Robot-2026`, one folder per change:
 `openspec/changes/<your-feature>/proposal.md`. The `openspec/` folder is already there —
-a mentor set it up — so you are adding a folder, not installing anything. Nothing in this
-training repository runs OpenSpec, and the CLI is optional.
+a mentor set it up — so you are adding a folder, not installing anything. If it is not
+there yet, stop and ask a mentor to seed it; that first commit sets the tool for everyone
+who follows you, and it is not yours to make. Nothing in this training repository runs
+OpenSpec, and the CLI is optional.
 
 **Commit the spec before your first implementation commit.** The commit timestamps are how
 that item on the done list is checked, which is why it is about ordering and not existence.
