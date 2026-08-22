@@ -23,8 +23,8 @@ This milestone sits **directly after M7 and anchors to M7's own output.** That p
 | The second-reader protocol | `projects/m8-spec-anchored/SPEC-REVIEW.md` | new |
 | Drafted-spec allowance | `docs/programming/ai-use-standard.md` §4 — takes it to v1.3 | edit |
 | **In-season milestone renumbered M8 → M9** | `docs/programming/milestones/`, `projects/`, and ~19 files | **rename** |
-| Ladder, gate note, nav, registration | `docs/programming/README.md`, `mkdocs.yml`, `tools/site_guard.py`, `tests/test_site_guard.py` | edit |
-| §1.3, §9.8, §9.9, §13 | `docs/programming/teaching-repo-spec.md` | edit |
+| Ladder, gate row, nav, registration | `docs/programming/README.md`, `docs/programming/curriculum-spec.md`, `mkdocs.yml`, `tools/site_guard.py`, `tools/changed_projects.py`, `tests/test_site_guard.py`, `tests/test_changed_projects.py` | edit |
+| §1.3, §8, **new §9.9**, §9.10, §13, §15 | `docs/programming/teaching-repo-spec.md` | edit |
 
 **No Gradle project, and no capability backlog.** Like M7, M8 ships no skeleton and no tests. §2.3 removes the need for a backlog file entirely — the student's subject is already determined by what they shipped at M7. `tests.lock` is untouched.
 
@@ -141,7 +141,11 @@ This mirrors M7's strongest prompt shape, inverted: at M7 you write and the agen
 
 **M8 is pre-season and sits directly after M7.** In-Season Deliverables & Ownership becomes **M9**, and keeps every property it has today — it runs *during* the season, takes a full season, and is not gated by the Kickoff Readiness Gate. The README line *"M8 is not gated — it runs during the season"* becomes **M9**.
 
-**M8 itself is not added to the Kickoff Readiness Gate.** M7 plus a signed standard remains the requirement for using AI tooling on competition code. Adding M8 would raise that bar substantially in the same season it is introduced, and M8's value is depth rather than safety — M7 is what makes agentic use safe. Flagged in §9 as reviewable after one cohort.
+**M8 is added to the Kickoff Readiness Gate.** The AI-tooling row becomes **`+ M7 and M8`, and a signed AI-use standard**, in `README.md` and in `curriculum-spec.md` §3 — both gate tables, because two gate tables disagreeing about whether M8 is required is worse than either answer alone.
+
+**This reverses the position this section originally took**, which was that M7 plus a signed standard remained sufficient. The original argument is preserved in §9 with its reasoning intact; what beat it is short. §2.6 moves the drafted-spec boundary to M8, and that boundary lives inside the Green tier of `ai-use-standard.md` §4. A student cleared for agentic use at M7 is cleared under a version of Green whose current text they have not reached — the gate would be admitting people to a tier under the previous edition of the document that defines it. The gate is not *M7 was enough*; the gate is *the standard you signed is the standard you are working under.*
+
+The cost is real and is stated where students read it: two more sessions before kickoff, and a student who finishes M7 in December is not cleared until M8 is done too. That belongs in the fall announcement, not in January.
 
 ---
 
@@ -156,7 +160,9 @@ Inserting at position 8 renames a **shipped, published milestone**. Scope, measu
 | Tooling | `tools/site_guard.py` `REQUIRED_PAGES`, `tools/templates_sync.py`, `tools/changed_projects.py`, `tests/test_site_guard.py`, `tests/test_changed_projects.py`, `.github/workflows/skeleton-integrity.yml` |
 | Nav | `mkdocs.yml` — two entries |
 
-**The published URL `programming/milestones/m8-in-season-deliverables/` breaks.** `mkdocs.yml` declares no plugins, so there is no `mkdocs-redirects` to soften it. Either accept the break — the site is a season old and its audience is a team that can be told — or add the redirects plugin as part of this work. **This record recommends accepting the break and announcing it**, because adding a plugin to preserve one URL is a permanent dependency bought for a one-time cost.
+**The published URL `programming/milestones/m8-in-season-deliverables/` breaks, and that is the decision.** `mkdocs.yml` declares no plugins and still declares none: **`mkdocs-redirects` was considered and is not being added.** A plugin is a permanent dependency — one more thing in the §16 seasonal bump, one more thing that can break a `mkdocs build --strict` that currently has nothing to break — bought to preserve exactly one URL, on a site one season old, whose entire audience is a team that can be told in a Slack message. The break is announced, not softened.
+
+The safety net is that nothing *inside* the repository is allowed to break with it: `mkdocs build --strict` fails on a dead internal link, `tools/site_guard.py`'s hand-maintained `REQUIRED_PAGES` fails if either page stops rendering, and `docs-links.yml` catches external rot. An outside bookmark is the only thing that dies, and no student's workflow depends on one.
 
 **The renumber ships atomically with M8's content, in one pull request.** Renumbering first would publish a ladder that runs M0–M7 and then M9, which is a visibly broken curriculum for however long the gap lasts.
 
@@ -183,11 +189,14 @@ The last item is §2.1's argument made assessable. A student who can only recite
 
 `docs/programming/teaching-repo-spec.md`:
 
-- **§1.3** — dated revision entry naming M8's insertion, the M8 → M9 renumber, the new §13 step, and `ai-use-standard.md` to v1.3.
-- **§9.8** — currently M7's subsection; **M8 is inserted and the existing §9.8 content for in-season work moves to §9.9.** Check every cross-reference to §9.8 in the repository, because several point at M7 and several at in-season work.
-- **§13** gains a numbered step. This is the first genuinely new milestone since the original build order, and unlike the M7 spec work it is not a content addition to a shipped step.
-- **§8** — the fade curve's L0 row gains M8; the table currently reads *M6, M7, M8* and must become *M6, M7, M8, M9*.
-- **§15** — no new unowned list. §2.3 removed the capability backlog, which is a small win against the risk register rather than an addition to it.
+- **§1.3** — dated revision entry naming M8's insertion, the M8 → M9 renumber, the accepted URL break, the gate row, the new §13 step, and `ai-use-standard.md` to v1.3.
+- **§9 — corrected during implementation, 2026-08-22.** An earlier draft of this bullet said §9.8 held in-season content and had to move. **It does not.** The measured headings were §9.7 = M6, **§9.8 = M7**, §9.9 = in-season. So: **§9.8 does not move**, M8 becomes a **new §9.9**, and the in-season milestone moves **§9.9 → §9.10**. The only in-repo `§9.8` cross-references are `teaching-repo-spec.md:42` and `:44`, two shipped §1.3 revision entries that point at M7 and correctly stay put — renumbering §9.8 would have silently repointed them at the wrong milestone. The `§9.9` references are all under `superpowers/`, which is history and is not renumbered.
+- **§13** gains numbered step 13. This is the first genuinely new milestone since the original build order, and unlike the M7 spec work it is not a content addition to a shipped step. Shipped step 11's label changes from *M8 templates* to *M9 templates* — the artifact is unchanged, only its milestone's number moved.
+- **§8** — the fade curve's L0 row gains M9; the table read *M6, M7, M8* and becomes *M6, M7, M8, M9*, with a sentence recording that the curve ends at L0 and both new milestones sit there.
+- **§15** — no new unowned list. §2.3 removed the capability backlog, which is a small win against the risk register rather than an addition to it, and §15 now says so.
+- **§5.4, §6.1, §4.1, D1, §14** — mechanical: the commit-access heading becomes M7–M9, the ladder matrix gains an M8 rung, the layout tree gains `projects/m8-spec-anchored/` and renames `m8-ownership/`, and the §14 acceptance line about `site_guard.py` goes from nine milestones to ten.
+
+`docs/programming/curriculum-spec.md` — **added to this list during implementation.** Beyond the §3 gate row (§2.8), its §4 ran `### 4.9 M7` → `### 4.10 M9` with no subsection for M8, while §4.1 declares every milestone file follows an identical structure. **A `### 4.10` for M8 was authored and in-season renumbered to `### 4.11`.** There are zero cross-references to `§4.9`/`§4.10`/`§4.11` anywhere in the repository, so the renumber dangles no citation. Its DoD summary is explicitly marked as a summary — the milestone file carries the authoritative eight-item list, and a verbatim third copy would only create a drift surface nothing checks.
 
 `docs/programming/ai-use-standard.md` → **v1.3**, for §2.6. Green's four conditions are unchanged; what changes is the spec rule's boundary, which currently forbids agent-drafted specs unconditionally and must say *"before M8."* Anyone who acknowledged v1.2 signs again.
 
@@ -225,16 +234,42 @@ The last item is §2.1's argument made assessable. A student who can only recite
 - **Full spec coverage of `Robot-2026`.** The delta model exists so nobody has to, and attempting it produces exactly the stale documentation §2.5 warns about, at scale.
 - **Wiring OpenSpec into CI**, here or in `Robot-2026`. Nothing executes.
 - **Changing what M9 (in-season) teaches.** It is renumbered and otherwise untouched.
-- **Adding M8 to the Kickoff Readiness Gate** (§2.8). Reviewable after a cohort.
+- ~~**Adding M8 to the Kickoff Readiness Gate.**~~ **Reversed.** M8 *is* on the gate — §2.8, with the rejected position at §9.4. What is out of scope is the roster mechanics: the gate is a checklist a mentor maintains, and this record adds no tooling for it.
 - **Assigning repository-wide spec-health ownership.** Named in §7 as unmitigated.
 
 ---
 
-## 9. Open questions for the programming lead
+## 9. Questions answered, and the position that lost
 
-1. **Does §2.6 go too far?** It relaxes a rule written a day earlier. The argument is that the tiers exist to be climbed and M8 is the earned rung; the counter is that agent-drafted specs are the exact thing M7 exists to prevent. Back-to-back placement sharpens both sides.
-2. **Two spec milestones in a row** — is that the right shape before a season, or should M8 be offseason work that a returning student does after M9? The old numbering implied the latter; this record follows your instruction and does not relitigate it, but it is the risk register's largest new entry.
-3. **Accept the broken URL, or add `mkdocs-redirects`?** §3 recommends accepting.
+The three questions this section posed were decided by the programming lead on 2026-08-22, before implementation. They are recorded as decisions rather than left posed, because a record that still asks a question somebody answered is a record that will be read as undecided.
+
+### 9.1 Does §2.6 go too far? — **No. It ships as written.**
+
+The question was whether permitting `openspec-propose` as a red-lined first draft relaxes, one day later, the rule M7 had just tightened.
+
+**Decision: it ships.** The rule M7 wrote was never *the tool is dangerous*; it was *you have not written one yourself yet*. That condition expires by construction — an M8 student has written a conforming spec by hand, watched an agent misread it, and defended where the build diverged. A boundary that never moves once its precondition is met was a ban wearing a tier's clothes, and it would teach that the rule was about the tool. **What makes it safe is not the argument, it is §2.4:** a rubber-stamped spec fails the second-reader test, because you cannot answer for edge cases in a document you did not really write. The relaxation is backed by an assessment that detects the abuse, which is the only kind of relaxation worth making.
+
+### 9.2 Two spec milestones back to back? — **Yes, and it stays pre-season.**
+
+The alternative was M8 as offseason work a returning student does after M9, which the old numbering implied.
+
+**Decision: directly after M7, pre-season.** §2.3 is the reason and it is decisive: the spec a student anchors to is the one *they* archived at M7, so the prerequisite is one mentor command on one pull request rather than a populated cohort archive. Deferring M8 past a season breaks that — the student is now modifying a stranger's capability after all, which is the dependency the placement exists to dissolve, and the arc from *shipped and archived* to *and now it changes* stops being one continuous thing. The four-to-six-session concern is real and stays in §7 as a risk with a measurement and a cut: if the first student lands past two sessions, drop `REMOVED` and teach `MODIFIED` only.
+
+### 9.3 Accept the broken URL, or add `mkdocs-redirects`? — **Accept the break.**
+
+**Decision: accept it, announce it, add no plugin.** Reasoning in §3, which is now written as the decision rather than a recommendation.
+
+### 9.4 Rejected: leaving M8 out of the Kickoff Readiness Gate
+
+This was §2.8's original position and it is preserved here because the argument for it is good and someone will make it again. As written:
+
+> **M8 itself is not added to the Kickoff Readiness Gate.** M7 plus a signed standard remains the requirement for using AI tooling on competition code. Adding M8 would raise that bar substantially in the same season it is introduced, and M8's value is depth rather than safety — M7 is what makes agentic use safe. Flagged as reviewable after one cohort.
+
+**Why it lost.** The *depth rather than safety* split does not survive §2.6. M8 is where the drafted-spec allowance opens, and that allowance is a clause of Green in `ai-use-standard.md` §4 — so M8 is not decoration on top of a settled tier, it is part of the tier's definition. Gating at M7 would admit students to Green under v1.2 while the published standard is v1.3, and the gate would be enforcing a document that no longer exists.
+
+The *same season it is introduced* objection is the strongest part of the losing case and it is not answered by argument, only by scheduling: the gate is a roster checklist a mentor maintains and it is announced in the fall, so the two extra sessions are a planning cost rather than a surprise. `README.md` states the consequence in advance, next to the M0–M3 one, which is what that section already does with every other row.
+
+**What would reopen this.** One cohort's evidence that the M7→M8 pair does not fit before kickoff. That is a scheduling finding, not an argument, and it would move the gate back — it would not move §2.6.
 
 ---
 

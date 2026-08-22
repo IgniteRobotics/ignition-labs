@@ -1,12 +1,12 @@
 # Ignite Robotics — Teaching Repository Spec
 
-**Status:** Executed. Every build-order step in §13 is complete, all nine milestone
+**Status:** Executed. Every build-order step in §13 is complete, all ten milestone
 projects and their test-outs exist, and the site is live. Revisions from here are
-maintenance (§16), not construction. · **Status revised:** 2026-08-19
+maintenance (§16), not construction. · **Status revised:** 2026-08-22
 **Owner:** Josh Reddick
 **Created:** 2026-08-06 · **Revised:** 2026-08-07
 **Team:** FRC 6829 Ignite Robotics
-**Parent:** [`curriculum-spec.md`](curriculum-spec.md) — this document executes the "Teaching repository for M0–M3 projects: **Not built**" line in that spec's status table, and extends it to all nine milestones.
+**Parent:** [`curriculum-spec.md`](curriculum-spec.md) — this document executes the "Teaching repository for M0–M3 projects: **Not built**" line in that spec's status table, and extends it to all ten milestones.
 
 ---
 
@@ -42,6 +42,8 @@ It is not a course-in-a-box that replaces mentors. Every milestone retains expla
 **2026-08-21.** Merged in the M7 spec-driven-development design session. Changes: spec-first development added to M7, with the spec written and committed before the first implementation commit (§9.8); that spec made Green's *fourth* condition in `ai-use-standard.md` §4 rather than milestone advice, which takes that standard to v1.1 and means anyone who acknowledged v1.0 signs again; `coding-standards.md` added as a governing document — Ignite's constitution, the counterpart to a spec — with a documentation-ownership boundary across the standards set (§5.7); `SPEC-TEMPLATE.md` added to M7's given inventory as L0's one piece of scaffolding (§9.8); M7's mentor-verified count raised from nine to eleven DoD items (§9.8). §13 gains no numbered step — this is content added to shipped step 11. The originating design document is preserved at `../superpowers/specs/2026-08-21-m7-spec-driven-development-design.md`.
 
 **2026-08-21 (second entry, same day).** M7 goes opinionated about its spec tooling, reversing part of the entry above after the shipped material was read back. Changes: the OpenSpec CLI is **required** rather than optional and Node 20.19+ becomes an M7 prerequisite (§9.8), and the hand-written fallback path is removed — a documented fallback is an invitation, and its existence made the format negotiable; `SPEC-TEMPLATE.md` is rewritten to upstream OpenSpec's real shape, a change folder of `proposal.md`, `tasks.md` and a delta spec at `specs/<capability>/spec.md` whose requirements are structurally checked, which makes `openspec validate` meaningful and turns it into a DoD item (§9.8); Green's first condition in `ai-use-standard.md` §4 sharpens from *a spec exists and is committed* to *you applied spec-driven development successfully* — committed first, built against, and the student able to name where the two diverged — taking that standard to **v1.2** and meaning anyone who acknowledged v1.0 or v1.1 signs again; and OpenSpec's `/opsx:propose` is **forbidden**, because having the agent draft the proposal collides directly with the rule that the spec is Yellow-tier work even at Green. Adopting a tool is not adopting its defaults, and the carve-out is taught rather than merely enforced. M7's DoD count stays at eleven — one item was sharpened, not added. §13 gains no numbered step. The originating design document is preserved at `../superpowers/specs/2026-08-21-m7-openspec-required-design.md`.
+
+**2026-08-22.** Merged in the M8 spec-anchored-development design session. Changes: **M8 — Spec-Anchored Development is inserted at position 8** as the milestone teaching what happens when a spec meets its second change — `MODIFIED` and `REMOVED` deltas, repair of the student's own M7 drift, and the `## Purpose` stub `openspec archive` leaves behind — assessed by a **second-reader test** rather than a defense review, because being articulate cannot pass a test where the author is silent (§9.9); **In-Season Deliverables & Ownership is renumbered M8 → M9**, unchanged in content: its page and its project directory both move from an `m8-` prefix to `m9-`, becoming `milestones/m9-in-season-deliverables.md` and `projects/m9-ownership/` (§9.10) — **the published URL under the old `m8-` slug therefore breaks, deliberately, and no redirects plugin was added to soften it**; the fade curve's L0 row becomes M6, M7, M8, M9 (§8); the §6.1 ladder gains an M8 rung and the in-season rung becomes M9; `ai-use-standard.md` goes to **v1.3**, moving the spec-drafting boundary in §4 from *never* to *before M8* — an agent may draft a spec you red-line from M8 on — which means **anyone who acknowledged v1.2 signs again**; and **M8 is added to the Kickoff Readiness Gate**, so the AI-tooling row now reads *+ M7 and M8*, in `README.md` and in `curriculum-spec.md` §3, which is a policy change and reverses the design record's own §2.8. §13 gains numbered step 13 — this is a new milestone, not content added to a shipped step. `tests.lock` is untouched; M8 ships no Gradle project and no tests. The originating design document is preserved at `../superpowers/specs/2026-08-22-m8-spec-anchored-design.md`.
 
 ---
 
@@ -81,7 +83,7 @@ Eleven decisions, all made, recorded with reasoning so they can be argued with r
 
 | # | Decision | Reasoning |
 |---|---|---|
-| **D1** | **Skeletons live in this repository**, at `projects/m0-onboarding/` … `projects/m8-ownership/` and `projects/testouts/`, a sibling of `docs/` rather than of `programming/` | One clone gets a student the curriculum and the code. CI can verify the docs against the code they describe — the drift failure mode `curriculum-spec.md` §1.2 exists to prevent. One seasonal re-verification surface, not two. A separate `ignite-training` repo was the original proposal and was rejected: it reintroduces exactly the sync problem it was meant to avoid. Accepted cost: a student forking to do M1 also forks every mentor-facing document, which is harmless — those documents are public, and the README already sends students to them |
+| **D1** | **Skeletons live in this repository**, at `projects/m0-onboarding/` … `projects/m9-ownership/` and `projects/testouts/`, a sibling of `docs/` rather than of `programming/` | One clone gets a student the curriculum and the code. CI can verify the docs against the code they describe — the drift failure mode `curriculum-spec.md` §1.2 exists to prevent. One seasonal re-verification surface, not two. A separate `ignite-training` repo was the original proposal and was rejected: it reintroduces exactly the sync problem it was meant to avoid. Accepted cost: a student forking to do M1 also forks every mentor-facing document, which is harmless — those documents are public, and the README already sends students to them |
 | **D2** | **Fork this repository once at M0. Branch per milestone. Pull request into your own fork.** Upstream receives exactly one student PR, ever | Mentor review and CI happen on the student's fork; the canonical repository never accumulates thirty students' solutions, and no cohort can read the previous cohort's answers. The single upstream PR is M0's contributor file, because shipping a real PR past CI **is** M0's stated learning objective. GitHub Classroom's autograding is genuinely better verification, but it is a roster-linked tracking system, and `curriculum-spec.md` §8 excluded tracking systems after a peer resource drew real criticism for collecting student names and emails with no deletion path. Reversing that needs a privacy review, not a convenience argument. Full mechanics in §5 |
 | **D3** | **Tests enforce the mechanical Definition-of-Done items only** | A JUnit assertion can prove a deadband function clamps correctly. It cannot prove a student can explain why `1/2` is `0`. Wiring CI to "check" the explanation items would produce a green check that means less than the mentor conversation it replaced. The test suite is the floor; the mentor conversation remains the ceiling. Every milestone's DoD is split explicitly in §9 |
 | **D4** | **Local WPILib toolchain only. No devcontainer, no Codespaces** | Installing the toolchain and getting `./gradlew build` green **is** M0's stated learning objective. A devcontainer lets a student skip the thing M0 exists to teach. Revisit only if a real student is genuinely blocked by a locked-down machine — at which point it is a one-off accommodation, not a shipped artifact |
@@ -120,7 +122,7 @@ ignition-labs/                   IgniteRobotics/ignition-labs — the repository
 │       ├── team-gitflow.md      ← the §5.7 team standard, student-facing
 │       ├── robot-repo-ladder.md ← the §6 matrix, student-facing
 │       ├── UNTESTED-TARGETS.md  ← mentor-maintained M6 shortlist (§6.5)
-│       ├── milestones/m0…m8.md  │ rendered
+│       ├── milestones/m0…m9.md  │ rendered
 │       └── tracks/              ┘
 ├── projects/                    a sibling of docs/, not inside it — unpublishable,
 │   ├── m0-onboarding/           because MkDocs cannot read outside docs_dir at all.
@@ -131,14 +133,15 @@ ignition-labs/                   IgniteRobotics/ignition-labs — the repository
 │   ├── m5-auto-vision/
 │   ├── m6-testing/
 │   ├── m7-ai-assisted/
-│   ├── m8-ownership/
+│   ├── m8-spec-anchored/
+│   ├── m9-ownership/
 │   └── testouts/
 │       ├── t1-find-the-bug/
 │       ├── t2-supplier-swap/
 │       ├── t3-scheduler-conflict/
 │       ├── t4-ringing-flywheel/
 │       └── t5-drifting-auto/
-├── templates/                   M8 deliverables as real copyable files — unpublishable, same reason
+├── templates/                   M9 deliverables as real copyable files — unpublishable, same reason
 │   ├── subsystem-readme.md
 │   ├── tuning-log.md
 │   ├── pit-documentation.md
@@ -234,7 +237,7 @@ PR: jsmith/ignition-labs:m3-command-based → jsmith/ignition-labs:main
 
 CI runs on the fork. A mentor reviews on the fork. Upstream never sees a student solution. Skeleton updates arrive through `fetch upstream` — the same command M0 already teaches, now doing real work.
 
-### 5.4 M7–M8 — commit access
+### 5.4 M7–M9 — commit access
 
 Post-Gate, the student has write access to `Robot-2026` and branches directly on it. No fork, no upstream remote. This is how the team works, and by M7 the student is part of the team.
 
@@ -299,7 +302,7 @@ the one the other three most easily bleed into. It owns exactly one question too
 | `ai-use-standard.md` | *What may I use a tool for, at my tier?* — policy, tiers, disclosure, defense review | Java conventions. Anything specific to one mechanism |
 | `coding-standards.md` | *What does good Ignite code look like?* — patterns, units, naming, safety | AI policy. Per-subsystem detail. Anything true of one season only |
 | `Robot-2026/.github/prompts/code-review-prompt.md` | *Enforcement.* Points at the constitution and adds nothing normative | Any standard not in the constitution |
-| `templates/subsystem-readme.md` (M8) | *What is this subsystem, and how do I not break it?* | Team-wide rules. Links to the constitution instead |
+| `templates/subsystem-readme.md` (M9) | *What is this subsystem, and how do I not break it?* | Team-wide rules. Links to the constitution instead |
 
 The direction of truth runs one way: a standard is written in `coding-standards.md` first, and
 the review prompt is what changes to match. Without this table `coding-standards.md` becomes
@@ -326,7 +329,8 @@ mirroring `ai-use-standard.md` §11. An unowned constitution is `FEATURE-BACKLOG
 | **M5** | `m5-auto-vision/` | branch → PR into own fork | Robot-2026 | **clone** — `vision/`, `LaunchCalculator` |
 | **M6** | `m6-testing/` *(warm-up)* | branch → PR into own fork | Robot-2026 | **fork → PR upstream.** Tests for an untested class. **This is the DoD item** |
 | **M7** | — | **branch on upstream** | Robot-2026 | commit access. Ship a feature |
-| **M8** | — | **branch on upstream** | Robot-2026 | commit access, in-season. Own a subsystem |
+| **M8** | — | **branch on upstream** | Robot-2026 | commit access. Extend the spec you shipped at M7 |
+| **M9** | — | **branch on upstream** | Robot-2026 | commit access, in-season. Own a subsystem |
 
 The four contact levels — **browse → clone → fork+PR → branch** — are deliberately monotonic. A student never moves backward, and each step is a strictly larger permission than the last.
 
@@ -432,7 +436,9 @@ Four density levels, decreasing across the ladder, per §2.3.
 | **L3 — Stub and fill** | M1 | Class, method signature, and a Javadoc contract stating exact expected behavior. Body is `throw new UnsupportedOperationException("TODO")`. Tests given and complete | Method bodies only |
 | **L2 — Contract and build** | M2 | A Javadoc-only specification of the required public API, and a read-only contract test that enforces it. No interface file — writing the signatures is part of the exercise | Class, signatures, bodies, plus their own tests |
 | **L1 — Harness and fill** | M3, M4, M5 | Everything that is not the lesson: `Main`/`Robot` wiring, simulated plants, vendordeps, sim config, logging, a test harness. Plus given tests that assert observable behavior | Subsystems, commands, control logic, gains, auto routines — the lesson |
-| **L0 — Worked example only** | M6, M7, M8 | One fully-commented worked example, the awkward setup encapsulated (CTRE sim timing, `AutoCloseable` teardown), and the raw material (a log, a regression patch, a feature backlog) | Everything else |
+| **L0 — Worked example only** | M6, M7, M8, M9 | One fully-commented worked example, the awkward setup encapsulated (CTRE sim timing, `AutoCloseable` teardown), and the raw material (a log, a regression patch, a feature backlog, a worked `MODIFIED` delta) | Everything else |
+
+**The curve ends at L0 and both new milestones sit there.** M8's single piece of scaffolding is `MODIFIED-EXAMPLE.md`; M9's is `templates/`. Nothing below L0 exists, which is the point — a milestone that needed a fifth level would be a milestone the ladder is not ready for.
 
 Two rules that hold at every level:
 
@@ -591,11 +597,24 @@ Almost no code. M7 ships a feature into a real repository with commit access —
 **Tests cover:** nothing. M7's assessment is the defense review, by design.
 **Mentor verifies:** all eleven DoD items.
 
-### 9.9 M8 — `projects/m8-ownership/` · fade: L0
+### 9.9 M8 — `projects/m8-spec-anchored/` · fade: L0
+
+No skeleton code, no Gradle build, no tests — the same shape as §9.8, and for the same reason: the deliverable is a change to a real repository, and a sandbox for it would defeat the requirement that the spec being modified is one somebody actually shipped.
+
+**Given:** `README.md`, which states the prerequisite (the student's own M7 change merged **and** archived) and walks the project end to end. `MODIFIED-EXAMPLE.md` — L0's one piece of scaffolding: a capability spec and the same spec after a `MODIFIED` change, side by side, with the reasoning for each edit. It works the vision-exception feature `SPEC-TEMPLATE.md` already spends, deliberately — that is the one capability guaranteed not to be any student's subject, and reusing it lets the example show a *second* change to a spec the reader already knows. `SPEC-REVIEW.md` — the second-reader protocol, written for both sides, because the reader is being taught too.
+
+**No capability backlog.** M7 needs `FEATURE-BACKLOG.md` because a student must choose a feature; M8's subject is determined by what that student shipped at M7. What the mentor must have is a genuine second change in mind before assigning the milestone, which is a mentor note rather than a file — a list would deplete and this does not.
+
+**Real repo:** branch on `Robot-2026` upstream. Commit access. The change commits there as `openspec/changes/<name>/`, against the capability spec the student's own M7 change archived into.
+
+**Tests cover:** nothing. The assessment is the second-reader test — a peer who has not seen the diff reads the updated spec alone and states what the system now does. The author is silent, which is the property a defense review cannot check.
+**Mentor verifies:** all eight DoD items, and runs `openspec archive` after the pull request merges.
+
+### 9.10 M9 — `projects/m9-ownership/` · fade: L0
 
 No skeleton code. The deliverables in `student-deliverables.md` become **real files** in `templates/` so a student copies rather than retypes — which is the difference between a template and a description of a template, and is already the stated acceptance criterion in `curriculum-spec.md` §7.
 
-`projects/m8-ownership/README.md` points at `templates/` and at the week-by-week cadence.
+`projects/m9-ownership/README.md` points at `templates/` and at the week-by-week cadence.
 
 **Real repo:** branch on `Robot-2026` upstream, in-season. Commit access.
 
@@ -695,9 +714,10 @@ Ordered by dependency, then by value. Each step is independently reviewable and 
 | **8** | **M6** + `UNTESTED-TARGETS.md` | Out of numeric order deliberately: it is the M7 gate, and the regression-patch verification is novel enough to want proving early | Done |
 | **9** | **M4** + T4 | Plant seam decided by spike: CTRE's simulated control loop and signal pipeline run on wall-clock time, so the student's loop is Java against given plants | Done |
 | **10** | **M5** + T5 | T5's three log sets are the single largest authoring cost in the spec | Done |
-| **11** | **M7**, **M8 templates** | Mostly documents | Done |
+| **11** | **M7**, **M9 templates** | Mostly documents. Shipped when the in-season milestone was still numbered M8; the templates are unchanged and are M9's | Done |
 | **12** | **Doc corrections.** The §7.3 CI claim in three files; M6's "first tests" → "a class that has none"; M4's required-PR DoD item; `curriculum-spec.md` §8 and `README.md` status tables; the `resources.md` seasonal re-verification list | — | Done |
-| **—** | Solutions repository, built continuously alongside steps 4–11, with the §11.2 cross-check job live from step 4 | Not a final step. A milestone shipped without its solution is not shipped. Backfilled late: steps 4–6 shipped without solutions, and each plan's verification implementation was written and then deleted rather than kept — from step 7 the solution ships with the milestone | M0–M6, T1–T5 done; M7–M8 notes only (no code to solve); cross-check live |
+| **13** | **M8** — spec-anchored development, **inserted** at position 8, and the in-season milestone renumbered to M9 | The first genuinely new milestone since this build order was written, so it takes a numbered step rather than adding content to a shipped one. Ships atomically with the renumber (§9.9, §9.10): landing the rename first would publish a ladder that runs M0–M7 and then M9. No Gradle project, no tests, `tests.lock` untouched | Done 2026-08-22 |
+| **—** | Solutions repository, built continuously alongside steps 4–11, with the §11.2 cross-check job live from step 4 | Not a final step. A milestone shipped without its solution is not shipped. Backfilled late: steps 4–6 shipped without solutions, and each plan's verification implementation was written and then deleted rather than kept — from step 7 the solution ships with the milestone | M0–M6, T1–T5 done; M7–M9 notes only (no code to solve); cross-check live |
 
 **Timing.** 2026-08-07, kickoff roughly five months out. Steps 1–7 fit comfortably *if step 1 lands now*. Steps 1–3 are almost entirely writing and configuration — they do not wait on the toolchain being settled.
 
@@ -718,7 +738,7 @@ ticked optimistically.
 - [x] `skeleton-integrity.yml` passes on `main`, including the inverted check that each skeleton's tests fail unmodified
 - [ ] A student fork's `student-check.yml` produces a single green check a mentor can read without opening the code — **unverifiable from this repository.** It needs a real student fork with Actions enabled; nothing here can assert it. Verify once, by hand, with the first student fork of the season
 - [x] `pages.yml`, `skeleton-integrity.yml`, and `docs-links.yml` are skipped — not failed — on a fork
-- [x] The Pages site renders every prose file and **zero** files from `projects/` — `tools/site_guard.py` now requires all nine milestones and four tracks, up from six pages
+- [x] The Pages site renders every prose file and **zero** files from `projects/` — `tools/site_guard.py` now requires all ten milestones and four tracks, up from six pages. Raised from nine on 2026-08-22 when M8 was inserted
 - [ ] `SETUP.md` documents enabling Actions on a fork, **with a screenshot** — the step exists and is correct; **there is no screenshot and this criterion has never been met.** Either capture one or amend the criterion; do not tick it as written
 - [x] No skeleton references pre-2026 Ignite code, and every referenced path is pinned to a commit SHA — the seven surviving `Robot-2025`/`2025-Robotics-Intro` mentions are all historical claims in prose ("`Robot-2025` has zero tests"), not paths sending a student anywhere. §1.2 forbids the latter
 - [x] Every project completes in simulation with no hardware
@@ -739,10 +759,17 @@ ticked optimistically.
 | Fork Actions disabled → M0 shows no CI, reads as broken | **High** | Explicit, screenshotted step in `SETUP.md`; mentor checklist item at M0 (§9.1) |
 | A flaky student test blocks team pull requests in-season | **High** | §6.5 hard rule: pure logic only in real-repo tests |
 | `UNTESTED-TARGETS.md` goes stale and M6 loses its target list | Medium | **Owned as of 2026-08-18: Joshua Reddick (`@y0shi`), named in the file.** `FEATURE-BACKLOG.md` is still unowned — assign it — §16 |
-| Student forks of `Robot-2026` drift once the season starts | Medium | The ladder puts fork-and-PR milestones before kickoff by design; M7/M8 branch on upstream |
+| Student forks of `Robot-2026` drift once the season starts | Medium | The ladder puts fork-and-PR milestones before kickoff by design; M7–M9 branch on upstream |
 | Skeletons rot against next season's WPILib | Medium | Seasonal re-verification pass, §16. Order preserved: bump, re-pin, cross-check |
 | Solutions repository silently diverges from the skeletons | Medium | §11.2 cross-check, live from build step 4 |
 | Pages workflow fires on student forks | Low | `if: github.repository ==` gate, §7.2 |
+
+**M8 adds no row, and that is the notable part.** The obvious shape for it was a capability
+backlog — a mentor-maintained list of specs available to modify, and a third unowned file next
+to `UNTESTED-TARGETS.md` and `FEATURE-BACKLOG.md`. Anchoring the milestone to the student's own
+M7 change removed the need for the file entirely (design record §2.3), so the register shrank by
+one entry it never had to acquire. The two lists above are still the whole of the problem, and
+`FEATURE-BACKLOG.md` is still unowned.
 
 ---
 

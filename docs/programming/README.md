@@ -23,7 +23,7 @@ Not sure between two? **Pick the earlier one.** The test-outs will move you up i
 
 ## How this works
 
-**One ladder, four entry points.** There is a single sequence of nine milestones. Your track determines where you get on and which test-outs you attempt — not what you eventually learn. Everyone converges.
+**One ladder, four entry points.** There is a single sequence of ten milestones. Your track determines where you get on and which test-outs you attempt — not what you eventually learn. Everyone converges.
 
 ```
 M0  Tooling, Git & the Build          <-- Track A, B, C, D all start here
@@ -34,7 +34,8 @@ M4  Sensors, Actuators & Control
 M5  Autonomous, Odometry & Vision
 M6  Simulation, Telemetry & Testing   <-- Track D's real starting point
 M7  AI-Assisted Development
-M8  In-Season Deliverables & Ownership
+M8  Spec-Anchored Development
+M9  In-Season Deliverables & Ownership
 ```
 
 **Test-outs, not self-assessment.** Skipping a milestone means passing a 30–60 minute challenge a mentor verifies. Failing one is routing information, not a judgment — you work that milestone, no penalty and no record.
@@ -57,7 +58,8 @@ M8  In-Season Deliverables & Ownership
 | **M5** | [Autonomous, Odometry & Vision](milestones/m5-autonomous-odometry-vision.md) | Fifteen seconds with no driver |
 | **M6** | [Simulation, Telemetry & Testing](milestones/m6-simulation-telemetry-testing.md) | Know your code is wrong before the robot does |
 | **M7** | [AI-Assisted Development](milestones/m7-ai-assisted-development.md) | Use AI tools without shipping what you cannot explain |
-| **M8** | [In-Season Deliverables](milestones/m8-in-season-deliverables.md) | Own a subsystem through a season |
+| **M8** | [Spec-Anchored Development](milestones/m8-spec-anchored-development.md) | Change a spec somebody else has to act on |
+| **M9** | [In-Season Deliverables](milestones/m9-in-season-deliverables.md) | Own a subsystem through a season |
 
 ---
 
@@ -70,17 +72,19 @@ The curriculum runs year-round. This is the one hard deadline.
 | Any programming subteam member | **M0, M1, M2, M3** |
 | Committing to competition robot code | **+ M4, M6** |
 | Autonomous or vision owner | **+ M5** |
-| Using AI tooling on competition code | **+ M7**, and a signed AI-use standard |
+| Using AI tooling on competition code | **+ M7 and M8**, and a signed AI-use standard |
 
 **This has a real consequence.** If you have not cleared M0–M3 by kickoff, you can still participate, but you do not get commit access to the season repository. That is stated here in advance rather than discovered in January.
 
-M8 is not gated — it runs during the season.
+**And so does the AI row.** Finishing M7 in December does not clear you for agentic use on competition code — M8 has to be done too, and it is two more sessions. Plan for both before kickoff or plan on not using the tools in January.
+
+M9 is not gated — it runs during the season.
 
 ---
 
 ## AI tooling
 
-**Read [the AI use standard](ai-use-standard.md) before using any AI coding tool on team code.** You sign it at M7.
+**Read [the AI use standard](ai-use-standard.md) before using any AI coding tool on team code.** You sign it at M7, and it is at v1.3 — if you signed v1.2, you sign again.
 
 The short version: your tier is set by the milestones you have completed.
 
@@ -88,7 +92,7 @@ The short version: your tier is set by the milestones you have completed.
 |---|---|---|
 | 🔴 **Red** | M0–M2 | Explanation only. **No code generation. Turn Copilot off** |
 | 🟡 **Yellow** | M3–M5 | Boilerplate, Javadoc, stack-trace triage. **Not** control logic, subsystem design, or gains. Disclosure required |
-| 🟢 **Green** | After M6 | Full agentic use — gated on a committed spec written first, tests passing, disclosure, and defending the diff in review |
+| 🟢 **Green** | After M6 | Full agentic use — gated on a committed spec written first, tests passing, disclosure, and defending the diff in review. **You write that spec yourself until M8**; from M8 an agent may draft one you red-line |
 
 FIRST has no rule about this and no other FRC team has published a policy. This is ours, we own it, and it is written to be argued with. If you think a tier boundary is wrong, bring the argument.
 
@@ -104,12 +108,12 @@ FIRST has no rule about this and no other FRC team has published a policy. This 
 | [`robot-repo-ladder.md`](robot-repo-ladder.md) | The four levels of access to the real robot repositories, and which milestone unlocks each |
 | [`curriculum-spec.md`](curriculum-spec.md) | The design document. Why the curriculum is shaped this way. For mentors and anyone editing it |
 | [`teaching-repo-spec.md`](teaching-repo-spec.md) | Spec for the skeleton source code students start each project from. For mentors and anyone building it |
-| [`ai-use-standard.md`](ai-use-standard.md) | The AI policy. Required reading, signed at M7 |
+| [`ai-use-standard.md`](ai-use-standard.md) | The AI policy. Required reading, signed at M7 and re-signed at M8 when the drafted-spec boundary moves |
 | [`coding-standards.md`](coding-standards.md) | What good Ignite code looks like — the standards code review enforces. M7 reading |
 | [`student-deliverables.md`](student-deliverables.md) | Fill-in-the-blank templates for everything you produce in-season |
 | [`resources.md`](resources.md) | Every external link in the curriculum, with notes on what each is good for |
 | [`tracks/`](tracks/track-a-new-to-programming.md) | The four entry-point guides, starting with Track A |
-| [`milestones/`](milestones/m0-tooling-and-git.md) | M0 through M8, starting with M0 |
+| [`milestones/`](milestones/m0-tooling-and-git.md) | M0 through M9, starting with M0 |
 
 ---
 
@@ -131,8 +135,8 @@ The three most likely to generate friction:
 
 | Piece | State |
 |---|---|
-| Spec, resources, AI standard, all nine milestones, deliverables, tracks | **Written** |
-| Teaching repository for M0–M8 projects | **All nine built.** Per-milestone state below |
+| Spec, resources, AI standard, all ten milestones, deliverables, tracks | **Written** |
+| Teaching repository for M0–M9 projects | **All ten built.** Per-milestone state below |
 | **M0** `m0-onboarding` | Built. Builds from a clean clone, simulator starts. `spotlessCheck` fails by design — `FormatMe.java` is the exercise |
 | **M1** `m1-java-fundamentals` + T1 | Built. Assembles green, tests red |
 | **M2** `m2-oop` + T2 | Built. Assembles green, tests red |
@@ -141,10 +145,11 @@ The three most likely to generate friction:
 | **M5** `m5-auto-vision` + T5 | Built. Assembles green, tests red. T5 ships three recorded logs and no tests — a log-diagnosis fixture, green by design |
 | **M6** `m6-testing` | Built, deliberately out of numeric order: it is the M7 gate. Tests green by design, protected by the regression gate |
 | **M7** `m7-ai-assisted` | Built. No Gradle build, no tests, no skeleton — five documents and a pinned copy of `Robot-2026`'s AI review pipeline. Assessed by defense review on a real pull request |
-| **M8** `m8-ownership` | Built. A pointer at `templates/`; six of its seven fill-in-the-blank files are M8 deliverables (the seventh, `CONTRIBUTOR.md`, is M0's). Verified by conversation, not CI |
+| **M8** `m8-spec-anchored` | Built. No Gradle build, no tests, no skeleton — a project README, a worked `MODIFIED` delta, and the second-reader protocol. Assessed by a peer reading the spec, not by CI |
+| **M9** `m9-ownership` | Built. A pointer at `templates/`; six of its seven fill-in-the-blank files are M9 deliverables (the seventh, `CONTRIBUTOR.md`, is M0's). Verified by conversation, not CI |
 | Supporting | Process docs, verification tooling, four CI workflows, and the Pages pipeline, all live |
 | `CommandTemplate` rewrite | **Out of scope** — see spec §8. Still the highest-leverage single fix, and it is still on WPILib 2025.2.1 |
-| Repo-level READMEs | **Not written** — M8 creates the habit per subsystem |
+| Repo-level READMEs | **Not written** — M9 creates the habit per subsystem |
 | Code references | **All 2026.** `Phoenix-2026` is the reading-scale repo, `Robot-2026` the full-complexity one. No milestone cites pre-2026 Ignite code |
 
 **Re-verify [`resources.md`](resources.md) at the start of each season** — both halves of it.

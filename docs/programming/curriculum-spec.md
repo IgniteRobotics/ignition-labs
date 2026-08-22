@@ -115,7 +115,9 @@ Delivery is evergreen, so calendar pressure concentrates in a single gate rather
 | Any programming subteam member | **M0, M1, M2, M3** |
 | Anyone committing to competition robot code | **+ M4, M6** |
 | Autonomous or vision owner | **+ M5** |
-| Anyone using AI tooling on competition code | **+ M7** and a signed AI-use standard |
+| Anyone using AI tooling on competition code | **+ M7 and M8** and a signed AI-use standard |
+
+M8 joined this row on 2026-08-22, when it was inserted. The argument for keeping the row at M7 — that M7 is what makes agentic use *safe* and M8 only adds depth — lost to the fact that M8 is where the drafted-spec allowance opens (`ai-use-standard.md` §4, v1.3). A student cleared for agentic use under a standard whose current Green tier they have not reached is cleared under the wrong document. The cost is two more sessions before kickoff and it must be announced in the fall, not discovered in January.
 
 M9 is explicitly *not* gated — it is the in-season milestone and runs during the season itself.
 
@@ -355,7 +357,38 @@ Ignite's existing Gemini PR-review bot (`.github/workflows/ai-code-review.yml`, 
 
 **Resources.** `ai-use-standard.md` (this curriculum) · [The Widening Gap (Prather et al., 2024)](https://arxiv.org/html/2405.17739v1) · [FIRST: Expanding the FIRST Toolbox with AI](https://community.firstinspires.org/expanding-the-first-toolbox-with-artificial-intelligence) · Ignite reference: `Robot-2026/.github/prompts/code-review-prompt.md`
 
-### 4.10 M9 — In-Season Deliverables & Ownership
+### 4.10 M8 — Spec-Anchored Development
+
+**Prerequisite:** M7 complete, **and that student's own M7 change archived** (`openspec archive`, run by the mentor after the pull request merges). Without the archive there is no settled spec on disk and the milestone has nothing to anchor to.
+
+**Concepts.** What M7 structurally cannot teach: a spec's second change. Every requirement a student has written to this point is an `## ADDED Requirements` block against an empty `openspec/specs/`, because there was nothing on disk to write *against*. M7 can therefore check only one property — *can you defend your decisions?* — and a spec that is never reopened is a deliverable graded on its author. M8 checks the other one: **is the spec true, and can somebody else act on it?**
+
+The delta types M7 never needed, `MODIFIED` and `REMOVED`. `MODIFIED` restates the whole requirement rather than a diff, and the tool enforces it by name — you cannot change one clause without accounting for every scenario attached to it, which makes *read the whole thing first* a precondition rather than advice. `REMOVED` is the harder one to do honestly: it claims behaviour the team once decided on is no longer wanted, and the only surviving record of why is the sentence written under it.
+
+What validation does not catch. `openspec validate`, with or without `--strict`, enforces **completeness, not truth.** It refuses a `MODIFIED` block that silently drops a scenario; it accepts one reworded into a falsehood. That gap is why the assessment is a person reading rather than a command running.
+
+Spec rot as the named enemy, on the same argument `coding-standards.md` makes about a constitution that quietly omits a standard: a document describing what the code *used to* do is believed **because** it exists. Two instances are waiting for the student and both are theirs — the `## Purpose` stub `openspec archive` leaves behind, and their own M7 drift, which M7 asked them to *name* but not to repair. The rule that follows: if you change behaviour a spec describes, the spec change ships in the same pull request as the code.
+
+Where Ignite stops. Spec-first, spec-anchored, spec-as-source: M7 does the first, M8 does the second, and the third stays rejected because a student who never edits code did not learn to write code (`ai-use-standard.md` §1). M8 is the first point at which a student can disagree competently, so the rejection gets argued here rather than asserted.
+
+**Project (simulation-mandatory).** Extend the change shipped at M7 — a genuine second change to the capability, identified by the mentor, not a scenario the student forgot — then hand the updated spec to somebody who has not seen the code. Repair the M7 drift and write the capability's `## Purpose` first. The delta carries a `MODIFIED` or `REMOVED` requirement restated in full, `openspec validate` passes, and the spec change and the code change open as one pull request.
+
+**The assessment is the second-reader test, not another defense review.** Another student reads only the updated spec — not the diff, not the code — and states what the system now does, including at least one edge case. If their description is not what was built, the spec is wrong whatever the code does. The author is silent throughout, which is precisely what a defense review cannot check: being articulate does not pass this. Failure is normal and is not a retry; the round-trip count is the interesting signal and is reported.
+
+**Definition of done.**
+- [ ] M7 drift repaired and the capability's `## Purpose` written
+- [ ] Change folder carries a `MODIFIED` or `REMOVED` requirement, restated in full, and `openspec validate` passes
+- [ ] Spec change and code change shipped in the same pull request
+- [ ] A second reader described the new behaviour correctly from the spec alone, and the student can say how many round trips it took
+- [ ] Student can name something `openspec validate` cannot check, and can make the strongest case *for* spec-as-source before saying why Ignite stops short
+
+The milestone file carries the authoritative eight-item list; the above is its summary and is not the checklist a mentor marks against.
+
+**AI posture:** 🟢 Green, and this is where the one remaining restriction lifts. `openspec-propose` may produce a first draft the student red-lines, disclosed, with at minimum one requirement rewritten and one scenario added or cut. A draft accepted unchanged is not a pass. Takes `ai-use-standard.md` to v1.3; anyone who acknowledged v1.2 signs again.
+
+**Resources.** `ai-use-standard.md` §4 · `coding-standards.md` · [OpenSpec](https://github.com/Fission-AI/OpenSpec/tree/main/docs) — `MODIFIED` and `REMOVED` · Böckeler, *Understanding Spec-Driven Development* — the source of the spec-first / spec-anchored / spec-as-source ladder
+
+### 4.11 M9 — In-Season Deliverables & Ownership
 
 **Runs during the season, not before it.** This milestone is the answer to the backlog item's second half: what students own in-season and how they build it. Full detail lives in `student-deliverables.md`; this milestone is the teaching wrapper around it.
 
