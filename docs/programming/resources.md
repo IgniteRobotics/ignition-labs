@@ -3,7 +3,7 @@
 **Last verified:** 2026-08-05
 **Companion to:** `curriculum-spec.md`
 
-Every external link used anywhere in the curriculum lives here. Milestone files link *to this file* rather than carrying their own copies, so a moved or dead URL gets fixed in one place instead of nine.
+Every external link used anywhere in the curriculum lives here. Milestone files link *to this file* rather than carrying their own copies, so a moved or dead URL gets fixed in one place instead of ten.
 
 **Rule:** if a link appears in a milestone file, it must appear here. If it does not appear here, it does not go in a milestone file.
 

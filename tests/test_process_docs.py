@@ -55,7 +55,7 @@ def ladder() -> str:
     return LADDER.read_text(encoding="utf-8")
 
 
-@pytest.mark.parametrize("milestone", [f"M{n}" for n in range(9)])
+@pytest.mark.parametrize("milestone", [f"M{n}" for n in range(10)])
 def test_every_milestone_has_a_row(ladder, milestone):
     assert f"**{milestone}**" in ladder
 

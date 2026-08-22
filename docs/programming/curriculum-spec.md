@@ -1,6 +1,6 @@
 # Ignite Robotics — Programming Curriculum Spec
 
-**Status:** Executed. All nine milestones are built and published; see
+**Status:** Executed. All ten milestones are built and published; see
 [`teaching-repo-spec.md`](teaching-repo-spec.md) §13 for the build-order record.
 Revisions from here are maintenance (§16), not construction. · **Status revised:** 2026-08-19
 **Owner:** Josh Reddick

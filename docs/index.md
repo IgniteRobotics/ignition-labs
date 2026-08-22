@@ -8,7 +8,7 @@ FRC 6829 Ignite Robotics — programming curriculum and team documentation.
 
 **New to the programming subteam?** Go to the [Programming Curriculum](programming/README.md)
 and answer the first question. It routes you to one of four tracks depending on
-what you already know, and every track converges on the same nine milestones.
+what you already know, and every track converges on the same ten milestones.
 
 **Setting up your laptop?** [Setup](SETUP.md) walks the toolchain install, and
 tells you about the one step everybody forgets.
@@ -22,7 +22,7 @@ and [Git Workflow](programming/git-workflow.md) has the exact commands.
 
 | Section | What it covers |
 |---|---|
-| [Programming Curriculum](programming/README.md) | Nine milestones from "never written code" to owning a subsystem through a competition season |
+| [Programming Curriculum](programming/README.md) | Ten milestones from "never written code" to owning a subsystem through a competition season |
 | [Git Workflow](programming/git-workflow.md) | What to do with git at every milestone. Clone what you're reading. Fork what you'll change. Branch to work |
 | [Real-Repo Ladder](programming/robot-repo-ladder.md) | When you stop working in a practice project and start contributing to the competition robot |
 | [AI Use Standard](programming/ai-use-standard.md) | What AI tooling you may use, and when. Your tier comes from the milestones you have finished |
