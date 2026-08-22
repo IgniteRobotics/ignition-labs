@@ -266,7 +266,7 @@ For adjudicating real situations. If your case is not here, reason from §3.
 | M6 student uses an agent to write the tests for their subsystem | Yellow during M6 | **Not allowed.** You write the tests that unlock Green |
 | M7 student asks an agent to draft the spec for their feature | Green | **Not allowed.** The spec is the decisions. See §4 |
 | M7 student writes the spec, then asks an agent which cases it missed | Green | **Allowed.** Disclose as `assisted`. This is the highest-value prompt shape in the milestone |
-| M8 student has an agent draft their delta spec, then rewrites two requirements | Green | **Allowed.** Disclose as `assisted` and show the red-line. See §4 |
+| M8 student has an agent draft their delta spec, then rewrites two requirements and cuts a scenario | Green | **Allowed.** Disclose as `assisted` and show the red-line. See §4 |
 | M7 student does the same thing | Green | **Not allowed.** The boundary is M8, and it is about having written one yourself first |
 | M7 student uses an agent to implement a full new subsystem, writes tests, discloses, defends in review | Green | **Allowed.** This is the system working as designed |
 | M7 student uses an agent, tests pass, but cannot explain why a particular timeout value was chosen | Green | **That part comes out.** Rest of the PR can proceed |

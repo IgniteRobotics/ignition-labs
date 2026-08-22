@@ -42,7 +42,7 @@ The same CLI you installed at M7. Nothing new to set up.
 ```bash
 openspec new change <name>        # creates the folder. All three files are yours to write
 openspec validate <name>          # must pass before you commit. This is a done item
-openspec list                     # flips your change to ✓ Complete once every task box is checked
+openspec list                     # shows your change as ✓ Complete once every task box is checked
 ```
 
 `openspec new change` scaffolds the folder and a `.openspec.yaml`, and stops there — no
@@ -109,7 +109,7 @@ running. Everything else here is mentor-verified, and there is no test to make g
 
 ## Definition of done
 
-- [ ] You repaired the drift between your M7 spec and what you actually shipped
+- [ ] You repaired the drift between your M7 spec and what you actually shipped, and wrote the capability's `## Purpose` line
 - [ ] Your change folder contains a `MODIFIED` or `REMOVED` requirement, restated in full
 - [ ] `openspec validate` passes, and the spec change shipped in the same pull request as the code
 - [ ] A second reader described the new behaviour correctly from your spec alone

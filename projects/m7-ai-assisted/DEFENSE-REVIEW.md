@@ -17,11 +17,14 @@ until every box in the student's `tasks.md` is checked — `openspec list` shows
 and moves the folder to `changes/archive/<date>-<change-name>/`, so the settled specs grow
 by exactly what shipped.
 
-**Then write the `## Purpose` line before you commit.** Archiving a brand-new capability
-leaves it reading `TBD - created by archiving change <name>. Update Purpose after
-archive.` One sentence saying what the capability is *for* — not what it does, which the
-requirements already cover. Skip it and every capability spec in the repository says TBD,
-which is the first step toward specs nobody trusts.
+**Then check the `## Purpose` line, and write it only if this student is not going on to
+M8.** Archiving a brand-new capability leaves it reading `TBD - created by archiving change
+<name>. Update Purpose after archive.` — one sentence is owed saying what the capability is
+*for*, not what it does, which the requirements already cover. **If they are starting M8,
+leave the TBD alone:** writing it is the first thing that milestone asks of them, and a
+Purpose you wrote here is a task they never get. Either way somebody writes it, because a
+repository where every capability spec says TBD is the first step toward specs nobody
+trusts.
 
 Ignite keeps the archive for a reason: it becomes the standing record of how Ignite
 students reason about features, which the team has no version of today, and it is what the

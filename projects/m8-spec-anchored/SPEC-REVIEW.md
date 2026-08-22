@@ -48,13 +48,18 @@ this point the settled spec on your branch carries your drift repair and your `M
 hand that over. Two minutes, and it makes you read your own end state, which otherwise
 nobody does until the next person needs it.
 
-**Apply the two merge rules exactly, and change nothing else.**
+**Apply the three merge rules exactly, and change nothing else.**
 
 - A `MODIFIED` block **replaces** the matching requirement in the settled spec, whole. Drop
   the `## MODIFIED Requirements` heading, then put the `### Requirement:` block and every
   scenario under it in place of the old one.
 - A `REMOVED` block **deletes** the matching requirement. Its argument paragraph does not get
   pasted in — that text lives in the change folder and never reaches the capability spec.
+- An `ADDED` block **appends** its requirement to `## Requirements`, in the position it will
+  occupy after archive. Your change may well carry one alongside the `MODIFIED` or `REMOVED`
+  requirement — new behaviour is frequently a new requirement. Leave it out and the reader
+  cannot describe behaviour your spec does actually specify, which records a round trip you
+  did not really fail.
 
 **You are retyping the document you are about to be assessed on. Do not improve it while you
 paste.** A clarifying word added here passes a test the spec that actually ships would have
@@ -135,8 +140,11 @@ what each one fixed has done the milestone better than one who reports zero.
 5. Reader now reads the diff — **and the change folder with it**, checking the scratch copy
    they were handed against the `MODIFIED` and `REMOVED` blocks that will actually ship. Both
    of you can talk from here.
-6. Author fixes the spec. Not the wording of the complaint — the thing that caused it.
-7. Round two — see below. Same reader, corrected file.
+6. Author fixes the spec. Not the wording of the complaint — the thing that caused it. **Then
+   re-derive the scratch copy from the corrected change folder**, by the same three merge
+   rules. The old copy is now out of date, and handing it back reads a round the fixes never
+   reached.
+7. Round two — see below. Same reader, the re-derived file.
 8. Author records the round-trip count and what each round fixed, and puts it in the pull
    request.
 
@@ -146,7 +154,17 @@ point: *does the corrected spec now say the thing you had to read the code to fi
 the same reader rather than burning a fresh one, because they are the only person who knows
 exactly what the old wording made them believe.
 
+Every round after a fix reads a freshly derived copy, so the file in front of the reader is
+always the one the corrected change folder produces. Round three re-derives again, and so on.
+
 The cold read happens once, at the top, and it is the expensive part. Protect it.
+
+**How the done box gets marked.** *"A second reader described the new behaviour correctly from
+your spec alone"* is ticked on the reader's **final** description matching what you built. It
+is not ticked on the cold read — the cold read is what the **round-trip count** records, and
+the count is a separate done item precisely so this one does not have to double as a score. A
+spec that took three rounds to get there has met the item. Read the other way, the honest
+answer would be unmarkable and only a suspicious zero could tick the box.
 
 ---
 
@@ -161,7 +179,10 @@ on two students. What you own:
   which means an author who clarifies while pasting can pass a test the real spec would have
   failed — without ever deciding to cheat. Step 5 puts the change folder in front of the
   reader for exactly this; if it did not happen, do it yourself before you sign the box. Any
-  wording that exists only in the scratch copy is a finding, not a typo.
+  wording that exists only in the scratch copy is a finding, not a typo. **Compare the final
+  scratch copy against the final change folder** — the copy is re-derived after every fix
+  (step 6), so the one that has to match what ships is the last one, not the one the cold read
+  used.
 - **Read the round-trip count, not just the checkbox.** Zero is the answer worth a question.
   So is a count of three with no note of what changed each time.
 - **This is where a rubber-stamped `openspec-propose` draft surfaces.** A student can tidy the

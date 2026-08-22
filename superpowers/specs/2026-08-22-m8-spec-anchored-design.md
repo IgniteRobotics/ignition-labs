@@ -183,6 +183,8 @@ Mentor-verified, like M7's. Every item is a minute of someone's review.
 
 The last item is §2.1's argument made assessable. A student who can only recite the Ignite position has not met it.
 
+**Item 1 — corrected during implementation, 2026-08-22.** The drafted item covers the drift repair only, and the shipped list extends it to *"…and wrote the capability's `## Purpose` line."* The `## Purpose` write is a task §2.5 calls a good first task, the milestone page calls "the first thing M8 asks of you", and `curriculum-spec.md`'s DoD summary already stated as part of item 1 — while no authoritative checklist contained it, so nothing a mentor marks covered a named failure mode of the milestone. Extending item 1 rather than adding a ninth item keeps the eight-item list the summary and the spec both describe, and keeps the two shipped copies of the list byte-identical.
+
 ---
 
 ## 5. Spec amendments

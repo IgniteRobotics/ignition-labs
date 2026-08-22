@@ -108,7 +108,7 @@ This is the same trade M6 made when it unlocked Green. The tool arrives once you
 
 ## Definition of done
 
-- [ ] You repaired the drift between your M7 spec and what you actually shipped
+- [ ] You repaired the drift between your M7 spec and what you actually shipped, and wrote the capability's `## Purpose` line
 - [ ] Your change folder contains a `MODIFIED` or `REMOVED` requirement, restated in full
 - [ ] `openspec validate` passes, and the spec change shipped in the same pull request as the code
 - [ ] A second reader described the new behaviour correctly from your spec alone
