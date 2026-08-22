@@ -2,8 +2,8 @@
 
 **Applies to:** All programming subteam members and mentors, FRC 6829 Ignite Robotics
 **Covers:** Robot code, scouting tools, internal tooling, and anything else the programming subteam ships
-**Version:** 1.2
-**Revised:** 2026-08-21 — v1.1 added a fourth condition to Green: a spec, written and committed before the first implementation commit (§4). v1.2 sharpens that condition from *a spec exists* to *you applied spec-driven development successfully*, and makes OpenSpec's format and tooling the standard rather than a suggestion. Anyone who acknowledged an earlier version signs again.
+**Version:** 1.3
+**Revised:** 2026-08-21 — v1.1 added a fourth condition to Green: a spec, written and committed before the first implementation commit (§4). v1.2 sharpens that condition from *a spec exists* to *you applied spec-driven development successfully*, and makes OpenSpec's format and tooling the standard rather than a suggestion. Anyone who acknowledged an earlier version signs again. 2026-08-22 — v1.3 moves the spec-drafting boundary in §4 to M8: before M8 you still write the spec yourself, full stop; at M8 and after, `openspec-propose` may produce a first draft you disclose and red-line. Anyone who acknowledged v1.2 signs again.
 **Effective:** 2026-08-05
 **Expires:** End of the 2027 build season — see §11
 
@@ -129,6 +129,12 @@ The spec is first because it is the only one of the four that happens before the
 A spec carries the decisions for *one* change. The decisions that hold across every change are written down separately, in [`coding-standards.md`](coding-standards.md) — Ignite's coding standards. This document says what you may use a tool for; that one says what the code it produces has to look like. Hand your agent both.
 
 > **The spec is Yellow-tier work, even at Green.** You may use AI to explain API surface, to critique a spec you wrote, and to point at cases you missed. You may not ask it to write the spec, or to decide what the feature should do. You do not get to use the agent to write the constraints that constrain the agent — for the same reason you did not get to use it to write the tests that unlocked Green.
+
+That prohibition has an edge, and the edge is M8, not never.
+
+**Before M8, you write the spec. Full stop.** At M8 and after, `openspec-propose` may produce a first draft — one you are required to red-line. You disclose that you used it, and you show what you changed: at minimum, one requirement you rewrote and one scenario you added or deleted. **A draft accepted unchanged is not a pass. It is evidence you did not review it.**
+
+**Why the edge sits there and not earlier.** This is the same argument for the third time: you may lean on the agent once you have written the tests that catch it (this section's own gate into Green), and you write the spec yourself before you are allowed to review one, for the identical reason. By M8 you have written a conforming spec by hand, watched an agent misread it, and defended where your build diverged from it — which is exactly the qualification this section said you lacked. The tool is earned by demonstrating you do not need it.
 
 **Why M6 is the gate and not something softer.** M6 is where you learn simulation, telemetry, and testing. Those are the things that tell you an AI's output is wrong before the robot does. Without them you have velocity and no brakes.
 
@@ -260,6 +266,8 @@ For adjudicating real situations. If your case is not here, reason from §3.
 | M6 student uses an agent to write the tests for their subsystem | Yellow during M6 | **Not allowed.** You write the tests that unlock Green |
 | M7 student asks an agent to draft the spec for their feature | Green | **Not allowed.** The spec is the decisions. See §4 |
 | M7 student writes the spec, then asks an agent which cases it missed | Green | **Allowed.** Disclose as `assisted`. This is the highest-value prompt shape in the milestone |
+| M8 student has an agent draft their delta spec, then rewrites two requirements | Green | **Allowed.** Disclose as `assisted` and show the red-line. See §4 |
+| M7 student does the same thing | Green | **Not allowed.** The boundary is M8, and it is about having written one yourself first |
 | M7 student uses an agent to implement a full new subsystem, writes tests, discloses, defends in review | Green | **Allowed.** This is the system working as designed |
 | M7 student uses an agent, tests pass, but cannot explain why a particular timeout value was chosen | Green | **That part comes out.** Rest of the PR can proceed |
 | Any student pastes our scouting data into a chatbot | All | **Not allowed.** See §5, rule 2 |
@@ -301,7 +309,7 @@ I have read this standard. Specifically, I understand that:
 
 - I am responsible for every line of code I submit, regardless of what wrote it
 - My tier is set by the milestones I have completed, not by what I feel ready for
-- If I cannot explain and defend it, it does not ship — and at Green, I write the spec before the agent writes the code, I write it myself, and I can say where the build diverged from it
+- If I cannot explain and defend it, it does not ship — and at Green, I write the spec before the agent writes the code, I write it myself through M7, I own whatever I accept from a drafted one from M8 on, and I can say where the build diverged from it
 - Disclosing AI use is required, and being honest about it is never held against me
 
 **Name:** ______________________________
