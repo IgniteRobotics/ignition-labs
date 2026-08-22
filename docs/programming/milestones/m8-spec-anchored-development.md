@@ -41,7 +41,9 @@ Two delta types you have not used. The syntax:
 The system SHALL <the full new behaviour, restated>.
 
 #### Scenario: <every scenario the current spec has, plus any new ones>
-- GIVEN / WHEN / THEN
+- GIVEN <state>
+- WHEN <action>
+- THEN <outcome>
 
 ## REMOVED Requirements
 
@@ -94,13 +96,13 @@ The line is a judgement about what a training team should optimise for. It is no
 
 1. Open the capability spec your M7 change archived into, at `openspec/specs/<capability>/spec.md`. **Repair the drift** between what it says and what you actually shipped, and write its `## Purpose`
 2. Take the second change your mentor identified. A real change in behaviour — a scenario you forgot to write down is not a modified requirement
-3. `openspec new change <name>`, and write the `MODIFIED` (or `REMOVED`) delta in full. `MODIFIED-EXAMPLE.md` in the project walks a worked one, before and after, with the reasoning for each edit
+3. `openspec new change <name>`, then write the change the way you did at M7 — `proposal.md`, `tasks.md`, and the delta spec — with the `MODIFIED` (or `REMOVED`) requirement restated in full. The command scaffolds the folder and nothing else; all three files are yours. `MODIFIED-EXAMPLE.md` in the project walks a worked delta, before and after, with the reasoning for each edit
 4. Run `openspec validate <name>` until it passes. Commit the change folder before your first implementation commit
 5. Build it. Tests pass and cover the new behaviour
 6. **Sit the second-reader test.** `SPEC-REVIEW.md` in the project is the protocol: another student reads your updated spec alone — not the diff, not the code — and tells you what the system now does, including at least one edge case. If what they describe is not what you built, the spec is wrong, whatever the code does. Fix it and they read again. Failing is normal and is not a retry; **report how many round trips it took**
-7. Open the PR, spec change and code change together. Your mentor archives after merge
+7. Open the PR, spec change and code change together. Check off every box in `tasks.md` as you finish it — `openspec archive` refuses to run while any of them is open, and your mentor runs it after merge
 
-**On drafting.** M7 forbade `openspec-propose` outright. Here you may run it, as a first draft and nothing more: you say in the pull request that you used it, and you show the red-line — at minimum one requirement you rewrote and one scenario you added or cut. A draft accepted unchanged is not a pass.
+**On drafting.** M7 forbade `openspec-propose` outright. Here you may use the skill, as a first draft and nothing more: you say in the pull request that you used it, and you show the red-line — at minimum one requirement you rewrote and one scenario you added or cut. A draft accepted unchanged is not a pass.
 
 This is the same trade M6 made when it unlocked Green. The tool arrives once you have demonstrated you do not need it, and you wrote a conforming spec by hand before anyone trusted you to correct one. At M7 you wrote and the agent critiqued; here the agent drafts and you critique. The skill being checked has not moved — it is still whether the decisions are yours.
 
@@ -119,7 +121,7 @@ This is the same trade M6 made when it unlocked Green. The tool arrives once you
 
 **The touch-up that is not a change.** Adding a scenario you meant to write at M7, or tightening a sentence, is editing a document — not modifying a requirement. There is no second reader worth the name if nothing about the system is different. This is why the mentor picks the change and you do not.
 
-**The rubber-stamped draft.** Running `openspec-propose` and shipping it with the wording tidied. It is less work than an M7 student did, on a harder milestone, and the second-reader test finds it — you cannot answer for the edge cases in a document you never really wrote.
+**The rubber-stamped draft.** Taking what `openspec-propose` hands back and shipping it with the wording tidied. It is less work than an M7 student did, on a harder milestone, and the second-reader test finds it — you cannot answer for the edge cases in a document you never really wrote.
 
 **The spec fixed in a follow-up PR.** The code merges Monday, the spec catches up Thursday, and for three days the file said something untrue to everyone who read it. The interim is exactly where somebody trusts a spec.
 
@@ -144,7 +146,7 @@ See [`ai-use-standard.md`](../ai-use-standard.md) §4 for the tier in full. It i
 
 See `resources.md` for the full library. For this milestone:
 
-- **`ai-use-standard.md`** — §4 Green, and the drafted-spec boundary M8 unlocks. Read the boundary before you run `openspec-propose`, not after
+- **`ai-use-standard.md`** — §4 Green, and the drafted-spec boundary M8 unlocks. Read the boundary before you ask the agent to draft one, not after
 - **OpenSpec** ([docs](https://github.com/Fission-AI/OpenSpec/tree/main/docs)) — `MODIFIED` and `REMOVED` are the parts of the delta format M7 never needed. Settled behaviour in `openspec/specs/`, in-flight changes in `openspec/changes/`, merged ones in `openspec/changes/archive/`
 - **Ignite:** [`coding-standards.md`](../coding-standards.md) — the constitution. The decisions that hold across every change, as opposed to the ones your spec carries for this one
 - **Böckeler, *Understanding Spec-Driven Development*** — the source of the spec-first / spec-anchored / spec-as-source ladder. Read it before you argue the last done item, from either side
