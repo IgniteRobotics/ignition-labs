@@ -7,7 +7,7 @@ Using AI coding tools well, now that you can tell when they are wrong.
 Required before you use AI tooling on competition robot code.
 
 **Estimated time:** 2–3 sessions
-**Prerequisites:** **M6 complete. No exceptions, including for veterans.**
+**Prerequisites:** **M6 complete. No exceptions, including for veterans.** Node 20.19+ with the OpenSpec CLI installed — see the project README. Install it before your first session, not at the keyboard
 **AI posture:** 🟢 Green — this milestone is where Green is earned and exercised
 
 ## Who enters here
@@ -75,6 +75,10 @@ Ignite's constitution is [`coding-standards.md`](../coding-standards.md): read i
 
 **From `ai-use-standard.md`: the spec is Yellow-tier work, even at Green.** You may ask an agent what your spec missed. You may not ask it to write your spec. You have lived the parallel already — at M6 you wrote the tests that unlocked Green. Here you write the constraints that constrain the agent.
 
+**Which means Ignite runs OpenSpec with one command switched off.** The tool ships `/opsx:propose`, and it works — the agent reads the code and drafts your proposal, your requirements, and your task list. It is the fastest path to a spec-shaped folder and it defeats the entire purpose, because the decisions end up being the agent's and you are left holding the typing. You will meet exactly this shape again: a tool whose default is to do the interesting part for you. Recognising it, and choosing to do that part yourself, is more of what this milestone teaches than any prompt technique above.
+
+**And the bar is not "a spec exists."** Green's first condition reads *applied spec-driven development successfully* — spec committed first, feature built against it, and you can say where the two diverged and why. A spec you wrote to satisfy a checklist gives itself away in about ten seconds, because you cannot answer that question about a document you were never steering by.
+
 ### AI as reviewer, not author
 
 The pattern with the best support in the education research: the tool answers conceptual questions, explains code, and points at mistakes without handing over the answer. Systems built this way shifted students "away from using it to generate code for them and toward using it as a learning assistant."
@@ -121,7 +125,7 @@ A checklist that works:
 **Ship a real feature, AI-assisted, under the Green tier — then defend it.**
 
 1. Pick a real, useful feature. Not a toy
-2. **Write the spec, and commit it before you start.** One change folder in `Robot-2026`: `openspec/changes/<your-feature>/proposal.md`. What is changing, why, the technical approach, and the cases that must hold. `SPEC-TEMPLATE.md` is a worked example. The folder is already there — a mentor set it up. If you get there first and it is not, ask a mentor rather than creating it yourself; which tool the season repo standardizes on is not a decision the first student to arrive should make
+2. **Write the spec, and commit it before you start.** On your branch in `Robot-2026`: `openspec new change <your-change>`, then write `proposal.md` (why, what changes, the approach and what you rejected), the delta spec under `specs/<capability>/spec.md`, and `tasks.md`. Run `openspec validate <your-change>` until it passes, then commit the folder. `SPEC-TEMPLATE.md` walks a complete one, file by file. The `openspec/` folder is already there — a mentor seeded it, and you do not run `openspec init`. If it is missing, ask a mentor rather than creating it yourself; which tool the season repo standardizes on is not a decision the first student to arrive should make
 3. **Use AI assistance genuinely and substantially, against the spec you wrote.** This is the one milestone where that is the assignment rather than a concession
 4. **Write or verify tests covering the new behavior.** They must pass
 5. Open a PR with the disclosure block filled in — see `ai-use-standard.md` §6. The "how I verified it" field must be specific
@@ -141,7 +145,7 @@ A checklist that works:
 - [ ] You read the coding standards (`coding-standards.md`) and can name two standards in it
 - [ ] You have read and signed the AI-use standard
 - [ ] You can explain the difference between interface-level and decision-level trust
-- [ ] Your spec was committed before your first implementation commit
+- [ ] `openspec validate` passes on your change, and the change folder was committed before your first implementation commit
 - [ ] You can name one place the implementation diverged from your spec, and say why
 
 ## Common failure modes
@@ -168,7 +172,7 @@ A checklist that works:
 
 Full agentic use, gated on four conditions that must all hold:
 
-1. Your spec is written and committed before your first implementation commit
+1. You applied spec-driven development successfully — a conforming OpenSpec change committed first, the feature built against it, and you can say where the two diverged
 2. Tests exist, cover the new behavior, and pass
 3. AI use is disclosed in the PR
 4. You defend the diff in review
@@ -187,6 +191,6 @@ See `resources.md` for the full library. For this milestone:
 - **Chief Delphi: Student written code** — the vendor-library argument you should be able to answer
 - **Chief Delphi: The Next Revolution: AI in FRC (254)** — the most credentialed programming team in FRC, going public with heavy AI use
 - **Böckeler, *Understanding Spec-Driven Development*** — the source of the spec-first / spec-anchored / spec-as-source ladder, and the sledgehammer warning. On this list *because* it is skeptical, not despite it
-- **OpenSpec** ([docs](https://github.com/Fission-AI/OpenSpec/tree/main/docs)) — the spec format M7 uses. Settled behaviour in `openspec/specs/`, one folder per in-flight change in `openspec/changes/`, and merged changes moved to `openspec/changes/archive/`. You write one `proposal.md` in the middle folder; the CLI is optional and you can complete the milestone without installing anything. **Ignite uses a deliberately reduced subset** — see `SPEC-TEMPLATE.md`, and read the upstream docs for the full shape rather than assuming ours is all of it
+- **OpenSpec** ([docs](https://github.com/Fission-AI/OpenSpec/tree/main/docs)) — the spec format M7 writes in, and a milestone prerequisite. Settled behaviour in `openspec/specs/`, one folder per in-flight change in `openspec/changes/`, merged changes archived into `openspec/changes/archive/`. A change is a `proposal.md`, a delta spec at `specs/<capability>/spec.md`, and a `tasks.md` — `SPEC-TEMPLATE.md` walks all three. Read the upstream docs for the parts Ignite does not use, and note the one command we forbid
 - **Ignite:** [`coding-standards.md`](../coding-standards.md) — the constitution. Our standards, in one place, written to be read by a person
 - **Ignite:** `Robot-2026/.github/workflows/ai-code-review.yml` — AI in the reviewer seat

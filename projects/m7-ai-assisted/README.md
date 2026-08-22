@@ -43,48 +43,63 @@ See `reference/README.md` for the pinned SHA, each file's original path in
 Your branch is on `Robot-2026`, not here. You need commit access — ask a mentor if you
 do not have it yet.
 
-Your spec goes on that branch too, in `openspec/changes/<your-feature>/` — one folder per
-change, `proposal.md` inside it. Nothing in this training repository runs OpenSpec.
+Your spec goes on that branch too, in `openspec/changes/<your-change>/`. Nothing in this
+training repository runs OpenSpec — the tool runs in your clone of `Robot-2026`.
 
-## Setting up your spec folder
+## Setting up OpenSpec
 
-**By hand (works everywhere).** On your branch, create
-`openspec/changes/<your-feature>/` and put `proposal.md` in it, copied from
-`SPEC-TEMPLATE.md`. That is the whole setup. The folder structure is already in the
-repository — a mentor set it up. Do not see `openspec/` on your branch? Ask a mentor
-before you create it. Seeding it is deliberately a mentor's job, so that one student's
-tool choice does not become the season repo's.
+**Ignite uses OpenSpec, and M7 requires it.** Node 20.19 or newer is a prerequisite for
+this milestone in the same way the WPILib toolchain is a prerequisite for M3. Install it
+before your first session; if your laptop cannot run it, that is a mentor problem to solve
+in advance, not something to discover at the keyboard.
 
-**With the CLI (optional).** If you have Node 20.19 or newer and want `openspec list` to
-show the changes in flight, `openspec view` to read one, and the dashboard:
-`npm install -g @fission-ai/openspec`, then `openspec init --tools <your-tool>` in your
-clone. Documentation is at <https://github.com/Fission-AI/OpenSpec/tree/main/docs>.
-**Do not commit what that writes outside `openspec/`** — the `.claude/`, `.cursor/` and
-`.agents/` directories it creates are yours, not the team's.
+```bash
+node --version                                    # 20.19 or newer
+npm install -g @fission-ai/openspec@latest
+openspec --version
+```
 
-**Expect `openspec validate` to complain about `SPEC-TEMPLATE.md`'s shape, and do not
-chase it.** Upstream OpenSpec puts requirement scenarios in delta-spec files under
-`changes/<name>/specs/`, and its `proposal.md` runs to intent, scope, and approach.
-Ignite's template deliberately collapses that into one file, because the point of this
-milestone is writing decisions down before you prompt, not learning a tool's file layout.
-A validation error against our template is the tool disagreeing with our simplification —
-not a defect in your spec. If you want the full shape, the docs above have it.
+The `openspec/` folder already exists on `Robot-2026` — a mentor seeded it, deliberately,
+so that one student's tool choice does not become the season repo's. **You do not run
+`openspec init`.** If `openspec/` is not there, stop and ask a mentor; that first commit
+sets the layout for everyone who follows you and it is not yours to make.
 
-**The CLI is optional, and nothing in this milestone requires it.** No done item, no
-review question and no mentor check asks whether you installed it. A student on a lab
-laptop with a Java toolchain and nothing else completes M7 in full. If an `npm install`
-goes wrong, that is not a problem you have to solve today — make the folder by hand and
-get on with the feature.
+Documentation: <https://github.com/Fission-AI/OpenSpec/tree/main/docs>
+
+### Your commands
+
+```bash
+openspec new change <your-change>        # scaffolds the folder and its files
+openspec validate <your-change>          # must pass before you commit. This is a done item
+openspec list                            # every change in flight
+openspec show <your-change>              # print yours
+openspec view                            # dashboard
+```
+
+After your pull request merges, a mentor runs `openspec archive <your-change>`, which
+folds your delta into `openspec/specs/` and moves the folder into `changes/archive/`.
+
+### The one command you do not run
+
+`/opsx:propose` has the agent draft your proposal, delta spec, and tasks. **Do not use
+it.** `ai-use-standard.md` §4 makes the spec Yellow-tier work even at Green, because the
+spec is where your decisions live — an agent that writes it has made the decisions and
+left you the typing, and the defense review becomes you defending a document you never
+thought through. Same reason you wrote the tests that unlocked Green at M6 instead of
+generating them.
+
+Hand the agent your finished draft and ask *"what did I miss?"* That is the best prompt in
+this milestone. Critique, not authorship.
 
 ## The order
 
 1. **Pick a feature** from `FEATURE-BACKLOG.md`. Read the selection criteria at the top
    of that file, because you will eventually be asked to add entries to it yourself
-2. **Write the spec, and commit it before you start.** One change folder on your branch:
-   `openspec/changes/<your-feature>/proposal.md`. What is changing, why, the technical
-   approach, and the cases that must hold. `SPEC-TEMPLATE.md` is a worked example, and
-   you write this one yourself — you may ask an agent what your spec missed, not to write
-   it
+2. **Write the spec, and commit it before you start.** `openspec new change <your-change>`,
+   then write `proposal.md`, the delta spec under `specs/<capability>/spec.md`, and
+   `tasks.md`. Run `openspec validate <your-change>` until it passes, then commit the
+   folder. `SPEC-TEMPLATE.md` walks a complete one. You write this yourself — you may ask
+   an agent what your spec missed, never to write it
 3. **Use AI assistance genuinely and substantially, against the spec you wrote.** This is
    the one milestone where that is the assignment rather than a concession
 4. **Write or verify tests covering the new behaviour.** They must pass. `build.gradle` is
@@ -116,7 +131,7 @@ assessment is step 6.** A green build on a diff you cannot explain is a failed M
 - [ ] You read the coding standards (`coding-standards.md`) and can name two standards in it
 - [ ] You have read and signed the AI-use standard
 - [ ] You can explain the difference between interface-level and decision-level trust
-- [ ] Your spec was committed before your first implementation commit
+- [ ] `openspec validate` passes on your change, and the change folder was committed before your first implementation commit
 - [ ] You can name one place the implementation diverged from your spec, and say why
 
 Every one of these is mentor-verified. There is no test to make green.

@@ -10,13 +10,16 @@ account for their own code without help. **Divergence between the spec and the d
 expected, not a fault** — a student who reports none either picked something too small or
 did not look, and either of those is a conversation, not a failure.
 
-**After the pull request merges, move the change folder to
-`openspec/changes/archive/<date>-<feature>/`.** The mentor who sat the review does this,
-because they are the one who knows it passed. It is a `git mv` and a commit. Ignite keeps
-the archive for a reason: it becomes the standing record of how Ignite students reason
-about features, which the team has no version of today, and it is what the next student
-reads to see what an M7-sized spec actually looked like. A spec that stays in `changes/`
-after merging leaves the folder describing work that is already done.
+**After the pull request merges, run `openspec archive <change-name>`.** The mentor who
+sat the review does this, because they are the one who knows it passed. The command folds
+the student's delta into `openspec/specs/` and moves the folder to `changes/archive/`, so
+the settled specs grow by exactly what shipped. Commit the result.
+
+Ignite keeps the archive for a reason: it becomes the standing record of how Ignite
+students reason about features, which the team has no version of today, and it is what the
+next student reads to see what an M7-sized spec actually looked like. A change left in
+`changes/` after merging leaves the folder describing work that is already done, and
+`openspec list` stops meaning anything.
 
 ---
 
@@ -32,7 +35,7 @@ Finding the gap is the entire point.
 
 ## Questions about the spec
 
-**Asked first.** Walk the spec before the diff — `openspec/changes/<your-feature>/proposal.md`
+**Asked first.** Walk the spec before the diff — `openspec/changes/<your-change>/proposal.md`
 open on the screen — because the diff is read *against* it, not on its own.
 
 - **Why.** What was wrong before? Say it without naming your solution.

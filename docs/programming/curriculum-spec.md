@@ -457,7 +457,7 @@ Modeled on MIT Course 6, where AI policy varies by what a specific course is try
 
 **🟢 Green — on completion of M6, and thereafter.** Yellow still applies *during* M6 itself; the tests that unlock Green are written by the student, not generated. Once M6 is signed off, full agentic use is permitted, gated on four conditions, all of which must hold:
 
-1. A spec is written and committed before the first implementation commit
+1. Spec-driven development is applied successfully — a conforming OpenSpec change committed before the first implementation commit, the feature built against it, and the student able to say where the two diverged and why
 2. Tests exist, cover the new behavior, and pass
 3. AI use is disclosed in the PR description, naming the tool and what it did
 4. The author defends every decision in the diff during review

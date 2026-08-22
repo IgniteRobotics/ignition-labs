@@ -2,8 +2,8 @@
 
 **Applies to:** All programming subteam members and mentors, FRC 6829 Ignite Robotics
 **Covers:** Robot code, scouting tools, internal tooling, and anything else the programming subteam ships
-**Version:** 1.1
-**Revised:** 2026-08-21 — v1.1 adds a fourth condition to Green: a spec, written and committed before the first implementation commit (§4), which means anyone who acknowledged v1.0 signs again.
+**Version:** 1.2
+**Revised:** 2026-08-21 — v1.1 added a fourth condition to Green: a spec, written and committed before the first implementation commit (§4). v1.2 sharpens that condition from *a spec exists* to *you applied spec-driven development successfully*, and makes OpenSpec's format and tooling the standard rather than a suggestion. Anyone who acknowledged an earlier version signs again.
 **Effective:** 2026-08-05
 **Expires:** End of the 2027 build season — see §11
 
@@ -115,12 +115,16 @@ Note the boundary carefully: Yellow still applies *during* M6. The tests that un
 
 **Allowed:** essentially everything, including agentic tools that write, run, and iterate on code — subject to four conditions that must **all** hold:
 
-1. **You wrote a spec before you started, and it is committed.** Not a paragraph in the pull request — a file, dated before your first implementation commit.
+1. **You applied spec-driven development successfully.** Not "a spec exists" — you did the loop. A conforming OpenSpec change, committed before your first implementation commit; the feature built against it; and you can walk the spec in review, name where the build diverged from it, and say why.
 2. **Tests exist, cover the new behavior, and pass.** Not "the code looks right." Tests.
 3. **AI use is disclosed in the pull request.** See §6.
 4. **You defend the diff in review.** See §7.
 
 The spec is first because it is the only one of the four that happens before the code exists. It is where the decisions live — what the feature does, what it does not do, and what has to hold when it is finished — and §3 is the reason the decisions are the part you have to own.
+
+**"Successfully" is doing real work in that first condition, and it is meant to.** A spec written to satisfy a checklist is worth nothing, and the failure is easy to spot: the student cannot say where the implementation diverged from the document, because they were never steering by it. Every real build diverges. Being able to point at where, and explain the call you made when it did, is the evidence that the spec was load-bearing rather than decorative. That is the bar — not a file in a folder.
+
+**Conforming means OpenSpec's format, and Ignite is opinionated about this.** A proposal, a delta spec whose requirements are observable and whose scenarios read GIVEN/WHEN/THEN, and a task list — the shape `openspec validate` checks. A spec everyone writes differently is a spec nobody can review quickly. M7's `SPEC-TEMPLATE.md` walks a complete one, and the tooling is a milestone prerequisite rather than a nice-to-have.
 
 A spec carries the decisions for *one* change. The decisions that hold across every change are written down separately, in [`coding-standards.md`](coding-standards.md) — Ignite's coding standards. This document says what you may use a tool for; that one says what the code it produces has to look like. Hand your agent both.
 
@@ -297,7 +301,7 @@ I have read this standard. Specifically, I understand that:
 
 - I am responsible for every line of code I submit, regardless of what wrote it
 - My tier is set by the milestones I have completed, not by what I feel ready for
-- If I cannot explain and defend it, it does not ship — and at Green, I write the spec before the agent writes the code
+- If I cannot explain and defend it, it does not ship — and at Green, I write the spec before the agent writes the code, I write it myself, and I can say where the build diverged from it
 - Disclosing AI use is required, and being honest about it is never held against me
 
 **Name:** ______________________________
