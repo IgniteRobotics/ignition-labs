@@ -93,7 +93,7 @@ The documentation gates are the usual set — `pytest`, `mkdocs build --strict`,
 | 2. `openspec init --tools agents` | Done **in a throwaway directory**, not on `Robot-2026`. P1 remains unmet |
 | 3. `openspec new change <name>`, then write `SPEC-TEMPLATE.md`'s three files | Done |
 | 4. **`openspec validate <name>`** | **PASS, exit 0 — and `--strict` also exit 0** |
-| 5. `openspec archive <name>` | **Not run.** Needs a change with completed tasks; still outstanding |
+| 5. `openspec archive <name>` | Done. Requires every task checked (`openspec list` flips to `✓ Complete`); merges the delta into `openspec/specs/<capability>/spec.md`, reports `+ 2 added`, and moves the folder to `changes/archive/<date>-<name>/` |
 
 **Step 4 is the one that mattered and the template is correct.** The delta-spec format, the `## ADDED Requirements` / `### Requirement:` / `#### Scenario:` heading levels, and the two-requirements split all validate as shipped. The curriculum describes something real.
 
@@ -105,7 +105,9 @@ The documentation gates are the usual set — `pytest`, `mkdocs build --strict`,
 
 **The `proposal.md` heading question is settled.** Upstream documentation disagreed with itself — `concepts.md` describes intent/scope/approach, `examples.md` glosses it as "why and what". The `openspec-propose` skill's own text says `proposal.md (what & why)`, and validation accepts the template's Why / What changes / Approach as written. `examples.md` was right.
 
-**Still outstanding:** P1 on `Robot-2026`, and step 5 — nobody has watched a delta merge into `openspec/specs/`, which is the mechanism M8's entire design rests on.
+**Archive creates a `## Purpose` stub reading `TBD - created by archiving change <name>. Update Purpose after archive.`** Nobody's documentation mentions this, and left alone every capability spec ends up saying TBD. The M8 record assigns it; until M8 exists it belongs to the mentor running the archive.
+
+**Still outstanding:** P1 on `Robot-2026`. Everything else in this table ran in a throwaway directory on 2026-08-22.
 
 ---
 

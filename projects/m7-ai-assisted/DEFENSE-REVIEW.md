@@ -11,9 +11,17 @@ expected, not a fault** — a student who reports none either picked something t
 did not look, and either of those is a conversation, not a failure.
 
 **After the pull request merges, run `openspec archive <change-name>`.** The mentor who
-sat the review does this, because they are the one who knows it passed. The command folds
-the student's delta into `openspec/specs/` and moves the folder to `changes/archive/`, so
-the settled specs grow by exactly what shipped. Commit the result.
+sat the review does this, because they are the one who knows it passed. It refuses to run
+until every box in the student's `tasks.md` is checked — `openspec list` shows
+`✓ Complete` when they are. The command folds the student's delta into `openspec/specs/`
+and moves the folder to `changes/archive/<date>-<change-name>/`, so the settled specs grow
+by exactly what shipped.
+
+**Then write the `## Purpose` line before you commit.** Archiving a brand-new capability
+leaves it reading `TBD - created by archiving change <name>. Update Purpose after
+archive.` One sentence saying what the capability is *for* — not what it does, which the
+requirements already cover. Skip it and every capability spec in the repository says TBD,
+which is the first step toward specs nobody trusts.
 
 Ignite keeps the archive for a reason: it becomes the standing record of how Ignite
 students reason about features, which the team has no version of today, and it is what the

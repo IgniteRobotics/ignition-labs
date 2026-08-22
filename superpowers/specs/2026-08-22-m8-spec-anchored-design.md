@@ -60,8 +60,14 @@ The system SHALL <the full new behaviour, restated>.
 
 Two things make this harder than M7:
 
-1. **`MODIFIED` restates the requirement in full, not as a diff.** You must first read and understand the existing requirement well enough to rewrite it whole. A student who patches a phrase without re-reading the scenarios ships a requirement that contradicts its own examples — and `openspec validate` will not catch it, because it is well-formed and false.
-2. **`REMOVED` requires justifying a deletion.** Removing a requirement claims that behaviour the team once decided on is no longer wanted. That is the hardest thing here to do honestly and the easiest to do by accident.
+1. **`MODIFIED` restates the requirement in full, not as a diff** — and the tool enforces it. Verified on 2026-08-22 against OpenSpec 1.10.0: a `MODIFIED` block that omits a scenario the current spec still has is rejected, by name:
+
+   > `✗ [ERROR] MODIFIED "Vision exception occurrence count" omits scenario(s) the current spec still has: "Repeated failures accumulate". Copy them into the MODIFIED block (a MODIFIED requirement replaces the whole block, so archive refuses to drop them).`
+
+   **This is better for the milestone than a lint rule would be.** You cannot change one clause of a requirement without accounting for every scenario attached to it, so the tool makes *read the whole thing before you change it* a precondition rather than advice — which is M8's lesson, enforced by something other than a mentor's attention.
+
+   **An earlier draft of this record claimed `openspec validate` would not catch this. That was wrong, and it was wrong because it had never been run.** The correct line is narrower and more useful: **validation enforces completeness, not truth.** It will not let you silently drop a scenario; it will happily accept one you reworded into a falsehood. That gap is exactly the space §2.4's second-reader test occupies.
+2. **`REMOVED` requires justifying a deletion.** Removing a requirement claims that behaviour the team once decided on is no longer wanted. That is the hardest thing here to do honestly and the easiest to do by accident. Verified: a `REMOVED` block merges cleanly and the requirement disappears from the capability spec — `Totals: + 0, ~ 1, - 1`.
 
 ### 2.3 The student extends their own M7 change — which is what "directly after M7" buys
 
@@ -102,7 +108,11 @@ Spec-anchored development has one catastrophic failure mode: **a spec that descr
 
 M8 teaches the detection and the discipline:
 
-- `openspec validate --specs` and `--strict` — and what they do **not** catch. They cannot tell you a requirement is false, only that it is malformed. That limitation is the lesson, and it is why §2.4's assessment is a human reading rather than a command.
+- `openspec validate --specs` and `--strict` — and what they do **not** catch. They enforce **completeness, not truth**: they will refuse a `MODIFIED` block that drops a scenario (§2.2), and they will cheerfully accept one whose GIVEN/WHEN/THEN describes behaviour the code has never had. That boundary is the lesson, and it is why §2.4's assessment is a human reading rather than a command.
+
+**Archive leaves a `## Purpose` stub, and somebody has to write it.** Verified: `openspec archive` creates the capability spec with `## Purpose` reading `TBD - created by archiving change <name>. Update Purpose after archive.` Left alone, every capability in `Robot-2026` ends up with a TBD purpose and the settled specs are a list of requirements with no statement of what the capability is *for*.
+
+**M8 is where that gets fixed, and it is a good first task.** The student is already reading the whole capability spec in order to modify it; writing its Purpose costs a sentence and forces them to say what the capability is, not just what it does. Add it to M7's archive step as the mentor's responsibility only if M8 is not being run.
 - The rule: **if you change behaviour a spec describes, the spec change ships in the same pull request.** Not a follow-up. A spec updated later was wrong in the interim, and the interim is where somebody trusted it.
 
 Under the new placement, the student's own M7 spec is the most likely thing to have drifted — their M7 implementation diverged from it, and M7's done list only required them to *name* the divergence, not to fix the document. **M8 opens by making them repair the drift they created**, which is both a real task and the cheapest possible demonstration that drift happens to careful people.
