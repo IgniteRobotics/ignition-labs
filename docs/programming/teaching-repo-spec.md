@@ -716,7 +716,7 @@ Ordered by dependency, then by value. Each step is independently reviewable and 
 | **10** | **M5** + T5 | T5's three log sets are the single largest authoring cost in the spec | Done |
 | **11** | **M7**, **M9 templates** | Mostly documents. Shipped when the in-season milestone was still numbered M8; the templates are unchanged and are M9's | Done |
 | **12** | **Doc corrections.** The §7.3 CI claim in three files; M6's "first tests" → "a class that has none"; M4's required-PR DoD item; `curriculum-spec.md` §8 and `README.md` status tables; the `resources.md` seasonal re-verification list | — | Done |
-| **13** | **M8** — spec-anchored development, **inserted** at position 8, and the in-season milestone renumbered to M9 | The first genuinely new milestone since this build order was written, so it takes a numbered step rather than adding content to a shipped one. Ships atomically with the renumber (§9.9, §9.10): landing the rename first would publish a ladder that runs M0–M7 and then M9. No Gradle project, no tests, `tests.lock` untouched | Done 2026-08-22 |
+| **13** | **M8** — spec-anchored development, **inserted** at position 8, and the in-season milestone renumbered to M9 | The first genuinely new milestone since this build order was written, so it takes a numbered step rather than adding content to a shipped one. Ships atomically with the renumber (§9.9, §9.10): landing the rename first would publish a ladder that runs M0–M7 and then M9. No Gradle project, no tests, `tests.lock` untouched | Done |
 | **—** | Solutions repository, built continuously alongside steps 4–11, with the §11.2 cross-check job live from step 4 | Not a final step. A milestone shipped without its solution is not shipped. Backfilled late: steps 4–6 shipped without solutions, and each plan's verification implementation was written and then deleted rather than kept — from step 7 the solution ships with the milestone | M0–M6, T1–T5 done; M7–M9 notes only (no code to solve); cross-check live |
 
 **Timing.** 2026-08-07, kickoff roughly five months out. Steps 1–7 fit comfortably *if step 1 lands now*. Steps 1–3 are almost entirely writing and configuration — they do not wait on the toolchain being settled.
@@ -762,14 +762,22 @@ ticked optimistically.
 | Student forks of `Robot-2026` drift once the season starts | Medium | The ladder puts fork-and-PR milestones before kickoff by design; M7–M9 branch on upstream |
 | Skeletons rot against next season's WPILib | Medium | Seasonal re-verification pass, §16. Order preserved: bump, re-pin, cross-check |
 | Solutions repository silently diverges from the skeletons | Medium | §11.2 cross-check, live from build step 4 |
+| Spec rot outruns the curriculum — `openspec/specs/` in `Robot-2026` describes what the code used to do | Medium | **None.** M8 teaches detection and the same-pull-request rule (§9.9), but **nobody owns repository-wide spec health.** Named unmitigated in the M8 design record §7, and explicitly out of scope in its §8 |
 | Pages workflow fires on student forks | Low | `if: github.repository ==` gate, §7.2 |
 
-**M8 adds no row, and that is the notable part.** The obvious shape for it was a capability
-backlog — a mentor-maintained list of specs available to modify, and a third unowned file next
-to `UNTESTED-TARGETS.md` and `FEATURE-BACKLOG.md`. Anchoring the milestone to the student's own
-M7 change removed the need for the file entirely (design record §2.3), so the register shrank by
-one entry it never had to acquire. The two lists above are still the whole of the problem, and
-`FEATURE-BACKLOG.md` is still unowned.
+**M8 adds no unowned file, but it does add one unmitigated risk, and the two are worth
+separating.** The obvious shape for the milestone was a capability backlog — a mentor-maintained
+list of specs available to modify, and a third unowned file next to `UNTESTED-TARGETS.md` and
+`FEATURE-BACKLOG.md`. Anchoring the milestone to the student's own M7 change removed the need for
+that file entirely (design record §2.3), so the register never acquired the entry. Those two
+lists are still the whole of the *file* problem, and `FEATURE-BACKLOG.md` is still unowned.
+
+What M8 does add is a new surface that can rot. A settled spec is trusted **because** it exists,
+which is precisely what makes a stale one worse than none at all, and the milestone that creates
+the surface cannot also own it — M8 teaches a student to keep *their* capability true, and
+nothing in this repository or in `Robot-2026` watches the rest. That is a real gap with no
+mitigation, so it takes a row rather than a footnote. Assigning the owner is the fix and it is a
+name, not a mechanism.
 
 ---
 

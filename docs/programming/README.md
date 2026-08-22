@@ -108,7 +108,7 @@ FIRST has no rule about this and no other FRC team has published a policy. This 
 | [`robot-repo-ladder.md`](robot-repo-ladder.md) | The four levels of access to the real robot repositories, and which milestone unlocks each |
 | [`curriculum-spec.md`](curriculum-spec.md) | The design document. Why the curriculum is shaped this way. For mentors and anyone editing it |
 | [`teaching-repo-spec.md`](teaching-repo-spec.md) | Spec for the skeleton source code students start each project from. For mentors and anyone building it |
-| [`ai-use-standard.md`](ai-use-standard.md) | The AI policy. Required reading, signed at M7 and re-signed at M8 when the drafted-spec boundary moves |
+| [`ai-use-standard.md`](ai-use-standard.md) | The AI policy. Required reading, signed at M7. v1.3 moved the drafted-spec boundary to M8, so anyone who signed v1.2 signs again |
 | [`coding-standards.md`](coding-standards.md) | What good Ignite code looks like — the standards code review enforces. M7 reading |
 | [`student-deliverables.md`](student-deliverables.md) | Fill-in-the-blank templates for everything you produce in-season |
 | [`resources.md`](resources.md) | Every external link in the curriculum, with notes on what each is good for |

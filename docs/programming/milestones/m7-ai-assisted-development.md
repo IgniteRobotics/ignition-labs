@@ -4,7 +4,7 @@
 
 Using AI coding tools well, now that you can tell when they are wrong.
 
-Required before you use AI tooling on competition robot code.
+Required before you use AI tooling on competition robot code — and **not sufficient on its own.** The Kickoff Readiness Gate asks for M7 *and* M8, plus a signed AI-use standard. Finishing this milestone does not clear you; finishing the next one does.
 
 **Estimated time:** 2–3 sessions
 **Prerequisites:** **M6 complete. No exceptions, including for veterans.** Node 20.19+ with the OpenSpec CLI installed — see the project README. Install it before your first session, not at the keyboard

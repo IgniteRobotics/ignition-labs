@@ -2,7 +2,7 @@
 
 **Status:** Executed. All ten milestones are built and published; see
 [`teaching-repo-spec.md`](teaching-repo-spec.md) §13 for the build-order record.
-Revisions from here are maintenance (§16), not construction. · **Status revised:** 2026-08-19
+Revisions from here are maintenance (§16), not construction. · **Status revised:** 2026-08-22
 **Owner:** Josh Reddick
 **Created:** 2026-08-05
 **Team:** FRC 6829 Ignite Robotics
@@ -354,6 +354,8 @@ Ignite's existing Gemini PR-review bot (`.github/workflows/ai-code-review.yml`, 
 - [ ] Student defended every decision in the diff, unaided, in review
 - [ ] Student can name shepherding and drifting and describe a time they did one
 - [ ] Student has read and signed the Ignite AI-use standard
+
+The milestone file carries the authoritative eleven-item list; the above is its summary and is not the checklist a mentor marks against.
 
 **Resources.** `ai-use-standard.md` (this curriculum) · [The Widening Gap (Prather et al., 2024)](https://arxiv.org/html/2405.17739v1) · [FIRST: Expanding the FIRST Toolbox with AI](https://community.firstinspires.org/expanding-the-first-toolbox-with-artificial-intelligence) · Ignite reference: `Robot-2026/.github/prompts/code-review-prompt.md`
 
