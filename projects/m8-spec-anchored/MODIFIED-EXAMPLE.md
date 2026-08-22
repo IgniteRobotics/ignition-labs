@@ -156,9 +156,9 @@ the outcome held unchanged.
 **Count what actually changed in that block.** Four scenarios came across from the settled
 spec, three of them word for word; one word moved in the fourth; and a fifth was added for
 the behaviour that is genuinely new. That ratio is normal, and it is what *restated in full*
-buys you — the four you did not touch are still there, still true, and still the record of
-what this requirement guarantees. A diff-shaped delta would have shown one line and quietly
-orphaned the rest.
+buys you — the three you left alone and the one you reworded are all still there, still
+true, and still the record of what this requirement guarantees. A diff-shaped delta would
+have shown one line and quietly orphaned the rest.
 
 **That refusal is the milestone.** You cannot change one clause of a requirement without
 accounting for every scenario hanging off it, so *read the whole thing before you change it*
