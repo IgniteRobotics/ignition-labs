@@ -42,6 +42,11 @@ exception since robot boot, as a telemetry field published alongside the vision 
 - WHEN it catches a second one
 - THEN the recorded count reads two, having not reset between loops
 
+#### Scenario: Running in simulation
+- GIVEN the code is running in simulation, where console capture is disabled
+- WHEN the handler catches an exception
+- THEN the recorded count appears in the log anyway
+
 ### Requirement: Most recent vision exception type
 The system SHALL record the simple class name of the most recently caught vision-estimate
 exception, as its own telemetry field.
@@ -53,24 +58,22 @@ exception, as its own telemetry field.
   than inside the console stream
 ```
 
-**Two things in that file are somebody's work, not the archive's.**
+**One line in that file is somebody's work, not the archive's.** `## Purpose` did not arrive
+written. Archiving a brand-new capability creates its spec with that heading reading
+`TBD - created by archiving change <name>. Update Purpose after archive.` The sentence above
+replaced the TBD, and writing it is the first thing M8 asks of you, because you are reading
+the whole file anyway.
 
-`## Purpose` did not arrive written. Archiving a brand-new capability creates its spec with
-that heading reading `TBD - created by archiving change <name>. Update Purpose after
-archive.` The sentence above replaced the TBD, and writing it is the first thing M8 asks of
-you, because you are reading the whole file anyway.
-
-And the count requirement carries three scenarios where the M7 delta had four. *Running in
-simulation* went during the drift repair: it restated the first scenario's outcome with a
-mechanism note bolted onto its GIVEN (*"where console capture is disabled"*) — the
-mechanism-in-a-requirement fault `SPEC-TEMPLATE.md` warns about — and what shipped publishes
-the field the same way either way. **That was the last time deleting a scenario is easy.**
+Everything under `## Requirements` is exactly what the M7 change put there. **Read all of
+it before you touch any of it** — the next section is about to restate one of those
+requirements in full, and *in full* means every scenario hanging off it.
 
 ---
 
 ## 2. The change
 
-`openspec new change rescope-vision-exception-count` scaffolds the folder and nothing else.
+`openspec new change rescope-vision-exception-count` scaffolds the folder and a
+`.openspec.yaml`, and stops there — no `proposal.md`, no `tasks.md`, no `specs/`.
 All three files are yours: `proposal.md` and `tasks.md` exactly as at M7, and the delta at
 `openspec/changes/rescope-vision-exception-count/specs/vision-telemetry/spec.md`. The count
 is rescoped from *since boot* to *since the current enable cycle*, and the exception-type
@@ -81,23 +84,29 @@ field goes.
 
 ### Requirement: Vision exception occurrence count
 The system SHALL record the number of times the vision-estimate handler has caught an
-exception since the current enable cycle began, as a telemetry field published
-alongside the vision data.
+exception since the current enable cycle began, as a telemetry field published alongside
+the vision data.
 
 #### Scenario: Queue drains without throwing
 - GIVEN the vision estimate queue drains cleanly
 - WHEN the handler completes
 - THEN the recorded count is unchanged
+- AND the method returns the same list it returns today
 
 #### Scenario: A single caught exception
 - GIVEN the recorded count reads N
 - WHEN the handler catches one exception
-- THEN the recorded count reads N plus one
+- THEN the recorded count reads N plus one, regardless of how many entries were pending
 
 #### Scenario: Repeated failures accumulate
 - GIVEN the handler has already caught an exception during this enable cycle
 - WHEN it catches a second one
 - THEN the recorded count reads two, having not reset between loops
+
+#### Scenario: Running in simulation
+- GIVEN the code is running in simulation, where console capture is disabled
+- WHEN the handler catches an exception
+- THEN the recorded count appears in the log anyway
 
 #### Scenario: The robot is enabled again
 - GIVEN the recorded count reads two from a previous enable cycle
@@ -141,9 +150,15 @@ tidying up. Validation refused, by name:
 
 A `MODIFIED` requirement replaces the whole block rather than patching part of it, so a
 scenario left out of the block is a scenario deleted from the settled spec. **The scenario
-was not obsolete; its wording was.** "This session" became "during this enable cycle", the
-outcome held unchanged, and the block gained a fourth scenario for the behaviour that is
-genuinely new.
+was not obsolete; its wording was.** "This session" became "during this enable cycle" and
+the outcome held unchanged.
+
+**Count what actually changed in that block.** Four scenarios came across from the settled
+spec, three of them word for word; one word moved in the fourth; and a fifth was added for
+the behaviour that is genuinely new. That ratio is normal, and it is what *restated in full*
+buys you — the four you did not touch are still there, still true, and still the record of
+what this requirement guarantees. A diff-shaped delta would have shown one line and quietly
+orphaned the rest.
 
 **That refusal is the milestone.** You cannot change one clause of a requirement without
 accounting for every scenario hanging off it, so *read the whole thing before you change it*
@@ -170,5 +185,7 @@ for anyone to read and disagree with.
 
 ---
 
-**One requirement modified, one removed, four scenarios, one screen.** Same target as M7,
-and for the same reason: the spec somebody actually reads is the short one.
+**One requirement modified, one removed, one scenario genuinely new.** Same target as M7,
+and for the same reason: the spec somebody actually reads is the short one. A `MODIFIED`
+block looks longer than the change it carries, and that is the format working as intended,
+not a spec getting out of hand.

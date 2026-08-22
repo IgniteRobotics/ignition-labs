@@ -48,6 +48,19 @@ this point the settled spec on your branch carries your drift repair and your `M
 hand that over. Two minutes, and it makes you read your own end state, which otherwise
 nobody does until the next person needs it.
 
+**Apply the two merge rules exactly, and change nothing else.**
+
+- A `MODIFIED` block **replaces** the matching requirement in the settled spec, whole. Drop
+  the `## MODIFIED Requirements` heading, then put the `### Requirement:` block and every
+  scenario under it in place of the old one.
+- A `REMOVED` block **deletes** the matching requirement. Its argument paragraph does not get
+  pasted in — that text lives in the change folder and never reaches the capability spec.
+
+**You are retyping the document you are about to be assessed on. Do not improve it while you
+paste.** A clarifying word added here passes a test the spec that actually ships would have
+failed, and it is the one way to fake this whole exercise without meaning to. Step 5 below
+exists to catch it.
+
 `proposal.md` is specifically excluded. It explains your reasoning, which is exactly the
 crutch this test is trying to remove.
 
@@ -100,7 +113,13 @@ is reported rather than hidden on purpose.
 | 0 | Suspicious. Usually the change was too small to have a second reader, or the reader had context they should not have had |
 | 1 | Fine, and common on a small change. Say what the one fix was |
 | 2–3 | Normal, and the most interesting outcome. This is what a spec meeting a real reader looks like |
+| 4–5 | Getting long, but not a failure. Look at whether the same ambiguity keeps resurfacing in a new place |
 | 6+ | Worth stopping and asking whether the requirement is trying to say two things at once |
+
+**Those are expectations, not measurements.** Nobody has run this test yet — the numbers come
+from what the milestone's design argues should happen, not from a cohort. The first mentor to
+sit a real one should correct this table, and correcting it is worth more than agreeing with
+it.
 
 Failing is not a retry and carries no penalty. A student who reports three round trips and
 what each one fixed has done the milestone better than one who reports zero.
@@ -113,9 +132,11 @@ what each one fixed has done the milestone better than one who reports zero.
 2. Reader reads. Ten minutes is plenty; this is one screen.
 3. Reader describes the behaviour and at least one edge case. **Author is silent.**
 4. Author writes down every mismatch, question, and guess — including the lucky ones.
-5. Reader now reads the diff. Both of you can talk from here.
+5. Reader now reads the diff — **and the change folder with it**, checking the scratch copy
+   they were handed against the `MODIFIED` and `REMOVED` blocks that will actually ship. Both
+   of you can talk from here.
 6. Author fixes the spec. Not the wording of the complaint — the thing that caused it.
-7. Back to step 1 with the corrected file, same reader.
+7. Round two — see below. Same reader, corrected file.
 8. Author records the round-trip count and what each round fixed, and puts it in the pull
    request.
 
@@ -136,6 +157,11 @@ on two students. What you own:
 
 - **Check the reader is clean.** The most common way this test gets hollowed out is a reader
   who already knows the change, usually because they sat next to the author for a week.
+- **Check the scratch copy matched what ships.** The author hands over a file they retyped,
+  which means an author who clarifies while pasting can pass a test the real spec would have
+  failed — without ever deciding to cheat. Step 5 puts the change folder in front of the
+  reader for exactly this; if it did not happen, do it yourself before you sign the box. Any
+  wording that exists only in the scratch copy is a finding, not a typo.
 - **Read the round-trip count, not just the checkbox.** Zero is the answer worth a question.
   So is a count of three with no note of what changed each time.
 - **This is where a rubber-stamped `openspec-propose` draft surfaces.** A student can tidy the

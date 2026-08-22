@@ -45,8 +45,8 @@ openspec validate <name>          # must pass before you commit. This is a done 
 openspec list                     # flips your change to ✓ Complete once every task box is checked
 ```
 
-`openspec new change` scaffolds the folder and nothing else — no `proposal.md`, no
-`tasks.md`, no `specs/`. You write all three, the way you did at M7.
+`openspec new change` scaffolds the folder and a `.openspec.yaml`, and stops there — no
+`proposal.md`, no `tasks.md`, no `specs/`. You write all three, the way you did at M7.
 
 After merge, a mentor runs `openspec archive <name>`. **It refuses to run while any box in
 your `tasks.md` is still open**, so check them off as you finish them rather than at the end.
