@@ -79,7 +79,7 @@ Useful for structure and sequencing. **Treat specific technical claims with susp
 | [Team 8744 — 2026 Software Lessons](https://github.com/FRC-Team8744/FRC_2026_SoftwareLessons) | A live, in-progress 2026 fall curriculum — the closest analog to what Ignite is building. Lesson01 teaches Java through an immediate robotics hook rather than in the abstract | M1, M3 |
 | [Team 3255 — FRC Java Tutorial](https://frcteam3255.github.io/FRC-Java-Tutorial/) | Full public tutorial site; a good template for what a from-scratch curriculum's table of contents looks like | M0, M1, M3 |
 | [Team 5712 — Gray Matter Coding Workshop](https://www.frc5712.com/) | Closed-loop control taught on a CTRE benchtop rig, then whole-robot autonomy. Vendor-matched to Ignite's stack | M4, M5 |
-| [Team 937 — Build Season Schedule](https://frc937.gitbook.io/frc-team-937/programming/build-season-schedule) | Concrete week-by-week programming deliverables. The direct source for M8's cadence | M8 |
+| [Team 937 — Build Season Schedule](https://frc937.gitbook.io/frc-team-937/programming/build-season-schedule) | Concrete week-by-week programming deliverables. The direct source for M9's cadence | M9 |
 | [Team 2554 — Documentation site](https://docs.jpsrobotics2554.org/) | Example of a beginner/advanced split within one team's docs | Reference |
 | [LearnFRC](https://learnfrc.com/) | Useful for **sequencing and pacing only** — see caution | Reference |
 
@@ -93,7 +93,7 @@ Real competition code worth reading. None of these are Ignite's conventions — 
 
 | Resource | What it's good for | Used by |
 |---|---|---|
-| [Team 254 — FRC-2025-Public](https://github.com/Team254/FRC-2025-Public) | The README is the model: setup instructions, a prose "code highlights" walkthrough, an explicit naming-conventions section | M8 |
+| [Team 254 — FRC-2025-Public](https://github.com/Team254/FRC-2025-Public) | The README is the model: setup instructions, a prose "code highlights" walkthrough, an explicit naming-conventions section | M9 |
 | [Team 3061 — 3061-lib](https://github.com/HuskieRobotics/3061-lib) | The closest external analog to what `CommandTemplate` should be: a maintained scaffold with a documented architecture | Reference |
 | [Team 2910 — 2025 Competition Robot](https://github.com/FRCTeam2910/2025CompetitionRobot-Public) | The Superstructure pattern for coordinating mechanisms — a pattern Ignite's own code-review prompt already aspires to | M3, Reference |
 | [AdvantageKit](https://github.com/Mechanical-Advantage/AdvantageKit) | Source and template projects for the IO-abstraction pattern | M6 (optional) |
@@ -144,7 +144,7 @@ Practitioner discussion. Higher signal than blog posts, lower authority than off
 |---|---|
 | [Limelight vs PhotonVision](https://www.chiefdelphi.com/t/limelight-vs-photonvision/452856) | The real consensus is not technical: "use the software you have the most experience with." Ramp-up time is the limiting factor |
 | [Choreo vs PathPlanner](https://www.chiefdelphi.com/t/choreo-vs-pathplanner/467373) | Same conclusion. Switching costs are low; familiarity decides. Settle this in the fall, not in Week 1 |
-| [Biding Time for Programmers](https://www.chiefdelphi.com/t/biding-time-for-programmers/509817) | What programmers do in Week 0–1 while mechanical builds: simulation work and last year's robot. Directly informs M8 |
+| [Biding Time for Programmers](https://www.chiefdelphi.com/t/biding-time-for-programmers/509817) | What programmers do in Week 0–1 while mechanical builds: simulation work and last year's robot. Directly informs M9 |
 
 **On other teams' training programs:**
 

@@ -8,7 +8,7 @@ You are the reason this curriculum exists. Everything here assumes you are start
 
 ## What you are signing up for
 
-You walk the whole ladder. Nine milestones, M0 through M8.
+You walk the whole ladder. Ten milestones, M0 through M9.
 
 That sounds like a lot. It is spread across a year, most of it is hands-on rather than reading, and by the end you will have written code that drives a real robot at a real competition.
 
@@ -29,7 +29,8 @@ That sounds like a lot. It is spread across a year, most of it is hands-on rathe
 | **[M5 — Autonomous, Odometry & Vision](../milestones/m5-autonomous-odometry-vision.md)** | Fifteen seconds without a driver | 4–6 |
 | **[M6 — Simulation, Telemetry & Testing](../milestones/m6-simulation-telemetry-testing.md)** | Knowing your code is wrong before the robot does | 4–5 |
 | **[M7 — AI-Assisted Development](../milestones/m7-ai-assisted-development.md)** | Using AI tools well | 2–3 |
-| **[M8 — In-Season Deliverables](../milestones/m8-in-season-deliverables.md)** | Owning a subsystem for a season | The season |
+| **[M8 — Spec-Anchored Development](../milestones/m8-spec-anchored-development.md)** | Changing a spec somebody else has to act on | 2 |
+| **[M9 — In-Season Deliverables](../milestones/m9-in-season-deliverables.md)** | Owning a subsystem for a season | The season |
 
 **Do not attempt any test-outs.** They exist to route people who already know the material. Skipping ahead will not save you time; it will cost you time in M3 when nothing makes sense.
 

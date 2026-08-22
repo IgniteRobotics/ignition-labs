@@ -112,11 +112,11 @@ def test_present_setup_and_contributing_pages_are_not_reported(tmp_path):
     assert missing_pages(site, ["SETUP", "CONTRIBUTING"]) == []
 
 
-def test_required_pages_include_all_nine_milestones_and_four_tracks():
+def test_required_pages_include_all_ten_milestones_and_four_tracks():
     # This is the regression test for C11b: REQUIRED_PAGES used to list six
-    # pages, so nine milestone pages and four track pages were never
+    # pages, so ten milestone pages and four track pages were never
     # required to render.
-    for n in range(9):
+    for n in range(10):
         assert any(
             f"m{n}-" in slug or slug.endswith(f"m{n}") for slug in REQUIRED_PAGES
         ), f"no required page for milestone {n}"
@@ -154,11 +154,18 @@ def test_team_gitflow_is_a_required_page():
     assert "programming/team-gitflow" in REQUIRED_PAGES
 
 
+def test_spec_anchored_development_is_a_required_page():
+    # Same C11b failure as team-gitflow: M8 was added to mkdocs.yml's nav: by
+    # the same change that inserted the milestone, and a nav entry alone is
+    # guarded by nothing. The spec-anchored page must actually publish.
+    assert "programming/milestones/m8-spec-anchored-development" in REQUIRED_PAGES
+
+
 def test_coding_standards_is_a_required_page():
     # Same C11b failure as team-gitflow: a page added to mkdocs.yml's nav: but
     # not to REQUIRED_PAGES renders today and is guarded by nothing.
-    # coding-standards.md is the team's constitution -- M1, M7 and M8 all point
-    # at it and M7 hands it to an agent as standing context; it must publish.
+    # coding-standards.md is the team's constitution -- M1, M7, M8 and M9 all
+    # point at it and M7 hands it to an agent as standing context; it must publish.
     assert "programming/coding-standards" in REQUIRED_PAGES
 
 

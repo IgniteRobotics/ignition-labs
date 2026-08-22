@@ -59,7 +59,8 @@ nav:
       - M5 — Autonomous, Odometry & Vision: programming/milestones/m5-autonomous-odometry-vision.md
       - M6 — Simulation, Telemetry & Testing: programming/milestones/m6-simulation-telemetry-testing.md
       - M7 — AI-Assisted Development: programming/milestones/m7-ai-assisted-development.md
-      - M8 — In-Season Deliverables: programming/milestones/m8-in-season-deliverables.md
+      - M8 — Spec-Anchored Development: programming/milestones/m8-spec-anchored-development.md
+      - M9 — In-Season Deliverables: programming/milestones/m9-in-season-deliverables.md
   - Vision:
       - Vision Subsystem: vision-subsystem.md
   - For Mentors:

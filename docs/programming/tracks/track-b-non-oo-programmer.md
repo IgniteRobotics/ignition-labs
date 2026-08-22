@@ -17,7 +17,7 @@ You start at M0, attempt one test-out, and go from there.
 | **[M2 — OOP, Interfaces & Lambdas](../milestones/m2-oop-interfaces-lambdas.md)** | **Work it.** This is your real starting point | 3–4 |
 | **[M3 — WPILib Command-Based](../milestones/m3-wpilib-command-based.md)** | Work it | 5–7 |
 | — | **Kickoff readiness minimum reached** | — |
-| **[M4](../milestones/m4-sensors-actuators-control.md)** through **[M8](../milestones/m8-in-season-deliverables.md)** | Same as everyone | See each |
+| **[M4](../milestones/m4-sensors-actuators-control.md)** through **[M9](../milestones/m9-in-season-deliverables.md)** | Same as everyone | See each |
 
 **Expected total to kickoff readiness:** 9 to 17 sessions, depending on how the M1 test-out goes.
 

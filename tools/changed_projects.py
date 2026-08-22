@@ -21,11 +21,11 @@ def _is_gradle_project(root: Path, rel: str) -> bool:
     """A standalone Gradle project has its own settings.gradle (spec §4.2).
 
     Checked against the filesystem rather than inferred from the path, because
-    projects/m7-ai-assisted/ and projects/m8-ownership/ are directories of documents --
-    the first entries under projects/ that are not Gradle projects at all. Selecting one
-    puts a directory with no gradlew into student-check.yml's build matrix, where the
-    first step is `chmod +x gradlew` and the failure reads like a broken toolchain to
-    the student whose Markdown change triggered it.
+    projects/m7-ai-assisted/, projects/m8-spec-anchored/ and projects/m9-ownership/ are
+    directories of documents -- the entries under projects/ that are not Gradle projects
+    at all. Selecting one puts a directory with no gradlew into student-check.yml's build
+    matrix, where the first step is `chmod +x gradlew` and the failure reads like a broken
+    toolchain to the student whose Markdown change triggered it.
     """
     return (root / rel / "settings.gradle").is_file()
 

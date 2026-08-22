@@ -80,7 +80,7 @@ def _gradle_project(root: Path, rel: str) -> None:
 
 
 def test_directory_without_settings_gradle_is_not_selected(tmp_path):
-    """M7 and M8 ship documents, not Gradle projects. Selecting them puts a directory
+    """M7, M8 and M9 ship documents, not Gradle projects. Selecting them puts a directory
     with no gradlew into student-check.yml's build matrix, which fails at chmod."""
     (tmp_path / "projects" / "m7-ai-assisted").mkdir(parents=True)
     (tmp_path / "projects" / "m7-ai-assisted" / "FEATURE-BACKLOG.md").write_text("x\n", encoding="utf-8")
@@ -101,9 +101,9 @@ def test_testout_fixture_with_settings_gradle_is_still_selected(tmp_path):
 
 def test_mixed_change_selects_only_the_gradle_project(tmp_path):
     _gradle_project(tmp_path, "projects/m5-auto-vision")
-    (tmp_path / "projects" / "m8-ownership").mkdir(parents=True)
+    (tmp_path / "projects" / "m9-ownership").mkdir(parents=True)
     changed = [
-        "projects/m8-ownership/README.md",
+        "projects/m9-ownership/README.md",
         "projects/m5-auto-vision/build.gradle",
     ]
     assert milestone_dirs(changed, root=tmp_path) == ["projects/m5-auto-vision"]

@@ -18,7 +18,7 @@ Test out fast, land in M3, and go.
 | **[M3 — WPILib Command-Based](../milestones/m3-wpilib-command-based.md)** | **Work it. Your real starting point** | 5–7 |
 | — | **Kickoff readiness minimum reached** | — |
 | **[M4 — Sensors, Actuators & Control](../milestones/m4-sensors-actuators-control.md)** | Work it. Probably the hardest thing here for you | 5–7 |
-| **[M5](../milestones/m5-autonomous-odometry-vision.md)** through **[M8](../milestones/m8-in-season-deliverables.md)** | Same as everyone | See each |
+| **[M5](../milestones/m5-autonomous-odometry-vision.md)** through **[M9](../milestones/m9-in-season-deliverables.md)** | Same as everyone | See each |
 
 **Expected total to kickoff readiness:** 5 to 9 sessions.
 

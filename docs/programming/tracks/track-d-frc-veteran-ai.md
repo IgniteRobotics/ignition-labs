@@ -40,7 +40,8 @@ So: you test out of M0 through M5 in an afternoon. Then you write tests like eve
 | **[M5](../milestones/m5-autonomous-odometry-vision.md)** | Test out | 60 min |
 | **[M6 — Simulation, Telemetry & Testing](../milestones/m6-simulation-telemetry-testing.md)** | **Work it. No test-out exists** | 4–5 sessions |
 | **[M7 — AI-Assisted Development](../milestones/m7-ai-assisted-development.md)** | Work it | 2–3 sessions |
-| **[M8](../milestones/m8-in-season-deliverables.md)** | The season | Ongoing |
+| **[M8 — Spec-Anchored Development](../milestones/m8-spec-anchored-development.md)** | **Work it. No test-out exists** | 2 sessions |
+| **[M9](../milestones/m9-in-season-deliverables.md)** | The season | Ongoing |
 
 **Test-outs in one sitting:** about four hours. Do them back to back.
 

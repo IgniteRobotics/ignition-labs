@@ -64,7 +64,8 @@ M4  Sensors, Actuators & Control
 M5  Autonomous, Odometry & Vision
 M6  Simulation, Telemetry & Testing      <-- Track D enters (test-out of M1-M5)
 M7  AI-Assisted Development
-M8  In-Season Deliverables & Ownership
+M8  Spec-Anchored Development
+M9  In-Season Deliverables & Ownership
         |
         v
    All tracks converge
@@ -116,7 +117,7 @@ Delivery is evergreen, so calendar pressure concentrates in a single gate rather
 | Autonomous or vision owner | **+ M5** |
 | Anyone using AI tooling on competition code | **+ M7** and a signed AI-use standard |
 
-M8 is explicitly *not* gated — it is the in-season milestone and runs during the season itself.
+M9 is explicitly *not* gated — it is the in-season milestone and runs during the season itself.
 
 **Enforcement:** the gate is a roster checklist a mentor maintains, not an honor system. A student who has not cleared M0–M3 by kickoff can still participate but does not get commit access to the season repo. This is a real consequence and it must be stated to students in advance, in the fall, not discovered in January.
 
@@ -354,7 +355,7 @@ Ignite's existing Gemini PR-review bot (`.github/workflows/ai-code-review.yml`, 
 
 **Resources.** `ai-use-standard.md` (this curriculum) · [The Widening Gap (Prather et al., 2024)](https://arxiv.org/html/2405.17739v1) · [FIRST: Expanding the FIRST Toolbox with AI](https://community.firstinspires.org/expanding-the-first-toolbox-with-artificial-intelligence) · Ignite reference: `Robot-2026/.github/prompts/code-review-prompt.md`
 
-### 4.10 M8 — In-Season Deliverables & Ownership
+### 4.10 M9 — In-Season Deliverables & Ownership
 
 **Runs during the season, not before it.** This milestone is the answer to the backlog item's second half: what students own in-season and how they build it. Full detail lives in `student-deliverables.md`; this milestone is the teaching wrapper around it.
 
@@ -402,7 +403,8 @@ docs/programming/
     ├── m5-autonomous-odometry-vision.md
     ├── m6-simulation-telemetry-testing.md
     ├── m7-ai-assisted-development.md
-    └── m8-in-season-deliverables.md
+    ├── m8-spec-anchored-development.md
+    └── m9-in-season-deliverables.md
 ```
 
 ### 5.1 Per-file acceptance criteria
@@ -531,7 +533,7 @@ Full content in `student-deliverables.md`. Required artifacts:
 |---|---|---|
 | `CommandTemplate` is stock WPILib sample code, still on WPILib 2025.2.1 | **Excluded from scope, still the highest-leverage fix** | Every season inherits generic sample code with no README, no CI, no Ignite conventions. **It must be bumped to 2026 before it seeds a 2027 season repo.** The curriculum will produce a teaching repo as a byproduct; seed that from `Robot-2026` and `Phoenix-2026` conventions, not from `CommandTemplate` |
 | `2025-Robotics-Intro` is retired from the curriculum | **Fixed** | It is a Romi project on WPILib 2025.2.1 with one vendordep, last touched 2025-02-11 — and §1.2 excludes Romi as a hardware floor, so three milestones sending students into it was a self-contradiction. All nine references were retargeted to 2026 repos: M1 and M2 to `Robot-2026` (`Constants`, `IntakeConstants`, `preferences/`), M3's subclass idiom to `Phoenix-2026/commands/DriveToPose.java`. **No student-facing path now references pre-2026 Ignite code** |
-| No README in any Ignite repo | **Partially addressed** | M8 ships the subsystem README as a real fill-in-the-blank file (`templates/subsystem-readme.md`) rather than a description of one, so the habit has a starting artifact; the repo-level READMEs remain unwritten |
+| No README in any Ignite repo | **Partially addressed** | M9 ships the subsystem README as a real fill-in-the-blank file (`templates/subsystem-readme.md`) rather than a description of one, so the habit has a starting artifact; the repo-level READMEs remain unwritten |
 | Ignite's standards live only in a bot prompt | **Addressed indirectly** | `.github/prompts/code-review-prompt.md` is the best existing draft of Ignite's conventions and should be mined when writing M3–M6 content. Converting it to a human-facing doc is out of scope here |
 | Romi / XRP practice robots | **Optional enrichment only** | Not selected as a hardware floor; no milestone depends on them |
 | `Phoenix-2026` benchtop rig | **Promoted: M3 depends on it as reading material** | Reclassified from optional enrichment. It is on WPILib 2026.2.1, Phoenix 6 26.1.1, PathPlanner 2026.1.2 and photonlib — the same stack as `Robot-2026` — with both CI workflows, Spotless, and `useJUnitPlatform()` configured, in **22 Java files versus `Robot-2026`'s 46**. It is the only current Ignite repo containing an explicit `Command` subclass. M3 now assigns it as a read-end-to-end target with `Robot-2026` as the full-complexity reference. Its *hardware* use remains optional — the M4 hardware variant is still enrichment |
@@ -543,10 +545,10 @@ Full content in `student-deliverables.md`. Required artifacts:
 
 Work proceeds in this order. Each step is independently reviewable.
 
-1. **`resources.md`** — build the link library first. Everything else cites it, and building it first prevents link drift across nine milestone files.
+1. **`resources.md`** — build the link library first. Everything else cites it, and building it first prevents link drift across ten milestone files.
 2. **`ai-use-standard.md`** — write the policy before the milestone that teaches it, because M7's content depends on the tier definitions being settled.
-3. **`milestones/m0` through `m8`** — in order. M3 and M4 are the largest; budget accordingly.
-4. **`student-deliverables.md`** — templates, written after M8 so the milestone and the artifacts stay consistent.
+3. **`milestones/m0` through `m9`** — in order. M3 and M4 are the largest; budget accordingly.
+4. **`student-deliverables.md`** — templates, written after M9 so the milestone and the artifacts stay consistent.
 5. **`tracks/*.md`** — written last, because a track guide is a routing document over content that must already exist.
 6. **`README.md`** — written last for the same reason.
 7. **Wiki correction** — fix the Epilogue claim in `frc-coding-best-practices-research` §Gap Analysis and note it in `frc-fall-curriculum-research-audit`.

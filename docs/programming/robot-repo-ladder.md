@@ -29,7 +29,8 @@ You move up this ladder and never back down. Each step is a bigger permission th
 | **M5** | `m5-auto-vision/` | branch → PR into own fork | Robot-2026 | **clone** — `vision/`, `LaunchCalculator` |
 | **M6** | `m6-testing/` *(warm-up)* | branch → PR into own fork | Robot-2026 | **fork + PR** — tests for a class that has none. **This is the milestone** |
 | **M7** | — | **branch on upstream** | Robot-2026 | commit access. Ship a feature |
-| **M8** | — | **branch on upstream** | Robot-2026 | commit access, in-season. Own a subsystem |
+| **M8** | — | **branch on upstream** | Robot-2026 | commit access. Extend the spec you shipped at M7 |
+| **M9** | — | **branch on upstream** | Robot-2026 | commit access, in-season. Own a subsystem |
 
 For the exact commands at each stage, see [the git workflow](git-workflow.md).
 
@@ -89,6 +90,6 @@ So the first M6 pull request does not just add tests. `./gradlew build` runs `ch
 
 ---
 
-## M7 and M8 — you are on the team
+## M7, M8 and M9 — you are on the team
 
 Past the Gate, you have commit access and you branch directly on `Robot-2026`. No fork. At that point the ladder is finished and you work the way everyone else does.

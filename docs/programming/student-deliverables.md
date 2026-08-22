@@ -1,6 +1,6 @@
 # Student Deliverables — In-Season
 
-**Companion to:** `milestones/m8-in-season-deliverables.md`
+**Companion to:** `milestones/m9-in-season-deliverables.md`
 
 Everything a subsystem owner produces during a season, with templates you fill in rather than write from scratch.
 
@@ -323,4 +323,4 @@ Everything here traces to a gap that currently exists.
 | Pit card | The pit crew currently depends on the subsystem owner being physically present |
 | Retro | Nothing currently converts a season's hard-won knowledge into the next season's starting point |
 
-Every one is small. None takes more than thirty minutes. The reason they do not exist is not difficulty — it is that nobody has owned them. M8 assigns that ownership.
+Every one is small. None takes more than thirty minutes. The reason they do not exist is not difficulty — it is that nobody has owned them. M9 assigns that ownership.

@@ -69,7 +69,7 @@ jobs:
         working-directory: ${{ matrix.project }}
         run: |
           # FormatMe.java is the M0 formatting exercise (spec §9.1): the one
-          # deliberately mis-formatted artifact in the whole curriculum. M1-M8
+          # deliberately mis-formatted artifact in the whole curriculum. M1-M9
           # ship stubs that throw UnsupportedOperationException, and those are
           # properly formatted -- FormatMe.java is the sole, intentional
           # exception, fixed locally with spotlessApply and never committed.

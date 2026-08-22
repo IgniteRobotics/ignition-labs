@@ -206,7 +206,7 @@ Batching matters for CAN bandwidth, and `waitForAll` matters for odometry, where
 
 **Tuning on a low battery.** Gains that work at 12.6V behave differently at 11.5V. This is also *why* feedforward matters — a good model degrades gracefully; a big kP does not.
 
-**Not writing down what you tried.** You will land on numbers and have no idea how. M8 makes the tuning log a real deliverable; start the habit now.
+**Not writing down what you tried.** You will land on numbers and have no idea how. M9 makes the tuning log a real deliverable; start the habit now.
 
 ## AI posture — 🟡 Yellow
 

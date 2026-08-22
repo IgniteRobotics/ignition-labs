@@ -111,7 +111,7 @@ See [the real-repo ladder](robot-repo-ladder.md) for what you do in that reposit
 
 ---
 
-## M7 and M8 — commit access
+## M7, M8 and M9 — commit access
 
 Once you have cleared the Kickoff Readiness Gate you have write access to `Robot-2026`. No fork, no `upstream` remote — you clone the team repository directly and branch on it, like every other member of the team.
 

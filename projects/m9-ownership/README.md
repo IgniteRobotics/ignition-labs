@@ -1,6 +1,6 @@
-# M8 — In-Season Ownership
+# M9 — In-Season Ownership
 
-**No skeleton, no code, no tests.** M8 is what happens after the curriculum ends and the
+**No skeleton, no code, no tests.** M9 is what happens after the curriculum ends and the
 season starts: you own a subsystem, on the real robot, for real matches.
 
 The whole milestone is deliverables. This directory points at them.
@@ -54,6 +54,6 @@ There is no such thing as a blocked programmer in Week 1.
 
 ## Definition of done
 
-M8's done list is in
-[the milestone document](../../docs/programming/milestones/m8-in-season-deliverables.md).
+M9's done list is in
+[the milestone document](../../docs/programming/milestones/m9-in-season-deliverables.md).
 Everything on it is mentor-verified across a season; there is nothing here to run.
