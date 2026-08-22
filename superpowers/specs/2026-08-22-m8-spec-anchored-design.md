@@ -115,7 +115,7 @@ The pattern is established twice. **Yellow → Green at M6:** you may lean on th
 
 By M8 a student has written a conforming spec by hand, watched an agent misread it, and defended the divergence. They can now review a drafted spec competently, which is exactly the qualification M7 said they lacked. So:
 
-> **At M8, `/opsx:propose` is permitted as a first draft that you must red-line.** You disclose that you used it, and you show what you changed and why — at minimum one requirement you rewrote and one scenario you added or deleted. A draft accepted unchanged is not a pass; it is evidence you did not review it.
+> **At M8, `openspec-propose` is permitted as a first draft that you must red-line.** You disclose that you used it, and you show what you changed and why — at minimum one requirement you rewrote and one scenario you added or deleted. A draft accepted unchanged is not a pass; it is evidence you did not review it.
 
 This mirrors M7's strongest prompt shape, inverted: at M7 you write and the agent critiques; at M8 the agent drafts and you critique. The skill assessed is the same one — **holding the decisions** — and the red-line is the artifact that proves it.
 
@@ -162,7 +162,7 @@ Mentor-verified, like M7's. Every item is a minute of someone's review.
 - [ ] A second reader described the new behaviour correctly from your spec alone
 - [ ] You can say how many round trips that took, and what you fixed each time
 - [ ] You can name something `openspec validate` cannot check about a requirement
-- [ ] If you used `/opsx:propose`, you can show one requirement you rewrote and one scenario you added or deleted
+- [ ] If you used `openspec-propose`, you can show one requirement you rewrote and one scenario you added or deleted
 - [ ] You can make the strongest case *for* spec-as-source, and then say why Ignite stops short of it
 
 The last item is §2.1's argument made assessable. A student who can only recite the Ignite position has not met it.

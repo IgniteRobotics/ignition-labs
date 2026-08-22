@@ -69,7 +69,7 @@ Documentation: <https://github.com/Fission-AI/OpenSpec/tree/main/docs>
 ### Your commands
 
 ```bash
-openspec new change <your-change>        # scaffolds the folder and its files
+openspec new change <your-change>        # creates the folder. You write the files
 openspec validate <your-change>          # must pass before you commit. This is a done item
 openspec list                            # every change in flight
 openspec show <your-change>              # print yours
@@ -81,8 +81,8 @@ folds your delta into `openspec/specs/` and moves the folder into `changes/archi
 
 ### The one command you do not run
 
-`/opsx:propose` has the agent draft your proposal, delta spec, and tasks. **Do not use
-it.** `ai-use-standard.md` §4 makes the spec Yellow-tier work even at Green, because the
+The `openspec-propose` skill has the agent draft your proposal, delta spec, and tasks in one
+step. **Do not use it.** `ai-use-standard.md` §4 makes the spec Yellow-tier work even at Green, because the
 spec is where your decisions live — an agent that writes it has made the decisions and
 left you the typing, and the defense review becomes you defending a document you never
 thought through. Same reason you wrote the tests that unlocked Green at M6 instead of

@@ -49,9 +49,9 @@ This is a change to a **signed** document. Anyone who acknowledged v1.0 or v1.1 
 
 ### 1.4 One OpenSpec command is switched off, deliberately
 
-`/opsx:propose` has the agent draft the proposal, the delta spec, and the task list. It is the tool's happy path and it is **forbidden at Ignite**, because it collides head-on with the original §2.3 — the spec is Yellow-tier work even at Green, since the spec is where the student's decisions live.
+The `openspec-propose` skill has the agent draft the proposal, the delta spec, and the task list. It is the tool's happy path and it is **forbidden at Ignite**, because it collides head-on with the original §2.3 — the spec is Yellow-tier work even at Green, since the spec is where the student's decisions live.
 
-**Adopting a tool is not adopting its defaults.** This is taught rather than merely enforced: a tool whose default is to do the interesting part for you is a shape students will meet repeatedly, and recognising it is worth more than any prompt technique in the milestone. `/opsx:apply` is likewise not a route to a written spec. Handing a finished draft to an agent and asking *"what did I miss?"* remains encouraged and is still the highest-value prompt in M7.
+**Adopting a tool is not adopting its defaults.** This is taught rather than merely enforced: a tool whose default is to do the interesting part for you is a shape students will meet repeatedly, and recognising it is worth more than any prompt technique in the milestone. `openspec-apply-change` is likewise not a route to a written spec. Handing a finished draft to an agent and asking *"what did I miss?"* remains encouraged and is still the highest-value prompt in M7.
 
 **§2.3 is unchanged and this record does not weaken it.** It is the reason for the carve-out.
 
@@ -77,7 +77,7 @@ This is a change to a **signed** document. Anyone who acknowledged v1.0 or v1.1 
 | Green condition 1 is competence-based; v1.2; re-acknowledgment | `ai-use-standard.md` §4, §12, header |
 | DoD item gates on `openspec validate` passing | milestone and project README, byte-identical |
 | `openspec archive` named as the mentor's post-merge step | `DEFENSE-REVIEW.md` |
-| `/opsx:propose` forbidden, and the reason taught | milestone Concepts; project README |
+| `openspec-propose` forbidden, and the reason taught | milestone Concepts; project README |
 
 ---
 
@@ -85,17 +85,27 @@ This is a change to a **signed** document. Anyone who acknowledged v1.0 or v1.1 
 
 The documentation gates are the usual set — `pytest`, `mkdocs build --strict`, `site_guard.py`, `tests_lock.py verify`, `templates_sync.py verify`, and the byte-identity of M7's two DoD lists.
 
-**None of them run OpenSpec, and that is now the largest gap in this change.** Every command sequence in the shipped material is written from upstream documentation, not from execution. Before a student meets this:
+**The dry run was executed on 2026-08-22, against OpenSpec 1.10.0, in a throwaway directory.** It had been written from upstream documentation alone; it now is not.
 
-1. `npm install -g @fission-ai/openspec@latest` on a lab-representative machine.
-2. `openspec init --tools agents` on `Robot-2026` — prerequisite P1, still unmet.
-3. `openspec new change <name>`, then reproduce `SPEC-TEMPLATE.md`'s worked example as real files.
-4. **`openspec validate <name>` — and it must pass.** If it does not, the template is wrong and this record's §1.2 is the thing to fix, not the student's spec.
-5. `openspec archive <name>` and confirm the delta lands in `openspec/specs/`.
+| Step | Result |
+|---|---|
+| 1. `npm install -g @fission-ai/openspec@latest` | Done. CLI 1.10.0 |
+| 2. `openspec init --tools agents` | Done **in a throwaway directory**, not on `Robot-2026`. P1 remains unmet |
+| 3. `openspec new change <name>`, then write `SPEC-TEMPLATE.md`'s three files | Done |
+| 4. **`openspec validate <name>`** | **PASS, exit 0 — and `--strict` also exit 0** |
+| 5. `openspec archive <name>` | **Not run.** Needs a change with completed tasks; still outstanding |
 
-That is the mentor dry-run (P3) with a concrete checklist instead of a vibe. Its most valuable outcome is still a negative result: if step 4 fails, we shipped a curriculum around a format we never ran.
+**Step 4 is the one that mattered and the template is correct.** The delta-spec format, the `## ADDED Requirements` / `### Requirement:` / `#### Scenario:` heading levels, and the two-requirements split all validate as shipped. The curriculum describes something real.
 
-**Upstream documentation is not fully self-consistent about `proposal.md`'s headings** — `concepts.md` describes intent/scope/approach, `examples.md` glosses it as "why and what". The delta-spec format, which is what validation actually checks, is quoted unambiguously and is what the template follows exactly. Step 4 settles the rest.
+**Three things the run corrected, which documentation alone had wrong:**
+
+1. **The command is `openspec-propose`, not `/opsx:propose`.** No `opsx` binary or reference exists anywhere in 1.10.0; `docs/opsx.md` describes a surface this version does not use. Every occurrence in the milestone, the project files, and both design records was corrected. **This is the exact failure mode the repository keeps producing — a claim about a named external thing, taken from a document, never executed.**
+2. **`openspec new change` scaffolds only the folder and a `.openspec.yaml`** — no `proposal.md`, no `tasks.md`, no `specs/`. Prose saying it "scaffolds the folder and its files" was wrong and is fixed. The student writes all three from scratch, which suits M7 better than a form to fill in would.
+3. **`init --tools agents` reports `Commands skipped for: agents (no adapter)`**, installing six skills under `.agents/skills/` and no slash-command adapter. §2.4's vendor-neutral choice holds, and the forbidden workflow is reached by asking the agent rather than by typing a command — worth knowing when a mentor checks whether a student used it.
+
+**The `proposal.md` heading question is settled.** Upstream documentation disagreed with itself — `concepts.md` describes intent/scope/approach, `examples.md` glosses it as "why and what". The `openspec-propose` skill's own text says `proposal.md (what & why)`, and validation accepts the template's Why / What changes / Approach as written. `examples.md` was right.
+
+**Still outstanding:** P1 on `Robot-2026`, and step 5 — nobody has watched a delta merge into `openspec/specs/`, which is the mechanism M8's entire design rests on.
 
 ---
 
@@ -107,4 +117,4 @@ That is the mentor dry-run (P3) with a concrete checklist instead of a vibe. Its
 | **The template does not validate** | §4 step 4. Unmitigated until someone runs it |
 | **OpenSpec churns** — a young tool, and its docs already disagree with themselves | Requirement syntax is the stable core and is what we teach; commands are named in one place per document, so a rename is a small edit |
 | **Session cost rises again** | Measured on the first student through. If M7 lands past three sessions, the miscalibration exercise is the first thing to cut, not the spec |
-| `/opsx:propose` used anyway | Not detectable from the artifact. The divergence question is the backstop — it is hard to answer about a spec you did not write |
+| `openspec-propose` used anyway | Not detectable from the artifact. The divergence question is the backstop — it is hard to answer about a spec you did not write |

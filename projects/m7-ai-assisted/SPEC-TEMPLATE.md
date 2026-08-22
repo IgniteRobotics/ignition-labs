@@ -45,7 +45,7 @@ only when *how* you are building something needs an argument that would swamp th
 npm install -g @fission-ai/openspec@latest
 
 # on your branch in Robot-2026
-openspec new change add-vision-exception-signal   # creates the folder and its files
+openspec new change add-vision-exception-signal   # creates the folder. You write the files
 # ... you write proposal.md, tasks.md, and the delta spec ...
 openspec validate add-vision-exception-signal     # must pass before you commit
 git add openspec/changes/add-vision-exception-signal
@@ -61,9 +61,9 @@ folder to `changes/archive/`.
 
 ### The one command you do not run
 
-OpenSpec ships `/opsx:propose`, and it works: the agent reads the code and drafts your
-proposal, your delta spec, and your tasks. **Do not use it, and do not use `/opsx:apply`
-to write the spec for you.**
+OpenSpec ships a skill called `openspec-propose`, and it works: ask your agent to propose a
+change and it reads the code and drafts your proposal, your delta spec, and your tasks in one
+step. **Do not use it, and do not use `openspec-apply-change` to write the spec for you.**
 
 This is not us being precious about tooling. `ai-use-standard.md` §4 is explicit that the
 spec is Yellow-tier work even at Green, and the reason is the whole point of this
