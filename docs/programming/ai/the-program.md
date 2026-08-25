@@ -95,8 +95,8 @@ M9 is not gated. It runs during the season.
 
 ## What the ladder unlocks
 
-Your AI tier is not a preference and it is not a negotiation. It is a function of where you are
-on the ladder.
+Where you are on the ladder sets your AI tier. Nobody negotiates it, and preference does not
+enter into it.
 
 | Tier | Where you are | What you may do |
 |---|---|---|
@@ -114,7 +114,7 @@ the commitment.
 
 This is the decision people argue with, so here is the reasoning rather than the assertion.
 
-Green tier is not a reward for finishing M6. It is only possible after M6. Everything that
+M6 is what makes Green tier possible, rather than something Green tier is handed out for. Everything that
 makes agentic development safe is a verification skill: writing a test before the thing it
 tests, running a mechanism in simulation, reading telemetry, telling *green* from *correct*.
 Those are M6's content. A student cleared for full agentic use without them cannot do the one

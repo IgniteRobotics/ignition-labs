@@ -6,7 +6,7 @@ Everything you put in front of the model competes for the same finite resource. 
 
 ## Prompting is half the skill
 
-**Prompt engineering** is writing and organizing instructions well. It is discrete: you write one, you send it.
+**Prompt engineering** is writing and organizing instructions well. It is discrete. You write one, you send it.
 
 **Context engineering** is curating the whole set of information the model sees during a session: the system prompt, the tools, the files, the conversation history, the tool output. It is iterative, because the curation decision happens *every single turn*.
 
@@ -14,7 +14,7 @@ If you only think about the prompt, you are managing about half of what determin
 
 ---
 
-## Context is a budget
+## Why long context makes answers worse
 
 The mechanism is architectural. Attention requires every token to relate to every other token, giving n² pairwise relationships for n tokens. Models therefore have an **attention budget**, and every new token spends some of it.
 
@@ -29,7 +29,7 @@ Specifics worth knowing:
 - Focused prompts of about 300 tokens beat full prompts of about 113,000 tokens, substantially, on the same underlying task.
 - **Shuffling the material to destroy its logical flow consistently *improved* performance.** Nobody fully knows why. These are empirical objects, not understood ones.
 
-**The FRC translation:** pasting the entire `RobotContainer.java`, three subsystems, and a Chief Delphi thread into the window is not being thorough. It is spending the budget on distractors and then wondering why the answer is worse than it was yesterday.
+**The FRC translation:** pasting the entire `RobotContainer.java`, three subsystems, and a Chief Delphi thread into the window spends the attention budget on distractors, and then you wonder why the answer is worse than it was yesterday. Volume is not thoroughness.
 
 ---
 
@@ -38,7 +38,7 @@ Specifics worth knowing:
 1. **Compaction** — summarize the conversation and start fresh with the summary. Watch out: aggressive compaction loses subtle but critical context.
 2. **Structured note-taking** — write notes to a file outside the window, pull them back later. We already do this in season; it is called the tuning log. Naming it as note-taking makes the idea transfer in both directions.
 3. **Sub-agents** — a specialized agent works in a clean window and returns only a condensed summary, often 1,000–2,000 tokens. See [Research & Team Memory](research-and-memory.md).
-4. **Just-in-time retrieval** — hold lightweight identifiers (file paths, queries, links) and load the actual content at runtime, instead of pre-loading everything. This is how you already work: you do not memorize the codebase, you remember where things are.
+4. **Just-in-time retrieval** — hold lightweight identifiers (file paths, queries, links) and load the actual content at runtime, instead of pre-loading everything. This is how you already work. You do not memorize the codebase; you remember where things are.
 
 ---
 
@@ -73,7 +73,7 @@ A semester-long randomized controlled trial in an introductory CS course put 979
 Three things fall out of that table:
 
 1. **Publishing a policy is worth almost nothing.** A text reminder, which is structurally what a written standard *is*, produced a gain of 0.08. Reading these pages is not the same as practising this.
-2. **Writing beats selecting beats reading.** The best condition cost 37 minutes and roughly tripled the retained gain over passive reading. That is one meeting.
+2. **Writing a prompt and having it critiqued retained 0.24 at seven weeks; reading about prompting retained 0.15.** The best condition cost 37 minutes, which is one meeting.
 3. **Everything decays.** The best condition lost more than half its gain in seven weeks, and seven weeks is about a third of a build season. Practise it in ordinary code review, or it goes away.
 
 ---

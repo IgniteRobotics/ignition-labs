@@ -66,12 +66,12 @@ If you read nothing else on these pages, read this.
 > 2. Spec first. No spec, no code.
 > 3. One format, and it is OpenSpec.
 > 4. Tests before implementation. Nothing edits them once implementation starts.
-> 5. The agent's job is to disagree with you. It flips about half the time you push — so stop pushing.
-> 6. Never let it grade its own homework.
-> 7. Green is a floor, not a ceiling.
-> 8. Context is a budget — and it gets cleared at every boundary.
+> 5. Configure it to disagree with you. It flips about half the time you push back, so stop pushing.
+> 6. It does not review its own output.
+> 7. Green does not mean correct.
+> 8. Clear context at every boundary.
 > 9. Simulate before you deploy. Replay after you compete.
-> 10. Enforce with machines. Request with prose.
+> 10. If a rule matters, a machine checks it.
 > 11. Disclose, and defend.
 > 12. Nothing leaves undocumented.
 

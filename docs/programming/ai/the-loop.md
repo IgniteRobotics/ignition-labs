@@ -1,6 +1,6 @@
 # The SDD Loop
 
-Spec-driven development is not "write a document, then code." That is a waterfall with a new hat, and it fails the same way.
+Spec-driven development is more than "write a document, then code." Writing the document once and never revisiting it is waterfall, and it fails for waterfall's reasons.
 
 SDD is a loop with a verification ladder in the middle of it. The spec's job is to make each rung of that ladder decidable.
 
@@ -8,7 +8,7 @@ SDD is a loop with a verification ladder in the middle of it. The spec's job is 
 
 ## What spec-driven development actually is
 
-The specification, not your prompt and not the chat history, is the single source of truth for the change. You write down what has to be true before the code exists. The agent builds against that document. You check the build against that document. The document is the artifact; the conversation is exhaust.
+The specification, not your prompt and not the chat history, is the single source of truth for the change. You write down what has to be true before the code exists. The agent builds against that document. You check the build against that document. The document is what gets reviewed and committed. The chat log is not kept.
 
 | Way of working | Where the intent lives | What survives the session |
 |---|---|---|
@@ -22,7 +22,7 @@ Three properties make a spec a spec. Miss any one and you have a wiki page:
 2. **Observable** — every requirement is something you could write a test for.
 3. **A diff** against what the system already promises, not a fresh essay each time.
 
-Why this matters more with an agent than without one. An agent has no memory of what you meant. Next session it is a stranger with your codebase and no context. The spec is the only thing that carries your intent across that gap, and §"the rule that is not optional" below is what happens when it can't.
+Why this matters more with an agent than without one. An agent has no memory of what you meant. Next session it starts with your codebase and no memory of the last one. The spec is the only thing that carries your intent across that gap, and §"the rule that is not optional" below is what happens when it can't.
 
 ---
 
@@ -56,7 +56,7 @@ Rungs 3 and 5 bracket the implementation. Rungs 6 through 9 are the ones teams s
 
 Most changes skip this. Reach for it when rung 1 ended with a question the repository cannot answer: a vendor API nobody has used, a control approach nobody has built, a mechanism whose behaviour nobody has measured.
 
-It is optional. What it produces is not.
+The rung is optional. Once you take it, the document it produces is not.
 
 > **Research that leaves no document did not happen.** The output is a Markdown file in the knowledge base, with citations, committed. Not a chat transcript, not a summary in someone's head, not a Slack message.
 
@@ -107,7 +107,7 @@ The half people skip: confirm the tests fail. A test that passes against an unim
 
 ### Who writes them
 
-Order is absolute. Authorship is earned.
+The order never changes. Who writes the tests depends on how far you are through the training.
 
 - **Before you are trained in this loop:** a person writes the tests.
 - **After:** the agent may author them here at rung 3, first or at the earliest once the interface is defined, with a person reviewing them and watching them fail.
@@ -127,7 +127,7 @@ Then the number that should change how you write specs:
 
 > On **ambiguous** problems, hardcoding jumped to **44.4%, 33.3%, and 22.2%** across the three agents — from near zero.
 
-Ambiguity is what causes the cheating. Not malice and not a bad model: an underspecified problem where "make the test pass" is the only legible goal.
+Ambiguity is what causes the cheating. The cause is an underspecified problem where "make the test pass" is the only legible goal, not malice and not a weak model.
 
 That is the argument for spec-first, and it is causal rather than aesthetic. A vague requirement is a standing invitation to special-case, and roughly a third of the time the invitation gets accepted.
 
@@ -139,13 +139,13 @@ That is the argument for spec-first, and it is causal rather than aesthetic. A v
 | Held-out cases the agent never sees | Heuristics that fit the visible cases |
 | A human reads the diff for special-casing | What the machines miss |
 
-That benchmark also found held-out tests produced **both false positives and false negatives**. Heuristics sometimes passed them. Held-out tests are necessary and they are not sufficient. A person still reads the diff.
+That benchmark also found held-out tests produced **both false positives and false negatives**. Heuristics sometimes passed them. Held-out tests are worth having and they are not enough on their own. A person still reads the diff.
 
 ---
 
 ## Rungs 5 and 6: green, then simulate
 
-**Green means the assertions passed. Simulate means somebody watched it.**
+**Green tells you the assertions passed. Simulating tells you somebody watched the mechanism move.**
 
 WPILib's physics simulation models mechanism motion without modifying your non-simulation code. It updates state from the commanded inputs and generates simulated sensor readings for the next timestep, and vendor `SimState` APIs update simulated device state while the regular device APIs stay in the code under test.
 
@@ -169,7 +169,7 @@ A `FakeIndexer` passes and teaches nothing. A simulated TalonFX with the real ge
 | 8 Field | driver ergonomics, real-world timing, alliance interactions | intermittents that need many repetitions |
 | 9 Replay | *exactly what happened*, deterministically, at speed | anything not logged |
 
-Rung 7 is where sign errors live, and no amount of simulation finds them. Simulation raises the floor; it does not replace the bench.
+Rung 7 is where sign errors live, and no amount of simulation finds them. Simulation catches scheduler and state bugs. It cannot catch a wiring inversion, and only the bench can.
 
 ---
 

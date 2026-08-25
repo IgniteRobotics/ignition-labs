@@ -66,7 +66,7 @@ Harnesses expose **deterministic gates**. In Claude Code these are hooks: shell 
 
 The distinction is the part worth memorizing:
 
-> **A prompt asks. A hook enforces.**
+> **A prompt is a request the model can ignore. A hook is a shell command that runs either way.**
 >
 > If a rule matters, it goes in a hook, in CI, or in a test — not in a paragraph the agent is asked to remember.
 
@@ -113,7 +113,7 @@ This also upgrades a rule you already have. "Never paste anything you would not 
 ## What to take away
 
 1. The harness is a system you configure, not a chatbox you type into.
-2. Configuration beats model choice. Spend your attention accordingly.
+2. How the harness is configured affected scores more than which model was used. Spend your attention accordingly.
 3. FRC has an unusually good feedback signal. Use it. It is what makes agent output checkable.
 4. If a rule matters, a machine enforces it.
 5. Never let one session touch untrusted input, sensitive data, and the outside world at the same time.

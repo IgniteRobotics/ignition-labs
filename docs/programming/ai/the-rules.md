@@ -10,7 +10,7 @@ Rules 1–4 are about the artifacts. Rules 5–8 are about controlling the agent
 
 **Every repository has a constitution: a short file of non-negotiable principles that every change is checked against, and that the agent reads before it does anything.**
 
-The idea is borrowed from GitHub's Spec Kit, which numbers its articles so a review can cite one: Article III is a Test-First Imperative, Article IX is Integration-First Testing. Kiro calls the same idea steering files. Claude Code and Codex read `AGENTS.md`. The name varies; the function does not.
+The idea is borrowed from GitHub's Spec Kit, which numbers its articles so a review can cite one: Article III is a Test-First Imperative, Article IX is Integration-First Testing. Kiro calls the same idea steering files. Claude Code and Codex read `AGENTS.md`. Different names, same file doing the same job.
 
 **The distinction that makes it useful:** the spec changes every change; the constitution changes once a season.
 
@@ -18,7 +18,7 @@ The idea is borrowed from GitHub's Spec Kit, which numbers its articles so a rev
 
 ### A starting constitution
 
-Copy this into any Ignite repository and adapt it. Twelve articles, short on purpose. A constitution nobody has read is decoration.
+Copy this into any Ignite repository and adapt it. Twelve articles, short on purpose, because a constitution has to be short enough that people actually read it.
 
 ```markdown
 # Constitution — Ignite Robotics robot code
@@ -113,7 +113,7 @@ The reason is measured, not aesthetic: ambiguity is what makes an agent special-
 
 **`ADDED` / `MODIFIED` / `REMOVED` requirement sections, observable requirements, GIVEN/WHEN/THEN scenarios. Validate before review.**
 
-The reason is not that OpenSpec wins some abstract comparison. It is that **a spec everyone writes differently is a spec nobody can review quickly**, and review speed decides how much you ship during a six-week build. The format also gives you the one-scenario-one-test mapping for free, which no free-form document does.
+We picked OpenSpec because **a spec everyone writes differently is a spec nobody can review quickly**, and review speed decides how much you ship during a six-week build. No abstract comparison of formats came into it. The format also gives you the one-scenario-one-test mapping for free, which no free-form document does.
 
 Pin the version at the start of the season and write the pinned commands into `AGENTS.md`.
 
@@ -129,11 +129,11 @@ Two independent controls, because the thing being defended against is an agent e
 
 ---
 
-## Rule 5: The agent's job is to disagree with you
+## Rule 5: Configure it to disagree with you
 
-**Configure it, prompt it, and review it so that agreement is expensive. An agent that never tells you you are wrong is not being helpful; it is being useless in a way that feels good.**
+**Configure it, prompt it, and review it so that agreement is expensive. An agent that never tells you you are wrong is useless in a way that feels helpful.**
 
-This is not a vibe. It is the best-measured failure mode in the field.
+This is the best-measured failure mode in the field.
 
 ### It caves when challenged
 
@@ -145,7 +145,7 @@ Two and a half years of model progress moved the mean from 46% to 48.7%. This is
 
 ### Warmth makes it worse, and benchmarks do not see it
 
-Controlled experiments across five models trained to be warmer and more empathetic found **error rates rising 10 to 30 percentage points**, with warm models significantly more likely to validate incorrect user beliefs, *particularly when the user's message expressed sadness*. Critically, this happened **despite preserved performance on standard benchmarks**.
+Controlled experiments across five models trained to be warmer and more empathetic found **error rates rising 10 to 30 percentage points**, with warm models significantly more likely to validate incorrect user beliefs, *particularly when the user's message expressed sadness*. This happened **despite preserved performance on standard benchmarks**.
 
 A frustrated student at midnight is exactly the emotional register that triggers it.
 
@@ -161,11 +161,11 @@ A frustrated student at midnight is exactly the emotional register that triggers
 
 And the harder discipline, which is the inverse: when it disagrees with you, that is data, not an obstacle.
 
-The build-season failure mode is someone re-prompting until the agent agrees. Re-prompting until you get the answer you wanted is not verification. It is the same act as running the test again until it passes.
+The build-season failure mode is someone re-prompting until the agent agrees. Re-prompting until you get the answer you wanted is the same act as re-running a test until it passes.
 
 ---
 
-## Rule 6: Never let it grade its own homework
+## Rule 6: It does not review its own output
 
 **The thing that wrote the code does not decide whether the code is good.**
 
@@ -175,15 +175,15 @@ A better model does not grade itself more honestly. It grades itself more confid
 
 Three separations, cheapest first:
 
-1. **Fresh context.** Review in a new session with no memory of writing it.
-2. **Read-only reviewer.** A subagent whose tool list is read-and-search-only *structurally cannot* turn a review into a rewrite.
-3. **A different model, or a person.** Reserve for changes touching control logic or safety.
+1. **Fresh context:** review in a new session with no memory of writing it.
+2. **Read-only reviewer:** a subagent whose tool list is read-and-search-only *structurally cannot* turn a review into a rewrite.
+3. **A different model, or a person:** reserve for changes touching control logic or safety.
 
 Rung 10 of the loop is a human defending the diff, and no amount of agent review substitutes for it.
 
 ---
 
-## Rule 7: Green is a floor, not a ceiling
+## Rule 7: Green does not mean correct
 
 **Passing tests means "not obviously broken." It does not mean correct, and it never means general.**
 
@@ -199,7 +199,7 @@ If nobody can answer, nobody understands the change yet.
 
 ---
 
-## Rule 8: Context is a budget; clear it at the boundaries
+## Rule 8: Clear context at every boundary
 
 **The smallest sufficient context beats the largest available one. Pasting four files in is not being thorough. See [Context & Prompts](context-and-prompts.md).**
 
@@ -215,7 +215,7 @@ What crosses a boundary is the artifact, never the conversation. If it matters a
 
 ---
 
-## Rule 10: Enforce with machines, request with prose
+## Rule 10: If a rule matters, a machine checks it
 
 **If a rule matters, it is a hook, a CI check, or a test. Everything else is a reminder.**
 
@@ -233,6 +233,6 @@ A hook fires whether or not the model cooperates. A paragraph in a standards doc
 
 ## Rule 12: Nothing leaves the session undocumented
 
-**The change is not done when it works. It is done when the spec is archived, the engineering decision is written down *with the options that were rejected*, and anything the agent got wrong about this repository has been written into `AGENTS.md` so the next person does not re-teach it.**
+**Working code is the middle of the change. It is done when the spec is archived, the engineering decision is written down *with the options that were rejected*, and anything the agent got wrong about this repository has been written into `AGENTS.md` so the next person does not re-teach it.**
 
-A team that loses 100% of its members every four years cannot afford to learn the same lesson twice. This is the only rung on the ladder that survives graduation. See [Research & Team Memory](research-and-memory.md).
+A team that loses 100% of its members every four years cannot afford to learn the same lesson twice. Written-down decisions are what a new member inherits; everything else leaves with the person who knew it. See [Research & Team Memory](research-and-memory.md).

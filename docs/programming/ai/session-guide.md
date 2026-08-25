@@ -58,11 +58,11 @@ Then say the last line twice: caught between two, pick the earlier one. A test-o
 
 Walk the top row first: four entry points, one sequence, everyone ends in the same place. Track D entering at M6 usually draws a question. Answer it here rather than deferring, because it is the same argument as the tier boundary below. Veterans are not asked to redo M0–M5; they are asked to acquire the one skill the ladder exists to guarantee before the tooling is handed over. As of 2026-08-18 our own repositories contained zero test files across three seasons, so this is measured, not asserted.
 
-Then drop to the coloured bands and say the sentence the whole session hangs on:
+Then drop to the coloured bands and say the sentence the rest of the session rests on:
 
-> **Your AI tier is not a preference and it is not a negotiation. It is a function of where you are on this line.**
+> **Where you are on this line sets your AI tier. Nobody negotiates it.**
 
-Green starts after M6 because everything that makes agentic development safe is a verification skill: writing a test before the thing it tests, running a mechanism in simulation, reading telemetry, telling *green* from *correct*. That is M6's content. Green tier is not a reward for finishing M6; it is only *possible* after M6.
+Green starts after M6 because everything that makes agentic development safe is a verification skill: writing a test before the thing it tests, running a mechanism in simulation, reading telemetry, telling *green* from *correct*. That is M6's content. M6 is what makes Green tier *possible*, rather than something Green tier is handed out for.
 
 ### Slide 5: How you move
 
@@ -74,7 +74,7 @@ Say plainly that the ladder is self-guided and that this session is not a milest
 
 Read the table, then slow down on the last row. Finishing M7 in December does not clear you for agentic use in January. M8 has to be done too, and it is two more sessions. Somebody discovers this at kickoff every year. The slide exists in August so that nobody has to.
 
-The commit-access consequence is real and it is published in advance on purpose. It is not a threat; it is the alternative to an argument in January that nobody can win.
+The commit-access consequence is real and it is published in advance on purpose. Publishing it in August is the alternative to an argument in January that nobody can win.
 
 ### Slide 7: What the ladder unlocks
 
@@ -113,7 +113,7 @@ Part two proper starts here. The goal of this stretch is **calibration, not proh
 
 The 2026 Game Manual adds nothing. We searched it for *artificial intelligence*, *AI*, *generative*, *machine learning*, *LLM*, *ChatGPT*, and *Copilot*, and got one hit: a stray image caption reading "AI-generated content may be incorrect."
 
-**So: we are permitted, and we are unguided.** Everything that follows is Ignite filling that gap on purpose. If someone thinks a rule is too strict, they are right that FIRST does not require it, and wrong that this makes it arbitrary. That is a conversation worth having out loud.
+**So we are permitted, and we are unguided.** Everything that follows is Ignite filling that gap on purpose. If someone thinks a rule is too strict, they are right that FIRST does not require it, and wrong that this makes it arbitrary. That is a conversation worth having out loud.
 
 ### Slide 11: Everyone else is already doing this
 
@@ -157,7 +157,7 @@ Verification means running it, testing it, simulating it, or checking it against
 
 Three sentences, then move on:
 
-1. The problem is not the tool. It is the sequencing and the verification.
+1. The failure is in the sequencing and the verification, not in the tool.
 2. Everything we ask you to do exists because of one of those three slides.
 3. The rest of the session is what to do about it.
 
@@ -174,7 +174,7 @@ The question is never who typed the characters. It is whether you can explain an
 - **Dependency:** you trust a vendor library does what its documentation says. You need to know what it does, not how it works.
 - **Decision:** picking a control strategy, decomposing a mechanism, choosing a gain, structuring an auto routine.
 
-**AI-generated control logic is a decision wearing a dependency's clothes.** Say it, then stop talking.
+**Control logic an agent wrote is still your decision, whoever typed it.** Say it, then stop talking.
 
 ### Slide 17: It is a harness, not a chatbot
 
@@ -186,9 +186,9 @@ The better question is **"what can it see, what can it run, and how does it find
 
 The diagram is the centrepiece of this part. Do not walk all eleven rungs. The picture already did that. Point at three things, in this order:
 
-1. **The ratio.** One box builds. Five verify. Say it out loud as a ratio: *"you spend one step writing the feature and five steps finding out whether it works."* That is the most useful thing on the slide, and it reframes the whole method as being mostly about checking.
+1. **The ratio:** one box builds. Five verify. Say it out loud as a ratio: *"you spend one step writing the feature and five steps finding out whether it works."* It reframes the whole method as being mostly about checking.
 2. **The three red rungs** — RED, SIMULATE, REPLAY. These are the ones teams skip under pressure and then lose matches to.
-3. **The bar underneath.** The constitution is checked at every rung, and it is the same file all season. You come back to it on slide 26.
+3. **The bar underneath:** the constitution is checked at every rung, and it is the same file all season. You come back to it on slide 26.
 
 **On rung 3, be precise**, because this is the question people ask: the *order* is non-negotiable, the *authorship* is earned. Untrained, a person writes the tests. Once you are trained in this loop, **the agent may write the tests from scenarios you specified**, and you review them and watch them fail before a line of the feature exists. At every level, once implementation begins, nothing edits them. The right-hand callout on the slide says this; say it anyway.
 
@@ -198,7 +198,7 @@ The dashed box is rung 1b, research: optional, and covered on the loop page in t
 
 The table shows what each rung catches and what it cannot. The line that lands:
 
-> **Simulation raises the floor. It does not replace the bench.**
+> **Simulation catches scheduler and state bugs. Only the bench catches a wiring inversion.**
 
 Rung 7 is where sign errors live (inverted motors, swapped CAN IDs, a gear ratio entered upside down) and no amount of simulation finds them.
 
@@ -218,7 +218,7 @@ The table contrasts three ways of working, and the third column is the one that 
 2. **Observable** — every requirement is something you could write a test for.
 3. **A diff** against what the system already promises, not a fresh essay each time.
 
-**Why this matters more with an agent than without one:** an agent has no memory of what you meant. Next session it is a stranger with no context. The spec is the only thing that carries your intent across that gap, and slide 22 is what happens when it can't.
+**Why this matters more with an agent than without one:** an agent has no memory of what you meant. Next session it starts with no memory of the last one. The spec is the only thing that carries your intent across that gap, and slide 22 is what happens when it can't.
 
 *(Cuttable at 45 minutes only if you are confident the room already knows what a spec is. Usually they don't.)*
 
@@ -240,7 +240,7 @@ Three coding agents, in an environment where cheating was easy. On clearly-speci
 
 Not malice. An underspecified problem where "make the test pass" is the only legible goal.
 
-**This is the single most important slide in the deck**, and its placement is deliberate: it lands *after* they have seen a sharp spec and its test, so they know exactly what "specified" looks like. It converts everything that follows from process imposed on them into something that visibly protects them.
+**Its placement is deliberate.** It lands *after* they have seen a sharp spec and its test, so they know exactly what "specified" looks like. It converts everything that follows from process imposed on them into something that visibly protects them.
 
 ### Slide 23: OpenSpec: a change is a folder
 
@@ -289,7 +289,7 @@ Ties back to the bar under the diagram on slide 18.
 
 **The distinction to land:** the spec changes every change; the constitution changes once a season.
 
-**Read the snippet out loud.** It is Article II, verbatim from the real file, and the same rung-3 rule from slide 18. Notice the *form*: specific enough to check, short enough to read, written so a reviewer can point at it. Vague articles ("write good code") are decoration. That contrast is the teaching.
+**Read the snippet out loud.** It is Article II, verbatim from the real file, and the same rung-3 rule from slide 18. Notice the *form*: specific enough to check, short enough to read, written so a reviewer can point at it. Vague articles ("write good code") cannot be checked in review, which is the contrast to draw.
 
 Other tools call this steering files or house rules. Same job, different name.
 
@@ -305,7 +305,7 @@ Then the test for what belongs in the file, which is the line people remember:
 
 ## Activity (slides 28–31, 16 min)
 
-**This block is where behaviour actually changes.** In the controlled trial, reading about prompting retained 0.15 at seven weeks; writing one and having it critiqued retained 0.24. Everything before this slide is setup for this slide.
+**This block is where behaviour actually changes.** In the controlled trial, reading about prompting retained 0.15 at seven weeks; writing one and having it critiqued retained 0.24.
 
 ### Setup (slides 29–30, 2 min)
 
@@ -347,8 +347,8 @@ Tell people the full list with the evidence under each rule lives in the docs, t
 Pick these three and spend the time here:
 
 1. **Spec first. No spec, no code.** — because of slide 22
-2. **The agent's job is to disagree with you.** — because of slide 13
-3. **Green is a floor, not a ceiling.** — passing tests is not correct, and in FRC the specific failure is an auto that works from exactly the position it was tested from
+2. **Configure it to disagree with you** — because of slide 13
+3. **Green does not mean correct** — passing tests is not correctness, and in FRC the specific failure is an auto that works from exactly the position it was tested from
 
 ---
 
@@ -392,4 +392,4 @@ Cutting part one entirely is a false economy in a room with new members in it. S
 
 **Never cut the activity to fit.** A 20-minute session with the activity beats a 60-minute session without it, and the trial data is unambiguous about which way that trade goes.
 
-**If you are cutting to 20, keep slides 4, 18 and 20.** The ladder is what makes the tier boundaries land as consequences instead of restrictions, the loop picture is the one thing a returning member can look at once and use, and slide 20 is the only place the method itself is defined. Everything else hangs off those three.
+**If you are cutting to 20, keep slides 4, 18 and 20.** The ladder is what makes the tier boundaries land as consequences instead of restrictions, a returning member can look at the loop picture once and use it, and slide 20 is the only place the method itself is defined. Everything else hangs off those three.

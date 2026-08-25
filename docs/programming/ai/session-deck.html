@@ -227,7 +227,7 @@ kbd{font-family:"IBM Plex Mono",ui-monospace,monospace;border:1px solid var(--ru
   <h1>Programming<br>at Ignite</h1>
   <p class="lede soft">Part one: the ladder you are on. Part two: how we work with AI.</p>
   <p class="src">About seventy-five minutes &middot; bring paper &middot; <kbd>n</kbd> toggles facilitator notes</p>
-  <div class="notes"><b>Before you start:</b> paper and pens for everyone. Do not demo a live agent: it eats the clock and turns the room into spectators. If you only have 45 minutes, Part One compresses to slides 4 and 7, never to nothing. See the cut paths in the session guide.</div>
+  <div class="notes"><b>Before you start:</b> paper and pens for everyone. Do not demo a live agent. It eats the clock and turns the room into spectators. If you only have 45 minutes, Part One compresses to slides 4 and 7, never to nothing. See the cut paths in the session guide.</div>
 </section>
 
 <section class="slide divider" data-part="Part 1 &middot; The program" data-clock="0:00">
@@ -307,9 +307,9 @@ kbd{font-family:"IBM Plex Mono",ui-monospace,monospace;border:1px solid var(--ru
       <text class="pl-t g" x="802" y="160">GREEN &#183; AFTER M6</text>
       <text class="pl-ts" x="802" y="177">FULL AGENTIC USE, SPEC AND TESTS FIRST.</text>
     </svg>
-    <figcaption>One sequence, ten milestones. Your track decides where you get on. Your <em>position</em> decides what AI tooling you are cleared for: that is the band underneath. Everyone converges at M9.</figcaption>
+    <figcaption>One sequence, ten milestones. Your track decides where you get on. Your <em>position</em> decides what AI tooling you are cleared for, which is the band underneath. Everyone converges at M9.</figcaption>
   </figure>
-  <div class="notes"><b>Spend real time here.</b> Walk the top row first: four entry points, one sequence, everyone ends in the same place. Then drop to the bands and say the sentence the whole session hangs on: <em>your AI tier is not a preference and it is not a conversation, it is a function of where you are on this line.</em> M6 is the boundary because M6 is where you learn to know your code is wrong before the robot does. Green tier is not a reward for finishing M6. It is only possible after M6.</div>
+  <div class="notes"><b>Spend real time here.</b> Walk the top row first: four entry points, one sequence, everyone ends in the same place. Then drop to the bands and say the sentence the rest of the session rests on: <em>where you are on this line sets your AI tier, and nobody negotiates it.</em> M6 is the boundary because M6 is where you learn to know your code is wrong before the robot does. M6 is what makes Green tier possible, rather than something Green tier is handed out for.</div>
 </section>
 
 <section class="slide" data-part="Part 1 &middot; The program" data-clock="0:06">
@@ -465,8 +465,8 @@ kbd{font-family:"IBM Plex Mono",ui-monospace,monospace;border:1px solid var(--ru
       <p>Control strategy. Subsystem decomposition. Auto routine structure. Every gain.</p>
     </div>
   </div>
-  <p class="lede wide">AI-generated control logic is a <strong>decision wearing a dependency's clothes.</strong></p>
-  <div class="notes">Say it, then stop talking. It is the line that decides whether the tier system reads as reasoned or arbitrary.</div>
+  <p class="lede wide">Control logic an agent wrote is <strong>still your decision</strong>, whoever typed it.</p>
+  <div class="notes">Say it, then stop talking. If this line doesn't land, the tier boundaries read as arbitrary for the rest of the session.</div>
 </section>
 
 <section class="slide" data-part="Part 2 &middot; How we work" data-clock="0:30">
@@ -559,13 +559,13 @@ kbd{font-family:"IBM Plex Mono",ui-monospace,monospace;border:1px solid var(--ru
   </table>
   </div>
   <p class="lede wide">Rung 7 is where sign errors live, and <strong>no amount of simulation finds them.</strong></p>
-  <div class="notes"><b>The line that lands:</b> simulation raises the floor, it does not replace the bench. Rung 9 is why we pull the log before we touch anything after a bad match. It turns a story into a regression test.</div>
+  <div class="notes"><b>The line that lands:</b> simulation catches scheduler and state bugs, and only the bench catches a wiring inversion. Rung 9 is why we pull the log before we touch anything after a bad match. It turns a story into a regression test.</div>
 </section>
 
 <section class="slide" data-part="Part 2 &middot; How we work" data-clock="0:36">
   <span class="eyebrow">Spec-driven development, defined</span>
   <h2 style="max-width:26ch">The spec is the source of truth. Not the prompt, not the chat.</h2>
-  <p class="wide"><strong>SDD means you write down what has to be true before the code exists</strong>, in a reviewable file. The agent builds against that file. You check the build against that file. The document is the artifact; the conversation is exhaust.</p>
+  <p class="wide"><strong>SDD means you write down what has to be true before the code exists</strong>, in a reviewable file. The agent builds against that file. You check the build against that file. The document is what gets reviewed and committed. The chat log is not kept.</p>
   <div class="scroll">
   <table class="grid">
     <tr><th>Way of working</th><th>Where the intent lives</th><th>What survives the session</th></tr>
@@ -574,7 +574,7 @@ kbd{font-family:"IBM Plex Mono",ui-monospace,monospace;border:1px solid var(--ru
     <tr class="k"><td>Spec-driven</td><td><strong>a committed file, written first</strong></td><td><strong>the file, and the tests it produced</strong></td></tr>
   </table>
   </div>
-  <p class="lede wide">An agent has no memory of what you meant. Next session it is a stranger.<br><strong>The spec is the only thing that carries your intent across that gap.</strong></p>
+  <p class="lede wide">An agent has no memory of what you meant. Next session it starts with no memory of the last one.<br><strong>The spec is the only thing that carries your intent across that gap.</strong></p>
   <div class="notes"><b>The definition to say out loud:</b> the spec, not the prompt and not the chat history, is the single source of truth for the change. Three properties make a spec a spec: it is written <em>before</em>, its requirements are <em>observable</em> (you could write a test), and it is a <em>diff</em> against what the system already promises. Miss any one and you have a wiki page, not a spec.</div>
 </section>
 
@@ -624,9 +624,9 @@ void stallDuringIntakeReverses() {
     <div class="stat"><span class="fig">0&ndash;2%</span><span class="cap">hardcoded the answer when the problem was <strong>clearly specified</strong></span></div>
     <div class="stat"><span class="fig hot">22&ndash;44%</span><span class="cap">hardcoded the answer when the problem was <strong>ambiguous</strong></span></div>
   </div>
-  <p class="lede wide">This is not malice. It is an underspecified problem where <em>"make the test pass"</em> is the only goal it can read.</p>
+  <p class="lede wide">Nothing here is deliberate. The problem was underspecified, and <em>"make the test pass"</em> was the only goal it could read.</p>
   <p class="src">Gabor, Lynch &amp; Rosenfeld 2026. Also observed: editing the tests, and deleting them after they passed</p>
-  <div class="notes"><b>Land this one if you land nothing else.</b> It turns "write a spec first" from a rule someone imposed into a thing that visibly protects them.</div>
+  <div class="notes"><b>Give this one room.</b> It turns "write a spec first" from a rule someone imposed into a thing that visibly protects them.</div>
 </section>
 
 <section class="slide" data-part="Part 2 &middot; How we work" data-clock="0:43">
@@ -682,7 +682,7 @@ Requirement: jamRetryCount must
       </ul>
     </div>
   </div>
-  <div class="notes"><b>Two rules to say out loud:</b> a requirement with no numbers isn't a requirement, and a scenario that names an internal field is broken. Both are review-enforceable in about four seconds.</div>
+  <div class="notes"><b>Two rules to say out loud:</b> a requirement with no numbers isn't a requirement, and a scenario that names an internal field is broken. Both are things a reviewer can check at a glance.</div>
 </section>
 
 <section class="slide" data-part="Part 2 &middot; How we work" data-clock="0:47">
@@ -693,7 +693,7 @@ Requirement: jamRetryCount must
       <h3>How you do it</h3>
       <ul class="bul" style="gap:.5em">
         <li style="font-size:.95em">Only when the answer <strong>isn't already in the repo.</strong> Most changes skip this rung.</li>
-        <li style="font-size:.95em"><strong>This is the one rung where fanning out pays.</strong> Several agents, several sources, each in its own context, each returning a summary. Building is not like this.</li>
+        <li style="font-size:.95em"><strong>This is the one rung where fanning out pays.</strong> Several agents, several sources, each in its own context, each returning a summary. Building rungs stay on a single agent.</li>
         <li style="font-size:.95em">Every claim gets a link, a version, and a date. Not "the docs say."</li>
         <li style="font-size:.95em">Write down what you <strong>could not</strong> verify. That section is never empty by default.</li>
       </ul>
@@ -753,7 +753,7 @@ does:
   agent writes, edits, or deletes a test.</pre>
     </div>
   </div>
-  <div class="notes"><b>Read the snippet out loud.</b> It's the same rung-3 rule from slide 18, Notice the <em>form</em>: specific enough to check, short enough to read, and written so a reviewer can point at it. That is what an article looks like. Vague articles ("write good code") are decoration.</div>
+  <div class="notes"><b>Read the snippet out loud.</b> It's the same rung-3 rule from slide 18. Notice the <em>form</em>: specific enough to check, short enough to read, and written so a reviewer can point at it. Vague articles ("write good code") cannot be checked in review.</div>
 </section>
 
 <section class="slide" data-part="Part 2 &middot; How we work" data-clock="0:52">
@@ -795,7 +795,7 @@ does:
 <section class="slide divider" data-part="Part 2 &middot; Your turn" data-clock="0:54">
   <span class="eyebrow">Now you</span>
   <h1>Your turn</h1>
-  <p class="lede soft">Paper out. Reading about this does not stick. Writing one does.</p>
+  <p class="lede soft">Paper out. Ten minutes of writing, and a partner to red-line it.</p>
 </section>
 
 <section class="slide" data-part="Part 2 &middot; Your turn" data-clock="0:54">
@@ -871,17 +871,17 @@ Guardrails: Don't touch src/test/. Don't
     <div>
       <h3 class="grouphead">How you drive it</h3>
       <ul class="rlist">
-        <li class="spot"><i>5</i><span>Its job is to disagree with you.</span></li>
-        <li><i>6</i><span>Never let it grade its own homework.</span></li>
-        <li class="spot"><i>7</i><span>Green is a floor, not a ceiling.</span></li>
-        <li><i>8</i><span>Context is a budget. Clear it at boundaries.</span></li>
+        <li class="spot"><i>5</i><span>Configure it to disagree with you.</span></li>
+        <li><i>6</i><span>It does not review its own output.</span></li>
+        <li class="spot"><i>7</i><span>Green does not mean correct.</span></li>
+        <li><i>8</i><span>Clear context at every boundary.</span></li>
       </ul>
     </div>
     <div>
       <h3 class="grouphead">How you close out</h3>
       <ul class="rlist">
         <li><i>9</i><span>Simulate before deploy. Replay after compete.</span></li>
-        <li><i>10</i><span>Enforce with machines. Request with prose.</span></li>
+        <li><i>10</i><span>If a rule matters, a machine checks it.</span></li>
         <li><i>11</i><span>Disclose, and defend.</span></li>
         <li><i>12</i><span>Nothing leaves undocumented.</span></li>
       </ul>
@@ -896,8 +896,8 @@ Guardrails: Don't touch src/test/. Don't
   <span class="eyebrow">If you take three away</span>
   <ul class="bul">
     <li><span class="lede wide">Spec first. No spec, no code.</span><br><span class="soft">Because of the 22&ndash;44%.</span></li>
-    <li><span class="lede wide">Its job is to disagree with you.</span><br><span class="soft">It flips about half the time you push, so stop pushing. Never type "are you sure?"</span></li>
-    <li><span class="lede wide">Green is a floor, not a ceiling.</span><br><span class="soft">Passing tests isn't correct. In FRC that's an auto that works from exactly the position you tested it from.</span></li>
+    <li><span class="lede wide">Configure it to disagree with you.</span><br><span class="soft">It flips about half the time you push, so stop pushing. Never type "are you sure?"</span></li>
+    <li><span class="lede wide">Green does not mean correct.</span><br><span class="soft">Passing tests isn't correct. In FRC that's an auto that works from exactly the position you tested it from.</span></li>
   </ul>
 </section>
 

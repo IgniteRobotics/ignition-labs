@@ -32,7 +32,7 @@ You will read about knowledge graphs and be tempted. Here is why the answer is n
 
 The expensive version costs what its name suggests. Microsoft's GraphRAG builds an entity graph over a corpus using a language model, then pre-summarizes it. It measurably improves answer comprehensiveness and diversity over plain search. It also costs so much to index that Microsoft published a follow-up, LazyGraphRAG, specifically to fix that: LazyGraphRAG matches plain search's indexing cost, which is **0.1% of the cost of full GraphRAG**, while reaching comparable answer quality at **more than 700 times lower query cost**.
 
-A thousand-fold cost reduction is not a tuning improvement. It is an admission the original approach was not viable for most corpora, and our corpus is a few thousand Markdown files.
+A thousand-fold cost reduction is an admission that the original approach was not viable for most corpora, and our corpus is a few thousand Markdown files.
 
 **And plain search wins anyway.** The harness study in [The Harness](the-harness.md) found `grep` beating vector search across every harness tested, with delivery mechanics mattering more than the retrieval strategy either way.
 
@@ -40,7 +40,7 @@ A thousand-fold cost reduction is not a tuning improvement. It is an admission t
 
 The "graph" is the link structure. The "index" is the filesystem. The "retrieval engine" ships with the operating system. It costs nothing, it works offline in a pit with no wifi, it survives any vendor going away, and a fifteen-year-old can review it in a pull request.
 
-It is also the better *learning* answer, which is what decides it. You can read the whole knowledge base. Nobody can read an embedding.
+It is also the better *learning* answer, which is what decides it. A student can open and read every file in the knowledge base. Nobody can open a vector index.
 
 ---
 
@@ -79,13 +79,13 @@ relates_to: [mech-swerve-module, inc-2026-week3-drift]
 1. **Definition of done gains a row.** A change that makes an engineering decision writes or updates a `decisions/` file. The spec says *what*; the decision file says *why this and not that*. They are different documents and the second is the one that is missing.
 2. **Competition procedure gains an incident rule.** Anything that goes wrong at an event gets an `incidents/` file **before the team leaves the venue.** Week 6 memory is unreliable and Week 40 memory is fiction.
 
-**If the corpus ever outgrows `grep`**, realistically several seasons out if ever, LazyGraphRAG over the same Markdown is an additive change, because the Markdown was the source of truth all along. That is the actual design win: the cheap answer is also the migration path.
+**If the corpus ever outgrows `grep`**, realistically several seasons out if ever, LazyGraphRAG over the same Markdown is an additive change, because the Markdown was the source of truth all along. The cheap answer is also the migration path, which is what makes it the right first choice.
 
 ---
 
 ## Research notes
 
-Rung 1b of [the loop](the-loop.md) is optional. Its output is not.
+Rung 1b of [the loop](the-loop.md) is optional. The document it produces, once you take that rung, is not.
 
 > **Research that leaves no document did not happen.**
 
@@ -175,6 +175,6 @@ The decomposition rule is: split by context boundaries, not by problem type. Seq
 >
 > Three agents building three subsystems that share `RobotContainer`: bad, and for the same reason we do not put three people on it.
 
-Rung 1b, research, is the one rung where fanning out actually pays. The building rungs are not.
+Rung 1b, research, is the one rung where fanning out actually pays. Keep the building rungs on a single agent.
 
 The 90.2% is the number someone will quote at you. The 15× belongs on the same slide.
