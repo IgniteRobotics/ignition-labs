@@ -25,11 +25,17 @@ They are also **not a milestone.** Nothing here has a test-out and nothing here 
 
 ## The one thing to understand first
 
-**FIRST has no rule about this.** We checked the 2026 Game Manual directly — searching the full manual for *artificial intelligence*, *AI*, *generative*, *machine learning*, *LLM*, *ChatGPT*, and *Copilot* returns exactly one hit, and it is a stray image caption reading "AI-generated content may be incorrect."
+**FIRST has a policy. It has no method.**
 
-There is no rule. Nobody is coming to enforce anything.
+The policy is a November 2023 statement from Chris Rake, FIRST's EVP & COO, and it is permissive. Can teams use AI to develop solutions? *"The answer is yes!"* — for code generation, sensor data, translation, outreach materials, and judging submissions. Judges have been *"instructed to evaluate teams based on what they have accomplished in relation to the judging criteria, and not discredit a team or rank them differently based on the tools they used."*
 
-So everything in these pages, and everything in the standard, is **Ignite deciding on purpose** — before the pressure of a build season decides for us. When somebody tells you a rule here is stricter than it needs to be, they are not wrong about the rule. They are wrong about who wrote it and why.
+It asks for one thing in return: **attribution.** *"Whether you're reusing or modifying code from a GitHub library or using generative language model-based tools, acknowledging the source is crucial."*
+
+That is the whole of it. The 2026 Game Manual adds nothing — searching the full manual for *artificial intelligence*, *AI*, *generative*, *machine learning*, *LLM*, *ChatGPT*, and *Copilot* returns one hit, and it is a stray image caption reading "AI-generated content may be incorrect."
+
+**So we are permitted, and we are unguided.** There is no verification standard, no guidance on when the tool hurts more than it helps, and nothing about what to do at 11pm in week five. That statement also predates the current generation of coding agents by more than two years, and FIRST said explicitly they may revisit it.
+
+Everything in these pages is **Ignite filling that gap on purpose** — before the pressure of a build season fills it for us. When somebody tells you a rule here is stricter than it needs to be, they are not wrong that FIRST doesn't require it. They are wrong that this makes it arbitrary.
 
 ---
 

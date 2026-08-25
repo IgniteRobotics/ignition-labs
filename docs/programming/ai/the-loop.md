@@ -6,6 +6,26 @@ Spec-driven development is not "write a document, then code." That is a waterfal
 
 ---
 
+## What spec-driven development actually is
+
+**The specification — not your prompt, not the chat history — is the single source of truth for the change.** You write down what has to be true before the code exists. The agent builds against that document. You check the build against that document. The document is the artifact; the conversation is exhaust.
+
+| Way of working | Where the intent lives | What survives the session |
+|---|---|---|
+| Vibe coding | the chat window | nothing |
+| Docs afterwards | somebody's memory, then a wiki | a document that rots |
+| **Spec-driven** | **a committed file, written first** | **the file, and the tests it produced** |
+
+**Three properties make a spec a spec.** Miss any one and you have a wiki page:
+
+1. **Written before** the implementation — not alongside it, not after.
+2. **Observable** — every requirement is something you could write a test for.
+3. **A diff** against what the system already promises, not a fresh essay each time.
+
+**Why this matters more with an agent than without one.** An agent has no memory of what you meant. Next session it is a stranger with your codebase and no context. The spec is the only thing that carries your intent across that gap — and §"the rule that is not optional" below is what happens when it can't.
+
+---
+
 ## The ladder
 
 ```

@@ -59,8 +59,21 @@ the full HTML manual for *artificial intelligence*, *AI*, *generative*, *machine
 *LLM*, *ChatGPT*, and *Copilot* returns exactly one hit, and it is a stray image caption
 reading "AI-generated content may be incorrect" under a logo in the season-overview section
 ([FIRST, 2026](https://firstfrc.blob.core.windows.net/frc2026/Manual/HTML/2026GameManual.htm)).
-There is no rule. The team's standard is right to say so, and the 2026 season did not
-change that.
+There is no rule *in the manual*, and the 2026 season did not change that.
+
+**There is, however, a policy, and it should not be described as an absence.**
+*Expanding the FIRST Toolbox with Artificial Intelligence* (Rake, 2023) is permissive and
+explicit: teams may use AI for code generation, sensor data, translation, outreach, and
+judging submissions; judges are "instructed to evaluate teams based on what they have
+accomplished in relation to the judging criteria, and not discredit a team or rank them
+differently based on the tools they used"; and the single ask in return is attribution
+([Rake, 2023](https://community.firstinspires.org/expanding-the-first-toolbox-with-artificial-intelligence)).
+
+So the accurate framing — and the one the student-facing material now uses — is **policy
+without method.** FIRST permits this and offers no verification standard, no guidance on
+when the tool costs more than it returns, and nothing about build-season pressure. The gap
+is real and it is ours to fill; "there is no rule" undersells the permission and oversells
+the vacuum.
 
 **This is the fact to open with, not close with.** Nobody is coming to enforce anything. Whatever standard Ignite holds, Ignite holds because it decided to.
 
@@ -1547,6 +1560,8 @@ Nikeghbal, N., Kargaran, A. H., Kolli, S., & Diesner, J. (2026, June 14). *Who f
 OpenSpec. (2026). *Fission-AI/OpenSpec* [Computer software]. GitHub. https://github.com/Fission-AI/OpenSpec
 
 Rasmussen, P., Paliychuk, P., Beauvais, T., Ryan, J., & Chalef, D. (2025). *Zep: A temporal knowledge graph architecture for agent memory* (arXiv:2501.13956). arXiv. https://arxiv.org/abs/2501.13956
+
+Rake, C. (2023, November 1). *Expanding the FIRST toolbox with artificial intelligence*. FIRST Community. https://community.firstinspires.org/expanding-the-first-toolbox-with-artificial-intelligence
 
 Robbes, R., Matricon, T., Degueule, T., Hora, A., & Zacchiroli, S. (2026, April 8). *Agentic much? Adoption of coding agents on GitHub* (arXiv:2601.18341v2). arXiv. https://arxiv.org/abs/2601.18341
 

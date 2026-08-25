@@ -199,7 +199,7 @@ kbd{font-family:"IBM Plex Mono",ui-monospace,monospace;border:1px solid var(--ru
 </style>
 
 <div class="rail">
-  <b id="railPart">Title</b><span class="pos" id="railPos">1 / 25</span>
+  <b id="railPart">Title</b><span class="pos" id="railPos">1 / 28</span>
   <span class="clock" id="railClock">0:00</span>
 </div>
 <div class="bar" id="bar" style="width:0"></div>
@@ -227,11 +227,12 @@ kbd{font-family:"IBM Plex Mono",ui-monospace,monospace;border:1px solid var(--ru
 
 <section class="slide divider" data-part="Part 1" data-clock="0:03">
   <span class="eyebrow">Part one &middot; What's actually true</span>
-  <h1>FIRST has no rule about this.</h1>
-  <p>We searched the 2026 Game Manual for <em>artificial intelligence</em>, <em>AI</em>, <em>generative</em>, <em>machine learning</em>, <em>LLM</em>, <em>ChatGPT</em>, and <em>Copilot</em>.</p>
-  <p><strong>One hit.</strong> A stray image caption reading "AI-generated content may be incorrect."</p>
-  <p class="lede">So every rule we have, Ignite wrote on purpose.</p>
-  <div class="notes"><b>Say it out loud:</b> nobody is coming to enforce anything. If someone thinks a rule is too strict they're arguing with us, not FIRST &mdash; and that's a conversation we want.</div>
+  <h1>FIRST has a policy.<br>It has no method.</h1>
+  <p><strong>The policy, November 2023, from their EVP &amp; COO.</strong> Can teams use AI? <em>"The answer is yes!"</em> Code generation, sensor data, outreach, judging submissions. Judges are <em>"instructed to evaluate teams based on what they have accomplished&hellip; and not discredit a team or rank them differently based on the tools they used."</em></p>
+  <p>It asks for exactly one thing: <strong>attribution.</strong> <em>"Acknowledging the source is crucial."</em></p>
+  <p class="lede">And that is the entire published guidance.</p>
+  <p class="src">Rake, C. (2023). <em>Expanding the FIRST toolbox with artificial intelligence.</em> FIRST Community &middot; the 2026 Game Manual adds nothing: one stray image caption, no rule</p>
+  <div class="notes"><b>The shape of this slide matters.</b> Don't say "there are no rules" &mdash; there is a policy, it is permissive, and it is two years older than the tools we're discussing. What it does <em>not</em> give you is any method: no verification standard, no guidance on when the tool hurts you, nothing about what to do at 11pm in week five. That gap is what the rest of the session fills, and it is Ignite's to fill, not FIRST's.</div>
 </section>
 
 <section class="slide" data-part="Part 1" data-clock="0:05">
@@ -295,7 +296,7 @@ kbd{font-family:"IBM Plex Mono",ui-monospace,monospace;border:1px solid var(--ru
   </ul>
 </section>
 
-<section class="slide divider" data-part="Part 2" data-clock="0:14">
+<section class="slide divider" data-part="Part 2" data-clock="0:15">
   <span class="eyebrow">Part two</span>
   <h1>How we do things</h1>
   <p class="lede soft">The line, the loop, the spec, and the constitution.</p>
@@ -387,8 +388,11 @@ kbd{font-family:"IBM Plex Mono",ui-monospace,monospace;border:1px solid var(--ru
     </svg>
     <figcaption>Dashed = optional. Solid blue = the only rung where you write the feature. Red outline = the three rungs teams skip and then lose matches to.</figcaption>
   </figure>
-  <p class="lede wide"><strong>One rung builds. Five verify.</strong> That ratio is the whole method.</p>
-  <div class="notes"><b>Don't walk all eleven.</b> Point at the ratio &mdash; one box builds, five check &mdash; then at the three red rungs, then at the bar underneath: the constitution is checked at every one of them, and it's the same file all season.</div>
+  <div class="cols" style="align-items:center">
+    <p class="lede wide"><strong>One rung builds. Five verify.</strong> That ratio is the whole method.</p>
+    <p class="wide" style="border-left:4px solid var(--hot);padding-left:1em"><strong>Rung 3 is yours to specify, not necessarily yours to type.</strong> The tests come from scenarios <em>you</em> wrote. Once you're trained in this loop, the agent may write them from your spec &mdash; and you review them and watch them fail before a line of the feature exists.</p>
+  </div>
+  <div class="notes"><b>Don't walk all eleven.</b> Point at the ratio &mdash; one box builds, five check &mdash; then at the three red rungs, then at the bar underneath. On rung 3, be precise: the <em>order</em> is non-negotiable, the <em>authorship</em> is earned. Untrained, a person writes the tests. Trained, the agent may write them from your scenarios. At every level, once implementation starts nothing edits them.</div>
 </section>
 
 <section class="slide" data-part="Part 2" data-clock="0:22">
@@ -409,6 +413,22 @@ kbd{font-family:"IBM Plex Mono",ui-monospace,monospace;border:1px solid var(--ru
 </section>
 
 <section class="slide" data-part="Part 2" data-clock="0:24">
+  <span class="eyebrow">Spec-driven development, defined</span>
+  <h2 style="max-width:26ch">The spec is the source of truth. Not the prompt, not the chat.</h2>
+  <p class="wide"><strong>SDD means you write down what has to be true before the code exists</strong>, in a reviewable file. The agent builds against that file. You check the build against that file. The document is the artifact; the conversation is exhaust.</p>
+  <div class="scroll">
+  <table class="grid">
+    <tr><th>Way of working</th><th>Where the intent lives</th><th>What survives the session</th></tr>
+    <tr><td>Vibe coding</td><td>the chat window</td><td class="no">nothing</td></tr>
+    <tr><td>Docs afterwards</td><td>somebody's memory, then a wiki</td><td class="no">a document that rots</td></tr>
+    <tr class="k"><td>Spec-driven</td><td><strong>a committed file, written first</strong></td><td><strong>the file, and the tests it produced</strong></td></tr>
+  </table>
+  </div>
+  <p class="lede wide">An agent has no memory of what you meant. Next session it is a stranger.<br><strong>The spec is the only thing that carries your intent across that gap.</strong></p>
+  <div class="notes"><b>The definition to say out loud:</b> the spec &mdash; not the prompt, not the chat history &mdash; is the single source of truth for the change. Three properties make a spec a spec: it is written <em>before</em>, its requirements are <em>observable</em> (you could write a test), and it is a <em>diff</em> against what the system already promises. Miss any one and you have a wiki page, not a spec.</div>
+</section>
+
+<section class="slide" data-part="Part 2" data-clock="0:26">
   <span class="eyebrow">Rung 2 &rarr; rung 3</span>
   <h2>One scenario becomes one test.</h2>
   <div class="cols">
@@ -446,7 +466,7 @@ void stallDuringIntakeReverses() {
   <div class="notes"><b>This is the payoff of the format.</b> A scenario you can't turn into a test is a scenario you haven't finished writing &mdash; and you find that out <em>before</em> the code exists. Note the numbers and units in the spec: "250 ms", not "a short delay". Article IV.</div>
 </section>
 
-<section class="slide" data-part="Part 2" data-clock="0:27">
+<section class="slide" data-part="Part 2" data-clock="0:29">
   <span class="eyebrow">The most important slide today</span>
   <h2>A vague spec is what makes it cheat.</h2>
   <p>Three coding agents, in an environment where cheating was easy.</p>
@@ -459,7 +479,7 @@ void stallDuringIntakeReverses() {
   <div class="notes"><b>Land this one if you land nothing else.</b> It turns "write a spec first" from a rule someone imposed into a thing that visibly protects them.</div>
 </section>
 
-<section class="slide" data-part="Part 2" data-clock="0:29">
+<section class="slide" data-part="Part 2" data-clock="0:31">
   <span class="eyebrow">How we write it down &middot; OpenSpec</span>
   <h2>A change is a folder, not a conversation.</h2>
   <div class="cols">
@@ -484,7 +504,7 @@ void stallDuringIntakeReverses() {
   <div class="notes"><b>Why a folder:</b> a spec everyone writes differently is a spec nobody can review quickly, and review speed is the whole game in a six-week build. The tell that someone gamed this: they can't say where the build diverged from the spec. Every real build diverges &mdash; pointing at where <em>is</em> the evidence it was load-bearing.</div>
 </section>
 
-<section class="slide" data-part="Part 2" data-clock="0:31">
+<section class="slide" data-part="Part 2" data-clock="0:33">
   <span class="eyebrow">The delta format</span>
   <h2>Three verbs, and requirements you can observe.</h2>
   <div class="cols">
@@ -515,44 +535,120 @@ Requirement: jamRetryCount must
   <div class="notes"><b>Two rules to say out loud:</b> a requirement with no numbers isn't a requirement, and a scenario that names an internal field is broken. Both are review-enforceable in about four seconds.</div>
 </section>
 
-<section class="slide" data-part="Part 2" data-clock="0:33">
-  <span class="eyebrow">The constitution</span>
-  <h2 style="max-width:24ch">The spec changes every change. This changes once a season.</h2>
+<section class="slide" data-part="Part 2" data-clock="0:35">
+  <span class="eyebrow">Rung 1b &middot; Research</span>
+  <h2>Research that leaves no document didn't happen.</h2>
   <div class="cols">
     <div class="card">
-      <h3>Twelve articles</h3>
-      <ul class="rules" style="grid-template-columns:1fr;gap:.15em">
-        <li>Simulation-First &mdash; including the mechanism</li>
-        <li class="spot">Test-First &mdash; non-negotiable as to order</li>
-        <li>Behaviour, Not Internals</li>
-        <li class="spot">Units Are Mandatory</li>
-        <li>Decisions Are Human</li>
-        <li>Current Season Only</li>
-        <li>Harness-Agnostic</li>
-        <li class="spot">Structured Notes, Clean Context</li>
-        <li>Enforced, Not Requested</li>
-        <li>Say the Cost</li>
-        <li>Disclose</li>
-        <li>Nothing Leaves Undocumented</li>
+      <h3>How you do it</h3>
+      <ul class="bul" style="gap:.5em">
+        <li style="font-size:.95em">Only when the answer <strong>isn't already in the repo.</strong> Most changes skip this rung.</li>
+        <li style="font-size:.95em"><strong>This is the one rung where fanning out pays.</strong> Several agents, several sources, each in its own context, each returning a summary. Building is not like this.</li>
+        <li style="font-size:.95em">Every claim gets a <strong>link, a version, and a date.</strong> Not "the docs say."</li>
+        <li style="font-size:.95em">Write down what you <strong>could not</strong> verify. That section is never empty by default.</li>
       </ul>
     </div>
-    <div class="card">
-      <h3>Why it's a separate file</h3>
-      <p style="font-size:.95em">It is read <strong>before every change</strong>, by you and by the agent. It is the thing each rung of the loop is checked against &mdash; the bar under the diagram.</p>
-      <p class="soft" style="margin-top:.8em;font-size:.95em">The test for whether something belongs in it:</p>
-      <p class="lede wide" style="margin-top:.4em;font-size:var(--step-0);font-weight:700">If you've explained it to an agent twice, it was a constitution line and you wrote it in a chat window instead.</p>
+    <div class="card good">
+      <h3>What you get out &mdash; and reuse</h3>
+      <pre>---
+id: res-2026-swerve-setpoint
+type: research
+question: Does setpoint optimization
+  change behaviour through a heading
+  discontinuity?
+status: answered
+sources_verified: 2026-01-14
+---
+## Answer          &lt;- short, up front
+## What we verified, and how
+## What we could NOT verify
+## References      &lt;- links + versions</pre>
     </div>
   </div>
-  <div class="notes"><b>Article IX is the load-bearing one</b> &mdash; enforced, not requested. A hook or a CI check fires whether or not the model cooperates; a paragraph doesn't. Everything else in the file is only as real as its enforcement.</div>
+  <p class="lede wide">Markdown, in the repo. <strong>Greppable, reviewable in a pull request, works in a pit with no wifi, and outlives whatever tool wrote it.</strong></p>
+  <div class="notes"><b>Three things to land.</b> (1) <em>Why a file:</em> we lose everyone within four years &mdash; the second person to need this answer is always under more time pressure than the first. (2) <em>Why Markdown:</em> plain text beats a database here; grep beat vector search in every harness tested, and a graph you can't read is worse than a folder you can. (3) <em>How you reuse it:</em> <code>sources_verified</code> is the shelf life &mdash; a claim about version 2026.2.1 is a claim <em>about</em> 2026.2.1, and next season somebody needs to know that before trusting it. Then clear context: what crosses into the spec is the file, never the conversation.</div>
 </section>
 
-<section class="slide divider" data-part="Part 3" data-clock="0:36">
+<section class="slide" data-part="Part 2" data-clock="0:38">
+  <span class="eyebrow">The constitution</span>
+  <h2 style="max-width:26ch">A short file of rules the agent reads before every change.</h2>
+  <div class="cols">
+    <div class="card">
+      <h3>What it is</h3>
+      <ul class="bul" style="gap:.5em">
+        <li style="font-size:.95em">A file called <code>constitution.md</code>, committed next to the code.</li>
+        <li style="font-size:.95em"><strong>A spec describes one change. A constitution describes what is true of every change.</strong></li>
+        <li style="font-size:.95em">Numbered articles, so a review can cite one: <em>"that's Article IV."</em></li>
+        <li style="font-size:.95em">The spec changes every change. <strong>This changes once a season.</strong></li>
+      </ul>
+      <p class="soft" style="margin-top:.9em;font-size:.92em">Other tools call it steering files, or house rules. Same job.</p>
+    </div>
+    <div class="card good">
+      <h3>A real article, verbatim</h3>
+      <pre>## Article II &mdash; Test-First
+   (NON-NEGOTIABLE as to order)
+
+No implementation before tests exist,
+are reviewed, and are confirmed to FAIL.
+
+Authorship follows training, order never
+does:
+- Before SDD training: tests are written
+  by a person.
+- After: the agent may author tests, if
+  written first &mdash; or once the interface
+  is defined &mdash; and reviewed and
+  confirmed FAILING by a person.
+- Always: once implementation begins, no
+  agent writes, edits, or deletes a test.</pre>
+    </div>
+  </div>
+  <div class="notes"><b>Read the snippet out loud.</b> It's the same rung-3 rule from slide 11, but notice the <em>form</em> &mdash; it is specific enough to check, short enough to read, and written so a reviewer can point at it. That is what an article looks like. Vague articles ("write good code") are decoration.</div>
+</section>
+
+<section class="slide" data-part="Part 2" data-clock="0:40">
+  <span class="eyebrow">All twelve articles</span>
+  <div class="rulegroups">
+    <div>
+      <h3 class="grouphead">The code</h3>
+      <ul class="rlist">
+        <li><i>I</i><span>Simulation-First &mdash; including the mechanism</span></li>
+        <li class="spot"><i>II</i><span>Test-First &mdash; non-negotiable as to order</span></li>
+        <li><i>III</i><span>Behaviour, Not Internals</span></li>
+        <li class="spot"><i>IV</i><span>Units Are Mandatory</span></li>
+      </ul>
+    </div>
+    <div>
+      <h3 class="grouphead">The tools</h3>
+      <ul class="rlist">
+        <li><i>V</i><span>Decisions Are Human</span></li>
+        <li><i>VI</i><span>Current Season Only</span></li>
+        <li><i>VII</i><span>Harness-Agnostic</span></li>
+        <li class="spot"><i>VIII</i><span>Structured Notes, Clean Context</span></li>
+      </ul>
+    </div>
+    <div>
+      <h3 class="grouphead">The team</h3>
+      <ul class="rlist">
+        <li class="spot"><i>IX</i><span>Enforced, Not Requested</span></li>
+        <li><i>X</i><span>Say the Cost</span></li>
+        <li><i>XI</i><span>Disclose</span></li>
+        <li><i>XII</i><span>Nothing Leaves Undocumented</span></li>
+      </ul>
+    </div>
+  </div>
+  <p class="lede wide" style="border-left:4px solid var(--hot);padding-left:1em"><strong>The test for what belongs in it:</strong> if you have explained something to an agent twice, it was a constitution line and you wrote it in a chat window instead.</p>
+  <p class="src">The full file, ready to copy: <strong>Working with AI &rarr; The Rules</strong> on the team site</p>
+  <div class="notes"><b>Don't read twelve.</b> Read <em>one</em> &mdash; Article IX, Enforced Not Requested &mdash; and say why it's load-bearing: a hook or a CI check fires whether or not the model cooperates; a paragraph doesn't. Every other article is only as real as its enforcement.</div>
+</section>
+
+<section class="slide divider" data-part="Part 3" data-clock="0:42">
   <span class="eyebrow">Part three</span>
   <h1>Your turn</h1>
   <p class="lede soft">Paper out. This is the part that actually sticks.</p>
 </section>
 
-<section class="slide" data-part="Part 3" data-clock="0:36">
+<section class="slide" data-part="Part 3" data-clock="0:42">
   <span class="eyebrow">Every good prompt has five parts</span>
   <ul class="bul">
     <li><strong>Problem</strong> &mdash; what's wrong, stated as a <em>symptom</em></li>
@@ -564,7 +660,7 @@ Requirement: jamRetryCount must
   <p class="lede wide">Everyone skips the last one. It's the one that encodes your tier.</p>
 </section>
 
-<section class="slide" data-part="Part 3" data-clock="0:38">
+<section class="slide" data-part="Part 3" data-clock="0:44">
   <span class="eyebrow">Spot the difference</span>
   <div class="cols">
     <div class="card bad">
@@ -592,7 +688,7 @@ Guardrails: Don't touch src/test/. Don't
   <p class="lede wide">The left one <strong>states a belief</strong> &mdash; exactly what slide 6 said never to do.</p>
 </section>
 
-<section class="slide" data-part="Part 3" data-clock="0:40">
+<section class="slide" data-part="Part 3" data-clock="0:46">
   <span class="eyebrow">Activity &middot; in pairs &middot; on paper</span>
   <div class="steps">
     <div class="step"><span class="t">6 min</span><span class="b"><strong>Write one prompt</strong> using all five parts, for one of the scenarios below.</span></div>
@@ -604,13 +700,13 @@ Guardrails: Don't touch src/test/. Don't
   <div class="notes"><b>Protect this block.</b> No coding experience needed &mdash; the five parts are about how you ask, not Java. Pair newer members with experienced ones. Reading about this retains 0.15 at seven weeks; writing one and having it critiqued retains 0.24.</div>
 </section>
 
-<section class="slide divider" data-part="Part 4" data-clock="0:52">
+<section class="slide divider" data-part="Part 4" data-clock="0:58">
   <span class="eyebrow">Part four</span>
   <h1>The rules</h1>
   <p class="lede soft">Twelve of them. Each has evidence under it.</p>
 </section>
 
-<section class="slide" data-part="Part 4" data-clock="0:52">
+<section class="slide" data-part="Part 4" data-clock="0:58">
   <span class="eyebrow">Twelve rules, three jobs</span>
   <div class="rulegroups">
     <div>
@@ -646,7 +742,7 @@ Guardrails: Don't touch src/test/. Don't
   <div class="notes"><b>Show, don't read.</b> The grouping is the message &mdash; four rules about what you write down, four about how you drive the tool, four about what outlives the session. Then go straight to the three for today.</div>
 </section>
 
-<section class="slide" data-part="Part 4" data-clock="0:55">
+<section class="slide" data-part="Part 4" data-clock="1:01">
   <span class="eyebrow">If you take three away</span>
   <ul class="bul">
     <li><span class="lede wide">Spec first. No spec, no code.</span><br><span class="soft">Because of the 22&ndash;44%.</span></li>
@@ -655,7 +751,7 @@ Guardrails: Don't touch src/test/. Don't
   </ul>
 </section>
 
-<section class="slide" data-part="Close" data-clock="0:58">
+<section class="slide" data-part="Close" data-clock="1:03">
   <span class="eyebrow">What next</span>
   <h2>Three things.</h2>
   <ul class="bul">

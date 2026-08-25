@@ -2,7 +2,7 @@
 
 Facilitator notes for the 45-minute session. **This is the presenter's page, not the student's** — students get [the other pages](README.md) and the slides.
 
-**[Open the slide deck](session-deck.html)** — 25 slides, self-contained, works offline. Arrow keys or click to advance, `n` toggles presenter notes on the current slide, `f` for fullscreen. The rail across the top shows the **target clock time** for each slide, so you can tell at a glance whether you are behind. Slide numbers below match it.
+**[Open the slide deck](session-deck.html)** — 28 slides, self-contained, works offline. Arrow keys or click to advance, `n` toggles presenter notes on the current slide, `f` for fullscreen. The rail across the top shows the **target clock time** for each slide, so you can tell at a glance whether you are behind. Slide numbers below match it.
 
 ---
 
@@ -10,9 +10,9 @@ Facilitator notes for the 45-minute session. **This is the presenter's page, not
 
 **Audience:** everyone, all tiers. Assume some people in the room have never written a line of Java and some have shipped competition code. The session is designed so nobody needs a laptop and nobody needs to be at the Green tier.
 
-**Time:** the full deck runs **about 60 minutes**, of which 12 are hands-on. It is written to be the team's standing overview of how we work, not only a first session — so it carries real detail on the loop, OpenSpec, and the constitution.
+**Time:** the full deck runs **about 65 minutes**, of which 12 are hands-on. It is written to be the team's standing overview of how we work, not only a first session — so it carries real detail on the loop, OpenSpec, and the constitution.
 
-**For a 45-minute slot, skip slides 4, 7, 12, and 16** and hold the activity to 10 minutes. That keeps the whole argument and every artifact; what you lose is depth you can point at in the docs. Full cut paths are at the bottom of this page.
+**For a 45-minute slot, skip slides 4, 7, 12, 17, and 20** and hold the activity to 10 minutes. That keeps the whole argument and every artifact; what you lose is depth you can point at in the docs. Full cut paths are at the bottom of this page.
 
 Protect the activity in every version. If you are running long, cut from Part 2 or Part 4 — never Part 3.
 
@@ -31,11 +31,11 @@ Protect the activity in every version. If you are running long, cut from Part 2 
 | Time | Slides | Part | Mode |
 |---|---|---|---|
 | 0:00–0:03 | 1–2 | Cold open — write a prediction | Written, individual |
-| 0:03–0:14 | 3–7 | What's actually true | Presented |
-| 0:14–0:36 | 8–17 | **How we do things** — the line, the loop, the spec, the constitution | Presented |
-| 0:36–0:52 | 18–21 | **Activity — write a prompt, red-line a partner's** | Written, in pairs |
-| 0:52–0:58 | 22–24 | The rules | Presented |
-| 0:58–1:00 | 25 | What next | Presented |
+| 0:03–0:15 | 3–7 | What's actually true | Presented |
+| 0:15–0:42 | 8–20 | **How we do things** — the line, the loop, SDD, OpenSpec, research, the constitution | Presented |
+| 0:42–0:58 | 21–24 | **Activity — write a prompt, red-line a partner's** | Written, in pairs |
+| 0:58–1:03 | 25–27 | The rules | Presented |
+| 1:03–1:05 | 28 | What next | Presented |
 
 ---
 
@@ -56,13 +56,17 @@ Expect most guesses in the +20% to +50% range for question 1.
 
 The goal of this part is **calibration, not prohibition.** Nobody leaves thinking AI is banned. They leave knowing the specific ways it fails.
 
-### Slide 3 — FIRST has no rule
+### Slide 3 — FIRST has a policy, not a method
 
-We searched the 2026 Game Manual directly for *artificial intelligence*, *AI*, *generative*, *machine learning*, *LLM*, *ChatGPT*, and *Copilot*. One hit, and it is a stray image caption reading "AI-generated content may be incorrect."
+**Get the shape of this right — do not say "there are no rules."** There is a policy, and it is permissive.
 
-**Say this out loud:** nobody is coming to enforce anything. Everything we do here, Ignite decided on purpose. If someone thinks a rule is too strict, they are arguing with us, not with FIRST — and that is a conversation we are happy to have.
+[*Expanding the FIRST Toolbox with Artificial Intelligence*](https://community.firstinspires.org/expanding-the-first-toolbox-with-artificial-intelligence), Chris Rake, EVP & COO, November 2023. Can teams use AI? *"The answer is yes!"* — code generation, sensor data, translation, outreach, judging submissions. Judges are *"instructed to evaluate teams based on what they have accomplished in relation to the judging criteria, and not discredit a team or rank them differently based on the tools they used."* It asks for one thing back: **attribution.**
 
-This matters more than it looks. A rule people believe is imposed from outside gets followed grudgingly and abandoned under pressure.
+**Then the actual point of the slide.** That is the entire published guidance. There is no verification standard, no method, no guidance on when the tool hurts more than it helps, and nothing about what to do at 11pm in week five. The statement also predates the current generation of coding agents by more than two years, and FIRST said they may revisit it.
+
+The 2026 Game Manual adds nothing — we searched it for *artificial intelligence*, *AI*, *generative*, *machine learning*, *LLM*, *ChatGPT*, and *Copilot*, and got one hit: a stray image caption reading "AI-generated content may be incorrect."
+
+**So: we are permitted, and we are unguided.** Everything that follows is Ignite filling that gap on purpose. If someone thinks a rule is too strict, they are right that FIRST does not require it — and wrong that this makes it arbitrary. That is a conversation worth having out loud.
 
 ### Slide 4 — Everyone else is already doing this
 
@@ -112,7 +116,7 @@ Three sentences, then move on:
 
 ---
 
-## Part 2 — How we do things (slides 8–17, 22 min)
+## Part 2 — How we do things (slides 8–20, 27 min)
 
 This is the part that turns the deck from a session into an overview. It answers "so what do you actually want me to do," and it is the section a returning member should be able to re-watch in ten minutes.
 
@@ -137,7 +141,9 @@ The diagram is the centrepiece of this part. **Do not walk all eleven rungs** �
 
 1. **The ratio.** One box builds. Five verify. Say it out loud as a ratio: *"you spend one step writing the feature and five steps finding out whether it works."* That is the most useful thing on the slide, and it reframes the whole method as being mostly about checking.
 2. **The three red rungs** — RED, SIMULATE, REPLAY. These are the ones teams skip under pressure and then lose matches to.
-3. **The bar underneath.** The constitution is checked at every rung, and it is the same file all season. You come back to it on slide 17.
+3. **The bar underneath.** The constitution is checked at every rung, and it is the same file all season. You come back to it on slide 19.
+
+**On rung 3, be precise**, because this is the question people ask: the *order* is non-negotiable, the *authorship* is earned. Untrained, a person writes the tests. Once you are trained in this loop, **the agent may write the tests from scenarios you specified** — and you review them and watch them fail before a line of the feature exists. At every level, once implementation begins, nothing edits them. The right-hand callout on the slide says this; say it anyway.
 
 The dashed box is rung 1b, research — optional, and covered on the loop page in the docs rather than in this session.
 
@@ -153,7 +159,23 @@ Also worth saying: rung 9 is why we **pull the log before touching anything** af
 
 *(Cuttable at 45 minutes — the docs carry the same table.)*
 
-### Slide 13 — One scenario becomes one test
+### Slide 13 — What spec-driven development actually is
+
+The definition, said plainly: **the spec — not the prompt, not the chat history — is the single source of truth for the change.** You write down what has to be true before the code exists. The agent builds against the document. You check the build against the document.
+
+The table contrasts three ways of working, and the third column is the one that lands: vibe coding leaves nothing behind, docs-afterwards leave a document that rots, spec-driven leaves the file *and* the tests it produced.
+
+**Three properties make a spec a spec.** Miss any one and you have a wiki page:
+
+1. **Written before** the implementation, not alongside or after.
+2. **Observable** — every requirement is something you could write a test for.
+3. **A diff** against what the system already promises, not a fresh essay each time.
+
+**Why this matters more with an agent than without one:** an agent has no memory of what you meant. Next session it is a stranger with no context. The spec is the only thing that carries your intent across that gap — and slide 15 is what happens when it can't.
+
+*(Cuttable at 45 minutes only if you are confident the room already knows what a spec is. Usually they don't.)*
+
+### Slide 14 — One scenario becomes one test
 
 The payoff of the spec format, side by side: the GIVEN/WHEN/THEN scenario on the left, the JUnit test on the right, with the mapping visible.
 
@@ -163,7 +185,7 @@ The point to make: **a scenario you cannot turn into a test is a scenario you ha
 
 Point at the numbers in the left column too: *"250 ms"*, not *"a short delay."* That is Article IV, and it is the difference between a requirement and a wish.
 
-### Slide 14 — The money slide
+### Slide 15 — The money slide
 
 Three coding agents, in an environment where cheating was easy. On clearly-specified problems, hardcoding was rare — **0 to 2.1%**. On **ambiguous** problems it jumped to **44.4%, 33.3%, and 22.2%**.
 
@@ -173,7 +195,7 @@ Not malice. An underspecified problem where "make the test pass" is the only leg
 
 **This is the single most important slide in the deck**, and its placement is deliberate: it lands *after* they have seen a sharp spec and its test, so they know exactly what "specified" looks like. It converts everything that follows from process imposed on them into something that visibly protects them.
 
-### Slide 15 — OpenSpec: a change is a folder
+### Slide 16 — OpenSpec: a change is a folder
 
 Two halves: what gets committed, and the three commands.
 
@@ -185,7 +207,7 @@ The folder — `proposal.md`, `design.md`, `tasks.md`, and the delta under `spec
 
 Say the version-pinning line — pin at the start of the season, put the pinned commands in `AGENTS.md` — but don't dwell.
 
-### Slide 16 — The delta format
+### Slide 17 — The delta format
 
 Three verbs — `ADDED`, `MODIFIED`, `REMOVED` — because **the spec is a diff against what the system already promises**, not a fresh document each time.
 
@@ -196,27 +218,53 @@ The right-hand card is the useful half. Two rules, both enforceable in about fou
 
 *(Cuttable at 45 minutes — slide 13 already showed a good spec, and the docs carry the format in full.)*
 
-### Slide 17 — The constitution
+### Slide 18 — Research, and why it ends in a file
 
-The closing move of Part 2, and it ties back to the bar under the diagram on slide 11.
+Rung 1b. Optional — most changes skip it — but what it produces is not.
 
-**The distinction to land:** the spec changes every change; the constitution changes once a season. It is read before every change, by you and by the agent.
+> **Research that leaves no document didn't happen.**
 
-The twelve articles are on screen. Do not read them. Read **one** — Article IX, *Enforced, Not Requested* — and explain why it is load-bearing: a hook or a CI check fires whether or not the model cooperates; a paragraph does not. Everything else in that file is only as real as its enforcement.
+Three things to land, in this order:
 
-Then the test for what belongs in it, which is the line people remember:
+**How you do it.** Only when the answer isn't already in the repo. This is **the one rung where fanning out actually pays** — several agents reading several sources, each in its own context, each returning a summary. Building is not like that and should stay single-agent. Every claim gets a link, a version, and a date; "the docs say" is not a citation. And you write down what you *could not* verify — that section is never empty by default, and an unverified claim recorded as unverified is useful where the same claim recorded as fact is a trap.
+
+**Why Markdown, in the repo.** Because it is greppable, reviewable in a pull request, works in a pit with no wifi, and outlives whatever tool wrote it. Someone will ask why not a database or a knowledge graph — the short answer is that plain text search beat semantic search in every harness that has been tested, and a graph nobody can read is worse than a folder anybody can.
+
+**How you use it later.** Point at the frontmatter. `sources_verified` is the shelf life: a claim about vendor version 2026.2.1 is a claim *about* 2026.2.1, and next season somebody needs to know that before trusting it. `status` tells you whether it was answered, partial, or a dead end — dead ends are worth keeping, because the next person will have the same idea.
+
+Close with the context rule: **what crosses into the spec is the file, never the conversation.** The dead ends and raw page content that got you to the answer are distractors by the time you are writing requirements.
+
+### Slide 19 — What a constitution is
+
+Ties back to the bar under the diagram on slide 11.
+
+**The definition:** a short file — `constitution.md` — committed next to the code, that the agent reads before every change. **A spec describes one change. A constitution describes what is true of every change.** Articles are numbered so a review can cite one: *"that's Article IV."*
+
+**The distinction to land:** the spec changes every change; the constitution changes once a season.
+
+**Read the snippet out loud.** It is Article II, verbatim from the real file — the same rung-3 rule from slide 11, but notice the *form*: specific enough to check, short enough to read, written so a reviewer can point at it. Vague articles ("write good code") are decoration. That contrast is the teaching.
+
+Other tools call this steering files or house rules. Same job, different name.
+
+### Slide 20 — All twelve articles
+
+Do not read twelve. Read **one** — Article IX, *Enforced, Not Requested* — and explain why it is load-bearing: a hook or a CI check fires whether or not the model cooperates; a paragraph does not. **Every other article is only as real as its enforcement.**
+
+Then the test for what belongs in the file, which is the line people remember:
 
 > **If you have explained something to an agent twice, it was a constitution line and you wrote it in a chat window instead.**
 
-## Part 3 — Activity (slides 18–21, 12 min)
+*(Cuttable at 45 minutes — slide 19 already showed what an article looks like, and the full file is in the docs.)*
+
+## Part 3 — Activity (slides 21–24, 12 min)
 
 **This is the part that actually changes behaviour.** In the controlled trial, reading about prompting retained 0.15 at seven weeks; writing one and having it critiqued retained 0.24. Everything before this slide is setup for this slide.
 
-### Setup (slides 19–20, 2 min)
+### Setup (slides 22–23, 2 min)
 
 Show the five components — Problem, Context, Method, Level, Guardrails — and the bad-versus-good example. Point out that the bad one *states a belief* ("I think the kP is too high"), which is exactly what slide 6 said never to do.
 
-### Write (slide 21, 6 min)
+### Write (slide 24, 6 min)
 
 Each person writes one prompt, on paper, using all five components, for a scenario from the deck. Offer two scenarios so the room is not identical:
 
@@ -239,25 +287,25 @@ Take two or three examples of leaked answers from the room. Do not debug the pro
 
 ---
 
-## Part 4 — The rules (slides 22–24, 6 min)
+## Part 4 — The rules (slides 25–27, 6 min)
 
-### Slide 23 — All twelve, in three groups
+### Slide 26 — All twelve rules, in three groups
 
 Show them. Do not read them. **The grouping is the message:** four rules about what you write down, four about how you drive the tool, four about what outlives the session.
 
 Tell people the full list with the evidence under each rule lives in the docs, then go straight to the next slide.
 
-### Slide 24 — The three for today
+### Slide 27 — The three for today
 
 Pick these three and spend the time here:
 
-1. **Spec first. No spec, no code.** — because of slide 14
+1. **Spec first. No spec, no code.** — because of slide 15
 2. **The agent's job is to disagree with you.** — because of slide 6
 3. **Green is a floor, not a ceiling.** — passing tests is not correct, and in FRC the specific failure is an auto that works from exactly the position it was tested from
 
 ---
 
-## Slide 25 — What next (2 min)
+## Slide 28 — What next (2 min)
 
 - The pages: [Working with AI](README.md), and the rule list in [The Rules](the-rules.md)
 - The policy is separate and it is [the AI Use Standard](../ai-use-standard.md). Which tier you are on, and what you must disclose, is there.
@@ -266,6 +314,9 @@ Pick these three and spend the time here:
 ---
 
 ## Facilitator FAQ
+
+**"So does FIRST allow this or not?"**
+Yes, explicitly, since November 2023 — and judges are instructed not to rank you differently for it. What FIRST does not give you is any method, which is the gap everything here fills. Attribution is the one thing they actually ask for, and our disclosure block already exceeds it.
 
 **"Is AI banned for new members?"**
 No. Explaining a concept, decoding an error message, and quizzing you are fine at every tier. Writing your code for you is not, at the start. The standard has the specifics.
@@ -285,11 +336,11 @@ Say so, with the reason. Every rule in the list has evidence under it, and evide
 
 | You have | Show | What you give up |
 |---|---|---|
-| **60 min** | everything | — |
-| **45 min** | skip 4, 7, 12, 16; activity to 10 min | verification-rung detail and the delta format — both in the docs |
-| **30 min** | the above, plus skip 9, 15, 23 | the OpenSpec mechanics; keeps the loop picture and the constitution |
-| **20 min** | 1–2, 5, 6, 11, 14, 18–21, 24 | everything but the prediction, the reveal, the two rules, the loop picture, the ambiguity finding, the full activity, and three rules to close |
+| **65 min** | everything | — |
+| **45 min** | skip 4, 7, 12, 17, 20; activity to 10 min | verification-rung detail, the delta format, the article list — all in the docs |
+| **30 min** | the above, plus skip 9, 16, 18, 26 | the OpenSpec mechanics and research; keeps the loop, the SDD definition, and the constitution |
+| **20 min** | 1–2, 5, 6, 11, 13, 15, 21–24, 27 | everything but the prediction, the reveal, the two rules, the loop picture, what SDD is, the ambiguity finding, the full activity, and three rules to close |
 
 **Never cut the activity to fit.** A 20-minute session with the activity beats a 60-minute session without it, and the trial data is unambiguous about which way that trade goes.
 
-**If you are cutting to 20, keep slide 11.** The loop picture is the one thing in the deck a returning member can look at once and use — it is the map everything else hangs off.
+**If you are cutting to 20, keep slides 11 and 13.** The loop picture is the one thing a returning member can look at once and use, and slide 13 is the only place the method itself is defined. Everything else hangs off those two.
