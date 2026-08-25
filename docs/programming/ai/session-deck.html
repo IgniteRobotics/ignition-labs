@@ -81,6 +81,11 @@ ul.bul li::before{content:"";position:absolute;left:0;top:.62em;width:.55em;heig
 .trio{display:flex;flex-wrap:wrap;gap:clamp(1.2rem,4vmin,3.5rem)}
 .trio .stat{flex:1 1 8ch}
 .trio .fig{font-size:var(--step-3)}
+.trio.compact{gap:clamp(.8rem,2.5vmin,1.6rem)}
+.trio.compact .fig{font-size:var(--step-2)}
+.trio.compact .cap{font-size:var(--step--1);max-width:20ch;line-height:1.35}
+.takeaway{display:flex;flex-direction:column;gap:.55em;border-left:4px solid var(--hot);padding-left:clamp(.8rem,2vmin,1.4rem)}
+.takeaway li{font-size:var(--step-0);line-height:1.32;max-width:none;padding-left:0}
 .src{
   font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:var(--step--1);
   color:var(--ink-soft);margin-top:auto;padding-top:1.2em;
@@ -160,7 +165,7 @@ kbd{font-family:"IBM Plex Mono",ui-monospace,monospace;border:1px solid var(--ru
 </style>
 
 <div class="rail">
-  <b id="railPart">Title</b><span class="pos" id="railPos">1 / 22</span>
+  <b id="railPart">Title</b><span class="pos" id="railPos">1 / 20</span>
   <span class="clock" id="railClock">0:00</span>
 </div>
 <div class="bar" id="bar" style="width:0"></div>
@@ -183,18 +188,12 @@ kbd{font-family:"IBM Plex Mono",ui-monospace,monospace;border:1px solid var(--ru
     <li><strong>How much faster do they think they were?</strong></li>
   </ul>
   <p class="soft">Keep the paper. We come back to it.</p>
-  <div class="notes"><b>Do not discuss answers yet.</b> The gap between what they wrote and slide 6 is the entire hook. Expect guesses of +20% to +50%.</div>
+  <div class="notes"><b>Do not discuss answers yet.</b> The gap between what they wrote and slide 5 is the entire hook. Expect guesses of +20% to +50%.</div>
 </section>
 
 <section class="slide divider" data-part="Part 1" data-clock="0:03">
-  <span class="eyebrow">Part one</span>
-  <h1>What's actually true</h1>
-  <p class="lede soft">Three findings. None of them say "don't."</p>
-</section>
-
-<section class="slide" data-part="Part 1" data-clock="0:03">
-  <span class="eyebrow">The rulebook</span>
-  <h2>FIRST has no rule about this.</h2>
+  <span class="eyebrow">Part one &middot; What's actually true</span>
+  <h1>FIRST has no rule about this.</h1>
   <p>We searched the 2026 Game Manual for <em>artificial intelligence</em>, <em>AI</em>, <em>generative</em>, <em>machine learning</em>, <em>LLM</em>, <em>ChatGPT</em>, and <em>Copilot</em>.</p>
   <p><strong>One hit.</strong> A stray image caption reading "AI-generated content may be incorrect."</p>
   <p class="lede">So every rule we have, Ignite wrote on purpose.</p>
@@ -225,30 +224,32 @@ kbd{font-family:"IBM Plex Mono",ui-monospace,monospace;border:1px solid var(--ru
 </section>
 
 <section class="slide" data-part="Part 1" data-clock="0:10">
-  <span class="eyebrow">Fast and forgettable</span>
-  <h2>You will go faster. You will remember less.</h2>
-  <div class="trio">
-    <div class="stat"><span class="fig">+14</span><span class="cap">points better on the day, out of 100</span></div>
-    <div class="stat"><span class="fig hot">&minus;18.9</span><span class="cap">points worse one week later, tested alone</span></div>
+  <span class="eyebrow">Two failure modes &mdash; and the two rules they buy you</span>
+  <h2 style="max-width:26ch">It makes you faster and shallower. Then it agrees with you.</h2>
+  <div class="cols">
+    <div class="card">
+      <h3>You remember less</h3>
+      <div class="trio compact">
+        <div class="stat"><span class="fig">+14</span><span class="cap">points better on the day</span></div>
+        <div class="stat"><span class="fig hot">&minus;18.9</span><span class="cap">points worse a week later, tested alone</span></div>
+      </div>
+      <p class="soft" style="margin-top:.7em"><em>"I didn't even think about the task &mdash; just copy-and-pasted."</em></p>
+    </div>
+    <div class="card">
+      <h3>It caves when you push</h3>
+      <div class="trio compact">
+        <div class="stat"><span class="fig hot">46%</span><span class="cap">flipped after nothing but "Are you sure?"</span></div>
+        <div class="stat"><span class="fig hot">48.7%</span><span class="cap">still flipping, 2026 frontier models</span></div>
+      </div>
+      <p class="soft" style="margin-top:.7em">Two and a half years of progress moved it 46% &rarr; 48.7%.</p>
+    </div>
   </div>
-  <p>Mental demand, time pressure, and effort all dropped substantially. So did engagement.</p>
-  <p class="lede wide">One participant: <em>"I didn't even think about the task &mdash; just copy-and-pasted."</em></p>
-  <p class="src">Gardella et al. 2026 &mdash; novices pairing with a human vs. with Copilot, retested after a week</p>
-  <div class="notes"><b>The line:</b> that's not an argument against the tool. It's an argument about <em>when</em> you use it.</div>
-</section>
-
-<section class="slide" data-part="Part 1" data-clock="0:12">
-  <span class="eyebrow">The failure nobody expects</span>
-  <h2>It will agree with you. Even when you're wrong.</h2>
-  <p>Ten models were given a task, then asked nothing but <strong>"Are you sure?"</strong></p>
-  <div class="trio">
-    <div class="stat"><span class="fig hot">46%</span><span class="cap">flipped their answer</span></div>
-    <div class="stat"><span class="fig">&minus;17%</span><span class="cap">accuracy lost &mdash; every model tested</span></div>
-    <div class="stat"><span class="fig hot">48.7%</span><span class="cap">mean flip rate when repeated on 2026 frontier models</span></div>
-  </div>
-  <p class="lede wide">Two and a half years of progress moved it from 46% to 48.7%.</p>
-  <p class="src">Laban et al. 2024 (FlipFlop) &middot; Nikeghbal et al. 2026 &mdash; seven frontier models</p>
-  <div class="notes"><b>Deliver plainly:</b> waiting will not fix this, and "are you sure?" is the single worst thing you can type.</div>
+  <ul class="takeaway">
+    <li><strong>Never ask it to do something you couldn't do yourself.</strong> Not "slower" &mdash; <em>unable</em>. If you can't do it, you can't tell whether it did.</li>
+    <li><strong>Never trust an answer you haven't verified.</strong> It is confident either way. Confidence is not evidence, and it will fold the moment you push back.</li>
+  </ul>
+  <p class="src">Gardella et al. 2026 &middot; Laban et al. 2024 (FlipFlop) &middot; Nikeghbal et al. 2026</p>
+  <div class="notes"><b>The two rules are the point of this slide</b> &mdash; the statistics are just why. Say the first one carefully: it is not "don't use it for hard things," it is "don't use it as a substitute for understanding." That distinction is the whole tier system in one sentence. And "are you sure?" is the single worst thing you can type.</div>
 </section>
 
 <section class="slide" data-part="Part 1" data-clock="0:14">
@@ -367,7 +368,7 @@ Guardrails: Don't touch src/test/. Don't
             WPILib docs.</pre>
     </div>
   </div>
-  <p class="lede wide">The left one <strong>states a belief</strong> &mdash; exactly what slide 8 said never to do.</p>
+  <p class="lede wide">The left one <strong>states a belief</strong> &mdash; exactly what slide 6 said never to do.</p>
 </section>
 
 <section class="slide" data-part="Part 3" data-clock="0:27">

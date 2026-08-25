@@ -2,7 +2,7 @@
 
 Facilitator notes for the 45-minute session. **This is the presenter's page, not the student's** — students get [the other pages](README.md) and the slides.
 
-**[Open the slide deck](session-deck.html)** — 22 slides, self-contained, works offline. Arrow keys or click to advance, `n` toggles presenter notes on the current slide, `f` for fullscreen. The rail across the top shows the **target clock time** for each slide, so you can tell at a glance whether you are behind. Slide numbers below match it.
+**[Open the slide deck](session-deck.html)** — 20 slides, self-contained, works offline. Arrow keys or click to advance, `n` toggles presenter notes on the current slide, `f` for fullscreen. The rail across the top shows the **target clock time** for each slide, so you can tell at a glance whether you are behind. Slide numbers below match it.
 
 ---
 
@@ -27,11 +27,11 @@ Facilitator notes for the 45-minute session. **This is the presenter's page, not
 | Time | Slides | Part | Mode |
 |---|---|---|---|
 | 0:00–0:03 | 1–2 | Cold open — write a prediction | Written, individual |
-| 0:03–0:15 | 3–9 | What's actually true | Presented |
-| 0:15–0:23 | 10–14 | The line and the loop | Presented |
-| 0:23–0:35 | 15–18 | **Activity — write a prompt, red-line a partner's** | Written, in pairs |
-| 0:35–0:43 | 19–21 | The rules | Presented |
-| 0:43–0:45 | 22 | What next | Presented |
+| 0:03–0:15 | 3–7 | What's actually true | Presented |
+| 0:15–0:23 | 8–12 | The line and the loop | Presented |
+| 0:23–0:35 | 13–16 | **Activity — write a prompt, red-line a partner's** | Written, in pairs |
+| 0:35–0:43 | 17–19 | The rules | Presented |
+| 0:43–0:45 | 20 | What next | Presented |
 
 ---
 
@@ -42,17 +42,17 @@ Facilitator notes for the 45-minute session. **This is the presenter's page, not
 > 1. An experienced programmer uses an AI coding tool on their own codebase. How much faster do they finish? Write a percentage.
 > 2. How much faster do they *think* they were? Write a percentage.
 
-**Do not discuss the answers yet.** Tell them to keep the paper. You come back to it on slide 6, and the gap between what they wrote and what the study found is the whole hook. Announcing the answer up front throws it away.
+**Do not discuss the answers yet.** Tell them to keep the paper. You come back to it on slide 5, and the gap between what they wrote and what the study found is the whole hook. Announcing the answer up front throws it away.
 
 Expect most guesses in the +20% to +50% range for question 1.
 
 ---
 
-## Part 1 — What's actually true (slides 3–9, 12 min)
+## Part 1 — What's actually true (slides 3–7, 12 min)
 
 The goal of this part is **calibration, not prohibition.** Nobody leaves thinking AI is banned. They leave knowing the specific ways it fails.
 
-### Slide 4 — FIRST has no rule
+### Slide 3 — FIRST has no rule
 
 We searched the 2026 Game Manual directly for *artificial intelligence*, *AI*, *generative*, *machine learning*, *LLM*, *ChatGPT*, and *Copilot*. One hit, and it is a stray image caption reading "AI-generated content may be incorrect."
 
@@ -60,13 +60,13 @@ We searched the 2026 Game Manual directly for *artificial intelligence*, *AI*, *
 
 This matters more than it looks. A rule people believe is imposed from outside gets followed grudgingly and abandoned under pressure.
 
-### Slide 5 — Everyone else is already doing this
+### Slide 4 — Everyone else is already doing this
 
 The first large-scale measurement studied 128,018 GitHub projects and found a **22.2–28.7% adoption rate** for coding agents, spanning every level of project maturity.
 
 **Why this slide exists:** it pre-empts the objection that this is a fringe concern. About a quarter of the open-source world is already here.
 
-### Slide 6 — The reveal
+### Slide 5 — The reveal
 
 > **Have them look at the paper they wrote three minutes ago.**
 
@@ -76,28 +76,29 @@ Let that sit for a second before moving on. Then the point:
 
 **These were experts, on their own code.** The exact population that would tell you the effect does not apply to them. It applies to mentors too — say that part, it buys you credibility.
 
-### Slide 7 — Fast and forgettable
+### Slide 6 — Two failure modes, two rules
 
-22 novice and intermediate programmers, pairing with a human versus pairing with Copilot, with a solo retest about a week later.
+This slide carries both findings side by side, then the two rules they buy you. **The rules are the point; the statistics are why.**
 
-- With Copilot: **~14 points higher** out of 100, large effect
-- Mental demand, time pressure, and effort all **substantially lower**
-- At retest: the AI condition showed an **18.88-point-larger drop**
-- Emotional engagement was significantly *lower* with the AI partner
+**Left — you remember less.** 22 novice and intermediate programmers, pairing with a human versus pairing with Copilot, retested alone about a week later. With Copilot they scored **~14 points higher** out of 100 on the day. At retest the AI condition showed an **18.88-point-larger drop**. Mental demand, time pressure, effort, and engagement all fell. One participant said they "didn't even think about the task" but "just copy-and-pasted."
 
-One participant said that with Copilot they "didn't even think about the task" but "just copy-and-pasted."
+**Right — it caves when you push.** Ten models, given a task, then asked nothing but *"Are you sure?"* — they flipped **46%** of the time and every one lost accuracy, averaging **17%**. Repeated in June 2026 across seven frontier models: a mean flip rate of **48.7%**. Two and a half years of progress moved it from 46% to 48.7%.
 
-**The line to deliver:** you will go faster and you will remember less. That is not an argument against the tool. It is an argument for when you use it.
+**Then the two rules.** Spend your time here, not on the numbers.
 
-### Slide 8 — It agrees with you
+> **Never ask it to do something you couldn't do yourself.**
 
-Ten models, given a classification task, then asked nothing more than *"Are you sure?"* — they flipped **46%** of the time, and every one lost accuracy, averaging a **17%** drop.
+Say this one carefully, because it is easy to hear wrong. It does not mean "don't use it for hard things." It means **don't use it as a substitute for understanding**. The test is not "could I do this faster?" — it is "if it hands me something wrong, would I know?" If the answer is no, you are not reviewing the output, you are hoping.
 
-That study is old, so: a June 2026 replication across seven frontier models found a mean flip rate of **48.7%**. Two and a half years of progress moved it from 46% to 48.7%.
+That distinction is the entire tier system in one sentence, and it is the honest answer to "why can't new members use it for everything." Not because we don't trust them. Because you cannot check work you couldn't have done.
 
-**The takeaway to say plainly:** this is not getting fixed by waiting, and "are you sure?" is the single worst thing you can type.
+> **Never trust an answer you haven't verified.**
 
-### Slide 9 — So what
+It is confident when it is right and confident when it is wrong — the tone carries no information. And per the left-hand column, the moment you push back it is roughly a coin flip whether it abandons a correct answer. So agreement is not confirmation, and neither is confidence.
+
+Verification means running it, testing it, simulating it, or checking it against the current docs. It does not mean asking the model whether it is sure — that is the one move guaranteed to make things worse.
+
+### Slide 7 — So what
 
 Three sentences, then move on:
 
@@ -107,11 +108,11 @@ Three sentences, then move on:
 
 ---
 
-## Part 2 — The line and the loop (slides 10–14, 8 min)
+## Part 2 — The line and the loop (slides 8–12, 8 min)
 
 Move quickly here. This part is orientation, and the details live in the docs.
 
-### Slide 11 — Dependency versus decision
+### Slide 9 — Dependency versus decision
 
 The question is never who typed the characters. It is whether you can explain and defend every decision in what you submit.
 
@@ -120,13 +121,13 @@ The question is never who typed the characters. It is whether you can explain an
 
 **AI-generated control logic is a decision wearing a dependency's clothes.** That sentence is the whole slide.
 
-### Slide 12 — It is a harness, not a chatbot
+### Slide 10 — It is a harness, not a chatbot
 
 A model in a loop with tools, permissions, and a feedback path. You cannot change the model. You can change everything else — and that configuration measurably matters more than which model you picked.
 
 The better question is **"what can it see, what can it run, and how does it find out it was wrong?"**
 
-### Slide 13 — The loop
+### Slide 11 — The loop
 
 Show the ladder. Do not walk all eleven rungs — point at three things:
 
@@ -134,7 +135,7 @@ Show the ladder. Do not walk all eleven rungs — point at three things:
 - Simulation is rung 6, and it is not the same as tests passing
 - Replay, rung 9, is how a competition failure becomes a regression test
 
-### Slide 14 — The money slide
+### Slide 12 — The money slide
 
 Three coding agents, in an environment where cheating was easy. On clearly-specified problems, hardcoding was rare — **0 to 2.1%**. On **ambiguous** problems it jumped to **44.4%, 33.3%, and 22.2%**.
 
@@ -146,15 +147,15 @@ Not malice. An underspecified problem where "make the test pass" is the only leg
 
 ---
 
-## Part 3 — Activity (slides 15–18, 12 min)
+## Part 3 — Activity (slides 13–16, 12 min)
 
 **This is the part that actually changes behaviour.** In the controlled trial, reading about prompting retained 0.15 at seven weeks; writing one and having it critiqued retained 0.24. Everything before this slide is setup for this slide.
 
-### Setup (slide 16–17, 2 min)
+### Setup (slides 14–15, 2 min)
 
-Show the five components — Problem, Context, Method, Level, Guardrails — and the bad-versus-good example. Point out that the bad one *states a belief* ("I think the kP is too high"), which is exactly what slide 8 said to never do.
+Show the five components — Problem, Context, Method, Level, Guardrails — and the bad-versus-good example. Point out that the bad one *states a belief* ("I think the kP is too high"), which is exactly what slide 6 said never to do.
 
-### Write (slide 18, 6 min)
+### Write (slide 16, 6 min)
 
 Each person writes one prompt, on paper, using all five components, for a scenario from the deck. Offer two scenarios so the room is not identical:
 
@@ -177,23 +178,23 @@ Take two or three examples of leaked answers from the room. Do not debug the pro
 
 ---
 
-## Part 4 — The rules (slides 19–21, 8 min)
+## Part 4 — The rules (slides 17–19, 8 min)
 
-### Slide 20 — All twelve
+### Slide 18 — All twelve
 
 Show them. Do not read them. Tell people the list lives in the docs and that each rule has evidence under it.
 
-### Slide 21 — The three for today
+### Slide 19 — The three for today
 
 Pick these three and spend the time here:
 
-1. **Spec first. No spec, no code.** — because of slide 14
-2. **The agent's job is to disagree with you.** — because of slide 8
+1. **Spec first. No spec, no code.** — because of slide 12
+2. **The agent's job is to disagree with you.** — because of slide 6
 3. **Green is a floor, not a ceiling.** — passing tests is not correct, and in FRC the specific failure is an auto that works from exactly the position it was tested from
 
 ---
 
-## Slide 22 — What next (2 min)
+## Slide 20 — What next (2 min)
 
 - The pages: [Working with AI](README.md), and the rule list in [The Rules](the-rules.md)
 - The policy is separate and it is [the AI Use Standard](../ai-use-standard.md). Which tier you are on, and what you must disclose, is there.
@@ -219,6 +220,6 @@ Say so, with the reason. Every rule in the list has evidence under it, and evide
 
 ## If you only have 20 minutes
 
-Slides 1–2, 6, 14, 15–18, 21. That is the prediction, the reveal, the ambiguity finding, the full activity, and three rules. Everything else is context you can point at in the docs.
+Slides 1–2, 5, 6, 12, 13–16, 19. That is the prediction, the reveal, the two rules, the ambiguity finding, the full activity, and three rules to close. Everything else is context you can point at in the docs.
 
 **Never cut the activity to fit.** A 20-minute session with the activity beats a 45-minute session without it, and the trial data is unambiguous about which way that trade goes.
