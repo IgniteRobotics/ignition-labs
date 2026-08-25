@@ -1,12 +1,12 @@
 # Context & Prompts
 
-Everything you put in front of the model competes for the same finite resource. Most people find this out by accident, when answers quietly get worse.
+Everything you put in front of the model competes for the same finite resource. Most people find this out by accident, when answers get worse and nothing announces why.
 
 ---
 
 ## Prompting is half the skill
 
-**Prompt engineering** is writing and organizing instructions well. It is discrete — you write one, you send it.
+**Prompt engineering** is writing and organizing instructions well. It is discrete: you write one, you send it.
 
 **Context engineering** is curating the whole set of information the model sees during a session: the system prompt, the tools, the files, the conversation history, the tool output. It is iterative, because the curation decision happens *every single turn*.
 
@@ -16,15 +16,15 @@ If you only think about the prompt, you are managing about half of what determin
 
 ## Context is a budget
 
-The mechanism is architectural. Attention requires every token to relate to every other token — n² pairwise relationships for n tokens. Models therefore have an **attention budget**, and every new token spends some of it.
+The mechanism is architectural. Attention requires every token to relate to every other token, giving n² pairwise relationships for n tokens. Models therefore have an **attention budget**, and every new token spends some of it.
 
 > Context is a finite resource with diminishing marginal returns.
 
-The empirical version is called **context rot**. A study of 18 frontier models — GPT-4.1, Claude 4, Gemini 2.5, Qwen3 — across needle-in-a-haystack tasks, long conversational question-answering, and a task as trivial as repeating words back found that performance varies significantly as input length changes, **even on simple tasks**.
+The empirical version is called **context rot**. A study of 18 frontier models (GPT-4.1, Claude 4, Gemini 2.5, Qwen3) across needle-in-a-haystack tasks, long conversational question-answering, and a task as trivial as repeating words back found that performance varies significantly as input length changes, **even on simple tasks**.
 
 Specifics worth knowing:
 
-- Degradation is **worse when your question and the answer share little vocabulary** — exactly the case where you are asking about something you cannot already name.
+- Degradation is **worse when your question and the answer share little vocabulary**, which is exactly the case where you are asking about something you cannot already name.
 - **A single distractor** measurably degrades performance versus a clean baseline. Multiple distractors compound it, unevenly, and the effect amplifies at longer contexts.
 - Focused prompts of about 300 tokens beat full prompts of about 113,000 tokens, substantially, on the same underlying task.
 - **Shuffling the material to destroy its logical flow consistently *improved* performance.** Nobody fully knows why. These are empirical objects, not understood ones.
@@ -59,7 +59,7 @@ Each transition changes what counts as signal. The dead ends from a research ses
 
 ## The prompt is an artifact, not a chat message
 
-This is the part with the strongest teaching evidence behind it.
+The teaching evidence behind this section is the strongest on any of these pages.
 
 A semester-long randomized controlled trial in an introductory CS course put 979 students across four conditions of increasing engagement, all teaching the same five-component framework.
 
@@ -72,7 +72,7 @@ A semester-long randomized controlled trial in an introductory CS course put 979
 
 Three things fall out of that table:
 
-1. **Publishing a policy is worth almost nothing.** A text reminder — structurally what a written standard *is* — produced a gain of 0.08. Reading these pages is not the same as practising this.
+1. **Publishing a policy is worth almost nothing.** A text reminder, which is structurally what a written standard *is*, produced a gain of 0.08. Reading these pages is not the same as practising this.
 2. **Writing beats selecting beats reading.** The best condition cost 37 minutes and roughly tripled the retained gain over passive reading. That is one meeting.
 3. **Everything decays.** The best condition lost more than half its gain in seven weeks, and seven weeks is about a third of a build season. Practise it in ordinary code review, or it goes away.
 
@@ -108,7 +108,7 @@ Guardrails: Do not modify anything under src/test/. Do not touch gains.
             Cite the current WPILib docs for any API you use.
 ```
 
-That is not a chat message. That is a document, and it belongs next to the spec — committed, red-lined in review, versioned like anything else.
+That is not a chat message. That is a document, and it belongs next to the spec: committed, red-lined in review, versioned like anything else.
 
 ### What a bad version looks like
 
@@ -118,9 +118,9 @@ my indexer keeps jamming, can you fix it? I think the kP is too high
 
 Four problems, and every one of them is covered above:
 
-1. No context — the model does not know the class, the hardware, or the version.
-2. No method — "fix it" means it will write code immediately.
-3. No level — it cannot calibrate the explanation.
+1. No context: the model does not know the class, the hardware, or the version.
+2. No method: "fix it" means it will write code immediately.
+3. No level: it cannot calibrate the explanation.
 4. **It states a belief.** "I think the kP is too high" is exactly what sycophancy latches onto, and now you are likely to get agreement instead of diagnosis. See Rule 5.
 
 ---

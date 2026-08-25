@@ -2,7 +2,7 @@
 
 This is the page about the problem no software company has as badly as we do.
 
-**A company loses maybe 15% of its engineers a year. We lose 100% of our seniors every year, and 100% of everybody within four.** There is no five-year veteran. The mentor is the only continuous memory, and mentors turn over too.
+A company loses maybe 15% of its engineers a year. We lose 100% of our seniors every year, and 100% of everybody within four. There is no five-year veteran. The mentor is the only continuous memory, and mentors turn over too.
 
 ---
 
@@ -30,9 +30,9 @@ The bottom three rows are the ones that hurt.
 
 You will read about knowledge graphs and be tempted. Here is why the answer is no.
 
-**The expensive version is genuinely expensive.** Microsoft's GraphRAG builds an entity graph over a corpus using a language model, then pre-summarizes it. It measurably improves answer comprehensiveness and diversity over plain search. It also costs so much to index that Microsoft published a follow-up, LazyGraphRAG, specifically to fix that: LazyGraphRAG matches plain search's indexing cost, which is **0.1% of the cost of full GraphRAG**, while reaching comparable answer quality at **more than 700 times lower query cost**.
+The expensive version costs what its name suggests. Microsoft's GraphRAG builds an entity graph over a corpus using a language model, then pre-summarizes it. It measurably improves answer comprehensiveness and diversity over plain search. It also costs so much to index that Microsoft published a follow-up, LazyGraphRAG, specifically to fix that: LazyGraphRAG matches plain search's indexing cost, which is **0.1% of the cost of full GraphRAG**, while reaching comparable answer quality at **more than 700 times lower query cost**.
 
-A thousand-fold cost reduction is not a tuning improvement. It is an admission the original approach was not viable for most corpora — and our corpus is a few thousand Markdown files.
+A thousand-fold cost reduction is not a tuning improvement. It is an admission the original approach was not viable for most corpora, and our corpus is a few thousand Markdown files.
 
 **And plain search wins anyway.** The harness study in [The Harness](the-harness.md) found `grep` beating vector search across every harness tested, with delivery mechanics mattering more than the retrieval strategy either way.
 
@@ -40,7 +40,7 @@ A thousand-fold cost reduction is not a tuning improvement. It is an admission t
 
 The "graph" is the link structure. The "index" is the filesystem. The "retrieval engine" ships with the operating system. It costs nothing, it works offline in a pit with no wifi, it survives any vendor going away, and a fifteen-year-old can review it in a pull request.
 
-It is also the better *learning* answer, which is what decides it. **You can read the whole knowledge base. Nobody can read an embedding.**
+It is also the better *learning* answer, which is what decides it. You can read the whole knowledge base. Nobody can read an embedding.
 
 ---
 
@@ -79,7 +79,7 @@ relates_to: [mech-swerve-module, inc-2026-week3-drift]
 1. **Definition of done gains a row.** A change that makes an engineering decision writes or updates a `decisions/` file. The spec says *what*; the decision file says *why this and not that*. They are different documents and the second is the one that is missing.
 2. **Competition procedure gains an incident rule.** Anything that goes wrong at an event gets an `incidents/` file **before the team leaves the venue.** Week 6 memory is unreliable and Week 40 memory is fiction.
 
-**If the corpus ever outgrows `grep`** — realistically several seasons out, if ever — LazyGraphRAG over the same Markdown is an additive change, because the Markdown was the source of truth all along. That is the actual design win: the cheap answer is also the migration path.
+**If the corpus ever outgrows `grep`**, realistically several seasons out if ever, LazyGraphRAG over the same Markdown is an additive change, because the Markdown was the source of truth all along. That is the actual design win: the cheap answer is also the migration path.
 
 ---
 
@@ -117,7 +117,7 @@ sources_verified: 2026-01-14
 
 `sources_verified` exists because a research note's shelf life is set by the things it cites, not by when it was written.
 
-**The "what we could not verify" section is not optional and is rarely empty.** An unverified claim recorded as unverified is useful. The same claim recorded as fact is a trap someone walks into in Week 5.
+The "what we could not verify" section is not optional and is rarely empty. An unverified claim recorded as unverified is useful. The same claim recorded as fact is a trap someone walks into in Week 5.
 
 ---
 
@@ -131,7 +131,7 @@ A **skill** is a directory with a `SKILL.md` at its root that an agent loads onl
 | Instructions | when triggered | under 5k | the `SKILL.md` body |
 | Resources | as needed | none until read | bundled files; scripts return only their output |
 
-You can install many skills without paying for the ones you do not use. And when a skill runs a script, **the script's code never enters the context window — only its output does.**
+You can install many skills without paying for the ones you do not use. And when a skill runs a script, the script's code never enters the context window. Only its output does.
 
 That is the attention-budget argument from [Context & Prompts](context-and-prompts.md), turned into a file format.
 
@@ -145,7 +145,7 @@ That is the attention-budget argument from [Context & Prompts](context-and-promp
 | `tuning-log` | the tuning-log schema + an append script | Article VIII, made mechanical |
 | `scouting-query` | match-data schema + query scripts | The strategy subteam gets a tool, not a chatbot |
 
-Notice the pattern: **every one of these is something we already wrote as prose.** A skill is mostly a packaging decision about documentation you already own.
+Notice the pattern: every one of these is something we already wrote as prose. A skill is mostly a packaging decision about documentation you already own.
 
 ### Security, non-negotiable
 
@@ -159,22 +159,22 @@ The vendor documentation is blunt about this: use skills only from trusted sourc
 
 A subagent is worth reaching for when a side task would flood your main conversation with search results or file contents you will never reference again. It works in its own context window, with its own tool list, and returns only a summary.
 
-**The underrated field is the tool list.** A subagent restricted to read-and-search tools *cannot edit anything* — which is a far stronger statement than any instruction in a prompt. A read-only reviewer is a review that structurally cannot become a rewrite. That is Rule 6, implemented in a config file instead of a culture.
+The underrated field is the tool list. A subagent restricted to read-and-search tools *cannot edit anything*, which is a far stronger statement than any instruction in a prompt. A read-only reviewer is a review that structurally cannot become a rewrite. That is Rule 6, implemented in a config file instead of a culture.
 
 ### When not to fan out
 
-This is the part that gets oversold, so here are the honest numbers.
+Multi-agent setups get oversold, so here are the numbers.
 
-Anthropic's own multi-agent research system outperformed its single-agent equivalent by **90.2%** on research tasks. It also used about **15 times more tokens than a chat**, and token usage alone explained **80% of the performance variance**. Their follow-up guidance puts typical multi-agent overhead at **3–10× single-agent** for equivalent tasks, and says outright that most coding tasks involve fewer genuinely parallel pieces than research does.
+Anthropic's own multi-agent research system outperformed its single-agent equivalent by **90.2%** on research tasks. It also used about **15 times more tokens than a chat**, and token usage alone explained **80% of the performance variance**. Their follow-up guidance puts typical multi-agent overhead at **3–10× single-agent** for equivalent tasks, and says outright that most coding tasks involve fewer independent pieces than research does.
 
-The decomposition rule is: **split by context boundaries, not by problem type.** Sequential phases — plan, implement, test — create coordination overhead and should stay in one agent.
+The decomposition rule is: split by context boundaries, not by problem type. Sequential phases (plan, implement, test) create coordination overhead and should stay in one agent.
 
 > **Fan out for search. Stay single-agent for building.**
 >
-> Three agents reading three vendor changelogs in parallel: good. That is genuinely independent work with a context boundary between each.
+> Three agents reading three vendor changelogs in parallel: good. That is independent work with a context boundary between each.
 >
 > Three agents building three subsystems that share `RobotContainer`: bad, and for the same reason we do not put three people on it.
 
-Rung 1b — research — is the one rung where fanning out actually pays. The building rungs are not.
+Rung 1b, research, is the one rung where fanning out actually pays. The building rungs are not.
 
-**The 90.2% is the number someone will quote at you. The 15× belongs on the same slide.**
+The 90.2% is the number someone will quote at you. The 15× belongs on the same slide.

@@ -16,17 +16,17 @@ A **coding agent** is a language model running in a loop with tool access, aimed
 5. Not done? Go to 1.
 ```
 
-The **harness** is everything in that loop that is not the model — the tool definitions, the system prompt, how context gets built, the permission gates, and the path by which the agent finds out it was wrong. Claude Code, Codex CLI, Cursor Agent, and Gemini CLI are all harnesses in this sense.
+The **harness** is everything in that loop that is not the model: the tool definitions, the system prompt, how context gets built, the permission gates, and the path by which the agent finds out it was wrong. Claude Code, Codex CLI, Cursor Agent, and Gemini CLI are all harnesses in this sense.
 
-**The harness is the part you control.** You cannot change the model's weights. You can change every other thing in that list.
+The harness is the part you control. You cannot change the model's weights. You can change every other thing in that list.
 
 ---
 
 ## Why this matters more than model choice
 
-A 2026 study compared plain text search (`grep`) against semantic vector search across four different harnesses, on the same 116 questions, with the same underlying data. The only thing that varied was the plumbing — specifically, whether tool output was placed directly into the context or written to a file the agent had to go read.
+A 2026 study compared plain text search (`grep`) against semantic vector search across four different harnesses, on the same 116 questions, with the same underlying data. The only thing that varied was the plumbing: whether tool output was placed directly into the context, or written to a file the agent had to go read.
 
-The result: `grep` consistently beat vector search **and** overall scores depended so strongly on the harness and tool-calling style that file-based delivery could *invert or erase* the advantage — with no change to the data at all.
+The result: `grep` consistently beat vector search **and** overall scores depended so strongly on the harness and tool-calling style that file-based delivery could *invert or erase* the advantage, with no change to the data at all.
 
 Read that twice. Same data, same model, same question, and the plumbing decided the winner.
 
@@ -34,7 +34,7 @@ Read that twice. Same data, same model, same question, and the plumbing decided 
 
 > What can this agent see? What can it run? How does it find out it was wrong?
 
-That third one is the whole game, and in FRC we are unusually well set up to answer it.
+The third question is the one that decides output quality, and in FRC we are unusually well set up to answer it.
 
 ---
 
@@ -50,9 +50,9 @@ An agent loop is only as good as the signal that comes back. In most software, t
 | WPILib simulation | the sim harness | seconds–minutes | integration, scheduler conflicts |
 | Deterministic log replay | AdvantageKit | faster than real time | **behaviour against a real match** |
 
-That last row is the one nobody outside FRC has. AdvantageKit records every input flowing into the robot code each loop cycle — sensor values, joystick state, NetworkTables updates — so the full state of the code can be replayed in simulation from a log file, deterministically, faster than real time.
+Nobody outside FRC has the last row. AdvantageKit records every input flowing into the robot code each loop cycle (sensor values, joystick state, NetworkTables updates) so the full state of the code can be replayed in simulation from a log file, deterministically, faster than real time.
 
-**That is a verification oracle an agent can drive.** "Change this, replay Quals 42, show me the flywheel velocity trace" is a closed loop with ground truth in it. Very few professional software teams have anything that good.
+That is a verification oracle an agent can drive. "Change this, replay Quals 42, show me the flywheel velocity trace" is a closed loop with ground truth in it. Very few professional software teams have anything that good.
 
 See [The SDD Loop](the-loop.md) for the standing replay procedure.
 
@@ -62,7 +62,7 @@ See [The SDD Loop](the-loop.md) for the standing replay procedure.
 
 Most of our guardrails are *prompt-level* or *human-level*: tiers, disclosure blocks, defending your diff in review. Those are necessary. They are not sufficient, because a prompt is a request and a person under deadline pressure is a poor enforcement layer.
 
-Harnesses expose **deterministic gates**. In Claude Code these are hooks — shell commands that fire at fixed points in the lifecycle, independent of what the model decides. A `PreToolUse` hook fires before a tool call and can block it; an exit code of 2 blocks unconditionally, and even a JSON response saying `"allow"` cannot override it.
+Harnesses expose **deterministic gates**. In Claude Code these are hooks: shell commands that fire at fixed points in the lifecycle, independent of what the model decides. A `PreToolUse` hook fires before a tool call and can block it; an exit code of 2 blocks unconditionally, and even a JSON response saying `"allow"` cannot override it.
 
 The distinction is the part worth memorizing:
 
@@ -106,7 +106,7 @@ The most useful single mitigation, from Meta, is this: an agent should not simul
 
 An agent session doing all three at once is the shape of every incident in that paper. "Don't do all three at once" is a rule you can hold in your head, which is more than can be said for most security guidance.
 
-**This also upgrades a rule you already have.** "Never paste anything you would not want public" is correct, and it is framed as a discipline problem. It is also an architecture problem — and the architecture version is enforceable.
+This also upgrades a rule you already have. "Never paste anything you would not want public" is correct, and it is framed as a discipline problem. It is also an architecture problem, and the architecture version is enforceable.
 
 ---
 
@@ -114,6 +114,6 @@ An agent session doing all three at once is the shape of every incident in that 
 
 1. The harness is a system you configure, not a chatbox you type into.
 2. Configuration beats model choice. Spend your attention accordingly.
-3. FRC has an unusually good feedback signal. Use it — that is what makes agent output checkable.
+3. FRC has an unusually good feedback signal. Use it. It is what makes agent output checkable.
 4. If a rule matters, a machine enforces it.
 5. Never let one session touch untrusted input, sensitive data, and the outside world at the same time.

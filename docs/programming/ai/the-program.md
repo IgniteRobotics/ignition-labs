@@ -2,7 +2,7 @@
 
 FRC 6829 · Programming subteam
 
-**Part one of the session.** Ten minutes on the shape of the whole programming curriculum — where you get on, how you move, and what each rung unlocks. Everything after this page is [part two](README.md): how we actually work with AI tools.
+**Part one of the session.** Ten minutes on the shape of the programming curriculum: where you get on, how you move, and what each rung unlocks. Everything after this page is [part two](README.md): how we actually work with AI tools.
 
 This is an orientation, not the curriculum itself. The curriculum lives at
 **[Programming Curriculum → Overview](../README.md)**, and every milestone has its own page.
@@ -14,7 +14,7 @@ shaped like this, you are in the right place.
 ## One ladder, four ways on
 
 There is a single sequence of ten milestones. Your track does not change *what* you eventually
-learn — it changes where you get on and which test-outs you attempt. Everyone converges.
+learn, only where you get on and which test-outs you attempt. Everyone converges.
 
 | Track | If this is you | Where you really start |
 |---|---|---|
@@ -28,8 +28,8 @@ Full entry-point guides: [Track A](../tracks/track-a-new-to-programming.md) ·
 [Track C](../tracks/track-c-oo-no-frc.md) ·
 [Track D](../tracks/track-d-frc-veteran-ai.md)
 
-**Caught between two? Pick the earlier one.** A test-out moves you up in under an hour if you
-were being modest. Starting too high does not cost you an hour — it costs you weeks, and it
+Caught between two? Pick the earlier one. A test-out moves you up in under an hour if you
+were being modest. Starting too high costs you weeks rather than an hour, and it
 almost always surfaces in M3, three weeks after the decision that caused it.
 
 ---
@@ -54,15 +54,15 @@ almost always surfaces in M3, three weeks after the decision that caused it.
 ## How you move
 
 **Test-outs, not self-assessment.** Skipping a milestone means passing a 30–60 minute challenge
-that a mentor verifies. Failing one is routing information, not a judgment — you work that
+that a mentor verifies. Failing one is routing information, not a judgment. You work that
 milestone, no penalty and no record of the attempt.
 
 **Definitions of done are objective.** Every milestone ends in a checklist where each item is a
 yes or a no, and a mentor who never taught that milestone can verify it. That property is doing
-more work than it looks like it is: it means nobody grades your vibe, nobody can gatekeep you on
-taste, and — the part that matters for part two — **nobody can talk their way past one either.**
+more work than it looks like it is. Nobody grades your vibe, nobody can gatekeep you on taste,
+and, the part that matters for part two, nobody can talk their way past one either.
 
-**Simulation is mandatory. Hardware is optional.** Every project finishes on your own laptop.
+Simulation is mandatory. Hardware is optional. Every project finishes on your own laptop.
 You never wait for the robot, and you cannot break anything.
 
 **The ladder is self-guided.** Nobody schedules it for you. This session is not a milestone,
@@ -72,7 +72,7 @@ has no test-out, and gates nothing.
 
 ## The Kickoff Readiness Gate
 
-The curriculum runs year-round. This is the one hard deadline.
+The curriculum runs year-round. This is the only hard deadline in it.
 
 | Your role at kickoff | You need |
 |---|---|
@@ -83,10 +83,10 @@ The curriculum runs year-round. This is the one hard deadline.
 
 If you have not cleared M0–M3 by kickoff you can still participate, but you do not get commit
 access to the season repository. That is published in August rather than discovered in January,
-which is the entire point of writing it down.
+which is why it is written down at all.
 
-The last row is the one people get wrong. **Finishing M7 in December does not clear you for
-agentic use on competition code** — M8 has to be done too, and it is two more sessions. Plan for
+The last row is the one people get wrong. Finishing M7 in December does not clear you for
+agentic use on competition code. M8 has to be done too, and it is two more sessions. Plan for
 both before kickoff, or plan on not using the tools in January.
 
 M9 is not gated. It runs during the season.
@@ -114,20 +114,20 @@ the commitment.
 
 This is the decision people argue with, so here is the reasoning rather than the assertion.
 
-**Green tier is not a reward for finishing M6. It is only possible after M6.** Everything that
+Green tier is not a reward for finishing M6. It is only possible after M6. Everything that
 makes agentic development safe is a verification skill: writing a test before the thing it
 tests, running a mechanism in simulation, reading telemetry, telling *green* from *correct*.
 Those are M6's content. A student cleared for full agentic use without them cannot do the one
-thing the clearance requires — check the work.
+thing the clearance requires, which is check the work.
 
-That is also why **Track D enters at M6, not M7.** An FRC veteran arriving with three seasons of
-shipped code has, in our experience, never written a test — as of 2026-08-18 our own
+That is also why Track D enters at M6, not M7. An FRC veteran arriving with three seasons of
+shipped code has, in our experience, never written a test. As of 2026-08-18 our own
 repositories contained zero test files across three seasons. Veterans are not asked to redo
 M0–M5. They are asked to acquire the one skill the ladder exists to guarantee before the tooling
 is handed over.
 
 The same logic explains the M8 clause in the Green row. M7 teaches you to use the tools on a
-spec **you** wrote. M8 teaches you to write and change a spec somebody else has to act on — which
+spec **you** wrote. M8 teaches you to write and change a spec somebody else has to act on, which
 is the skill you need before an agent is allowed to draft one for you. Reviewing a generated spec
 is harder than writing one, not easier.
 
@@ -139,12 +139,12 @@ what was decided and why.
 
 ## Where this goes next
 
-Part one told you what you are permitted to do. **Part two is method, not permission** — and it
+Part one told you what you are permitted to do. Part two is method rather than permission, and it
 applies from the day you are cleared for any of it.
 
 | Next | What it is |
 |---|---|
-| [Working with AI — Overview](README.md) | Part two: the whole of it, and the twelve rules in short form |
+| [Working with AI — Overview](README.md) | Part two in full, and the twelve rules in short form |
 | [The Rules](the-rules.md) | The twelve, each with the evidence under it, plus a copyable constitution |
 | [The SDD Loop](the-loop.md) | What spec-driven development actually is, and where tests and simulation sit |
 | [Session Guide](session-guide.md) | Facilitator notes for running both parts |
