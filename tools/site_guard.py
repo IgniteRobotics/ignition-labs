@@ -87,6 +87,13 @@ REQUIRED_PAGES = [
     "programming/coding-standards",
     "programming/student-deliverables",
     "programming/resources",
+    "programming/ai",
+    "programming/ai/the-harness",
+    "programming/ai/the-loop",
+    "programming/ai/the-rules",
+    "programming/ai/context-and-prompts",
+    "programming/ai/research-and-memory",
+    "programming/ai/session-guide",
     "programming/tracks/track-a-new-to-programming",
     "programming/tracks/track-b-non-oo-programmer",
     "programming/tracks/track-c-oo-no-frc",
@@ -113,6 +120,7 @@ REQUIRED_PAGES = [
 # to match a mistake.
 REQUIRED_ASSETS = [
     "images/gitflow.png",
+    "programming/ai/session-deck.html",
 ]
 
 

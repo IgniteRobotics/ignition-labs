@@ -45,6 +45,14 @@ nav:
       - Coding Standards: programming/coding-standards.md
       - Student Deliverables: programming/student-deliverables.md
       - Resources: programming/resources.md
+  - Working with AI:
+      - Overview: programming/ai/README.md
+      - The Harness: programming/ai/the-harness.md
+      - The SDD Loop: programming/ai/the-loop.md
+      - The Rules: programming/ai/the-rules.md
+      - Context & Prompts: programming/ai/context-and-prompts.md
+      - Research & Team Memory: programming/ai/research-and-memory.md
+      - Session Guide (45 min): programming/ai/session-guide.md
   - Tracks:
       - Track A — New to Programming: programming/tracks/track-a-new-to-programming.md
       - Track B — Programmed, Not Object-Oriented: programming/tracks/track-b-non-oo-programmer.md
