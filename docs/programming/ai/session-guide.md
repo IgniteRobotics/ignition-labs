@@ -2,7 +2,7 @@
 
 Facilitator notes for the 45-minute session. **This is the presenter's page, not the student's** — students get [the other pages](README.md) and the slides.
 
-**[Open the slide deck](session-deck.html)** — 20 slides, self-contained, works offline. Arrow keys or click to advance, `n` toggles presenter notes on the current slide, `f` for fullscreen. The rail across the top shows the **target clock time** for each slide, so you can tell at a glance whether you are behind. Slide numbers below match it.
+**[Open the slide deck](session-deck.html)** — 25 slides, self-contained, works offline. Arrow keys or click to advance, `n` toggles presenter notes on the current slide, `f` for fullscreen. The rail across the top shows the **target clock time** for each slide, so you can tell at a glance whether you are behind. Slide numbers below match it.
 
 ---
 
@@ -10,7 +10,11 @@ Facilitator notes for the 45-minute session. **This is the presenter's page, not
 
 **Audience:** everyone, all tiers. Assume some people in the room have never written a line of Java and some have shipped competition code. The session is designed so nobody needs a laptop and nobody needs to be at the Green tier.
 
-**Time:** 45 minutes, of which **12 are hands-on**. Protect the activity. If you are running long, cut Part 4, not Part 3.
+**Time:** the full deck runs **about 60 minutes**, of which 12 are hands-on. It is written to be the team's standing overview of how we work, not only a first session — so it carries real detail on the loop, OpenSpec, and the constitution.
+
+**For a 45-minute slot, skip slides 4, 7, 12, and 16** and hold the activity to 10 minutes. That keeps the whole argument and every artifact; what you lose is depth you can point at in the docs. Full cut paths are at the bottom of this page.
+
+Protect the activity in every version. If you are running long, cut from Part 2 or Part 4 — never Part 3.
 
 **Materials:**
 
@@ -27,11 +31,11 @@ Facilitator notes for the 45-minute session. **This is the presenter's page, not
 | Time | Slides | Part | Mode |
 |---|---|---|---|
 | 0:00–0:03 | 1–2 | Cold open — write a prediction | Written, individual |
-| 0:03–0:15 | 3–7 | What's actually true | Presented |
-| 0:15–0:23 | 8–12 | The line and the loop | Presented |
-| 0:23–0:35 | 13–16 | **Activity — write a prompt, red-line a partner's** | Written, in pairs |
-| 0:35–0:43 | 17–19 | The rules | Presented |
-| 0:43–0:45 | 20 | What next | Presented |
+| 0:03–0:14 | 3–7 | What's actually true | Presented |
+| 0:14–0:36 | 8–17 | **How we do things** — the line, the loop, the spec, the constitution | Presented |
+| 0:36–0:52 | 18–21 | **Activity — write a prompt, red-line a partner's** | Written, in pairs |
+| 0:52–0:58 | 22–24 | The rules | Presented |
+| 0:58–1:00 | 25 | What next | Presented |
 
 ---
 
@@ -108,9 +112,9 @@ Three sentences, then move on:
 
 ---
 
-## Part 2 — The line and the loop (slides 8–12, 8 min)
+## Part 2 — How we do things (slides 8–17, 22 min)
 
-Move quickly here. This part is orientation, and the details live in the docs.
+This is the part that turns the deck from a session into an overview. It answers "so what do you actually want me to do," and it is the section a returning member should be able to re-watch in ten minutes.
 
 ### Slide 9 — Dependency versus decision
 
@@ -127,15 +131,39 @@ A model in a loop with tools, permissions, and a feedback path. You cannot chang
 
 The better question is **"what can it see, what can it run, and how does it find out it was wrong?"**
 
-### Slide 11 — The loop
+### Slide 11 — The loop, as a picture
 
-Show the ladder. Do not walk all eleven rungs — point at three things:
+The diagram is the centrepiece of this part. **Do not walk all eleven rungs** — the picture already did that. Point at three things, in this order:
 
-- Tests come *before* implementation, at rung 3
-- Simulation is rung 6, and it is not the same as tests passing
-- Replay, rung 9, is how a competition failure becomes a regression test
+1. **The ratio.** One box builds. Five verify. Say it out loud as a ratio: *"you spend one step writing the feature and five steps finding out whether it works."* That is the most useful thing on the slide, and it reframes the whole method as being mostly about checking.
+2. **The three red rungs** — RED, SIMULATE, REPLAY. These are the ones teams skip under pressure and then lose matches to.
+3. **The bar underneath.** The constitution is checked at every rung, and it is the same file all season. You come back to it on slide 17.
 
-### Slide 12 — The money slide
+The dashed box is rung 1b, research — optional, and covered on the loop page in the docs rather than in this session.
+
+### Slide 12 — Why five verification rungs
+
+The table shows what each rung catches and what it cannot. The line that lands:
+
+> **Simulation raises the floor. It does not replace the bench.**
+
+Rung 7 is where sign errors live — inverted motors, swapped CAN IDs, a gear ratio entered upside down — and no amount of simulation finds them.
+
+Also worth saying: rung 9 is why we **pull the log before touching anything** after a bad match. It turns a story into a regression test.
+
+*(Cuttable at 45 minutes — the docs carry the same table.)*
+
+### Slide 13 — One scenario becomes one test
+
+The payoff of the spec format, side by side: the GIVEN/WHEN/THEN scenario on the left, the JUnit test on the right, with the mapping visible.
+
+**GIVEN is the fixture. WHEN is the stimulus. THEN is the assertion.**
+
+The point to make: **a scenario you cannot turn into a test is a scenario you have not finished writing** — and the format makes you find that out *before* the code exists rather than after.
+
+Point at the numbers in the left column too: *"250 ms"*, not *"a short delay."* That is Article IV, and it is the difference between a requirement and a wish.
+
+### Slide 14 — The money slide
 
 Three coding agents, in an environment where cheating was easy. On clearly-specified problems, hardcoding was rare — **0 to 2.1%**. On **ambiguous** problems it jumped to **44.4%, 33.3%, and 22.2%**.
 
@@ -143,19 +171,52 @@ Three coding agents, in an environment where cheating was easy. On clearly-speci
 
 Not malice. An underspecified problem where "make the test pass" is the only legible goal.
 
-**This is the single most important slide in the deck.** It converts "write a spec first" from a process rule someone imposed into a thing that visibly protects them. If you only land one idea today, land this one.
+**This is the single most important slide in the deck**, and its placement is deliberate: it lands *after* they have seen a sharp spec and its test, so they know exactly what "specified" looks like. It converts everything that follows from process imposed on them into something that visibly protects them.
 
----
+### Slide 15 — OpenSpec: a change is a folder
 
-## Part 3 — Activity (slides 13–16, 12 min)
+Two halves: what gets committed, and the three commands.
+
+The folder — `proposal.md`, `design.md`, `tasks.md`, and the delta under `specs/` — is committed **before the first implementation commit**, with a hash you can point at in review.
+
+**Why a folder and not a conversation:** a spec everyone writes differently is a spec nobody can review quickly, and review speed is the whole game during a six-week build.
+
+**The tell that someone gamed this:** they cannot say where the build diverged from the spec. Every real build diverges. Being able to point at where, and defend the call you made, *is* the evidence the document was load-bearing rather than decorative.
+
+Say the version-pinning line — pin at the start of the season, put the pinned commands in `AGENTS.md` — but don't dwell.
+
+### Slide 16 — The delta format
+
+Three verbs — `ADDED`, `MODIFIED`, `REMOVED` — because **the spec is a diff against what the system already promises**, not a fresh document each time.
+
+The right-hand card is the useful half. Two rules, both enforceable in about four seconds of review:
+
+- **A requirement with no numbers is not a requirement.** "Recovers quickly" is not testable.
+- **A scenario that names a private field is broken.** That is an implementation, not a contract.
+
+*(Cuttable at 45 minutes — slide 13 already showed a good spec, and the docs carry the format in full.)*
+
+### Slide 17 — The constitution
+
+The closing move of Part 2, and it ties back to the bar under the diagram on slide 11.
+
+**The distinction to land:** the spec changes every change; the constitution changes once a season. It is read before every change, by you and by the agent.
+
+The twelve articles are on screen. Do not read them. Read **one** — Article IX, *Enforced, Not Requested* — and explain why it is load-bearing: a hook or a CI check fires whether or not the model cooperates; a paragraph does not. Everything else in that file is only as real as its enforcement.
+
+Then the test for what belongs in it, which is the line people remember:
+
+> **If you have explained something to an agent twice, it was a constitution line and you wrote it in a chat window instead.**
+
+## Part 3 — Activity (slides 18–21, 12 min)
 
 **This is the part that actually changes behaviour.** In the controlled trial, reading about prompting retained 0.15 at seven weeks; writing one and having it critiqued retained 0.24. Everything before this slide is setup for this slide.
 
-### Setup (slides 14–15, 2 min)
+### Setup (slides 19–20, 2 min)
 
 Show the five components — Problem, Context, Method, Level, Guardrails — and the bad-versus-good example. Point out that the bad one *states a belief* ("I think the kP is too high"), which is exactly what slide 6 said never to do.
 
-### Write (slide 16, 6 min)
+### Write (slide 21, 6 min)
 
 Each person writes one prompt, on paper, using all five components, for a scenario from the deck. Offer two scenarios so the room is not identical:
 
@@ -178,23 +239,25 @@ Take two or three examples of leaked answers from the room. Do not debug the pro
 
 ---
 
-## Part 4 — The rules (slides 17–19, 8 min)
+## Part 4 — The rules (slides 22–24, 6 min)
 
-### Slide 18 — All twelve
+### Slide 23 — All twelve, in three groups
 
-Show them. Do not read them. Tell people the list lives in the docs and that each rule has evidence under it.
+Show them. Do not read them. **The grouping is the message:** four rules about what you write down, four about how you drive the tool, four about what outlives the session.
 
-### Slide 19 — The three for today
+Tell people the full list with the evidence under each rule lives in the docs, then go straight to the next slide.
+
+### Slide 24 — The three for today
 
 Pick these three and spend the time here:
 
-1. **Spec first. No spec, no code.** — because of slide 12
+1. **Spec first. No spec, no code.** — because of slide 14
 2. **The agent's job is to disagree with you.** — because of slide 6
 3. **Green is a floor, not a ceiling.** — passing tests is not correct, and in FRC the specific failure is an auto that works from exactly the position it was tested from
 
 ---
 
-## Slide 20 — What next (2 min)
+## Slide 25 — What next (2 min)
 
 - The pages: [Working with AI](README.md), and the rule list in [The Rules](the-rules.md)
 - The policy is separate and it is [the AI Use Standard](../ai-use-standard.md). Which tier you are on, and what you must disclose, is there.
@@ -218,8 +281,15 @@ Say so, with the reason. Every rule in the list has evidence under it, and evide
 
 ---
 
-## If you only have 20 minutes
+## Cut paths
 
-Slides 1–2, 5, 6, 12, 13–16, 19. That is the prediction, the reveal, the two rules, the ambiguity finding, the full activity, and three rules to close. Everything else is context you can point at in the docs.
+| You have | Show | What you give up |
+|---|---|---|
+| **60 min** | everything | — |
+| **45 min** | skip 4, 7, 12, 16; activity to 10 min | verification-rung detail and the delta format — both in the docs |
+| **30 min** | the above, plus skip 9, 15, 23 | the OpenSpec mechanics; keeps the loop picture and the constitution |
+| **20 min** | 1–2, 5, 6, 11, 14, 18–21, 24 | everything but the prediction, the reveal, the two rules, the loop picture, the ambiguity finding, the full activity, and three rules to close |
 
-**Never cut the activity to fit.** A 20-minute session with the activity beats a 45-minute session without it, and the trial data is unambiguous about which way that trade goes.
+**Never cut the activity to fit.** A 20-minute session with the activity beats a 60-minute session without it, and the trial data is unambiguous about which way that trade goes.
+
+**If you are cutting to 20, keep slide 11.** The loop picture is the one thing in the deck a returning member can look at once and use — it is the map everything else hangs off.
