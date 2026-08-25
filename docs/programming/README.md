@@ -112,6 +112,7 @@ FIRST has no rule about this and no other FRC team has published a policy. This 
 | [`coding-standards.md`](coding-standards.md) | What good Ignite code looks like — the standards code review enforces. M7 reading |
 | [`student-deliverables.md`](student-deliverables.md) | Fill-in-the-blank templates for everything you produce in-season |
 | [`resources.md`](resources.md) | Every external link in the curriculum, with notes on what each is good for |
+| [`ai/`](ai/the-program.md) | **Working with AI** — the two-part session and its written companion: the program at a glance, then the harness, the SDD loop, the twelve rules, context, and team memory. Practice, not policy |
 | [`tracks/`](tracks/track-a-new-to-programming.md) | The four entry-point guides, starting with Track A |
 | [`milestones/`](milestones/m0-tooling-and-git.md) | M0 through M9, starting with M0 |
 

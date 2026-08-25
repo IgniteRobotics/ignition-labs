@@ -12,14 +12,17 @@ These pages are **practice**, not policy. The policy is [the AI Use Standard](..
 
 They are also **not a milestone.** Nothing here has a test-out and nothing here gates anything. The milestone ladder is self-guided and stays that way. Read these when the thing they describe is in front of you.
 
+Together with [The Program at a Glance](the-program.md), these pages are the written half of a two-part session: **part one** is the curriculum ladder and what each rung unlocks, **part two** — everything below — is how we work once you are cleared to.
+
 | If you are | Read this first |
 |---|---|
+| New to the subteam, or unsure what any of this gates | [The Program at a Glance](the-program.md) — the ladder, the tracks, and the tier you are on |
 | Brand new, nowhere near using an agent | [The Rules](the-rules.md) — so the restrictions make sense before they annoy you |
 | About to configure a tool for the first time | [The Harness](the-harness.md) |
 | Writing a spec, or about to | [The SDD Loop](the-loop.md) |
 | Getting worse answers than you did last week | [Context & Prompts](context-and-prompts.md) |
 | Trying to make knowledge survive graduation | [Research & Team Memory](research-and-memory.md) |
-| Running the 45-minute session | [Session Guide](session-guide.md) |
+| Running the session for a group | [Session Guide](session-guide.md) — both parts, ~75 min, with cut paths |
 
 ---
 
@@ -40,6 +43,8 @@ Everything in these pages is **Ignite filling that gap on purpose** — before t
 ---
 
 ## What these pages cover
+
+**[The Program at a Glance](the-program.md)** — Part one. Ten milestones, four entry points, one hard deadline, and three AI tiers that are a function of where you are on the ladder rather than a preference. Also the reasoning behind the boundary people argue with most: why full agentic use starts after M6 and not before.
 
 **[The Harness](the-harness.md)** — An AI coding tool is not a chatbot. It is a model running in a loop with tools, permissions, and a feedback path, and *that configuration* is what decides output quality — measurably more than which model you picked. Covers the agent loop, the FRC feedback ladder, hooks as enforcement, and the security posture that keeps a session from doing something expensive.
 

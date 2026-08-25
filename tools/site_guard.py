@@ -88,6 +88,7 @@ REQUIRED_PAGES = [
     "programming/student-deliverables",
     "programming/resources",
     "programming/ai",
+    "programming/ai/the-program",
     "programming/ai/the-harness",
     "programming/ai/the-loop",
     "programming/ai/the-rules",
