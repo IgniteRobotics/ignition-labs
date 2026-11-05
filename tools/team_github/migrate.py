@@ -85,41 +85,71 @@ def _option_id(fields: list[dict], field: str, option: str) -> tuple[str, str]:
     raise GhError(["project", "field-list"], 1, f"target {field} field has no option {option!r}")
 
 
-def _apply_items(runner: Runner, cfg: Config, items: list[tuple[str, str, str | None]]) -> None:
+# One planned item: (url, status, size, target item id or None, edits still needed).
+_Planned = tuple[str, str, "str | None", "str | None", tuple[str, ...]]
+
+
+def _needed(status: str, size: str | None, have: dict | None) -> tuple[str, ...]:
+    """Field edits a target item still needs; () means fully migrated."""
+    if have is None:
+        return ("Status",) + (("Size",) if size else ())
+    out = []
+    if have.get("status") != status:
+        out.append("Status")
+    if size and have.get("size") != size:
+        out.append("Size")
+    return tuple(out)
+
+
+def _target_index(runner: Runner, cfg: Config, target: ProjectRef | None) -> dict[str, dict]:
+    if target is None:
+        return {}
+    return {
+        (e.get("content") or {}).get("url"): e for e in _items(runner, cfg, target.number)
+    }
+
+
+def _apply_items(runner: Runner, cfg: Config, items: list[_Planned]) -> None:
     ref = find_project(runner, cfg)
     if ref is None:
         raise GhError(["project", "list"], 1, f"project {cfg.project_title!r} does not exist")
     fields = project_fields(runner, cfg, ref)
-    for url, status, size in items:
-        added = json.loads(runner.run(
-            ["project", "item-add", str(ref.number), "--owner", cfg.org, "--url", url, "--format", "json"]
-        ))
-        wanted = [("Status", status)] + ([("Size", size)] if size else [])
-        for field, option in wanted:
+    for url, status, size, item_id, edits in items:
+        if item_id is None:
+            added = json.loads(runner.run(
+                ["project", "item-add", str(ref.number), "--owner", cfg.org, "--url", url, "--format", "json"]
+            ))
+            item_id = added["id"]
+        for field in edits:
+            option = status if field == "Status" else size
             field_id, option_id = _option_id(fields, field, option)
-            runner.run(["project", "item-edit", "--id", added["id"], "--project-id", ref.node_id,
+            runner.run(["project", "item-edit", "--id", item_id, "--project-id", ref.node_id,
                         "--field-id", field_id, "--single-select-option-id", option_id])
 
 
 def plan_migration(runner: Runner, cfg: Config, target: ProjectRef | None) -> list[Change]:
     source = _read_sources(runner, cfg)
-    # An item already in the target with a Status set is done; one with none (a half-finished
-    # earlier run) is re-planned. item-add on an existing item is idempotent.
-    done = {
-        (e.get("content") or {}).get("url") for e in (_items(runner, cfg, target.number) if target else [])
-        if e.get("status")
-    }
+    index = _target_index(runner, cfg, target)
     titles = _titles(runner, cfg)
     changes: list[Change] = []
     for number, items in source.add.items():
-        todo = [i for i in items if i[0] not in done]
+        todo: list[_Planned] = []
+        for url, status, size in items:
+            have = index.get(url)
+            edits = _needed(status, size, have)
+            if edits:
+                todo.append((url, status, size, have.get("id") if have else None, edits))
         if not todo:
             continue
         where = "" if target else " (project does not exist yet; items resolved at apply)"
+        detail = []
+        for url, status, size, item_id, edits in todo:
+            line = f"{url}  {status}  size={size or '-'}"
+            detail.append(line if item_id is None else f"{line}  (already in target; set {', '.join(edits)})")
         changes.append(Change(
             SCOPE, "migrate-items",
             f"add {len(todo)} item(s) from Project #{number} ({titles.get(number, '?')}){where}",
-            detail=[f"{url}  {status}  size={size or '-'}" for url, status, size in todo],
+            detail=detail,
             apply=lambda t=todo: _apply_items(runner, cfg, t),
         ))
     if source.archived:
@@ -137,28 +167,34 @@ def plan_migration(runner: Runner, cfg: Config, target: ProjectRef | None) -> li
 
 
 def _close(runner: Runner, cfg: Config, number: int) -> None:
-    missing = _missing_in_target(runner, cfg)
-    if missing:
-        raise CloseRefused(f"refusing to close #{number}: {len(missing)} item(s) not in the target yet")
+    problems = _incomplete(runner, cfg)
+    if problems:
+        raise CloseRefused(f"refusing to close #{number}: {problems[0]}")
     runner.run(["project", "close", str(number), "--owner", cfg.org])
 
 
-def _missing_in_target(runner: Runner, cfg: Config) -> set[str]:
-    wanted = _read_sources(runner, cfg).urls
+def _incomplete(runner: Runner, cfg: Config) -> list[str]:
+    """Why the migration is not complete (empty list = complete): same criterion as plan_migration."""
     target = find_project(runner, cfg)
-    have = {(e.get("content") or {}).get("url") for e in _items(runner, cfg, target.number)} if target else set()
-    return wanted - have
+    if target is None:
+        return [f"project '{cfg.project_title}' does not exist"]
+    index = _target_index(runner, cfg, target)
+    out = []
+    for items in _read_sources(runner, cfg).add.values():
+        for url, status, size in items:
+            if _needed(status, size, index.get(url)):
+                out.append(url)
+    return [f"{len(out)} item(s) are not fully migrated"] + out if out else []
 
 
 def plan_close_old(runner: Runner, cfg: Config, *, migration_planned: bool = False) -> list[Change]:
     """Close (never delete) the old Projects. `migration_planned`: this run also migrates, first."""
-    missing = _missing_in_target(runner, cfg)
-    if missing and not migration_planned:
+    problems = _incomplete(runner, cfg)
+    if problems and not migration_planned:
         return [Change(
             SCOPE, "close-refused",
-            f"refusing to close old Projects: {len(missing)} migratable item(s) are not in "
-            f"'{cfg.project_title}' yet; run the migration first",
-            detail=sorted(missing), report_only=True,
+            f"refusing to close old Projects: {problems[0]}; run the migration first",
+            detail=problems[1:], report_only=True,
         )]
     titles = _titles(runner, cfg)  # open projects only: a closed one is already done
     return [

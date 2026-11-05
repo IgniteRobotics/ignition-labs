@@ -1,3 +1,5 @@
+import json
+
 from tests.team_github_helpers import (
     TARGET_NUMBER,
     load_config,
@@ -62,3 +64,15 @@ def test_status_options_right_names_wrong_order_is_drift():
     order = ["Ready", "Backlog", "In progress", "In review", "Done"]
     changes = plan_project(projects_runner(target=target_fields(status=order)), load_config())
     assert [c.kind for c in changes] == ["status-options"]
+
+
+def test_status_option_drift_with_items_is_report_only():
+    from tests.team_github_helpers import items_call
+    runner = projects_runner(target=target_fields(status=["Todo", "In Progress", "Done"]))
+    runner.responses[items_call(TARGET_NUMBER)] = json.dumps(
+        {"items": [{"id": "PVTI_1", "status": "Todo", "content": {"url": "u"}}], "totalCount": 1})
+    [change] = plan_project(runner, load_config())
+    assert change.report_only and not change.actionable
+    assert "reset every item's Status" in change.summary and "by hand" in change.summary
+    change.apply()
+    assert not any(c[0] == "api" and "updateProjectV2Field" in c[-1] for c in runner.calls)

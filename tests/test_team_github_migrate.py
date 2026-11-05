@@ -136,13 +136,21 @@ def test_migration_apply_adds_then_sets_fields():
     assert runner.calls[-3:] == [add, edit("F_status", "s0"), edit("F_size", "z2")]
 
 
+def migrated_target_items():
+    """Target items exactly as a complete migration leaves them."""
+    out = []
+    for n in (3, 5):
+        for i in project_fixture(f"items-{n}.json")["items"]:
+            if "flashpoint-private" in i["content"]["repository"]:
+                continue
+            out.append(item(i["content"]["url"], STATUS_MAP[i["status"]], i.get("size")))
+    return out
+
+
 def test_close_old_plans_close_never_delete_and_leaves_2_and_4():
     runner = projects_runner(target=target_fields())
-    # target already holds every migratable url
-    urls = [i["content"]["url"] for n in (3, 5) for i in project_fixture(f"items-{n}.json")["items"]
-            if "flashpoint-private" not in i["content"]["repository"]]
     runner.responses[items_call(TARGET_NUMBER)] = json.dumps(
-        {"items": [item(u, "Backlog") for u in urls], "totalCount": len(urls)})
+        {"items": migrated_target_items(), "totalCount": 39})
     changes = plan_close_old(runner, load_config())
     assert [c.summary for c in changes] == ["close Project #3 (Flashpoint)", "close Project #5 (IgniteLib)"]
     close = {("project", "close", "3", "--owner", ORG): "{}", ("project", "close", "5", "--owner", ORG): "{}"}
@@ -152,7 +160,52 @@ def test_close_old_plans_close_never_delete_and_leaves_2_and_4():
     mutating = [call for call in runner.calls if call[:2] == ("project", "close")]
     assert mutating == list(close)
     assert not any("delete" in " ".join(call) for call in runner.calls)
-    assert not any(call[2:3] in (("2",), ("4",)) for call in runner.calls if call[:2] == ("project", "close"))
+
+
+def test_close_old_refused_when_item_half_migrated():
+    runner = projects_runner(target=target_fields())
+    items = migrated_target_items()
+    sized = next(i for i in items if i.get("size"))
+    del sized["size"]  # Status landed, Size edit failed
+    runner.responses[items_call(TARGET_NUMBER)] = json.dumps({"items": items, "totalCount": len(items)})
+    changes = plan_close_old(runner, load_config())
+    assert changes and all(c.report_only for c in changes)
+    assert "refus" in changes[0].summary.lower() and sized["content"]["url"] in changes[0].detail
+    runner.responses[("project", "close", "3", "--owner", ORG)] = "{}"
+    forced = plan_close_old(runner, load_config(), migration_planned=True)
+    with pytest.raises(GhError, match="refusing"):
+        forced[0].apply()
+    assert not any(c[:2] == ("project", "close") for c in runner.calls)
+
+
+def test_close_old_refused_without_target_project():
+    changes = plan_close_old(projects_runner(), load_config())
+    assert len(changes) == 1 and changes[0].report_only
+    assert "does not exist" in changes[0].summary
+
+
+def test_migration_rerun_retries_missing_size():
+    url = "https://github.com/IgniteRobotics/flashpoint/issues/1"
+    runner = only_sources({3: [item(url, "Todo", "M")], 5: []})
+    runner.responses[items_call(TARGET_NUMBER)] = json.dumps(
+        {"items": [item(url, "Backlog")], "totalCount": 1})
+    edit = ("project", "item-edit", "--id", "PVTI_es/1", "--project-id", TARGET_ID,
+            "--field-id", "F_size", "--single-select-option-id", "z2")
+    runner.responses[edit] = "{}"
+    [change] = adds(plan_migration(runner, load_config(), TARGET))
+    assert "set Size" in change.detail[0] and "set Status" not in change.detail[0]
+    change.apply()
+    assert runner.calls[-1] == edit  # no item-add, no status edit
+    assert not any(c[:2] == ("project", "item-add") for c in runner.calls)
+
+
+def test_migration_rerun_fixes_wrong_status():
+    url = "https://github.com/IgniteRobotics/flashpoint/issues/1"
+    runner = only_sources({3: [item(url, "Todo")], 5: []})
+    runner.responses[items_call(TARGET_NUMBER)] = json.dumps(
+        {"items": [item(url, "Done")], "totalCount": 1})
+    [change] = adds(plan_migration(runner, load_config(), TARGET))
+    assert "set Status" in change.detail[0]
 
 
 def test_close_old_refuses_when_target_lacks_migratable_urls():

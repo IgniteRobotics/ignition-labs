@@ -57,6 +57,13 @@ def status_mutation(field_id: str, options: list[str]) -> list[str]:
     return ["api", "graphql", "-f", f"query={query}"]
 
 
+def _has_items(runner: Runner, cfg: Config, ref: ProjectRef) -> bool:
+    data = json_call(
+        runner, ["project", "item-list", str(ref.number), "--owner", cfg.org, "--limit", "200", "--format", "json"]
+    )
+    return bool(data.get("items"))
+
+
 def _linked_repos(runner: Runner, cfg: Config, ref: ProjectRef) -> set[str]:
     query = (
         f'{{organization(login:"{cfg.org}"){{projectV2(number:{ref.number})'
@@ -109,7 +116,15 @@ def plan_project(runner: Runner, cfg: Config) -> list[Change]:
 
     status = by_name.get("Status")
     have = [o["name"] for o in status.get("options", [])] if status else []
-    if ref is None or have != cfg.status_options:
+    if ref is not None and have != cfg.status_options and _has_items(runner, cfg, ref):
+        changes.append(Change(
+            SCOPE, "status-drift",
+            f"Status options differ from {', '.join(cfg.status_options)} (now: {', '.join(have)}): "
+            "replacing the options would reset every item's Status, so this tool will not; "
+            "fix them by hand in the Project UI",
+            report_only=True,
+        ))
+    elif ref is None or have != cfg.status_options:
         changes.append(Change(
             SCOPE, "status-options",
             f"set Status options to {', '.join(cfg.status_options)}",
