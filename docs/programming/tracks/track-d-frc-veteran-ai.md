@@ -1,6 +1,6 @@
 # Track D — FRC Veteran, Leveling Up With AI
 
-**This track is for you if:** you have programmed for Ignite (or another FRC team) for at least a season. You have shipped autonomous routines, tuned mechanisms, and debugged something at a competition. You want to use AI tooling seriously.
+**This track is for you if:** you have programmed for Ignite (or another FRC team) for at least a season. You have shipped autonomous routines, tuned mechanisms, and debugged something at a competition. You want to use AI tooling seriously. When you reach M7, [the setup guide](../ai/setup.md) gets your tool working in the WPILib VS Code.
 
 You are going to disagree with where this track starts. Read the next section before deciding it is wrong.
 
