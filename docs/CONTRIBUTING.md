@@ -81,6 +81,9 @@ you wrote in November is blocking somebody's competition fix at 11pm.
 The simulation-timing helpers live in `projects/m6-testing/`. That is what the
 practice project is for.
 
+Once you have commit access (M7), work in `Robot-2026` starts from an issue; see
+[Issues & Projects](programming/issues-and-projects.md).
+
 ---
 
 ## Working on the repository itself

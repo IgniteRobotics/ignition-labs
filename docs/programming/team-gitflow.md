@@ -4,10 +4,10 @@ How Ignite works on the competition robot's code — and when that becomes how y
 
 ---
 
-> **⚠️ This is not what you do yet.** This page describes `Robot-2026`, the competition
-> robot's code, written by people who already have commit access to it. You get that access
-> at **M7**, when you clear the Kickoff Readiness Gate. Until then you fork `ignition-labs`
-> and pull-request into your own fork — see [the git workflow](git-workflow.md).
+> **Before M7, this is background.** This page is the team's gitflow, used in `Robot-2026`
+> and the other managed repos by people with commit access. You get that access at **M7**,
+> when you clear the Kickoff Readiness Gate. Until then you fork `ignition-labs` and
+> pull-request into your own fork; see [the git workflow](git-workflow.md).
 >
 > Nothing here contradicts that. It describes the far side of the same boundary. Read it now
 > so that when you clone `Robot-2026` at M2 and find a `development` branch that the git
@@ -47,8 +47,8 @@ feature branched after it, and someone re-breaks it in March.
 | Branch | What it holds | Who writes to it |
 |---|---|---|
 | `main` | Competition-ready code, and nothing else | Nobody directly. Only merges, from `development` or a `hotfix` |
-| `development` | Features merged together so they can be tested as a set | Nobody directly. Only merges — from `feature/*`, and from `main` after a hotfix |
-| `feature/<name>` | One feature or fix. One, 95% of the time | You |
+| `development` | The default branch. Features merged together so they can be tested as a set | Nobody directly. Only merges — from `feature/*`, and from `main` after a hotfix |
+| `feature/<num>-<name>` | One feature or fix, for one issue. One, 95% of the time | You |
 | `hotfix/<comp>` | Changes made at a competition, branched from `main` | Whoever is at the event |
 
 We do not use `release` branches. Code goes from `development` straight to `main`.
@@ -57,17 +57,25 @@ We do not use `release` branches. Code goes from `development` straight to `main
 
 ## The standard flow
 
-1. Fetch from all remotes, so you are working from what everyone else has already done.
-2. Check out `development` if you are not already on it.
-3. Pull, to pick up any updates.
-4. Create your feature branch, `feature/<name>`, and switch to it. Branch directly in the
-   Ignite repository — no fork.
-5. Write the code.
-6. Test it. You can deploy to the robot directly from your feature branch.
-7. Open a pull request from your feature branch back into `development`.
-8. If the automated build fails, fix it and push again. The pull request updates itself.
-9. Review with the other developers and a mentor. Walk them through what you did.
-10. A lead merges it. Delete the feature branch on GitHub afterward to keep the list short.
+1. Pick up an issue in the **Ready** status, assign it to yourself, and read it. If it is not
+   Ready, ask a lead; see [Issues & Projects](issues-and-projects.md#ready).
+2. Fetch from all remotes, so you are working from what everyone else has already done.
+3. Check out `development`, the default branch, if you are not already on it.
+4. Pull, to pick up any updates.
+5. Create your feature branch, `feature/<num>-<name>` (for example `feature/42-indexer-jam`),
+   and switch to it. Move your card to **In progress**. Branch directly in the Ignite
+   repository, no fork.
+6. If the change has a spec, commit it first, then open a **draft** pull request into
+   `development`. The draft is the spec review.
+7. Write the code.
+8. Test it. You can deploy to the robot directly from your feature branch.
+9. Put `Closes #<num>` in the pull request body and mark it ready for review. If the
+   automated build fails, fix it and push again. The pull request updates itself.
+10. Review with the other developers and a mentor. Walk them through what you did.
+11. If the change has a spec, archive it (`openspec archive`) as the last commit on the
+    branch, after the mentor has approved.
+12. A lead merges it. The merge closes the issue and moves the card to **Done**. Delete the
+    feature branch on GitHub afterward to keep the list short.
 
 ---
 
@@ -91,6 +99,12 @@ We do not use `release` branches. Code goes from `development` straight to `main
    `development`.** Two hops. The second one is what keeps the fix from vanishing off every
    branch cut after the event.
 7. **No `release` branches.** `development` goes straight to `main`.
+8. **Every change starts from an issue**, and the branch name carries its number:
+   `feature/<num>-<name>`. A hotfix at an event is the exception; file it afterwards.
+9. **Every feature pull request body carries `Closes #<num>`.** It only works because
+   `development` is the default branch.
+10. **A failure found after merge opens a new issue that links the old one.** Do not reopen
+    the old one.
 
 **One exception, before you have commit access.** At M4 and M6 you open a pull request into
 `Robot-2026` from a fork, without commit access — a contribution from outside the team's
@@ -104,7 +118,7 @@ the repository is right and the page is stale — ask a mentor.
 
 At **M7**. Clearing the Kickoff Readiness Gate is what gets you commit access to
 `Robot-2026`, and from that point this page stops being background reading and starts
-describing your week: your branch is `feature/<name>`, your pull request targets
+describing your week: your branch is `feature/<num>-<name>`, your pull request targets
 `development`, and you never push to `main`.
 
 That is the same boundary as the git ritual. Before the Gate you fork and send pull
@@ -116,7 +130,5 @@ the competition robot's code.
 
 ## Source
 
-This page is the curriculum's copy of the team's
-[Ignite Git Usage Guidelines](https://igniterobotics.notion.site/Ignite-Git-Usage-Guidlines-2ece1d60205380c39926f80cb312612a).
-Where the two disagree, the Notion page is what the team does and this page is out of date —
-tell a mentor.
+This page is the team's standard for how we use git. For issues, the board, and hotfix
+filing, see [Issues & Projects](issues-and-projects.md).

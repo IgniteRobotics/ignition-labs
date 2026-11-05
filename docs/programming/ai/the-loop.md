@@ -31,10 +31,12 @@ Why this matters more with an agent than without one. An agent has no memory of 
 ```
   ┌─ 0. CONSTITUTION ──── standing rules; read before every change
   │
+  ├─ 0b. ISSUE ───────── the problem, written down and Ready; the change links it
+  │
   ├─ 1. EXPLORE ───────── read the code, the knowledge base, the mechanism
   ├╌ 1b. RESEARCH ╌╌╌╌╌╌ OPTIONAL. Only when the answer isn't in the repo.
   ┆                      Always produces a cited document. Clear context after.
-  ├─ 2. PROPOSE ───────── the change: proposal, delta spec, tasks
+  ├─ 2. PROPOSE ───────── the change: proposal, delta spec, tasks; draft PR opens
   ├─ 3. RED ───────────── scenarios become failing tests. Confirm they fail.
   ├─ 4. APPLY ─────────── implement against the spec, agent may drive
   ├─ 5. GREEN ────────── unit + integration tests pass; format; CI
@@ -43,10 +45,13 @@ Why this matters more with an agent than without one. An agent has no memory of 
   ├─ 8. FIELD ────────── practice field / match
   ├─ 9. REPLAY ───────── log replay against what actually happened
   ├─ 10. REVIEW ──────── defend the diff; disclosure block
-  └─ 11. ARCHIVE ─────── spec archived, decision recorded, AGENTS.md updated
+  └─ 11. ARCHIVE ─────── spec archived as the PR's last commit, then merge;
+                         decision recorded, AGENTS.md updated
         │
         └──→ back to 1
 ```
+
+Rung 0b is the [issue](../issues-and-projects.md): it says why the change exists, and `proposal.md` links it. Rung 11 happens before the merge, not after, so a merged PR leaves the specs and the code in sync.
 
 Rungs 3 and 5 bracket the implementation. Rungs 6 through 9 are the ones teams skip, and they are the ones that catch the failures that lose matches.
 
@@ -69,6 +74,8 @@ Then **clear your context.** What crosses into rung 2 is the committed document,
 ---
 
 ## Rung 2: propose, and the spec makes the tests writable
+
+Open a draft pull request as soon as the change is committed, before any implementation code. The draft is the spec review: reviewers read the proposal and delta spec there, and the draft shows that the spec came first.
 
 The delta spec is the part that does the work, and its format exists for a reason that only shows up at rung 3:
 
@@ -179,7 +186,7 @@ Log replay converts a competition failure from an anecdote into a **regression t
 
 1. Something goes wrong in a match. **Pull the log before anything else.**
 2. Replay it. Reproduce the failure in sim, on a laptop, off the field.
-3. Write the failing test *from the replay*, at rung 3. This is a new scenario and it belongs in the spec as a `MODIFIED` requirement.
+3. Open a new issue that links the old one. Do not reopen the old one. Write the failing test *from the replay*, at rung 3. This is a new scenario and it belongs in the spec as a `MODIFIED` requirement.
 4. Fix. Rungs 4–6.
 5. Replay the original log against the fix. **The bug is fixed when the old log produces the right behaviour**, not when someone says it looks better.
 6. Keep the log. It is a fixture now, and it belongs in the knowledge base.
@@ -197,8 +204,8 @@ The full ladder is right and it is not always affordable. Say the degraded mode 
 | Offseason / preseason | all rungs, 1b included | — |
 | Build weeks 1–4 | 1–6, 10, 11; 1b when the answer isn't in the repo | tests before code; archive; **research still writes its document** |
 | Build weeks 5–6 | 1–6, 10 | tests before code |
-| Competition, between matches | 3, 4, 5, 9 | **a failing test that reproduces it** |
-| Competition, 10 minutes to queue | 4, 7 — human types it, no agent | a second person watches the change |
+| Competition, between matches | 3, 4, 5, 9 (issue may be filed after) | **a failing test that reproduces it** |
+| Competition, 10 minutes to queue | 4, 7 — human types it, no agent (issue may be filed after) | a second person watches the change |
 
 The last row is a real policy, not a joke.
 
