@@ -3,7 +3,7 @@
 **There is no skeleton here either, and this time there is not even a backlog.** Your
 subject is already decided: you are extending the change you shipped at M7, in the
 capability spec your own change archived into. Nothing to pick, nothing to wait for beyond
-your own archive.
+your own merge.
 
 Two sessions is normal.
 
@@ -26,10 +26,10 @@ Your branch is on `Robot-2026`, not here — same as M7. **Nothing in this train
 runs OpenSpec.** There is no `openspec/` directory here and no CI wiring; the tool runs in
 your clone of `Robot-2026`.
 
-You need one thing to exist before you start: **your M7 change must be merged and archived.**
-The mentor who sat your defense review runs `openspec archive <your-m7-change>` after the
-pull request merges, which folds your delta into `openspec/specs/<capability>/spec.md`. If
-that has not happened, M8 has nothing to anchor to. Ask for it before your first session
+You need one thing to exist before you start: **your M7 PR must be merged.**
+Its last commit was your `openspec archive <your-m7-change>`, which folded your delta into
+`openspec/specs/<capability>/spec.md`. If that commit was not there, M8 has nothing to
+anchor to. Ask your mentor before your first session
 rather than at the keyboard.
 
 Your mentor also needs a second change in mind for your capability — a real difference in
@@ -48,7 +48,7 @@ openspec list                     # shows your change as ✓ Complete once every
 `openspec new change` scaffolds the folder and a `.openspec.yaml`, and stops there — no
 `proposal.md`, no `tasks.md`, no `specs/`. You write all three, the way you did at M7.
 
-After merge, a mentor runs `openspec archive <name>`. **It refuses to run while any box in
+Once your mentor has approved spec and code, you run `openspec archive <name>` as the last commit of your PR. **It refuses to run while any box in
 your `tasks.md` is still open**, so check them off as you finish them rather than at the end.
 
 ### `openspec-propose`, and the rule that lifts here
@@ -117,3 +117,4 @@ running. Everything else here is mentor-verified, and there is no test to make g
 - [ ] You can name something `openspec validate` cannot check about a requirement
 - [ ] If you used `openspec-propose`, you can show one requirement you rewrote and one scenario you added or deleted
 - [ ] You can make the strongest case *for* spec-as-source, and then say why Ignite stops short of it
+- [ ] Your change has an issue, and your PR says `Closes #<num>`

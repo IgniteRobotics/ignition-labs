@@ -7,7 +7,7 @@ Using AI coding tools well, now that you can tell when they are wrong.
 Required before you use AI tooling on competition robot code — and **not sufficient on its own.** The Kickoff Readiness Gate asks for M7 *and* M8, plus a signed AI-use standard. Finishing this milestone does not clear you; finishing the next one does.
 
 **Estimated time:** 2–3 sessions
-**Prerequisites:** **M6 complete. No exceptions, including for veterans.** Node 20.19+ with the OpenSpec CLI installed — see the project README. Install it before your first session, not at the keyboard
+**Prerequisites:** **M6 complete. No exceptions, including for veterans.** Node 20.19+ with the OpenSpec CLI installed — [the setup guide](../ai/setup.md) walks it. Install it before your first session, not at the keyboard
 **AI posture:** 🟢 Green — this milestone is where Green is earned and exercised
 
 ## Who enters here
@@ -125,7 +125,7 @@ A checklist that works:
 **Ship a real feature, AI-assisted, under the Green tier — then defend it.**
 
 1. Pick a real, useful feature. Not a toy
-2. **Write the spec, and commit it before you start.** On your branch in `Robot-2026`: `openspec new change <your-change>`, then write `proposal.md` (why, what changes, the approach and what you rejected), the delta spec under `specs/<capability>/spec.md`, and `tasks.md`. Run `openspec validate <your-change>` until it passes, then commit the folder. `SPEC-TEMPLATE.md` walks a complete one, file by file. The `openspec/` folder is already there — a mentor seeded it, and you do not run `openspec init`. If it is missing, ask a mentor rather than creating it yourself; which tool the season repo standardizes on is not a decision the first student to arrive should make
+2. **Start from an issue, then write the spec and commit it before you start.** Your change has a GitHub issue; the PR you open later says `Closes #<num>`. On your branch in `Robot-2026`: `openspec new change <your-change>`, then write `proposal.md` (why, what changes, the approach and what you rejected), the delta spec under `specs/<capability>/spec.md`, and `tasks.md`. Run `openspec validate <your-change>` until it passes, then commit the folder. `SPEC-TEMPLATE.md` walks a complete one, file by file. The `openspec/` folder is already there — a mentor seeded it, and you do not run `openspec init`. If it is missing, ask a mentor rather than creating it yourself; which tool the season repo standardizes on is not a decision the first student to arrive should make
 3. **Use AI assistance genuinely and substantially, against the spec you wrote.** This is the one milestone where that is the assignment rather than a concession
 4. **Write or verify tests covering the new behavior.** They must pass
 5. Open a PR with the disclosure block filled in — see `ai-use-standard.md` §6. The "how I verified it" field must be specific
@@ -147,6 +147,8 @@ A checklist that works:
 - [ ] You can explain the difference between interface-level and decision-level trust
 - [ ] `openspec validate` passes on your change, and the change folder was committed before your first implementation commit
 - [ ] You can name one place the implementation diverged from your spec, and say why
+- [ ] Your change has an issue, and your PR says `Closes #<num>`
+- [ ] `openspec archive` is the last commit of your PR
 
 ## Common failure modes
 

@@ -361,7 +361,7 @@ The milestone file carries the authoritative eleven-item list; the above is its 
 
 ### 4.10 M8 — Spec-Anchored Development
 
-**Prerequisite:** M7 complete, **and that student's own M7 change archived** (`openspec archive`, run by the mentor after the pull request merges). Without the archive there is no settled spec on disk and the milestone has nothing to anchor to.
+**Prerequisite:** M7 complete, **and that student's own M7 PR merged** (its last commit is `openspec archive`, run by the student after the mentor approves spec and code; the mentor checks that commit before merging). Without the archive there is no settled spec on disk and the milestone has nothing to anchor to.
 
 **Concepts.** What M7 structurally cannot teach: a spec's second change. Every requirement a student has written to this point is an `## ADDED Requirements` block against an empty `openspec/specs/`, because there was nothing on disk to write *against*. M7 can therefore check only one property — *can you defend your decisions?* — and a spec that is never reopened is a deliverable graded on its author. M8 checks the other one: **is the spec true, and can somebody else act on it?**
 

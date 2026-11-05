@@ -21,13 +21,13 @@ DOD_PAIRS = [
         "M7",
         "docs/programming/milestones/m7-ai-assisted-development.md",
         "projects/m7-ai-assisted/README.md",
-        11,
+        13,
     ),
     (
         "M8",
         "docs/programming/milestones/m8-spec-anchored-development.md",
         "projects/m8-spec-anchored/README.md",
-        8,
+        9,
     ),
 ]
 

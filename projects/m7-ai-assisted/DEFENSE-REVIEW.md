@@ -10,10 +10,11 @@ account for their own code without help. **Divergence between the spec and the d
 expected, not a fault** — a student who reports none either picked something too small or
 did not look, and either of those is a conversation, not a failure.
 
-**After the pull request merges, run `openspec archive <change-name>`.** The mentor who
-sat the review does this, because they are the one who knows it passed. It refuses to run
-until every box in the student's `tasks.md` is checked — `openspec list` shows
-`✓ Complete` when they are. The command folds the student's delta into `openspec/specs/`
+**Once you have approved the spec and the code, the student runs `openspec archive
+<change-name>` as the last commit of their PR. Check that commit before you merge:** every
+box in `tasks.md` checked (`openspec list` shows `✓ Complete`), `openspec validate`
+passing, and `openspec/specs/` updated. The command refuses to run until every box is
+checked. It folds the student's delta into `openspec/specs/`
 and moves the folder to `changes/archive/<date>-<change-name>/`, so the settled specs grow
 by exactly what shipped.
 

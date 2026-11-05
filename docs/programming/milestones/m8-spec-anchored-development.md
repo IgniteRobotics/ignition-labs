@@ -5,12 +5,12 @@
 What happens when a spec meets its second change.
 
 **Estimated time:** 2 sessions
-**Prerequisites:** **M7 complete, and your M7 change archived.** The mentor runs `openspec archive` after your PR merges — if that has not happened, M8 has nothing to anchor to. Ask for it before your first session
+**Prerequisites:** **M7 complete, and your M7 PR merged (merging it archived your change).** Your PR carried the `openspec archive` commit — if it did not, M8 has nothing to anchor to. Ask your mentor before your first session
 **AI posture:** 🟢 Green — and the one thing M7 held back is handed over here
 
 ## Who enters here
 
-Everyone, after M7. You are extending the change *you* shipped, so there is nothing to wait for beyond your own archive.
+Everyone, after M7. You are extending the change *you* shipped, so there is nothing to wait for beyond your own merge.
 
 Your mentor needs one thing ready before you start: a genuine second change to the capability you specified. Not a scenario you forgot — a real difference in what the robot does.
 
@@ -96,11 +96,11 @@ The line is a judgement about what a training team should optimise for. It is no
 
 1. Open the capability spec your M7 change archived into, at `openspec/specs/<capability>/spec.md`. **Repair the drift** between what it says and what you actually shipped, and write its `## Purpose`
 2. Take the second change your mentor identified. A real change in behaviour — a scenario you forgot to write down is not a modified requirement
-3. `openspec new change <name>`, then write the change the way you did at M7 — `proposal.md`, `tasks.md`, and the delta spec — with the `MODIFIED` (or `REMOVED`) requirement restated in full. The command scaffolds the folder and a `.openspec.yaml`, and stops there; all three files are yours. `MODIFIED-EXAMPLE.md` in the project walks a worked delta, before and after, with the reasoning for each edit
+3. Start from an issue: your change has one, and the PR says `Closes #<num>`. Then `openspec new change <name>`, then write the change the way you did at M7 — `proposal.md`, `tasks.md`, and the delta spec — with the `MODIFIED` (or `REMOVED`) requirement restated in full. The command scaffolds the folder and a `.openspec.yaml`, and stops there; all three files are yours. `MODIFIED-EXAMPLE.md` in the project walks a worked delta, before and after, with the reasoning for each edit
 4. Run `openspec validate <name>` until it passes. Commit the change folder before your first implementation commit
 5. Build it. Tests pass and cover the new behaviour
 6. **Sit the second-reader test.** `SPEC-REVIEW.md` in the project is the protocol: another student reads your updated spec alone — not the diff, not the code — and tells you what the system now does, including at least one edge case. If what they describe is not what you built, the spec is wrong, whatever the code does. Fix it and they read again. Failing is normal and is not a retry; **report how many round trips it took**
-7. Open the PR, spec change and code change together. Check off every box in `tasks.md` as you finish it — `openspec archive` refuses to run while any of them is open, and your mentor runs it after merge
+7. Open the PR, spec change and code change together. Check off every box in `tasks.md` as you finish it — `openspec archive` refuses to run while any of them is open. Once your mentor has approved spec and code, you run it as the last commit of your PR
 
 **On drafting.** M7 forbade `openspec-propose` outright. Here you may use the skill, as a first draft and nothing more: you say in the pull request that you used it, and you show the red-line — at minimum one requirement you rewrote and one scenario you added or cut. A draft accepted unchanged is not a pass.
 
@@ -116,6 +116,7 @@ This is the same trade M6 made when it unlocked Green. The tool arrives once you
 - [ ] You can name something `openspec validate` cannot check about a requirement
 - [ ] If you used `openspec-propose`, you can show one requirement you rewrote and one scenario you added or deleted
 - [ ] You can make the strongest case *for* spec-as-source, and then say why Ignite stops short of it
+- [ ] Your change has an issue, and your PR says `Closes #<num>`
 
 ## Common failure modes
 
