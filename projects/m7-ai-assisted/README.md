@@ -76,8 +76,10 @@ openspec show <your-change>              # print yours
 openspec view                            # dashboard
 ```
 
-After your pull request merges, a mentor runs `openspec archive <your-change>`, which
-folds your delta into `openspec/specs/` and moves the folder into `changes/archive/`.
+Once your mentor has approved the spec and the code, you run `openspec archive <your-change>`
+as the last commit of your pull request. It folds your delta into `openspec/specs/` and
+moves the folder into `changes/archive/`. The mentor checks that commit before merging:
+tasks checked, `openspec validate` passing, `openspec/specs/` updated.
 
 ### The one command you do not run
 
@@ -133,5 +135,7 @@ assessment is step 6.** A green build on a diff you cannot explain is a failed M
 - [ ] You can explain the difference between interface-level and decision-level trust
 - [ ] `openspec validate` passes on your change, and the change folder was committed before your first implementation commit
 - [ ] You can name one place the implementation diverged from your spec, and say why
+- [ ] Your change has an issue, and your PR says `Closes #<num>`
+- [ ] `openspec archive` is the last commit of your PR
 
 Every one of these is mentor-verified. There is no test to make green.

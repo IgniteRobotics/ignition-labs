@@ -55,9 +55,9 @@ git commit -m "Spec: structured signal for the swallowed vision exception"
 
 Useful while you work: `openspec list` shows every change in flight, `openspec show
 add-vision-exception-signal` prints yours, and `openspec view` opens a dashboard.
-After your pull request merges, a mentor runs `openspec archive
-add-vision-exception-signal`, which folds your delta into `openspec/specs/` and moves the
-folder to `changes/archive/`.
+Once your mentor has approved the spec and the code, you run `openspec archive
+add-vision-exception-signal` as the last commit of your pull request. It folds your delta
+into `openspec/specs/` and moves the folder to `changes/archive/`.
 
 ### The one command you do not run
 

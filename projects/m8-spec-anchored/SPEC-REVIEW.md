@@ -42,7 +42,7 @@ they are disqualified as a reader for this change. Find someone else; they are n
 **One file: the capability spec as it will read once your change archives.** Nothing else.
 Not the change folder, not the proposal, not the pull request, not the code.
 
-That file does not exist on disk yet — `openspec archive` runs after your PR merges, so at
+That file does not exist on disk yet — `openspec archive` is the last commit of your PR, so at
 this point the settled spec on your branch carries your drift repair and your `MODIFIED` and
 `REMOVED` blocks are still in the change folder. Paste them together into a scratch copy and
 hand that over. Two minutes, and it makes you read your own end state, which otherwise
