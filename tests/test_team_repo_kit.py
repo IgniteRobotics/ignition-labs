@@ -1,5 +1,6 @@
 """Tests for the team-repo kit and the org-wide GitHub templates."""
 
+import re
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parent.parent
@@ -13,14 +14,15 @@ def _lines(path: Path) -> list[str]:
     return path.read_text(encoding="utf-8").splitlines()
 
 
-def _textarea_block(path: Path, field_id: str) -> str:
-    """Return the text of the body item whose `id:` is field_id (stdlib, line-based)."""
+def _field_block(path: Path, field_id: str) -> str:
+    """Return the single body item (one `  - type:` entry) whose `id:` is field_id."""
     text = path.read_text(encoding="utf-8")
-    items = text.split("\n    - type:")
-    for item in items:
-        if f"id: {field_id}\n" in item + "\n":
-            return item
-    raise AssertionError(f"{path.name}: no body item with id: {field_id}")
+    items = re.split(r"^(?=  - type:)", text, flags=re.M)[1:]
+    matches = [i for i in items if re.search(rf"^    id: {re.escape(field_id)}$", i, re.M)]
+    assert len(matches) == 1, f"{path.name}: expected one body item with id: {field_id}"
+    block = matches[0]
+    assert len(re.findall(r"^    id: ", block, re.M)) == 1, "block spans multiple fields"
+    return block
 
 
 def test_issue_forms_have_required_keys_and_label() -> None:
@@ -32,21 +34,21 @@ def test_issue_forms_have_required_keys_and_label() -> None:
 
 
 def test_feature_form_requires_problem_statement() -> None:
-    block = _textarea_block(ISSUE_DIR / "feature.yml", "problem")
-    assert "type: textarea" in block
+    block = _field_block(ISSUE_DIR / "feature.yml", "problem")
+    assert block.lstrip().startswith("- type: textarea")
     assert "required: true" in block
 
 
 def test_bug_form_asks_for_log_or_replay() -> None:
     text = (ISSUE_DIR / "bug.yml").read_text(encoding="utf-8").lower()
     assert "log" in text and "replay" in text
-    block = _textarea_block(ISSUE_DIR / "bug.yml", "evidence")
+    block = _field_block(ISSUE_DIR / "bug.yml", "evidence")
     assert "required: true" in block
 
 
 def test_hotfix_form_records_event_and_branch() -> None:
     for field_id in ("event", "branch"):
-        block = _textarea_block(ISSUE_DIR / "hotfix.yml", field_id)
+        block = _field_block(ISSUE_DIR / "hotfix.yml", field_id)
         assert "required: true" in block, f"hotfix {field_id} not required"
 
 
