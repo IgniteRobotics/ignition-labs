@@ -1,0 +1,32 @@
+name: Hotfix
+description: File a fix made at an event. Open this after the fix, not before.
+title: "[Hotfix] "
+labels: ["hotfix"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Hotfixes at an event need no issue first. File this afterwards.
+        Close it by hand when the `hotfix/<comp>` branch merges into `main`.
+  - type: input
+    id: event
+    attributes:
+      label: Event
+      description: Which competition, and which match or practice slot?
+      placeholder: "Example Regional, Qualification 14"
+    validations:
+      required: true
+  - type: input
+    id: branch
+    attributes:
+      label: Hotfix branch
+      description: The `hotfix/<comp>` branch holding the fix.
+      placeholder: "hotfix/example-regional"
+    validations:
+      required: true
+  - type: textarea
+    id: what
+    attributes:
+      label: What broke and what you changed
+    validations:
+      required: true

@@ -1,0 +1,6 @@
+# Seeder: append these lines to .gitignore, and remove any bare `.claude/` entry
+# (it hides the committed .claude/skills/ files from git).
+.claude/settings.local.json
+.claude/worktrees/
+.codex/
+.ignite/implementing
