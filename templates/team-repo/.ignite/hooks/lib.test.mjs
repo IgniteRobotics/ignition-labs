@@ -174,3 +174,18 @@ test("session-start: prints tier or unknown", () => {
   assert.equal(r.status, 0);
   assert.equal(r.stdout.trim(), "Ignite tier: unknown — ask a mentor");
 });
+
+test("guard: blocks commands wrapped by cmd /c and pwsh -Command", () => {
+  for (const c of [
+    "cmd /c git push origin x",
+    "cmd.exe /C git push",
+    "pwsh -Command git push",
+    "powershell -Command openspec update",
+    'bash -c "git push"',
+  ]) {
+    assert.equal(decide(shell(c), noMarker).block, true, c);
+  }
+  for (const c of ["cmd /c dir", "pwsh -Command Get-ChildItem", 'bash -c "echo hi"']) {
+    assert.equal(decide(shell(c), withMarker).block, false, c);
+  }
+});

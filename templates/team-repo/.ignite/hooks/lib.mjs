@@ -149,7 +149,7 @@ function inspectSegment(tokens, out) {
 
   if (["sh", "bash", "zsh", "pwsh", "powershell", "cmd"].includes(prog)) {
     const j = rest.findIndex((t) => /^(-c|-command|\/c)$/i.test(t));
-    if (j >= 0 && rest[j + 1]) for (const s of segments(rest[j + 1])) inspectSegment(s, out);
+    if (j >= 0 && rest[j + 1]) for (const s of segments(rest.slice(j + 1).join(" "))) inspectSegment(s, out);
     return;
   }
   if (prog === "git") {
