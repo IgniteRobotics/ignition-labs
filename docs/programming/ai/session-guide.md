@@ -244,7 +244,7 @@ Not malice. An underspecified problem where "make the test pass" is the only leg
 
 ### Slide 23: OpenSpec: a change is a folder
 
-Two halves: what gets committed, and the three commands.
+Two halves: what gets committed, and the commands. `openspec` runs in the bare shell; `init` happens once per repository. The `/opsx:` commands run inside your coding agent and exist only if `init` set up that agent. **Say the M8 line out loud:** until M8 the student writes the spec, and `/opsx:propose` is off-limits.
 
 The folder (`proposal.md`, `design.md`, `tasks.md`, and the delta under `specs/`) is committed **before the first implementation commit**, with a hash you can point at in review.
 

@@ -643,11 +643,17 @@ void stallDuringIntakeReverses() {
     indexer/spec.md   the delta</pre>
     </div>
     <div class="card">
-      <h3>The three commands</h3>
-      <pre>/opsx:propose   write the change
+      <h3>The commands</h3>
+      <pre># shell
+openspec init              once per repo
+openspec new change &lt;name&gt;
+openspec validate &lt;name&gt;   before you commit
+
+# in your agent
+/opsx:propose   draft the change
 /opsx:apply     build against it
 /opsx:archive   fold it into the specs</pre>
-      <p class="soft" style="margin-top:.8em;font-size:.9em">Pin the version each season. Put the pinned commands in <code>AGENTS.md</code>.</p>
+      <p class="soft" style="margin-top:.8em;font-size:.9em">Until M8 you write the spec yourself: no <code>/opsx:propose</code>. Pin the version each season. Put the pinned commands in <code>AGENTS.md</code>.</p>
     </div>
   </div>
   <p class="lede wide">Committed <strong>before</strong> the first implementation commit. With a hash you can point at in review.</p>

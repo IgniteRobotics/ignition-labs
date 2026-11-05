@@ -121,7 +121,7 @@ The "what we could not verify" section is not optional and is rarely empty. An u
 
 ---
 
-## Skills: packaging what we already wrote
+## Skills
 
 A **skill** is a directory with a `SKILL.md` at its root that an agent loads only when it is relevant. The design property that matters is progressive disclosure:
 
@@ -135,23 +135,11 @@ You can install many skills without paying for the ones you do not use. And when
 
 That is the attention-budget argument from [Context & Prompts](context-and-prompts.md), turned into a file format.
 
-### Skills worth writing
-
-| Skill | What it bundles | Why a skill and not a prompt |
-|---|---|---|
-| `wpilib-2026` | current API reference, deprecations by season | Attacks our most-reported real failure: confidently wrong old APIs |
-| `ignite-spec` | the spec template, the delta format, a validate script | The team format, enforced deterministically |
-| `ignite-review` | our checklist for reading generated code | The checklist is currently prose nobody re-reads |
-| `tuning-log` | the tuning-log schema + an append script | Article VIII, made mechanical |
-| `scouting-query` | match-data schema + query scripts | The strategy subteam gets a tool, not a chatbot |
-
-Notice the pattern: every one of these is something we already wrote as prose. A skill is mostly a packaging decision about documentation you already own.
-
 ### Security, non-negotiable
 
 The vendor documentation is blunt about this: use skills only from trusted sources, because a malicious skill can direct an agent to invoke tools or run code in ways that do not match its stated purpose. Skills that fetch external URLs are called out as particularly risky.
 
-> **Ignite skills live in an Ignite repository and are reviewed like code. We do not install skills from the internet.**
+> **Skills come from tools we have chosen and pinned, like the ones `openspec init` installs, and they are committed and reviewed like code. Nothing else gets installed from the internet.**
 
 ---
 
