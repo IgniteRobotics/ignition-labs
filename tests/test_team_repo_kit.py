@@ -12,7 +12,8 @@ GITHUB_TEMPLATES = REPO / "templates" / "github"
 ISSUE_DIR = GITHUB_TEMPLATES / "ISSUE_TEMPLATE"
 PR_TEMPLATE = GITHUB_TEMPLATES / "PULL_REQUEST_TEMPLATE.md"
 REPO_PR_TEMPLATE = REPO / ".github" / "PULL_REQUEST_TEMPLATE.md"
-HOOKS_DIR = REPO / "templates" / "team-repo" / ".ignite" / "hooks"
+IGNITE_DIR = REPO / "templates" / "team-repo" / ".ignite"
+HOOKS_DIR = IGNITE_DIR / "hooks"
 
 
 def _lines(path: Path) -> list[str]:
@@ -90,8 +91,8 @@ def test_hook_suite_passes_under_node() -> None:
     major, minor = (int(x) for x in version.lstrip("v").split(".")[:2])
     if (major, minor) < (20, 19):
         pytest.fail(f"Node >= 20.19 is required to run the hook suite (found {version})")
-    # Pass the test file, not the directory: newer Node treats a directory argument as a module.
-    result = subprocess.run(
-        [node, "--test", str(HOOKS_DIR / "lib.test.mjs")], capture_output=True, text=True
-    )
+    # Pass explicit files: newer Node treats a directory argument as a module, and globs fail on 20.
+    test_files = sorted(str(p) for p in IGNITE_DIR.rglob("*.test.mjs"))
+    assert test_files, "no *.test.mjs files found under .ignite/"
+    result = subprocess.run([node, "--test", *test_files], capture_output=True, text=True)
     assert result.returncode == 0, result.stdout + result.stderr
