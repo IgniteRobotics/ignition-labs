@@ -1,0 +1,40 @@
+# Managed repos and settings for `python -m tools.team_github`.
+# Adding a repo = adding a [[repos]] entry. Dry-run first; --apply only after reading it.
+
+org = "IgniteRobotics"
+project_title = "Ignite Programming"
+status_options = ["Backlog", "Ready", "In progress", "In review", "Done"]
+size_options = ["XS", "S", "M", "L", "XL"]
+mentor_team = "mentors"      # org team id 18901463; CODEOWNERS owner
+bypass_team_id = 9240266     # org team code-reviewers; ruleset bypass actor
+old_projects = [3, 5]        # Flashpoint, IgniteLib
+templates_repo = ".github"
+
+# Label name -> colour. Existing labels are never recoloured.
+[labels]
+feature = "0e8a16"
+bug = "d73a4a"
+hotfix = "b60205"
+spec = "5319e7"
+
+# required_checks are job names. A check no workflow has reported on `development`
+# yet is reported PENDING and left out of the ruleset.
+[[repos]]
+name = "Robot-2026"
+default_branch = "development"
+required_checks = ["Build and Check Code Format", "OpenSpec tool files"]
+
+[[repos]]
+name = "IgniteLib"
+default_branch = "development"
+required_checks = ["Build and Check Code Format", "OpenSpec tool files"]
+
+[[repos]]
+name = "flashpoint"
+default_branch = "development"
+required_checks = ["ci-ok", "OpenSpec tool files"]  # ci-ok: job in .github/workflows/ci.yml
+
+[[repos]]
+name = "Phoenix-2026"
+default_branch = "development"
+required_checks = ["Build and Check Code Format", "OpenSpec tool files"]
