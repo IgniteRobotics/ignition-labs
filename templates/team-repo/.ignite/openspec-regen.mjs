@@ -1,7 +1,7 @@
 // Regenerates the OpenSpec tool files from .ignite/openspec-recipe.json, with no user or
 // runner config leaking in. `--check` also fails when the result differs from what is committed.
 import { spawnSync } from "node:child_process";
-import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, mkdtempSync, readdirSync, readFileSync, realpathSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -15,9 +15,16 @@ export const TOOL_PATHS = [
   "openspec/config.yaml",
 ];
 
-// Only what a child process needs to find node/npx and a temp dir. HOME and every XDG/APPDATA
-// variable are deliberately absent so the caller's OpenSpec profile cannot reach the run.
-const PASSTHROUGH = ["PATH", "Path", "PATHEXT", "SystemRoot", "SYSTEMROOT", "ComSpec", "TEMP", "TMP", "TMPDIR", "LANG", "CI"];
+// Only what a child process needs to find node/npx, reach the registry through a proxy, and use a
+// temp dir. HOME and every XDG/APPDATA variable are deliberately absent so the caller's OpenSpec
+// profile cannot reach the run.
+export const PASSTHROUGH = [
+  "PATH", "Path", "PATHEXT", "SystemRoot", "SYSTEMROOT", "windir", "ProgramFiles", "ProgramData", "ComSpec",
+  "TEMP", "TMP", "TMPDIR", "LANG", "CI",
+  "HTTP_PROXY", "HTTPS_PROXY", "NO_PROXY", "http_proxy", "https_proxy", "no_proxy",
+  "NODE_EXTRA_CA_CERTS", "SSL_CERT_FILE",
+  "npm_config_proxy", "npm_config_https_proxy", "npm_config_registry", "npm_config_cafile",
+];
 
 export function buildEnv(home, base = process.env) {
   const env = {};
@@ -51,7 +58,7 @@ export function driftMessage(paths) {
   return [
     "OpenSpec tool files changed:",
     ...paths.map((p) => `  ${p}`),
-    "Students: revert these files with `git checkout -- <paths>`. Never run `openspec init` or `openspec update` in a team repo.",
+    "Students: undo these changes — `git checkout -- <changed paths>` and delete any new files listed. Never run `openspec init` or `openspec update` in a team repo.",
     "Mentors: regenerate with `node .ignite/openspec-regen.mjs` (recipe: .ignite/openspec-recipe.json) and commit the result.",
   ].join("\n");
 }
@@ -61,6 +68,26 @@ export function parsePorcelain(output) {
     .split("\n")
     .filter((line) => line.length > 3)
     .map((line) => line.slice(3).replace(/^"|"$/g, ""));
+}
+
+// `init` only writes. Delete the generated set first so files the recipe no longer produces (or
+// that someone added by hand under an OpenSpec name) show up as git changes. openspec/config.yaml
+// carries hand-written context and is never deleted; non-OpenSpec files are never touched.
+export function removeGenerated(root) {
+  for (const dir of [".claude/skills", ".agents/skills", ".github/skills"]) {
+    const abs = join(root, dir);
+    if (!existsSync(abs)) continue;
+    for (const entry of readdirSync(abs)) {
+      if (entry.startsWith("openspec-")) rmSync(join(abs, entry), { recursive: true, force: true });
+    }
+  }
+  rmSync(join(root, ".claude", "commands", "opsx"), { recursive: true, force: true });
+  const prompts = join(root, ".github", "prompts");
+  if (existsSync(prompts)) {
+    for (const entry of readdirSync(prompts)) {
+      if (entry.startsWith("opsx-")) rmSync(join(prompts, entry), { recursive: true, force: true });
+    }
+  }
 }
 
 function regenerate(root, recipe) {
@@ -73,6 +100,7 @@ function regenerate(root, recipe) {
       mkdirSync(join(dir, "openspec"), { recursive: true });
       writeFileSync(join(dir, "openspec", "config.json"), body);
     }
+    removeGenerated(root);
     const [bin, ...args] = buildCommand(recipe);
     const result = spawnSync(bin, args, { cwd: root, env, stdio: "inherit", shell: process.platform === "win32" });
     return result.status ?? 1;
@@ -98,6 +126,7 @@ function main() {
   const recipe = JSON.parse(readFileSync(join(root, ".ignite", "openspec-recipe.json"), "utf8"));
   const status = regenerate(root, recipe);
   if (status !== 0) {
+    console.error("The OpenSpec download or run failed. Check your network and proxy settings, then try again.");
     console.error(`openspec exited with status ${status}; tool files were not regenerated.`);
     process.exit(2);
   }
@@ -110,4 +139,14 @@ function main() {
   }
 }
 
-if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) main();
+export function isEntry(argv1, metaUrl, platform = process.platform) {
+  if (!argv1) return false;
+  const norm = (p) => (platform === "win32" ? realpathSync(p).toLowerCase() : realpathSync(p));
+  try {
+    return norm(argv1) === norm(fileURLToPath(metaUrl));
+  } catch {
+    return resolve(argv1) === fileURLToPath(metaUrl);
+  }
+}
+
+if (isEntry(process.argv[1], import.meta.url)) main();

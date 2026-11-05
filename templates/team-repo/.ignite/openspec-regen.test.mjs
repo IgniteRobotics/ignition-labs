@@ -1,11 +1,12 @@
 import assert from "node:assert/strict";
-import { readFileSync } from "node:fs";
+import { spawnSync } from "node:child_process";
+import { chmodSync, cpSync, existsSync, mkdirSync, mkdtempSync, readFileSync, symlinkSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import test from "node:test";
 import { fileURLToPath } from "node:url";
 
-import { buildCommand, buildEnv, driftMessage } from "./openspec-regen.mjs";
+import { buildCommand, buildEnv, driftMessage, removeGenerated } from "./openspec-regen.mjs";
 
 const here = dirname(fileURLToPath(import.meta.url));
 const recipe = JSON.parse(readFileSync(join(here, "openspec-recipe.json"), "utf8"));
@@ -59,8 +60,79 @@ test("regen: drift message names files and both audiences", () => {
       "OpenSpec tool files changed:",
       "  .claude/skills/openspec-explore/SKILL.md",
       "  openspec/config.yaml",
-      "Students: revert these files with `git checkout -- <paths>`. Never run `openspec init` or `openspec update` in a team repo.",
+      "Students: undo these changes — `git checkout -- <changed paths>` and delete any new files listed. Never run `openspec init` or `openspec update` in a team repo.",
       "Mentors: regenerate with `node .ignite/openspec-regen.mjs` (recipe: .ignite/openspec-recipe.json) and commit the result.",
     ].join("\n"),
   );
+});
+
+test("regen: env keeps proxy vars and replaces the HOME family", () => {
+  const home = join(tmpdir(), "regen-home");
+  const env = buildEnv(home, {
+    PATH: "/usr/bin",
+    HOME: "/home/hostile",
+    USERPROFILE: "C:\\Users\\hostile",
+    APPDATA: "/home/hostile/AppData",
+    XDG_CONFIG_HOME: "/home/hostile/.config",
+    HTTP_PROXY: "http://proxy.school:3128",
+    NODE_EXTRA_CA_CERTS: "/etc/ca.pem",
+    npm_config_registry: "https://registry.example",
+  });
+  assert.equal(env.HTTP_PROXY, "http://proxy.school:3128");
+  assert.equal(env.NODE_EXTRA_CA_CERTS, "/etc/ca.pem");
+  assert.equal(env.npm_config_registry, "https://registry.example");
+  assert.equal(env.PATH, "/usr/bin");
+  assert.equal(env.HOME, home);
+  assert.equal(env.USERPROFILE, home);
+  assert.equal(env.APPDATA, join(home, "AppData", "Roaming"));
+  assert.equal(env.XDG_CONFIG_HOME, join(home, ".config"));
+});
+
+test("regen: removeGenerated deletes only OpenSpec-named files", () => {
+  const root = mkdtempSync(join(tmpdir(), "regen-rm-"));
+  const put = (rel) => {
+    mkdirSync(dirname(join(root, rel)), { recursive: true });
+    writeFileSync(join(root, rel), "x");
+  };
+  const gone = [
+    ".claude/skills/openspec-foo/SKILL.md",
+    ".agents/skills/openspec-explore/SKILL.md",
+    ".github/skills/openspec-sync-specs/SKILL.md",
+    ".claude/commands/opsx/sync.md",
+    ".github/prompts/opsx-sync.prompt.md",
+  ];
+  const kept = [
+    ".claude/skills/my-skill/SKILL.md",
+    ".claude/commands/other/cmd.md",
+    ".github/prompts/code-review-prompt.md",
+    "openspec/config.yaml",
+  ];
+  [...gone, ...kept].forEach(put);
+  removeGenerated(root);
+  for (const rel of gone) assert.ok(!existsSync(join(root, rel)), `${rel} should be removed`);
+  for (const rel of kept) assert.ok(existsSync(join(root, rel)), `${rel} should be kept`);
+});
+
+test("regen: runs main when invoked through a symlinked path", { skip: process.platform === "win32" }, () => {
+  const real = mkdtempSync(join(tmpdir(), "regen-real-"));
+  cpSync(here, join(real, ".ignite"), { recursive: true, filter: (src) => !src.includes("hooks") });
+  const bin = join(real, "bin");
+  mkdirSync(bin);
+  // A fake npx stands in for OpenSpec: it writes one tool file, so the run must show up as drift.
+  writeFileSync(join(bin, "npx"), '#!/bin/sh\nmkdir -p .claude/skills/openspec-fake && echo hi > .claude/skills/openspec-fake/SKILL.md\n');
+  chmodSync(join(bin, "npx"), 0o755);
+  const git = (...a) => spawnSync("git", ["-c", "user.email=t@t", "-c", "user.name=t", ...a], { cwd: real });
+  git("init", "-q");
+  git("add", ".ignite");
+  git("commit", "-qm", "base");
+  const linkParent = mkdtempSync(join(tmpdir(), "regen-link-"));
+  const link = join(linkParent, "link");
+  symlinkSync(real, link);
+  const r = spawnSync(process.execPath, [join(link, ".ignite", "openspec-regen.mjs"), "--check"], {
+    cwd: linkParent,
+    encoding: "utf8",
+    env: { ...process.env, PATH: `${bin}:${process.env.PATH}` },
+  });
+  assert.equal(r.status, 1, r.stdout + r.stderr);
+  assert.match(r.stderr, /\.claude\/skills\/openspec-fake\/SKILL\.md/);
 });
