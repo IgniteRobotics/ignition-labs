@@ -25,8 +25,8 @@ answer questions; the student writes the spec.
 - Never run `openspec init` or `openspec update` here. They rewrite committed tool files based on
   the runner's personal settings. Tool files change only through `node .ignite/openspec-regen.mjs`
   (mentors only); CI checks for drift.
-- Hooks in `.ignite/hooks/` enforce the test rule. Do not work around a block; report it.
-- Follow the AI-use tiers and fill in the PR's AI disclosure honestly.
+- Hooks in `.ignite/hooks/` enforce the test rule. Do not work around a block; report it to a mentor.
+- Follow the AI-use tiers in the AI use standard linked below, and fill in the PR's AI disclosure honestly.
 
 ## Where the standards live
 
