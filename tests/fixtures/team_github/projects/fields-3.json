@@ -1,0 +1,151 @@
+{
+ "fields": [
+  {
+   "id": "PVTF_lADOAeoJ684BnxT_zhmUYV8",
+   "name": "Title",
+   "type": "ProjectV2Field"
+  },
+  {
+   "id": "PVTF_lADOAeoJ684BnxT_zhmUYWA",
+   "name": "Assignees",
+   "type": "ProjectV2Field"
+  },
+  {
+   "id": "PVTSSF_lADOAeoJ684BnxT_zhmUYWE",
+   "name": "Status",
+   "options": [
+    {
+     "id": "0fe16a49",
+     "name": "Needs triage"
+    },
+    {
+     "id": "f75ad846",
+     "name": "Backlog"
+    },
+    {
+     "id": "47fc9ee4",
+     "name": "In progress"
+    },
+    {
+     "id": "98236657",
+     "name": "Done"
+    }
+   ],
+   "type": "ProjectV2SingleSelectField"
+  },
+  {
+   "id": "PVTF_lADOAeoJ684BnxT_zhmUYWI",
+   "name": "Labels",
+   "type": "ProjectV2Field"
+  },
+  {
+   "id": "PVTF_lADOAeoJ684BnxT_zhmUYWM",
+   "name": "Linked pull requests",
+   "type": "ProjectV2Field"
+  },
+  {
+   "id": "PVTF_lADOAeoJ684BnxT_zhmUYWQ",
+   "name": "Milestone",
+   "type": "ProjectV2Field"
+  },
+  {
+   "id": "PVTF_lADOAeoJ684BnxT_zhmUYWU",
+   "name": "Repository",
+   "type": "ProjectV2Field"
+  },
+  {
+   "id": "PVTF_lADOAeoJ684BnxT_zhmUYWc",
+   "name": "Reviewers",
+   "type": "ProjectV2Field"
+  },
+  {
+   "id": "PVTF_lADOAeoJ684BnxT_zhmUYWg",
+   "name": "Parent issue",
+   "type": "ProjectV2Field"
+  },
+  {
+   "id": "PVTF_lADOAeoJ684BnxT_zhmUYWk",
+   "name": "Sub-issues progress",
+   "type": "ProjectV2Field"
+  },
+  {
+   "id": "PVTF_lADOAeoJ684BnxT_zhmUYWo",
+   "name": "Created",
+   "type": "ProjectV2Field"
+  },
+  {
+   "id": "PVTF_lADOAeoJ684BnxT_zhmUYWs",
+   "name": "Updated",
+   "type": "ProjectV2Field"
+  },
+  {
+   "id": "PVTF_lADOAeoJ684BnxT_zhmUYWw",
+   "name": "Closed",
+   "type": "ProjectV2Field"
+  },
+  {
+   "id": "PVTSSF_lADOAeoJ684BnxT_zhmUbXs",
+   "name": "Priority",
+   "type": "ProjectV2SingleSelectField"
+  },
+  {
+   "id": "PVTSSF_lADOAeoJ684BnxT_zhmUbXw",
+   "name": "Size",
+   "options": [
+    {
+     "id": "3bd49c68",
+     "name": "XS"
+    },
+    {
+     "id": "6c82e442",
+     "name": "S"
+    },
+    {
+     "id": "58b8c8cc",
+     "name": "M"
+    },
+    {
+     "id": "bde66378",
+     "name": "L"
+    },
+    {
+     "id": "b4c28b9b",
+     "name": "XL"
+    }
+   ],
+   "type": "ProjectV2SingleSelectField"
+  },
+  {
+   "id": "PVTF_lADOAeoJ684BnxT_zhmUbX0",
+   "name": "Estimate",
+   "type": "ProjectV2Field"
+  },
+  {
+   "id": "PVTIF_lADOAeoJ684BnxT_zhmUbX4",
+   "name": "Iteration",
+   "type": "ProjectV2IterationField"
+  },
+  {
+   "id": "PVTF_lADOAeoJ684BnxT_zhmUbX8",
+   "name": "Start date",
+   "type": "ProjectV2Field"
+  },
+  {
+   "id": "PVTF_lADOAeoJ684BnxT_zhmUbYA",
+   "name": "Target date",
+   "type": "ProjectV2Field"
+  },
+  {
+   "id": "PVTSSF_lADOAeoJ684BnxT_zhmXRbM",
+   "name": "Release",
+   "options": [
+    {
+     "id": "621f7716",
+     "name": "2026.1.0"
+    }
+   ],
+   "type": "ProjectV2SingleSelectField"
+  }
+ ],
+ "totalCount": 20
+}

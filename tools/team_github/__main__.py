@@ -13,9 +13,13 @@ from tools.team_github import config as config_mod
 from tools.team_github.config import Config
 from tools.team_github.gh import GhError, GhRunner, Runner
 from tools.team_github.model import Change
+from tools.team_github.migrate import plan_close_old, plan_migration
+from tools.team_github.org_templates import plan_templates
+from tools.team_github.project import find_project, plan_project
 from tools.team_github.repos import plan_repo
 
 DEFAULT_CONFIG = Path(__file__).resolve().parent.parent / "team_github.toml"
+DEFAULT_TEMPLATES = Path(__file__).resolve().parent.parent.parent / "templates" / "github"
 ONLY_CHOICES = ["repos", "project", "migrate", "templates"]
 
 Planner = Callable[[Runner, Config, argparse.Namespace], list[Change]]
@@ -30,8 +34,29 @@ def _plan_repos(runner: Runner, cfg: Config, args: argparse.Namespace) -> list[C
     return out
 
 
-# Task 2 registers "project", "migrate" and "templates" here.
-TARGETS: dict[str, Planner] = {"repos": _plan_repos}
+def _plan_project(runner: Runner, cfg: Config, args: argparse.Namespace) -> list[Change]:
+    return plan_project(runner, cfg)
+
+
+def _plan_migrate(runner: Runner, cfg: Config, args: argparse.Namespace) -> list[Change]:
+    changes = plan_migration(runner, cfg, find_project(runner, cfg))
+    if args.close_old:
+        migrating = any(c.actionable for c in changes)
+        changes += plan_close_old(runner, cfg, migration_planned=migrating)
+    return changes
+
+
+def _plan_templates(runner: Runner, cfg: Config, args: argparse.Namespace) -> list[Change]:
+    return plan_templates(runner, cfg, args.templates_dir)
+
+
+# Apply order follows this dict: repos, then project -> links -> migration (+ close-old), then templates.
+TARGETS: dict[str, Planner] = {
+    "repos": _plan_repos,
+    "project": _plan_project,
+    "migrate": _plan_migrate,
+    "templates": _plan_templates,
+}
 
 
 def render(changes: list[Change], scopes: list[str]) -> str:
@@ -106,6 +131,8 @@ def main(
     parser.add_argument("--close-old", action="store_true", help="close the old Projects (with migrate)")
     parser.add_argument("--only", choices=ONLY_CHOICES, help="run one target only")
     parser.add_argument("--config", type=Path, default=None)
+    parser.add_argument("--templates-dir", type=Path, default=DEFAULT_TEMPLATES,
+                        help="source of the org templates (default: templates/github/)")
     args = parser.parse_args(argv)
     args.repos = None
 

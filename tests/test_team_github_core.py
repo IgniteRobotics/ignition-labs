@@ -141,7 +141,7 @@ def test_cli_pending_only_exits_zero(capsys):
         state["check_runs"] = {"total_count": 0, "check_runs": []}
         for ruleset in state["rulesets"].values():
             ruleset["rules"] = [r for r in ruleset["rules"] if r["type"] != "required_status_checks"]
-    assert run_cli([], full_runner(states)) == 0
+    assert run_cli(["--only", "repos"], full_runner(states)) == 0
     assert "PENDING" in capsys.readouterr().out
 
 

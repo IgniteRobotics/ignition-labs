@@ -115,3 +115,74 @@ def converged_state(repo: str) -> dict:
         state["rulesets"][name] = detail
     state["protection"] = None
     return state
+
+
+# --- org Project / migration helpers -------------------------------------------------
+
+PROJECTS = FIXTURES / "projects"
+TARGET_NUMBER = 6
+TARGET_ID = "PVT_target"
+
+
+def project_fixture(name: str) -> dict:
+    return json.loads((PROJECTS / name).read_text())
+
+
+def list_call() -> tuple[str, ...]:
+    return ("project", "list", "--owner", ORG, "--format", "json", "--limit", "100")
+
+
+def fields_call(number: int) -> tuple[str, ...]:
+    return ("project", "field-list", str(number), "--owner", ORG, "--format", "json")
+
+
+def items_call(number: int) -> tuple[str, ...]:
+    return ("project", "item-list", str(number), "--owner", ORG, "--limit", "200", "--format", "json")
+
+
+def links_call(number: int) -> tuple[str, ...]:
+    query = (
+        f'query={{organization(login:"{ORG}"){{projectV2(number:{number})'
+        "{repositories(first:50){nodes{name}}}}}"
+    )
+    return ("api", "graphql", "-f", query)
+
+
+def target_fields(status=None, size=("XS", "S", "M", "L", "XL"), release=True) -> dict:
+    status = ["Backlog", "Ready", "In progress", "In review", "Done"] if status is None else status
+    fields = [
+        {"id": "F_status", "name": "Status", "type": "ProjectV2SingleSelectField",
+         "options": [{"id": f"s{i}", "name": n} for i, n in enumerate(status)]},
+    ]
+    if size is not None:
+        fields.append({"id": "F_size", "name": "Size", "type": "ProjectV2SingleSelectField",
+                       "options": [{"id": f"z{i}", "name": n} for i, n in enumerate(size)]})
+    if release:
+        fields.append({"id": "F_release", "name": "Release", "type": "ProjectV2SingleSelectField",
+                       "options": [{"id": "r0", "name": "gwinnett"}]})
+    return {"fields": fields, "totalCount": len(fields)}
+
+
+def projects_runner(*, target: dict | None = None, target_items=None, linked=None,
+                    sources=(3, 5), extra=None) -> FakeRunner:
+    """Replays the recorded org Projects. `target` is the project-list entry's fields/items state."""
+    listing = project_fixture("list.json")
+    if target is not None:
+        listing["projects"].append({
+            "id": TARGET_ID, "number": TARGET_NUMBER, "title": "Ignite Programming",
+            "closed": False, "url": f"https://github.com/orgs/{ORG}/projects/{TARGET_NUMBER}",
+        })
+    responses: dict[tuple[str, ...], object] = {list_call(): json.dumps(listing)}
+    for n in sources:
+        responses[items_call(n)] = json.dumps(project_fixture(f"items-{n}.json"))
+        responses[fields_call(n)] = json.dumps(project_fixture(f"fields-{n}.json"))
+    if target is not None:
+        responses[fields_call(TARGET_NUMBER)] = json.dumps(target)
+        items = target_items or []
+        responses[items_call(TARGET_NUMBER)] = json.dumps({"items": items, "totalCount": len(items)})
+        names = ["Robot-2026", "IgniteLib", "flashpoint", "Phoenix-2026"] if linked is None else linked
+        responses[links_call(TARGET_NUMBER)] = json.dumps(
+            {"data": {"organization": {"projectV2": {"repositories": {"nodes": [{"name": n} for n in names]}}}}}
+        )
+    responses.update(extra or {})
+    return FakeRunner(responses)
