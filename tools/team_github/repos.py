@@ -1,6 +1,8 @@
 """Plan the changes for one repo: default branch, labels, owned rulesets."""
 
+import base64
 import json
+import re
 
 from tools.team_github.config import Config, RepoConfig
 from tools.team_github.gh import GhError, Runner, json_call
@@ -34,6 +36,71 @@ def _reported_checks(runner: Runner, cfg: Config, repo: RepoConfig) -> set[str]:
     )
     for sha in dict.fromkeys(pr["headRefOid"] for pr in prs):
         names |= _check_names(runner, root, sha)
+    return names
+
+
+def job_names(workflow: str) -> set[str]:
+    """Check names a workflow file defines: each job's `name:`, else its key. Line-based, no YAML."""
+    names: set[str] = set()
+    lines = workflow.splitlines()
+    try:
+        start = next(i for i, l in enumerate(lines) if re.match(r"jobs:\s*(#.*)?$", l))
+    except StopIteration:
+        return names
+
+    def indent(line: str) -> int:
+        return len(line) - len(line.lstrip(" "))
+
+    def unquote(text: str) -> str:
+        text = re.sub(r"\s+#.*$", "", text.strip())
+        if len(text) >= 2 and text[0] == text[-1] and text[0] in "\"'":
+            text = text[1:-1]
+        return text
+
+    body = [l for l in lines[start + 1 :] if l.strip() and not l.lstrip().startswith("#")]
+    if not body:
+        return names
+    key_indent = indent(body[0])
+    key = None
+    explicit = False
+    for line in body:
+        ind = indent(line)
+        if ind < key_indent:
+            break  # left the jobs block
+        if ind == key_indent:
+            if key is not None and not explicit:
+                names.add(key)
+            match = re.match(r"\s*([^\s:#][^:]*?)\s*:\s*(#.*)?$", line)
+            key, explicit = (unquote(match.group(1)) if match else None), False
+        elif key is not None and not explicit:
+            match = re.match(r"\s*name:\s*(.+)$", line)
+            if match and ind == _child_indent(body, key_indent):
+                names.add(unquote(match.group(1)))
+                explicit = True
+    if key is not None and not explicit:
+        names.add(key)
+    return names
+
+
+def _child_indent(body: list[str], key_indent: int) -> int:
+    return next(len(l) - len(l.lstrip(" ")) for l in body if len(l) - len(l.lstrip(" ")) > key_indent)
+
+
+def _defined_checks(runner: Runner, cfg: Config, repo: RepoConfig) -> set[str]:
+    """Job names defined by workflow files currently on the repo's default branch."""
+    root = f"repos/{cfg.org}/{repo.name}"
+    try:
+        files = json_call(runner, ["api", f"{root}/contents/.github/workflows?ref={repo.default_branch}"])
+    except GhError as err:
+        if _absent(err):
+            return set()
+        raise
+    names: set[str] = set()
+    for entry in files:
+        if not entry["name"].endswith((".yml", ".yaml")):
+            continue
+        blob = json_call(runner, ["api", f"{root}/contents/{entry['path']}?ref={repo.default_branch}"])
+        names |= job_names(base64.b64decode(blob["content"]).decode())
     return names
 
 
@@ -90,7 +157,8 @@ def plan_repo(runner: Runner, cfg: Config, repo: RepoConfig) -> list[Change]:
 
     # A check the live gate already requires counts as reported: never strip live protection
     # because the tool could not see the check run.
-    reported = _reported_checks(runner, cfg, repo)
+    # Reported = seen running AND defined by a workflow now on the branch.
+    reported = _reported_checks(runner, cfg, repo) & _defined_checks(runner, cfg, repo)
     if "dev-main-pr-gate" in live:
         reported |= set(gate_contexts(live["dev-main-pr-gate"]))
     desired = desired_rulesets(cfg, repo, reported)

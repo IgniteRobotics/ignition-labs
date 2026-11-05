@@ -1,5 +1,6 @@
 """Fixture loading for the team_github tests: recorded `gh` JSON replayed through FakeRunner."""
 
+import base64
 import copy
 import json
 from pathlib import Path
@@ -33,6 +34,7 @@ def load_state(repo: str) -> dict:
         "labels": json.loads((base / "labels.json").read_text()),
         "rulesets": rulesets,
         "check_runs": json.loads((base / "check-runs-development.json").read_text()),
+        "workflows": json.loads((base / "workflows-development.json").read_text()),
         "pr_check_runs": json.loads((base / "check-runs-pr-heads.json").read_text()),
         "protection": None if "required_status_checks" not in protection else protection,
     }
@@ -51,6 +53,17 @@ def runner_for(repo: str, state: dict) -> FakeRunner:
             state["check_runs"]
         ),
     }
+    wf_dir = ("api", f"{root}/contents/.github/workflows?ref=development")
+    if state["workflows"] is None:
+        responses[wf_dir] = GhError(list(wf_dir), 1, "gh: Not Found (HTTP 404)")
+    else:
+        responses[wf_dir] = json.dumps(
+            [{"name": p.rsplit("/", 1)[1], "path": p} for p in state["workflows"]]
+        )
+        for path, text in state["workflows"].items():
+            responses[("api", f"{root}/contents/{path}?ref=development")] = json.dumps(
+                {"content": base64.b64encode(text.encode()).decode()}
+            )
     prs = [{"headRefOid": sha} for sha in state["pr_check_runs"]]
     responses[
         ("pr", "list", "--repo", f"{ORG}/{repo}", "--base", "development", "--state", "all",
@@ -88,6 +101,10 @@ def converged_state(repo: str) -> dict:
     }
     reported = set(rc.required_checks)
     state["pr_check_runs"] = {}
+    state["workflows"] = {
+        ".github/workflows/all.yml": "name: x\njobs:\n"
+        + "".join(f"  j{i}:\n    name: {c}\n    runs-on: ubuntu-latest\n" for i, c in enumerate(rc.required_checks))
+    }
     state["rulesets"] = {}
     for index, (name, body) in enumerate(desired_rulesets(cfg, rc, reported).items()):
         detail = copy.deepcopy(body)

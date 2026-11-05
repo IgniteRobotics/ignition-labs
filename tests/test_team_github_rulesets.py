@@ -199,3 +199,42 @@ def test_missing_branch_means_nothing_reported():
     key = ("api", "repos/IgniteRobotics/IgniteLib/commits/development/check-runs?per_page=100")
     runner.responses[key] = GhError(list(key), 1, "gh: No commit found (HTTP 422)")
     plan_repo(runner, cfg, repo_cfg(cfg, "IgniteLib"))  # does not raise
+
+
+def test_check_without_workflow_on_branch_is_pending():
+    cfg = load_config()
+    state = load_state("Phoenix-2026")
+    state["workflows"] = None  # no .github/workflows on the branch
+    assert any(  # ...yet old PR heads reported it
+        c["name"] == BUILD for v in state["pr_check_runs"].values() for c in v["check_runs"]
+    )
+    changes = plan_repo(runner_for("Phoenix-2026", state), cfg, repo_cfg(cfg, "Phoenix-2026"))
+    pending = sorted(c.summary for c in changes if c.kind == "required-check")
+    assert pending == [f'require check "{BUILD}"', f'require check "{DRIFT}"']
+
+
+def test_check_defined_by_workflow_and_seen_is_required():
+    cfg = load_config()
+    state = load_state("Robot-2026")  # pr-build-check.yml on development, seen on PR heads
+    changes = plan_repo(runner_for("Robot-2026", state), cfg, repo_cfg(cfg, "Robot-2026"))
+    assert [c.summary for c in changes if c.kind == "required-check"] == [f'require check "{DRIFT}"']
+
+
+def test_live_required_check_kept_even_without_workflow():
+    cfg = load_config()
+    state = converged_state("IgniteLib")
+    state["workflows"] = None
+    assert plan_repo(runner_for("IgniteLib", state), cfg, repo_cfg(cfg, "IgniteLib")) == []
+
+
+def test_job_names_name_beats_key_and_key_is_fallback():
+    from tools.team_github.repos import job_names
+
+    text = (
+        "name: W\non: push\njobs:\n"
+        "  build:\n    name: \"Build and Check\"  # c\n    steps:\n      - name: step\n"
+        "  ci-ok:\n    runs-on: x\n    steps:\n      - name: not-a-job\n"
+        "  other:\n    name: Other Job\n"
+    )
+    assert job_names(text) == {"Build and Check", "ci-ok", "Other Job"}
+    assert job_names("name: no jobs\n") == set()
