@@ -1,0 +1,524 @@
+{
+ "items": [
+  {
+   "content": {
+    "number": 3,
+    "repository": "IgniteRobotics/flashpoint",
+    "title": "Windows: tests skipped in P3 (fake sysfs, backslash robot paths)",
+    "type": "Issue",
+    "url": "https://github.com/IgniteRobotics/flashpoint/issues/3"
+   },
+   "id": "PVTI_lADOAeoJ684BnxT_zhB4Z6s",
+   "labels": [
+    "enhancement"
+   ],
+   "repository": "https://github.com/IgniteRobotics/flashpoint",
+   "status": "Backlog",
+   "title": "Windows: tests skipped in P3 (fake sysfs, backslash robot paths)"
+  },
+  {
+   "content": {
+    "number": 4,
+    "repository": "IgniteRobotics/flashpoint",
+    "title": "Flaky: Linux owlet sometimes fails on power-loss-truncated corpus hoots (owlet-failed vs incomplete-read)",
+    "type": "Issue",
+    "url": "https://github.com/IgniteRobotics/flashpoint/issues/4"
+   },
+   "id": "PVTI_lADOAeoJ684BnxT_zhB4Z7U",
+   "labels": [
+    "bug"
+   ],
+   "repository": "https://github.com/IgniteRobotics/flashpoint",
+   "status": "Backlog",
+   "title": "Flaky: Linux owlet sometimes fails on power-loss-truncated corpus hoots (owlet-failed vs incomplete-read)"
+  },
+  {
+   "content": {
+    "number": 5,
+    "repository": "IgniteRobotics/flashpoint",
+    "title": "Silver drops Phoenix DeviceEnable (string in bronze)",
+    "type": "Issue",
+    "url": "https://github.com/IgniteRobotics/flashpoint/issues/5"
+   },
+   "id": "PVTI_lADOAeoJ684BnxT_zhB4Z70",
+   "labels": [
+    "bug"
+   ],
+   "repository": "https://github.com/IgniteRobotics/flashpoint",
+   "status": "Backlog",
+   "title": "Silver drops Phoenix DeviceEnable (string in bronze)"
+  },
+  {
+   "content": {
+    "number": 6,
+    "repository": "IgniteRobotics/flashpoint",
+    "title": "No battery voltage is logged; Replay uses the lowest device voltage as a proxy",
+    "type": "Issue",
+    "url": "https://github.com/IgniteRobotics/flashpoint/issues/6"
+   },
+   "id": "PVTI_lADOAeoJ684BnxT_zhB4Z8A",
+   "labels": [
+    "robot-side"
+   ],
+   "repository": "https://github.com/IgniteRobotics/flashpoint",
+   "status": "Backlog",
+   "title": "No battery voltage is logged; Replay uses the lowest device voltage as a proxy"
+  },
+  {
+   "content": {
+    "number": 7,
+    "repository": "IgniteRobotics/flashpoint",
+    "title": "roboRIO TalonFX status signals log at 4 Hz",
+    "type": "Issue",
+    "url": "https://github.com/IgniteRobotics/flashpoint/issues/7"
+   },
+   "id": "PVTI_lADOAeoJ684BnxT_zhB4Z8E",
+   "labels": [
+    "robot-side"
+   ],
+   "repository": "https://github.com/IgniteRobotics/flashpoint",
+   "status": "Backlog",
+   "title": "roboRIO TalonFX status signals log at 4 Hz"
+  },
+  {
+   "content": {
+    "number": 8,
+    "repository": "IgniteRobotics/flashpoint",
+    "title": "Hoot-only sessions are missing from unit odometry",
+    "type": "Issue",
+    "url": "https://github.com/IgniteRobotics/flashpoint/issues/8"
+   },
+   "id": "PVTI_lADOAeoJ684BnxT_zhB4Z8M",
+   "labels": [
+    "enhancement"
+   ],
+   "repository": "https://github.com/IgniteRobotics/flashpoint",
+   "status": "Backlog",
+   "title": "Hoot-only sessions are missing from unit odometry"
+  },
+  {
+   "content": {
+    "number": 9,
+    "repository": "IgniteRobotics/flashpoint",
+    "title": "Canvas metrics without a data source: faults, firmware, spin test, batteries",
+    "type": "Issue",
+    "url": "https://github.com/IgniteRobotics/flashpoint/issues/9"
+   },
+   "id": "PVTI_lADOAeoJ684BnxT_zhB4Z8Q",
+   "labels": [
+    "enhancement",
+    "robot-side"
+   ],
+   "repository": "https://github.com/IgniteRobotics/flashpoint",
+   "status": "Backlog",
+   "title": "Canvas metrics without a data source: faults, firmware, spin test, batteries"
+  },
+  {
+   "content": {
+    "number": 10,
+    "repository": "IgniteRobotics/flashpoint",
+    "title": "History health reads NO DATA for units with no temperature (gyro, encoders)",
+    "type": "Issue",
+    "url": "https://github.com/IgniteRobotics/flashpoint/issues/10"
+   },
+   "id": "PVTI_lADOAeoJ684BnxT_zhB4Z80",
+   "labels": [
+    "bug"
+   ],
+   "repository": "https://github.com/IgniteRobotics/flashpoint",
+   "status": "Backlog",
+   "title": "History health reads NO DATA for units with no temperature (gyro, encoders)"
+  },
+  {
+   "content": {
+    "number": 54,
+    "repository": "IgniteRobotics/flashpoint-private",
+    "title": "Missing config folder is silent: derive maps nothing, doctor lists nothing",
+    "type": "Issue",
+    "url": "https://github.com/IgniteRobotics/flashpoint-private/issues/54"
+   },
+   "id": "PVTI_lADOAeoJ684BnxT_zhB4Z9E",
+   "repository": "https://github.com/IgniteRobotics/flashpoint-private",
+   "status": "Done",
+   "title": "Missing config folder is silent: derive maps nothing, doctor lists nothing"
+  },
+  {
+   "content": {
+    "number": 11,
+    "repository": "IgniteRobotics/flashpoint",
+    "title": "tools/update-owlet-manifest.py ignores --help and starts downloading",
+    "type": "Issue",
+    "url": "https://github.com/IgniteRobotics/flashpoint/issues/11"
+   },
+   "id": "PVTI_lADOAeoJ684BnxT_zhB4Z9U",
+   "labels": [
+    "bug",
+    "good first issue"
+   ],
+   "linked pull requests": [
+    "https://github.com/IgniteRobotics/flashpoint/pull/32"
+   ],
+   "repository": "https://github.com/IgniteRobotics/flashpoint",
+   "status": "In progress",
+   "title": "tools/update-owlet-manifest.py ignores --help and starts downloading"
+  },
+  {
+   "content": {
+    "number": 12,
+    "repository": "IgniteRobotics/flashpoint",
+    "title": "acquire 'cycle done' log line prints Python dict reprs",
+    "type": "Issue",
+    "url": "https://github.com/IgniteRobotics/flashpoint/issues/12"
+   },
+   "id": "PVTI_lADOAeoJ684BnxT_zhB4Z9g",
+   "labels": [
+    "bug",
+    "good first issue"
+   ],
+   "repository": "https://github.com/IgniteRobotics/flashpoint",
+   "status": "Backlog",
+   "title": "acquire 'cycle done' log line prints Python dict reprs"
+  },
+  {
+   "content": {
+    "number": 13,
+    "repository": "IgniteRobotics/flashpoint",
+    "title": "Open [HUMAN] verification tasks across OpenSpec changes",
+    "type": "Issue",
+    "url": "https://github.com/IgniteRobotics/flashpoint/issues/13"
+   },
+   "id": "PVTI_lADOAeoJ684BnxT_zhB4Z9w",
+   "repository": "https://github.com/IgniteRobotics/flashpoint",
+   "status": "Backlog",
+   "title": "Open [HUMAN] verification tasks across OpenSpec changes"
+  },
+  {
+   "content": {
+    "number": 14,
+    "repository": "IgniteRobotics/flashpoint",
+    "title": "Ingest: quarantine is permanent even for machine errors (owlet download, internal), and re-runs report it as 'skipped'",
+    "type": "Issue",
+    "url": "https://github.com/IgniteRobotics/flashpoint/issues/14"
+   },
+   "id": "PVTI_lADOAeoJ684BnxT_zhB4Z-I",
+   "labels": [
+    "bug"
+   ],
+   "linked pull requests": [
+    "https://github.com/IgniteRobotics/flashpoint/pull/40"
+   ],
+   "repository": "https://github.com/IgniteRobotics/flashpoint",
+   "status": "Done",
+   "title": "Ingest: quarantine is permanent even for machine errors (owlet download, internal), and re-runs report it as 'skipped'"
+  },
+  {
+   "content": {
+    "number": 15,
+    "repository": "IgniteRobotics/flashpoint",
+    "title": "Ingest leaves Replay data stale: 'No aligned samples' persists after the missing wpilog is ingested",
+    "type": "Issue",
+    "url": "https://github.com/IgniteRobotics/flashpoint/issues/15"
+   },
+   "id": "PVTI_lADOAeoJ684BnxT_zhB4Z-U",
+   "labels": [
+    "bug"
+   ],
+   "linked pull requests": [
+    "https://github.com/IgniteRobotics/flashpoint/pull/40"
+   ],
+   "repository": "https://github.com/IgniteRobotics/flashpoint",
+   "status": "Done",
+   "title": "Ingest leaves Replay data stale: 'No aligned samples' persists after the missing wpilog is ingested"
+  },
+  {
+   "content": {
+    "number": 16,
+    "repository": "IgniteRobotics/flashpoint",
+    "title": "P0: Stabilize & decide",
+    "type": "Issue",
+    "url": "https://github.com/IgniteRobotics/flashpoint/issues/16"
+   },
+   "id": "PVTI_lADOAeoJ684BnxT_zhB95EM",
+   "labels": [
+    "roadmap"
+   ],
+   "repository": "https://github.com/IgniteRobotics/flashpoint",
+   "size": "S",
+   "status": "In progress",
+   "title": "P0: Stabilize & decide"
+  },
+  {
+   "content": {
+    "number": 67,
+    "repository": "IgniteRobotics/flashpoint-private",
+    "title": "P1: Core readers & lake",
+    "type": "Issue",
+    "url": "https://github.com/IgniteRobotics/flashpoint-private/issues/67"
+   },
+   "id": "PVTI_lADOAeoJ684BnxT_zhB95JE",
+   "labels": [
+    "roadmap"
+   ],
+   "repository": "https://github.com/IgniteRobotics/flashpoint-private",
+   "size": "L",
+   "status": "Done",
+   "title": "P1: Core readers & lake"
+  },
+  {
+   "content": {
+    "number": 68,
+    "repository": "IgniteRobotics/flashpoint-private",
+    "title": "P2: Semantics & physics",
+    "type": "Issue",
+    "url": "https://github.com/IgniteRobotics/flashpoint-private/issues/68"
+   },
+   "id": "PVTI_lADOAeoJ684BnxT_zhB95ZE",
+   "labels": [
+    "roadmap"
+   ],
+   "repository": "https://github.com/IgniteRobotics/flashpoint-private",
+   "size": "M",
+   "status": "Done",
+   "title": "P2: Semantics & physics"
+  },
+  {
+   "content": {
+    "number": 69,
+    "repository": "IgniteRobotics/flashpoint-private",
+    "title": "NetworkTables signal mapping",
+    "type": "Issue",
+    "url": "https://github.com/IgniteRobotics/flashpoint-private/issues/69"
+   },
+   "id": "PVTI_lADOAeoJ684BnxT_zhB95hI",
+   "labels": [
+    "roadmap"
+   ],
+   "repository": "https://github.com/IgniteRobotics/flashpoint-private",
+   "size": "M",
+   "status": "Done",
+   "title": "NetworkTables signal mapping"
+  },
+  {
+   "content": {
+    "number": 17,
+    "repository": "IgniteRobotics/flashpoint",
+    "title": "P3: Acquire & automate",
+    "type": "Issue",
+    "url": "https://github.com/IgniteRobotics/flashpoint/issues/17"
+   },
+   "id": "PVTI_lADOAeoJ684BnxT_zhB95ow",
+   "labels": [
+    "roadmap"
+   ],
+   "repository": "https://github.com/IgniteRobotics/flashpoint",
+   "size": "S",
+   "status": "In progress",
+   "title": "P3: Acquire & automate"
+  },
+  {
+   "content": {
+    "number": 71,
+    "repository": "IgniteRobotics/flashpoint-private",
+    "title": "P4: Views",
+    "type": "Issue",
+    "url": "https://github.com/IgniteRobotics/flashpoint-private/issues/71"
+   },
+   "id": "PVTI_lADOAeoJ684BnxT_zhB950E",
+   "labels": [
+    "roadmap"
+   ],
+   "repository": "https://github.com/IgniteRobotics/flashpoint-private",
+   "size": "M",
+   "status": "Done",
+   "title": "P4: Views"
+  },
+  {
+   "content": {
+    "number": 72,
+    "repository": "IgniteRobotics/flashpoint-private",
+    "title": "AdvantageScope launch",
+    "type": "Issue",
+    "url": "https://github.com/IgniteRobotics/flashpoint-private/issues/72"
+   },
+   "id": "PVTI_lADOAeoJ684BnxT_zhB9560",
+   "labels": [
+    "roadmap"
+   ],
+   "repository": "https://github.com/IgniteRobotics/flashpoint-private",
+   "size": "S",
+   "status": "Done",
+   "title": "AdvantageScope launch"
+  },
+  {
+   "content": {
+    "number": 73,
+    "repository": "IgniteRobotics/flashpoint-private",
+    "title": "Replay UX",
+    "type": "Issue",
+    "url": "https://github.com/IgniteRobotics/flashpoint-private/issues/73"
+   },
+   "id": "PVTI_lADOAeoJ684BnxT_zhB96As",
+   "labels": [
+    "roadmap"
+   ],
+   "repository": "https://github.com/IgniteRobotics/flashpoint-private",
+   "size": "S",
+   "status": "Done",
+   "title": "Replay UX"
+  },
+  {
+   "content": {
+    "number": 74,
+    "repository": "IgniteRobotics/flashpoint-private",
+    "title": "CAN health",
+    "type": "Issue",
+    "url": "https://github.com/IgniteRobotics/flashpoint-private/issues/74"
+   },
+   "id": "PVTI_lADOAeoJ684BnxT_zhB96JE",
+   "labels": [
+    "roadmap"
+   ],
+   "repository": "https://github.com/IgniteRobotics/flashpoint-private",
+   "size": "M",
+   "status": "Done",
+   "title": "CAN health"
+  },
+  {
+   "content": {
+    "number": 18,
+    "repository": "IgniteRobotics/flashpoint",
+    "title": "Live & Pit views",
+    "type": "Issue",
+    "url": "https://github.com/IgniteRobotics/flashpoint/issues/18"
+   },
+   "id": "PVTI_lADOAeoJ684BnxT_zhB96Qk",
+   "labels": [
+    "roadmap"
+   ],
+   "repository": "https://github.com/IgniteRobotics/flashpoint",
+   "size": "M",
+   "status": "Backlog",
+   "title": "Live & Pit views"
+  },
+  {
+   "content": {
+    "number": 19,
+    "repository": "IgniteRobotics/flashpoint",
+    "title": "Import status view",
+    "type": "Issue",
+    "url": "https://github.com/IgniteRobotics/flashpoint/issues/19"
+   },
+   "id": "PVTI_lADOAeoJ684BnxT_zhB96nU",
+   "labels": [
+    "roadmap"
+   ],
+   "repository": "https://github.com/IgniteRobotics/flashpoint",
+   "size": "M",
+   "status": "Backlog",
+   "title": "Import status view"
+  },
+  {
+   "content": {
+    "number": 20,
+    "repository": "IgniteRobotics/flashpoint",
+    "title": "P5: Anomaly detection",
+    "type": "Issue",
+    "url": "https://github.com/IgniteRobotics/flashpoint/issues/20"
+   },
+   "id": "PVTI_lADOAeoJ684BnxT_zhB96uY",
+   "labels": [
+    "roadmap"
+   ],
+   "repository": "https://github.com/IgniteRobotics/flashpoint",
+   "size": "L",
+   "status": "In progress",
+   "title": "P5: Anomaly detection"
+  },
+  {
+   "content": {
+    "number": 21,
+    "repository": "IgniteRobotics/flashpoint",
+    "title": "P6: Prediction & fleet (stretch)",
+    "type": "Issue",
+    "url": "https://github.com/IgniteRobotics/flashpoint/issues/21"
+   },
+   "id": "PVTI_lADOAeoJ684BnxT_zhB963I",
+   "labels": [
+    "roadmap"
+   ],
+   "repository": "https://github.com/IgniteRobotics/flashpoint",
+   "size": "L",
+   "status": "Backlog",
+   "title": "P6: Prediction & fleet (stretch)"
+  },
+  {
+   "content": {
+    "number": 22,
+    "repository": "IgniteRobotics/flashpoint",
+    "title": "Live CAN health",
+    "type": "Issue",
+    "url": "https://github.com/IgniteRobotics/flashpoint/issues/22"
+   },
+   "id": "PVTI_lADOAeoJ684BnxT_zhB-ah4",
+   "labels": [
+    "roadmap"
+   ],
+   "repository": "https://github.com/IgniteRobotics/flashpoint",
+   "size": "M",
+   "status": "Backlog",
+   "title": "Live CAN health"
+  },
+  {
+   "content": {
+    "number": 23,
+    "repository": "IgniteRobotics/flashpoint",
+    "title": "Live import updates",
+    "type": "Issue",
+    "url": "https://github.com/IgniteRobotics/flashpoint/issues/23"
+   },
+   "id": "PVTI_lADOAeoJ684BnxT_zhB-cmg",
+   "labels": [
+    "roadmap"
+   ],
+   "repository": "https://github.com/IgniteRobotics/flashpoint",
+   "size": "M",
+   "status": "Backlog",
+   "title": "Live import updates"
+  },
+  {
+   "content": {
+    "number": 24,
+    "repository": "IgniteRobotics/flashpoint",
+    "title": "Team setup: install and configure for any team",
+    "type": "Issue",
+    "url": "https://github.com/IgniteRobotics/flashpoint/issues/24"
+   },
+   "id": "PVTI_lADOAeoJ684BnxT_zhB-hTQ",
+   "labels": [
+    "roadmap"
+   ],
+   "repository": "https://github.com/IgniteRobotics/flashpoint",
+   "size": "L",
+   "status": "In progress",
+   "title": "Team setup: install and configure for any team"
+  },
+  {
+   "content": {
+    "number": 25,
+    "repository": "IgniteRobotics/flashpoint",
+    "title": "Team branding: name and colour palette",
+    "type": "Issue",
+    "url": "https://github.com/IgniteRobotics/flashpoint/issues/25"
+   },
+   "id": "PVTI_lADOAeoJ684BnxT_zhB-kOw",
+   "labels": [
+    "roadmap"
+   ],
+   "repository": "https://github.com/IgniteRobotics/flashpoint",
+   "size": "S",
+   "status": "Backlog",
+   "title": "Team branding: name and colour palette"
+  }
+ ],
+ "totalCount": 31
+}

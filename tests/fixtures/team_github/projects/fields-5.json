@@ -1,0 +1,136 @@
+{
+ "fields": [
+  {
+   "id": "PVTF_lADOAeoJ684Boz0AzhnSKUA",
+   "name": "Title",
+   "type": "ProjectV2Field"
+  },
+  {
+   "id": "PVTF_lADOAeoJ684Boz0AzhnSKUI",
+   "name": "Assignees",
+   "type": "ProjectV2Field"
+  },
+  {
+   "id": "PVTSSF_lADOAeoJ684Boz0AzhnSKUQ",
+   "name": "Status",
+   "options": [
+    {
+     "id": "f75ad846",
+     "name": "Todo"
+    },
+    {
+     "id": "47fc9ee4",
+     "name": "In progress"
+    },
+    {
+     "id": "98236657",
+     "name": "Done"
+    }
+   ],
+   "type": "ProjectV2SingleSelectField"
+  },
+  {
+   "id": "PVTF_lADOAeoJ684Boz0AzhnSKUY",
+   "name": "Labels",
+   "type": "ProjectV2Field"
+  },
+  {
+   "id": "PVTF_lADOAeoJ684Boz0AzhnSKUg",
+   "name": "Linked pull requests",
+   "type": "ProjectV2Field"
+  },
+  {
+   "id": "PVTF_lADOAeoJ684Boz0AzhnSKUo",
+   "name": "Milestone",
+   "type": "ProjectV2Field"
+  },
+  {
+   "id": "PVTF_lADOAeoJ684Boz0AzhnSKUw",
+   "name": "Repository",
+   "type": "ProjectV2Field"
+  },
+  {
+   "id": "PVTF_lADOAeoJ684Boz0AzhnSKVI",
+   "name": "Reviewers",
+   "type": "ProjectV2Field"
+  },
+  {
+   "id": "PVTF_lADOAeoJ684Boz0AzhnSKVY",
+   "name": "Parent issue",
+   "type": "ProjectV2Field"
+  },
+  {
+   "id": "PVTF_lADOAeoJ684Boz0AzhnSKVk",
+   "name": "Sub-issues progress",
+   "type": "ProjectV2Field"
+  },
+  {
+   "id": "PVTF_lADOAeoJ684Boz0AzhnSKVw",
+   "name": "Created",
+   "type": "ProjectV2Field"
+  },
+  {
+   "id": "PVTF_lADOAeoJ684Boz0AzhnSKV4",
+   "name": "Updated",
+   "type": "ProjectV2Field"
+  },
+  {
+   "id": "PVTF_lADOAeoJ684Boz0AzhnSKWA",
+   "name": "Closed",
+   "type": "ProjectV2Field"
+  },
+  {
+   "id": "PVTSSF_lADOAeoJ684Boz0AzhnSKoc",
+   "name": "Priority",
+   "type": "ProjectV2SingleSelectField"
+  },
+  {
+   "id": "PVTSSF_lADOAeoJ684Boz0AzhnSKog",
+   "name": "Size",
+   "options": [
+    {
+     "id": "b223cceb",
+     "name": "XS"
+    },
+    {
+     "id": "1c55ae77",
+     "name": "S"
+    },
+    {
+     "id": "9600bd44",
+     "name": "M"
+    },
+    {
+     "id": "3aa808a0",
+     "name": "L"
+    },
+    {
+     "id": "8beef439",
+     "name": "XL"
+    }
+   ],
+   "type": "ProjectV2SingleSelectField"
+  },
+  {
+   "id": "PVTF_lADOAeoJ684Boz0AzhnSKok",
+   "name": "Estimate",
+   "type": "ProjectV2Field"
+  },
+  {
+   "id": "PVTIF_lADOAeoJ684Boz0AzhnSKoo",
+   "name": "Iteration",
+   "type": "ProjectV2IterationField"
+  },
+  {
+   "id": "PVTF_lADOAeoJ684Boz0AzhnSKos",
+   "name": "Start date",
+   "type": "ProjectV2Field"
+  },
+  {
+   "id": "PVTF_lADOAeoJ684Boz0AzhnSKow",
+   "name": "Target date",
+   "type": "ProjectV2Field"
+  }
+ ],
+ "totalCount": 19
+}
