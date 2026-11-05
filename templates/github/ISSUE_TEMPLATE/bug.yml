@@ -1,0 +1,32 @@
+name: Bug
+description: Something the robot code does that it should not.
+title: "[Bug] "
+labels: ["bug"]
+body:
+  - type: textarea
+    id: expected
+    attributes:
+      label: What you expected, and what happened
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Log or replay
+      description: Paste the relevant log lines, or link the log file or replay that reproduces it. Name the file and the timestamp.
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      description: In simulation if you can.
+    validations:
+      required: false
+  - type: input
+    id: version
+    attributes:
+      label: Branch or commit
+      description: Where did you see this?
+    validations:
+      required: false

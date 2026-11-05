@@ -1,0 +1,31 @@
+name: Feature
+description: A change to the robot code that someone wants built.
+title: "[Feature] "
+labels: ["feature"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        An issue is Ready only when it states the problem it solves. A lead moves it to Ready.
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: What goes wrong or is missing today, and for whom? Describe the problem, not the solution.
+      placeholder: "Drivers lose a game piece when the indexer jams and there is no way to clear it without a power cycle."
+    validations:
+      required: true
+  - type: textarea
+    id: outcome
+    attributes:
+      label: What done looks like
+      description: How will we know it works? Observable behavior, in simulation or on the robot.
+    validations:
+      required: false
+  - type: textarea
+    id: notes
+    attributes:
+      label: Notes
+      description: Links, constraints, related issues, or ideas about approach.
+    validations:
+      required: false
