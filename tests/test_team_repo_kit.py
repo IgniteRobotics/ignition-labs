@@ -1,13 +1,18 @@
 """Tests for the team-repo kit and the org-wide GitHub templates."""
 
 import re
+import shutil
+import subprocess
 from pathlib import Path
+
+import pytest
 
 REPO = Path(__file__).resolve().parent.parent
 GITHUB_TEMPLATES = REPO / "templates" / "github"
 ISSUE_DIR = GITHUB_TEMPLATES / "ISSUE_TEMPLATE"
 PR_TEMPLATE = GITHUB_TEMPLATES / "PULL_REQUEST_TEMPLATE.md"
 REPO_PR_TEMPLATE = REPO / ".github" / "PULL_REQUEST_TEMPLATE.md"
+HOOKS_DIR = REPO / "templates" / "team-repo" / ".ignite" / "hooks"
 
 
 def _lines(path: Path) -> list[str]:
@@ -75,3 +80,18 @@ def test_pr_template_sections() -> None:
     order = ["Closes #", "## What changed", "## Spec", "## AI use disclosure", "## I can explain this"]
     positions = [text.index(s) for s in order]
     assert positions == sorted(positions)
+
+
+def test_hook_suite_passes_under_node() -> None:
+    node = shutil.which("node")
+    if node is None:
+        pytest.fail("Node >= 20.19 is required to run the hook suite (node not found)")
+    version = subprocess.run([node, "--version"], capture_output=True, text=True).stdout.strip()
+    major, minor = (int(x) for x in version.lstrip("v").split(".")[:2])
+    if (major, minor) < (20, 19):
+        pytest.fail(f"Node >= 20.19 is required to run the hook suite (found {version})")
+    # Pass the test file, not the directory: newer Node treats a directory argument as a module.
+    result = subprocess.run(
+        [node, "--test", str(HOOKS_DIR / "lib.test.mjs")], capture_output=True, text=True
+    )
+    assert result.returncode == 0, result.stdout + result.stderr
