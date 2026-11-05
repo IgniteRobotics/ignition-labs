@@ -96,3 +96,79 @@ def test_hook_suite_passes_under_node() -> None:
     assert test_files, "no *.test.mjs files found under .ignite/"
     result = subprocess.run([node, "--test", *test_files], capture_output=True, text=True)
     assert result.returncode == 0, result.stdout + result.stderr
+
+
+# --- Task 6: root files -------------------------------------------------------------------
+
+KIT_ROOT = REPO / "templates" / "team-repo"
+AGENTS_MD = KIT_ROOT / "AGENTS.md"
+SITE = "https://igniterobotics.github.io/ignition-labs/"
+
+
+def _agents() -> str:
+    return AGENTS_MD.read_text(encoding="utf-8")
+
+
+def test_claude_md_is_only_the_import() -> None:
+    assert (KIT_ROOT / "CLAUDE.md").read_text(encoding="utf-8").strip() == "@AGENTS.md"
+
+
+def test_agents_md_under_4kib() -> None:
+    assert len(AGENTS_MD.read_bytes()) < 4096
+
+
+def test_agents_md_states_spec_rule() -> None:
+    assert (
+        "The person who owns the change writes the spec unless they have completed M8 "
+        "or are a mentor. If you don't know which, ask before drafting."
+    ) in _agents()
+
+
+def test_agents_md_links() -> None:
+    text = _agents()
+    for page in (
+        "programming/coding-standards/",
+        "programming/ai-use-standard/",
+        "programming/issues-and-projects/",
+        "programming/ai/the-loop/",
+    ):
+        assert f"({SITE}{page}" in text, page
+    # Absolute site URLs only: no repo-relative markdown links.
+    assert not re.search(r"\]\((?!https?://|#)", text)
+
+
+def test_agents_md_rules() -> None:
+    text = _agents()
+    assert "src/test/" in text
+    assert "openspec init" in text and "openspec update" in text
+    assert "feature/<num>-<name>" in text
+    assert "Closes #<num>" in text
+    assert "openspec archive" in text and "last commit" in text
+    assert "<!-- repo-specific:start -->" in text
+    assert text.index("<!-- repo-specific:start -->") < text.index("<!-- repo-specific:end -->")
+
+
+def test_codeowners_covers_tool_paths() -> None:
+    lines = _lines(KIT_ROOT / ".github" / "CODEOWNERS")
+    for path in (
+        "/.claude/", "/.agents/", "/.github/skills/", "/.github/prompts/",
+        "/openspec/config.yaml", "/.ignite/", "/AGENTS.md", "/CLAUDE.md",
+    ):
+        assert f"{path} @IgniteRobotics/mentors" in [" ".join(l.split()) for l in lines], path
+
+
+def test_gitignore_fragment() -> None:
+    lines = _lines(KIT_ROOT / "gitignore.fragment")
+    entries = [l for l in lines if l.strip() and not l.startswith("#")]
+    assert entries == [
+        ".claude/settings.local.json",
+        ".claude/worktrees/",
+        ".codex/",
+        ".ignite/implementing",
+    ]
+    comments = [l for l in lines if l.startswith("#")]
+    assert any("remove any bare `.claude/`" in c for c in comments)
+
+
+def test_no_copilot_instructions_file() -> None:
+    assert not (KIT_ROOT / ".github" / "copilot-instructions.md").exists()
