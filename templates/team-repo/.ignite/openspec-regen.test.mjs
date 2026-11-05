@@ -136,3 +136,36 @@ test("regen: runs main when invoked through a symlinked path", { skip: process.p
   assert.equal(r.status, 1, r.stdout + r.stderr);
   assert.match(r.stderr, /\.claude\/skills\/openspec-fake\/SKILL\.md/);
 });
+
+test("regen: restores generated files when openspec fails", { skip: process.platform === "win32" }, () => {
+  const real = mkdtempSync(join(tmpdir(), "regen-fail-"));
+  cpSync(here, join(real, ".ignite"), { recursive: true, filter: (src) => !src.includes("hooks") });
+  const files = {
+    ".claude/skills/openspec-explore/SKILL.md": "skill body\n",
+    ".claude/commands/opsx/explore.md": "cmd\n",
+    ".github/prompts/opsx-explore.prompt.md": "prompt\n",
+    ".github/prompts/code-review-prompt.md": "mine\n",
+    "openspec/config.yaml": "context: |\n  hand written\n",
+  };
+  for (const [rel, body] of Object.entries(files)) {
+    mkdirSync(dirname(join(real, rel)), { recursive: true });
+    writeFileSync(join(real, rel), body);
+  }
+  const bin = join(real, "bin");
+  mkdirSync(bin);
+  // Fake npx that half-works then fails: clobbers config.yaml, writes a stray file, exits 1.
+  writeFileSync(join(bin, "npx"), '#!/bin/sh\necho junk > openspec/config.yaml\nmkdir -p .claude/skills/openspec-partial && echo p > .claude/skills/openspec-partial/SKILL.md\nexit 1\n');
+  chmodSync(join(bin, "npx"), 0o755);
+  const r = spawnSync(process.execPath, [join(real, ".ignite", "openspec-regen.mjs"), "--check"], {
+    cwd: real,
+    encoding: "utf8",
+    env: { ...process.env, PATH: `${bin}:${process.env.PATH}` },
+  });
+  assert.equal(r.status, 2, r.stdout + r.stderr);
+  assert.match(r.stderr, /network and proxy/);
+  assert.match(r.stderr, /restored/);
+  for (const [rel, body] of Object.entries(files)) {
+    assert.equal(readFileSync(join(real, rel), "utf8"), body, `${rel} not restored`);
+  }
+  assert.ok(!existsSync(join(real, ".claude/skills/openspec-partial")), "partial output left behind");
+});
