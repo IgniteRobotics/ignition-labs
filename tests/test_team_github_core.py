@@ -187,3 +187,13 @@ def test_json_body_sent_on_stdin_for_rulesets():
     gate.apply()
     body = json.loads(runner.inputs[-1])
     assert body["name"] == "dev-main-pr-gate"
+
+
+def test_cli_exits_2_and_plans_nothing_when_check_lookup_fails(capsys):
+    repos = ["Robot-2026", "IgniteLib", "flashpoint", "Phoenix-2026"]
+    runner = full_runner({r: load_state(r) for r in repos})
+    key = ("api", f"repos/{ORG}/IgniteLib/commits/development/check-runs?per_page=100")
+    runner.responses[key] = GhError(list(key), 1, "gh: Bad credentials (HTTP 401)")
+    assert run_cli(["--only", "repos", "--apply"], runner) == 2
+    assert mutating_calls(runner) == []
+    assert "error reading GitHub" in capsys.readouterr().err

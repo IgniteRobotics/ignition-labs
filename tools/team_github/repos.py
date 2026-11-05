@@ -8,12 +8,33 @@ from tools.team_github.model import Change
 from tools.team_github.rulesets import OWNED, desired_rulesets, diff_ruleset, gate_contexts
 
 
-def _reported_checks(runner: Runner, root: str) -> set[str]:
+def _absent(err: GhError) -> bool:
+    """True for "no such branch/commit" (404/422); anything else is a real failure."""
+    return "404" in err.stderr or "422" in err.stderr
+
+
+def _check_names(runner: Runner, root: str, ref: str) -> set[str]:
     try:
-        data = json_call(runner, ["api", f"{root}/commits/development/check-runs?per_page=100"])
-    except GhError:
-        return set()  # no `development` branch yet: nothing has reported
+        data = json_call(runner, ["api", f"{root}/commits/{ref}/check-runs?per_page=100"])
+    except GhError as err:
+        if _absent(err):
+            return set()
+        raise
     return {run["name"] for run in data.get("check_runs", [])}
+
+
+def _reported_checks(runner: Runner, cfg: Config, repo: RepoConfig) -> set[str]:
+    """Check names seen on the default branch HEAD or on the head of any of its last 20 PRs."""
+    root = f"repos/{cfg.org}/{repo.name}"
+    names = _check_names(runner, root, repo.default_branch)
+    prs = json_call(
+        runner,
+        ["pr", "list", "--repo", f"{cfg.org}/{repo.name}", "--base", repo.default_branch,
+         "--state", "all", "--limit", "20", "--json", "headRefOid"],
+    )
+    for sha in dict.fromkeys(pr["headRefOid"] for pr in prs):
+        names |= _check_names(runner, root, sha)
+    return names
 
 
 def _classic_protection(runner: Runner, root: str) -> dict | None:
@@ -59,18 +80,24 @@ def plan_repo(runner: Runner, cfg: Config, repo: RepoConfig) -> list[Change]:
                 )
             )
 
-    reported = _reported_checks(runner, root)
-    desired = desired_rulesets(cfg, repo, reported)
     listing = json_call(runner, ["api", f"{root}/rulesets"])
     by_name = {r["name"]: r["id"] for r in listing}
+    live = {
+        name: json_call(runner, ["api", f"{root}/rulesets/{by_name[name]}"])
+        for name in OWNED
+        if name in by_name
+    }
+
+    # A check the live gate already requires counts as reported: never strip live protection
+    # because the tool could not see the check run.
+    reported = _reported_checks(runner, cfg, repo)
+    if "dev-main-pr-gate" in live:
+        reported |= set(gate_contexts(live["dev-main-pr-gate"]))
+    desired = desired_rulesets(cfg, repo, reported)
 
     for name in OWNED:
         want = desired[name]
-        current = (
-            json_call(runner, ["api", f"{root}/rulesets/{by_name[name]}"])
-            if name in by_name
-            else None
-        )
+        current = live.get(name)
         diff = diff_ruleset(current, want)
         if not diff:
             continue
@@ -100,7 +127,7 @@ def plan_repo(runner: Runner, cfg: Config, repo: RepoConfig) -> list[Change]:
                     f'require check "{check}"',
                     [
                         f'Not in dev-main-pr-gate yet: no check run named "{check}" on the '
-                        "latest commit of development.",
+                        f"latest commit of {repo.default_branch} or its last 20 PRs.",
                         "Requiring a check nothing reports blocks every PR in this repo. "
                         "Re-run once its workflow has run on development.",
                     ],

@@ -7,6 +7,7 @@ from tests.team_github_helpers import (
     repo_cfg,
     runner_for,
 )
+from tools.team_github.gh import GhError
 from tools.team_github.repos import plan_repo
 from tools.team_github.rulesets import desired_rulesets, diff_ruleset
 
@@ -117,6 +118,7 @@ def test_classic_protection_not_covered_when_check_unreported():
     cfg = load_config()
     state = load_state("flashpoint")
     state["check_runs"] = {"total_count": 0, "check_runs": []}
+    state["pr_check_runs"] = {}
     runner = runner_for("flashpoint", state)
     classic = next(c for c in plan_repo(runner, cfg, repo_cfg(cfg, "flashpoint")) if c.kind == "classic-protection")
     assert "NOT covered" in " ".join(classic.detail)
@@ -135,3 +137,65 @@ def test_unowned_ruleset_reported_not_touched():
     assert not changes[0].actionable
     changes[0].apply()
     assert not [c for c in runner.calls if "-X" in c]
+
+
+def test_pr_gate_bypass_is_admin_only():
+    cfg = load_config()
+    gate = desired_rulesets(cfg, repo_cfg(cfg, "IgniteLib"), set())["dev-main-pr-gate"]
+    assert [(a["actor_type"], a["bypass_mode"]) for a in gate["bypass_actors"]] == [
+        ("OrganizationAdmin", "always")
+    ]
+    live = load_state("IgniteLib")["rulesets"]["dev-main-pr-gate"]
+    assert not [l for l in diff_ruleset(live, gate) if "bypass" in l]
+
+
+def test_check_reported_on_recent_pr_is_required():
+    cfg = load_config()
+    rc = repo_cfg(cfg, "Robot-2026")
+    state = load_state("Robot-2026")
+    assert state["check_runs"]["check_runs"] == []  # absent on development HEAD
+    assert any(
+        c["name"] == BUILD for v in state["pr_check_runs"].values() for c in v["check_runs"]
+    )
+    changes = plan_repo(runner_for("Robot-2026", state), cfg, rc)
+    pending = [c.summary for c in changes if c.kind == "required-check"]
+    assert pending == [f'require check "{DRIFT}"']
+    gate = next(c for c in changes if "dev-main-pr-gate" in c.summary)
+    assert gate.kind == "ruleset"
+    runner = runner_for("Robot-2026", state)
+    runner.responses[("api", "repos/IgniteRobotics/Robot-2026/rulesets", "-X", "POST", "--input", "-")] = "{}"
+    next(c for c in plan_repo(runner, cfg, rc) if "dev-main-pr-gate" in c.summary).apply()
+    import json as _json
+
+    assert contexts(_json.loads(runner.inputs[-1])) == [BUILD]
+
+
+def test_live_required_check_is_never_stripped():
+    cfg = load_config()
+    state = converged_state("IgniteLib")  # live gate requires BUILD and DRIFT
+    state["check_runs"] = {"total_count": 0, "check_runs": []}
+    state["pr_check_runs"] = {}
+    runner = runner_for("IgniteLib", state)
+    changes = plan_repo(runner, cfg, repo_cfg(cfg, "IgniteLib"))
+    assert changes == []
+
+
+def test_reported_checks_error_propagates():
+    import pytest
+
+    cfg = load_config()
+    state = load_state("IgniteLib")
+    runner = runner_for("IgniteLib", state)
+    key = ("api", "repos/IgniteRobotics/IgniteLib/commits/development/check-runs?per_page=100")
+    runner.responses[key] = GhError(list(key), 1, "gh: Internal Server Error (HTTP 500)")
+    with pytest.raises(GhError):
+        plan_repo(runner, cfg, repo_cfg(cfg, "IgniteLib"))
+
+
+def test_missing_branch_means_nothing_reported():
+    cfg = load_config()
+    state = load_state("IgniteLib")
+    runner = runner_for("IgniteLib", state)
+    key = ("api", "repos/IgniteRobotics/IgniteLib/commits/development/check-runs?per_page=100")
+    runner.responses[key] = GhError(list(key), 1, "gh: No commit found (HTTP 422)")
+    plan_repo(runner, cfg, repo_cfg(cfg, "IgniteLib"))  # does not raise

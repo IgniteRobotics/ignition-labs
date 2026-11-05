@@ -33,6 +33,7 @@ def load_state(repo: str) -> dict:
         "labels": json.loads((base / "labels.json").read_text()),
         "rulesets": rulesets,
         "check_runs": json.loads((base / "check-runs-development.json").read_text()),
+        "pr_check_runs": json.loads((base / "check-runs-pr-heads.json").read_text()),
         "protection": None if "required_status_checks" not in protection else protection,
     }
 
@@ -50,6 +51,13 @@ def runner_for(repo: str, state: dict) -> FakeRunner:
             state["check_runs"]
         ),
     }
+    prs = [{"headRefOid": sha} for sha in state["pr_check_runs"]]
+    responses[
+        ("pr", "list", "--repo", f"{ORG}/{repo}", "--base", "development", "--state", "all",
+         "--limit", "20", "--json", "headRefOid")
+    ] = json.dumps(prs)
+    for sha, runs in state["pr_check_runs"].items():
+        responses[("api", f"{root}/commits/{sha}/check-runs?per_page=100")] = json.dumps(runs)
     for detail in state["rulesets"].values():
         responses[("api", f"{root}/rulesets/{detail['id']}")] = json.dumps(detail)
     protection_args = ("api", f"{root}/branches/main/protection")
@@ -79,6 +87,7 @@ def converged_state(repo: str) -> dict:
         "check_runs": [{"name": c} for c in rc.required_checks],
     }
     reported = set(rc.required_checks)
+    state["pr_check_runs"] = {}
     state["rulesets"] = {}
     for index, (name, body) in enumerate(desired_rulesets(cfg, rc, reported).items()):
         detail = copy.deepcopy(body)
