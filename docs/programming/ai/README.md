@@ -18,6 +18,7 @@ Together with [The Program at a Glance](the-program.md), these pages are the wri
 |---|---|
 | New to the subteam, or unsure what any of this gates | [The Program at a Glance](the-program.md) — the ladder, the tracks, and the tier you are on |
 | Brand new, nowhere near using an agent | [The Rules](the-rules.md) — so the restrictions make sense before they annoy you |
+| Finished M6 and need a tool working in WPILib VS Code | [Setup: SDD and AI tools](setup.md) |
 | About to configure a tool for the first time | [The Harness](the-harness.md) |
 | Writing a spec, or about to | [The SDD Loop](the-loop.md) |
 | Getting worse answers than you did last week | [Context & Prompts](context-and-prompts.md) |
@@ -45,6 +46,8 @@ Everything in these pages is Ignite filling that gap on purpose, before the pres
 ## What these pages cover
 
 [The Program at a Glance](the-program.md) is part one: ten milestones, four entry points, one hard deadline, and three AI tiers set by where you are on the ladder rather than by preference. It also carries the reasoning behind the boundary people argue with most, which is why full agentic use starts after M6.
+
+[Setup](setup.md) gets one tool (Copilot, Codex, or Claude Code) working in the WPILib VS Code, with Node, the OpenSpec CLI, and the local hooks. It is the prerequisite for M7.
 
 [The Harness](the-harness.md) explains why an AI coding tool is not a chatbot. It is a model running in a loop with tools, permissions, and a feedback path, and *that configuration* decides output quality, measurably more than which model you picked. Covers the agent loop, the FRC feedback ladder, hooks as enforcement, and the security posture that keeps a session from doing something expensive.
 
