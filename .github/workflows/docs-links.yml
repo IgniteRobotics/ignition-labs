@@ -28,11 +28,14 @@ jobs:
         run: python3 tools/templates_sync.py verify
 
       - name: Check links
+        # Robot-2026 and ignition-labs are private. lychee fetches unauthenticated, so
+        # every link into them is a 404 that says nothing about whether the link is good.
         uses: lycheeverse/lychee-action@v2
         with:
           args: >-
             --no-progress
             --accept 200,206,403,429
+            --exclude '^https://github\.com/IgniteRobotics/(Robot-2026|ignition-labs)([/#?.]|$)'
             --exclude-path superpowers
             --exclude-path .superpowers
             './**/*.md'
