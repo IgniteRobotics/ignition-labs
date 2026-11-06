@@ -5,7 +5,7 @@
 What happens when a spec meets its second change.
 
 **Estimated time:** 2 sessions
-**Prerequisites:** **M7 complete, and your M7 PR merged (merging it archived your change).** Your PR carried the `openspec archive` commit — if it did not, M8 has nothing to anchor to. Ask your mentor before your first session
+**Prerequisites:** **M7 complete, and your M7 PR merged (the archive commit in that PR archived your change).** Your PR carried the `openspec archive` commit — if it did not, M8 has nothing to anchor to. Ask your mentor before your first session
 **AI posture:** 🟢 Green — and the one thing M7 held back is handed over here
 
 ## Who enters here
