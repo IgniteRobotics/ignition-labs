@@ -74,7 +74,7 @@ All three extensions install side by side without errors in WPILib VS Code. Even
 
 OpenSpec is the spec tool from [the SDD loop](the-loop.md).
 
-1. Install Node.js from [nodejs.org](https://nodejs.org/en/download), choosing an **LTS** release of version 22 or newer. OpenSpec 1.10.0 needs Node 20.19 or newer ([npm registry entry, `engines` field, checked 2026-11-05](https://registry.npmjs.org/@fission-ai/openspec/1.10.0)). The Copilot CLI's npm install needs 22, so 22 covers both. Close and reopen the terminal afterwards.
+1. Install Node.js from [nodejs.org](https://nodejs.org/en/download), choosing an **LTS** release of version 22 or newer. OpenSpec 1.10.0 needs Node 20.19 or newer ([npm registry entry, `engines` field, checked 2026-11-05](https://registry.npmjs.org/@fission-ai/openspec/1.10.0)). The Copilot CLI's npm install needs 22, so 22 covers both. Restart WPILib VS Code afterwards: close every window and open it again. A new terminal is not enough, because VS Code's terminals keep the PATH it had when it started.
 2. Install the pinned CLI version, in the terminal inside WPILib VS Code:
 
     ```bash
@@ -97,7 +97,7 @@ OpenSpec is the spec tool from [the SDD loop](the-loop.md).
     setx OPENSPEC_TELEMETRY 0
     ```
 
-    Open a new terminal afterwards so the setting takes effect.
+    Restart WPILib VS Code afterwards so the setting takes effect. On Windows a new terminal is not enough: `setx` changes new programs, and VS Code's terminals inherit what VS Code started with.
 
 4. Check it:
 
@@ -150,6 +150,8 @@ The session-start hook prints it. If the file is missing it prints `Ignite tier:
 ### Turn the hooks on, per tool
 
 Run these from the repo root. Create the folder if it does not exist.
+
+If `.claude/settings.local.json` already exists (Claude Code saves your permission answers there), do not replace it. Add the `"hooks"` key below next to what is already in the file, keeping the file valid JSON.
 
 **Claude Code and Copilot CLI** share one file, `.claude/settings.local.json`. [Copilot CLI reads it too](https://docs.github.com/en/copilot/reference/hooks-reference) (accessed 2026-11-05).
 
@@ -291,8 +293,9 @@ When all four pass, you are ready for M7.
 | `/opsx` or `$openspec` commands are missing | The repo may not be seeded yet, or you are on the wrong branch. Check you are on `development`. If it is still missing, tell a mentor. Do not run `openspec init` or `openspec update`. |
 | Each OpenSpec skill shows up two or three times in the list | Expected. Copilot reads three skill folders, and the copies differ only in how you call them. Ignore the extras. |
 | `openspec` is not found after install | Close and reopen the terminal. If it still fails, `npm config get prefix` shows where npm put it. That folder's `bin` (or the folder itself on Windows) must be on your PATH. |
+| In PowerShell, `npm` or `openspec` fails with "…cannot be loaded because running scripts is disabled on this system" | Windows blocks the `npm.ps1` and `openspec.ps1` launchers by default. Allow them for your own account only, no admin needed: `Set-ExecutionPolicy -Scope CurrentUser RemoteSigned`, answer `Y`, then open a new terminal. |
 | `openspec --version` prints something other than `1.10.0` | `npm install -g @fission-ai/openspec@1.10.0` again. |
-| The OpenSpec drift check is red on your PR | You changed generated OpenSpec files, probably by running `openspec update`. Undo it. For each file the check lists, run `git checkout -- <path>`, and delete any new files it lists. Push again. Mentors fix real changes (see below). |
+| The OpenSpec drift check is red on your PR | You changed generated OpenSpec files, probably by running `openspec update`, and committed them. Put them back the way `development` has them: `git fetch origin`, then `git checkout origin/development -- <path>` for each file the check lists, and `git rm <path>` for any listed file that `development` does not have. Commit and push. Mentors fix real changes (see below). |
 | A hook blocked something you did not expect | Stop. Tell a mentor. Do not edit `.ignite/`. |
 | In Copilot CLI, every tool call is denied | A broken hook command is denied outright in Copilot CLI ([vendor docs](https://docs.github.com/en/copilot/reference/hooks-reference)). Check `node --version` works in that terminal, and that you are in the repo root. |
 | Codex ignores the hooks | The project is not trusted yet, or you have not approved the hooks. Trust the project, then run `/hooks`. |

@@ -18,12 +18,13 @@ checked. It folds the student's delta into `openspec/specs/`
 and moves the folder to `changes/archive/<date>-<change-name>/`, so the settled specs grow
 by exactly what shipped.
 
-**Then check the `## Purpose` line, and write it only if this student is not going on to
-M8.** Archiving a brand-new capability leaves it reading `TBD - created by archiving change
-<name>. Update Purpose after archive.` — one sentence is owed saying what the capability is
-*for*, not what it does, which the requirements already cover. **If they are starting M8,
-leave the TBD alone:** writing it is the first thing that milestone asks of them, and a
-Purpose you wrote here is a task they never get. Either way somebody writes it, because a
+**Then check the `## Purpose` line in that same commit.** Archiving a brand-new capability
+leaves it reading `TBD - created by archiving change <name>. Update Purpose after
+archive.` Unless the student is going on to M8, they replace it in the archive commit with
+one sentence saying what the capability is *for*, not what it does, which the requirements
+already cover. You check that sentence before you merge; you do not write it, and nothing
+is edited after the merge. **If they are starting M8, the TBD stays:** writing it is the
+first thing that milestone asks of them. Either way the student writes it, because a
 repository where every capability spec says TBD is the first step toward specs nobody
 trusts.
 

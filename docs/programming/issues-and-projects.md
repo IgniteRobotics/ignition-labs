@@ -37,10 +37,10 @@ All programming issues from the four repos appear on one organization Project, *
 | Backlog | Nowhere. The issue was just opened. | Automatic: a new issue is added to the board. |
 | Ready | Nowhere. The issue states its problem and has acceptance criteria. | A lead, by hand. |
 | In progress | Your branch, `feature/<num>-<name>` | You, by hand, when you create the branch. GitHub does not react to branch creation. |
-| In review | A pull request into `development` | Opening a pull request that carries `Closes #<num>`. If the board does not do this itself, move it by hand. |
+| In review | A pull request into `development`, ready for review | Adding `Closes #<num>` when you mark the pull request ready for review. If the board does not do this itself, move it by hand. |
 | Done | Merged into `development` | Automatic: merging the pull request closes the issue, and the board marks it Done. |
 
-You touch your own card twice: Ready to **In progress** when you branch, and (if the board does not do it for you) **In progress** to **In review** when you open the pull request. Everything else happens on its own or belongs to a lead.
+You touch your own card twice: Ready to **In progress** when you branch, and (if the board does not do it for you) **In progress** to **In review** when you mark the pull request ready for review. Everything else happens on its own or belongs to a lead.
 
 ### Size and Release
 
@@ -55,7 +55,7 @@ Two more fields sit on each card.
 
 - **Branch name:** `feature/<num>-<name>`, where `<num>` is the issue number. Issue 42 about an indexer jam becomes `feature/42-indexer-jam`.
 - **Pull request body:** include `Closes #<num>`. GitHub only acts on that line when the pull request merges into the repo's **default branch**, which is why `development` is the default branch in every managed repo and `main` is not. A fresh clone also lands on the branch you branch from.
-- **Draft pull request as the spec review.** For a change with an OpenSpec spec, open a **draft** pull request into `development` as soon as the spec is committed, before any implementation code. Reviewers read the spec there. There is no separate "spec review" Status; a draft pull request on a card in In progress is enough.
+- **Draft pull request as the spec review.** For a change with an OpenSpec spec, open a **draft** pull request into `development` as soon as the spec is committed, before any implementation code. Reviewers read the spec there. Leave `Closes #<num>` out of the draft and add it when you mark the pull request ready for review ([Team Gitflow](team-gitflow.md) step 9), so the card stays in **In progress** during the spec review. There is no separate "spec review" Status.
 - **Archive last.** Run `openspec archive` as the last commit on the branch, after the mentor has approved the spec and the code. The mentor checks that commit (all tasks checked, `openspec validate` passing, `openspec/specs/` updated) before merging.
 - **Failures after merge open a new issue.** If you find a problem after merge, whether at the field or in a log replay, open a new issue and link the old one. Do not reopen the old one. This matches the loop: a replay failure is a new `MODIFIED` requirement, not an edit to a finished one.
 
@@ -100,7 +100,7 @@ poetry run python -m tools.team_github
     poetry run python -m tools.team_github --apply
     ```
 
-3. **Re-run to check for drift.** A second run on a configured org plans zero changes.
+3. **Re-run to check for drift.** A configured org is converged only when the run exits 0 **and** prints no PENDING section. A pending check is left out of the plan, so a run can exit 0 while a required check is still waiting to be added.
 4. **Close the old Projects** once you have looked at the migrated board:
 
     ```bash
