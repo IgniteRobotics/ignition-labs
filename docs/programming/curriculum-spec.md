@@ -355,7 +355,7 @@ Ignite's existing Gemini PR-review bot (`.github/workflows/ai-code-review.yml`, 
 - [ ] Student can name shepherding and drifting and describe a time they did one
 - [ ] Student has read and signed the Ignite AI-use standard
 
-The milestone file carries the authoritative eleven-item list; the above is its summary and is not the checklist a mentor marks against.
+The milestone file carries the authoritative thirteen-item list; the above is its summary and is not the checklist a mentor marks against.
 
 **Resources.** `ai-use-standard.md` (this curriculum) · [The Widening Gap (Prather et al., 2024)](https://arxiv.org/html/2405.17739v1) · [FIRST: Expanding the FIRST Toolbox with AI](https://community.firstinspires.org/expanding-the-first-toolbox-with-artificial-intelligence) · Ignite reference: `Robot-2026/.github/prompts/code-review-prompt.md`
 
@@ -384,7 +384,7 @@ Where Ignite stops. Spec-first, spec-anchored, spec-as-source: M7 does the first
 - [ ] A second reader described the new behaviour correctly from the spec alone, and the student can say how many round trips it took
 - [ ] Student can name something `openspec validate` cannot check, and can make the strongest case *for* spec-as-source before saying why Ignite stops short
 
-The milestone file carries the authoritative eight-item list; the above is its summary and is not the checklist a mentor marks against.
+The milestone file carries the authoritative nine-item list; the above is its summary and is not the checklist a mentor marks against.
 
 **AI posture:** 🟢 Green, and this is where the one remaining restriction lifts. `openspec-propose` may produce a first draft the student red-lines, disclosed, with at minimum one requirement rewritten and one scenario added or cut. A draft accepted unchanged is not a pass. Takes `ai-use-standard.md` to v1.3; anyone who acknowledged v1.2 signs again.
 

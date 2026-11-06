@@ -115,14 +115,14 @@ A required status check that no workflow has reported yet would block every pull
 
 ### Project automations (by hand)
 
-GitHub Project automations are set in the Project's settings, <!-- verdict -->and the script cannot set them, so a person does this once in the web UI.
+GitHub Project automations are the Project's built-in workflows. GitHub has no API that turns them on; they are switched on only in the Project's web UI ([GitHub docs](https://docs.github.com/en/issues/planning-and-tracking-with-projects/automating-your-project/using-the-built-in-automations), accessed 2026-11-05). The script cannot set them, so a person does this once.
 
 Open **Ignite Programming**, then **Settings**, then **Workflows**, and turn on:
 
-- [ ] **Auto-add to project**, one rule per managed repo, so every new issue lands in Backlog. If the plan limits how many of these you can have, say so to a lead; a workflow using `actions/add-to-project` can fill the gap.
+- [ ] **Auto-add to project**, one rule per managed repo, so every new issue lands in Backlog. The org is on GitHub's Team plan, which allows five auto-add workflows ([GitHub docs](https://docs.github.com/en/issues/planning-and-tracking-with-projects/automating-your-project/adding-items-automatically), accessed 2026-11-05). The docs do not say whether that limit counts per Project or per org, and the old Flashpoint and IgniteLib Projects hold one rule each. If GitHub refuses a rule, delete the old Projects' auto-add rules first.
 - [ ] **Item closed**, set Status to Done.
 - [ ] **Pull request merged**, set Status to Done.
-- [ ] **Pull request linked to issue**, set Status to In review, if that option exists.
+- [ ] **Pull request linked to issue**, set Status to In review. GitHub's automation docs do not list this one, but it is in the Workflows menu of the team's existing Projects.
 - [ ] **Auto-archive items**, if you want old Done cards to leave the board.
 
 Check one by opening a test issue and watching it appear in Backlog.

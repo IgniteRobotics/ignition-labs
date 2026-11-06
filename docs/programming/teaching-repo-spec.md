@@ -45,6 +45,8 @@ It is not a course-in-a-box that replaces mentors. Every milestone retains expla
 
 **2026-08-22.** Merged in the M8 spec-anchored-development design session. Changes: **M8 — Spec-Anchored Development is inserted at position 8** as the milestone teaching what happens when a spec meets its second change — `MODIFIED` and `REMOVED` deltas, repair of the student's own M7 drift, and the `## Purpose` stub `openspec archive` leaves behind — assessed by a **second-reader test** rather than a defense review, because being articulate cannot pass a test where the author is silent (§9.9); **In-Season Deliverables & Ownership is renumbered M8 → M9**, unchanged in content: its page and its project directory both move from an `m8-` prefix to `m9-`, becoming `milestones/m9-in-season-deliverables.md` and `projects/m9-ownership/` (§9.10) — **the published URL under the old `m8-` slug therefore breaks, deliberately, and no redirects plugin was added to soften it**; the fade curve's L0 row becomes M6, M7, M8, M9 (§8); the §6.1 ladder gains an M8 rung and the in-season rung becomes M9; `ai-use-standard.md` goes to **v1.3**, moving the spec-drafting boundary in §4 from *never* to *before M8* — an agent may draft a spec you red-line from M8 on — which means **anyone who acknowledged v1.2 signs again**; and **M8 is added to the Kickoff Readiness Gate**, so the AI-tooling row now reads *+ M7 and M8*, in `README.md` and in `curriculum-spec.md` §3, which is a policy change and reverses the design record's own §2.8. §13 gains numbered step 13 — this is a new milestone, not content added to a shipped step. `tests.lock` is untouched; M8 ships no Gradle project and no tests. The originating design document is preserved at `../superpowers/specs/2026-08-22-m8-spec-anchored-design.md`.
 
+**2026-11-05.** Merged in the GitHub Issues & Projects and SDD/AI setup-guide design sessions. Changes: all team development moves onto **GitHub Issues and one org Project, *Ignite Programming***, on the four managed repos (`Robot-2026`, `Phoenix-2026`, `flashpoint`, `IgniteLib`); the issue is the why, the OpenSpec change is the what, and the pull request is the how, and every change starts from an issue its PR closes with `Closes #<num>`; `issues-and-projects.md` is added as the page that owns that lifecycle, and `team-gitflow.md` becomes canonical rather than a copy of the Notion page (§5.7); **`development` becomes the default branch** on all four, because GitHub honours a closing keyword only on a merge into the default branch; **`openspec archive` moves inside the pull request**: the student runs it as the last commit of their PR after the mentor has approved spec and code, and the mentor checks that commit (tasks checked, `openspec validate` passing, `openspec/specs/` updated) before merging, where previously the mentor ran it after merge (§9.8, §9.9); M7 gains two DoD items, an issue the PR closes and the archive commit, taking it from eleven to thirteen, and M8 gains the issue item, taking it from eight to nine; **`ai/setup.md` replaces "see the project README"** as M7's install path for Node 20.19+ and the OpenSpec CLI, and walks GitHub Copilot, Codex or Claude Code in WPILib VS Code; and the four team repos are **seeded for all three tools**: one `AGENTS.md`, agent hooks that freeze `src/test/` while a change is being implemented, the OpenSpec recipe pinned at `1.10.0`, and a drift check that fails a PR whose generated tool files differ from the recipe. §13 gains no numbered step — no milestone is built, and `tests.lock` is untouched. The originating design documents are preserved at `../superpowers/specs/2026-11-04-github-issues-and-projects-design.md` and `../superpowers/specs/2026-11-04-sdd-ai-setup-guide-design.md`.
+
 ---
 
 ## 2. Research basis
@@ -260,8 +262,8 @@ The git ritual and the commit-access policy are the same boundary. That is not a
 
 `Robot-2026` runs a simplified gitflow — `main` ← `development` ← `feature/*`, `hotfix/<comp>`
 branched from `main` at competition and merged back into `main`, which then merges into
-`development`, `release/<comp>` tags, no release branches. That is the team's own standard, maintained on Notion; `team-gitflow.md` is
-the curriculum's copy of it.
+`development`, `release/<comp>` tags, no release branches. `development` is the default branch. That is the team's own standard; it was first written on Notion, and since 2026-11-05 (§1.3)
+`team-gitflow.md` is its source rather than a copy of it.
 
 **M0 teaches it as literacy only.** The student reads the diagram and can say what
 `development` is for. They do not practise it, because until M7 they have no repository to
@@ -595,20 +597,20 @@ Almost no code. M7 ships a feature into a real repository with commit access —
 **Real repo:** branch on `Robot-2026` upstream. Commit access. M7's specs commit there too, as `openspec/changes/<feature>/`, and that `openspec/` scaffolding is **mentor-seeded once** rather than created by the first student's pull request — students never run `openspec init`, though the CLI itself (Node 20.19+) is a milestone prerequisite they install before session one — a student's first commit to the competition repository is not the place to invent a convention the whole team then inherits.
 
 **Tests cover:** nothing. M7's assessment is the defense review, by design.
-**Mentor verifies:** all eleven DoD items.
+**Mentor verifies:** all thirteen DoD items. Once the mentor has approved the spec and the code, the student runs `openspec archive <change>` as the last commit of their PR; the mentor checks that commit before merging: every box in `tasks.md` checked, `openspec validate` passing, `openspec/specs/` updated.
 
 ### 9.9 M8 — `projects/m8-spec-anchored/` · fade: L0
 
 No skeleton code, no Gradle build, no tests — the same shape as §9.8, and for the same reason: the deliverable is a change to a real repository, and a sandbox for it would defeat the requirement that the spec being modified is one somebody actually shipped.
 
-**Given:** `README.md`, which states the prerequisite (the student's own M7 change merged **and** archived) and walks the project end to end. `MODIFIED-EXAMPLE.md` — L0's one piece of scaffolding: a capability spec and the same spec after a `MODIFIED` change, side by side, with the reasoning for each edit. It works the vision-exception feature `SPEC-TEMPLATE.md` already spends, deliberately — that is the one capability guaranteed not to be any student's subject, and reusing it lets the example show a *second* change to a spec the reader already knows. `SPEC-REVIEW.md` — the second-reader protocol, written for both sides, because the reader is being taught too.
+**Given:** `README.md`, which states the prerequisite (the student's own M7 PR merged, which archived the change — its last commit is `openspec archive`) and walks the project end to end. `MODIFIED-EXAMPLE.md` — L0's one piece of scaffolding: a capability spec and the same spec after a `MODIFIED` change, side by side, with the reasoning for each edit. It works the vision-exception feature `SPEC-TEMPLATE.md` already spends, deliberately — that is the one capability guaranteed not to be any student's subject, and reusing it lets the example show a *second* change to a spec the reader already knows. `SPEC-REVIEW.md` — the second-reader protocol, written for both sides, because the reader is being taught too.
 
 **No capability backlog.** M7 needs `FEATURE-BACKLOG.md` because a student must choose a feature; M8's subject is determined by what that student shipped at M7. What the mentor must have is a genuine second change in mind before assigning the milestone, which is a mentor note rather than a file — a list would deplete and this does not.
 
-**Real repo:** branch on `Robot-2026` upstream. Commit access. The change commits there as `openspec/changes/<name>/`, against the capability spec the student's own M7 change archived into.
+**Real repo:** branch on `Robot-2026` upstream. Commit access. The change commits there as `openspec/changes/<name>/`, against the capability spec the student's own M7 change archived into. The archive commit was the last commit of that M7 pull request, so the settled spec is on `development` once it merges.
 
 **Tests cover:** nothing. The assessment is the second-reader test — a peer who has not seen the diff reads the updated spec alone and states what the system now does. The author is silent, which is the property a defense review cannot check.
-**Mentor verifies:** all eight DoD items, and runs `openspec archive` after the pull request merges.
+**Mentor verifies:** all nine DoD items. Once the mentor has approved the spec and the code, the student runs `openspec archive <change>` as the last commit of their PR; the mentor checks that commit before merging: every box in `tasks.md` checked, `openspec validate` passing, `openspec/specs/` updated.
 
 ### 9.10 M9 — `projects/m9-ownership/` · fade: L0
 
