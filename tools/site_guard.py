@@ -81,6 +81,7 @@ REQUIRED_PAGES = [
     "programming",  # renders programming/README.md -> programming/index.html
     "programming/git-workflow",
     "programming/team-gitflow",
+    "programming/issues-and-projects",
     "programming/robot-repo-ladder",
     "programming/UNTESTED-TARGETS",
     "programming/ai-use-standard",
@@ -88,6 +89,7 @@ REQUIRED_PAGES = [
     "programming/student-deliverables",
     "programming/resources",
     "programming/ai",
+    "programming/ai/setup",
     "programming/ai/the-program",
     "programming/ai/the-harness",
     "programming/ai/the-loop",

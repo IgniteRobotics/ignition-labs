@@ -39,6 +39,7 @@ nav:
       - Overview: programming/README.md
       - Git Workflow: programming/git-workflow.md
       - Team Gitflow: programming/team-gitflow.md
+      - Issues & Projects: programming/issues-and-projects.md
       - Real-Repo Ladder: programming/robot-repo-ladder.md
       - Untested Targets: programming/UNTESTED-TARGETS.md
       - AI Use Standard: programming/ai-use-standard.md
@@ -46,6 +47,7 @@ nav:
       - Student Deliverables: programming/student-deliverables.md
       - Resources: programming/resources.md
   - Working with AI:
+      - Setup: programming/ai/setup.md
       - Overview: programming/ai/README.md
       - The Program at a Glance: programming/ai/the-program.md
       - The Harness: programming/ai/the-harness.md

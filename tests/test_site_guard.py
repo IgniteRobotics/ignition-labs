@@ -169,6 +169,20 @@ def test_coding_standards_is_a_required_page():
     assert "programming/coding-standards" in REQUIRED_PAGES
 
 
+def test_issues_page_is_required():
+    # Same C11b failure as team-gitflow: a page added to mkdocs.yml's nav: but
+    # not to REQUIRED_PAGES renders today and is guarded by nothing. The issues
+    # page is where every team change starts; team-gitflow and the loop link it.
+    assert "programming/issues-and-projects" in REQUIRED_PAGES
+
+
+def test_setup_guide_is_required():
+    # Same C11b failure as team-gitflow. The setup guide is the first page under
+    # Working with AI and the M7 starting point for every post-M6 student; a
+    # nav entry alone is guarded by nothing, so it must be in the static list.
+    assert "programming/ai/setup" in REQUIRED_PAGES
+
+
 def test_missing_required_asset_is_reported(tmp_path):
     site = _make_site(tmp_path, ["index.html"])
     assert missing_assets(site, ["images/gitflow.png"]) == ["images/gitflow.png"]
