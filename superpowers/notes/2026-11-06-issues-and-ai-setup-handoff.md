@@ -77,13 +77,18 @@ Read these lines in the dry-run before applying:
 
 Task 2's verdict was **auto-add: builtin**. GitHub has no API that enables a built-in Project workflow (the only workflow mutation is `deleteProjectV2Workflow`). The org plan is `team`, and the steps are on [Issues & Projects → Project automations (by hand)](https://igniterobotics.github.io/ignition-labs/programming/issues-and-projects/#project-automations-by-hand):
 
-- [ ] Auto-add to project: one rule per managed repo (4). **The Team plan allows 5 auto-add workflows, and GitHub doesn't say whether that's per Project or per org.** Old Projects #3 and #5 hold one rule each, so if it counts per org, 2 + 4 = 6 > 5. Delete the old Projects' auto-add rules (or close them, step 5) before adding the fourth rule.
+The red warning icons are expected. GitHub turns these workflows on by default for a new Project, pointed at its default Status options. The tool replaces those options, so the workflows lose their target status. Edit each one and pick the new status.
+
+- [ ] Auto-add to project: one rule per managed repo (4), filter `is:issue is:open`, not GitHub's sample `is:issue,pr is:open label:bug`. Set up one, then use **⋯ → Duplicate workflow** for the rest. **The Team plan allows 5 auto-add workflows, and GitHub doesn't say whether that's per Project or per org.** Old Projects #3 and #5 hold one rule each, so if it counts per org, 2 + 4 = 6 > 5. Delete the old Projects' auto-add rules (or close them, step 5) before adding the fourth rule.
+- [ ] Item added to project → Backlog. Without it, auto-added issues land in "No Status".
 - [ ] Item closed → Done
 - [ ] Pull request merged → Done
 - [ ] Pull request linked to issue → In review. This exists: the live API lists it on Projects #2–#5, but GitHub's docs page doesn't.
+- [ ] Auto-close issue → **off**. Issues close when their PR merges (`Closes #N`), not when a card is dragged to Done.
 - [ ] Auto-archive items (optional)
+- Leave Auto-add sub-issues on. It added `flashpoint-private#54`, a closed sub-issue of `flashpoint#24`, during migration. Remove that card: `gh project item-delete 6 --owner IgniteRobotics --id PVTI_lADOAeoJ684BqjSfzhGtZuA`.
 
-Then open a test issue and watch it land in Backlog.
+Then open a test issue: it should land in Backlog, then move to Done when you close it.
 
 ## 5. Look at the migrated board, then `--close-old`
 

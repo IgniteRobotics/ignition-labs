@@ -117,12 +117,18 @@ A required status check that no workflow has reported yet would block every pull
 
 GitHub Project automations are the Project's built-in workflows. GitHub has no API that turns them on; they are switched on only in the Project's web UI ([GitHub docs](https://docs.github.com/en/issues/planning-and-tracking-with-projects/automating-your-project/using-the-built-in-automations), accessed 2026-11-05). The script cannot set them, so a person does this once.
 
-Open **Ignite Programming**, then **Settings**, then **Workflows**, and turn on:
+Open **Ignite Programming** and click **Workflows** at the top right. To change a workflow, pick it in the left-hand list, click **Edit**, make the change, then click **Save and turn on**. To turn one off, open **Edit** and switch its toggle off.
 
-- [ ] **Auto-add to project**, one rule per managed repo, so every new issue lands in Backlog. The org is on GitHub's Team plan, which allows five auto-add workflows ([GitHub docs](https://docs.github.com/en/issues/planning-and-tracking-with-projects/automating-your-project/adding-items-automatically), accessed 2026-11-05). The docs do not say whether that limit counts per Project or per org, and the old Flashpoint and IgniteLib Projects hold one rule each. If GitHub refuses a rule, delete the old Projects' auto-add rules first.
+Some workflows show a red warning icon at first. GitHub turns them on by default for a new Project, pointed at its default Status options. The script replaces those options with ours, so those workflows point at options that no longer exist. Editing each one to use the status below clears the warning.
+
+- [ ] **Auto-add to project**, one rule per managed repo, with the filter `is:issue is:open`. GitHub's sample filter, `is:issue,pr is:open label:bug`, adds pull requests as extra cards and skips every issue without the `bug` label. Set up the first repo, then use **Duplicate workflow** in the workflow's **⋯** menu for each of the others. The org is on GitHub's Team plan, which allows five auto-add workflows ([GitHub docs](https://docs.github.com/en/issues/planning-and-tracking-with-projects/automating-your-project/adding-items-automatically), accessed 2026-11-05). The docs do not say whether that limit counts per Project or per org, and the old Flashpoint and IgniteLib Projects hold one rule each. If GitHub refuses a rule, delete the old Projects' auto-add rules first.
+- [ ] **Item added to project**, set Status to Backlog. Auto-add only puts an issue on the board. Without this rule, the issue sits in "No Status" instead of Backlog.
 - [ ] **Item closed**, set Status to Done.
 - [ ] **Pull request merged**, set Status to Done.
 - [ ] **Pull request linked to issue**, set Status to In review. GitHub's automation docs do not list this one, but it is in the Workflows menu of the team's existing Projects.
+- [ ] **Auto-close issue**: turn it **off**. When it is on, dragging a card to Done closes the issue. On this team an issue closes when the pull request that says `Closes #N` merges, so moving a card by hand must not close it.
 - [ ] **Auto-archive items**, if you want old Done cards to leave the board.
 
-Check one by opening a test issue and watching it appear in Backlog.
+Leave **Auto-add sub-issues to project** on: a sub-issue of an issue on the board joins the board too. Leave **Code changes requested**, **Code review approved**, and **Item reopened** off, because this workflow doesn't use them.
+
+Check the setup with a test issue in one of the managed repos. It should appear in **Backlog**, then move to **Done** when you close it.
