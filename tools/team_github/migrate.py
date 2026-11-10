@@ -90,13 +90,17 @@ _Planned = tuple[str, str, "str | None", "str | None", tuple[str, ...]]
 
 
 def _needed(status: str, size: str | None, have: dict | None) -> tuple[str, ...]:
-    """Field edits a target item still needs; () means fully migrated."""
+    """Field edits a target item still needs; () means fully migrated.
+
+    Only empty fields are filled. A value already on the target board was set by a person or an
+    automation after migration (a linked PR moves a card to In review) and is never overwritten.
+    """
     if have is None:
         return ("Status",) + (("Size",) if size else ())
     out = []
-    if have.get("status") != status:
+    if not have.get("status"):
         out.append("Status")
-    if size and have.get("size") != size:
+    if size and not have.get("size"):
         out.append("Size")
     return tuple(out)
 

@@ -199,13 +199,31 @@ def test_migration_rerun_retries_missing_size():
     assert not any(c[:2] == ("project", "item-add") for c in runner.calls)
 
 
-def test_migration_rerun_fixes_wrong_status():
+def test_migration_rerun_fills_missing_status():
     url = "https://github.com/IgniteRobotics/flashpoint/issues/1"
     runner = only_sources({3: [item(url, "Todo")], 5: []})
     runner.responses[items_call(TARGET_NUMBER)] = json.dumps(
-        {"items": [item(url, "Done")], "totalCount": 1})
+        {"items": [item(url, None)], "totalCount": 1})
     [change] = adds(plan_migration(runner, load_config(), TARGET))
     assert "set Status" in change.detail[0]
+
+
+def test_migration_never_overwrites_status_set_on_target():
+    # The board is live after migration: automations and people move cards.
+    # IgniteLib#4 went to "In review" when a PR linked it; a re-run must not drag it back.
+    url = "https://github.com/IgniteRobotics/IgniteLib/issues/4"
+    runner = only_sources({3: [], 5: [item(url, "Todo")]})
+    runner.responses[items_call(TARGET_NUMBER)] = json.dumps(
+        {"items": [item(url, "In review")], "totalCount": 1})
+    assert adds(plan_migration(runner, load_config(), TARGET)) == []
+
+
+def test_migration_never_overwrites_size_set_on_target():
+    url = "https://github.com/IgniteRobotics/flashpoint/issues/1"
+    runner = only_sources({3: [item(url, "Todo", "M")], 5: []})
+    runner.responses[items_call(TARGET_NUMBER)] = json.dumps(
+        {"items": [item(url, "Backlog", "L")], "totalCount": 1})
+    assert adds(plan_migration(runner, load_config(), TARGET)) == []
 
 
 def test_close_old_refuses_when_target_lacks_migratable_urls():
