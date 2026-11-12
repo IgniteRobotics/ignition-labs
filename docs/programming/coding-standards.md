@@ -1,6 +1,7 @@
 # Ignite Robotics — Coding Standards
 
-**Applies to:** All Java in `Robot-2026` and every season repository after it
+**Applies to:** All Java in `Robot-2026` and every season repository after it; Python and
+JavaScript in Flashpoint (its own section below)
 **Status:** **Draft.** Not ratified
 **Owner:** ⚠️ UNASSIGNED — TODO(P2): a season lead must be named here. This line must not merge as a placeholder.
 **Ratified by:** —
@@ -433,6 +434,111 @@ you have. Knowing which auto was actually selected and when each period began is
 
 ---
 
+## Flashpoint (Python and JavaScript)
+
+Everything above is about robot Java. This section is for
+[Flashpoint](https://github.com/IgniteRobotics/flashpoint), the team's telemetry platform: a
+Python backend and a small browser app. It has two kinds of rule. **Check** rules fail the
+required pull-request check, so you'll know before review. **Review** rules depend on judgment
+and are enforced by a reviewer. Flashpoint's developer guide carries this same text. If the two
+ever differ, this page is right and the guide gets fixed.
+
+### Python: formatting, naming, and types
+
+- Formatting and import order come from `ruff format` and `ruff check`. Don't argue with the
+  formatter. *(Check)*
+- `snake_case` for functions and variables, `PascalCase` for classes, `UPPER_SNAKE_CASE` for
+  constants, `kebab-case` for file and directory names outside the Python package. This is
+  different from the Java naming above. Each language follows its own community's convention,
+  and nobody should have to translate. *(Check, except filenames: Review)*
+- Type hints on everything. `mypy --strict` passes. *(Check)*
+
+*Why:* the formatter makes every file look the same, so a diff shows only what changed. Strict
+types catch a whole class of bug before the code runs, and they tell the next reader what a
+function expects without them having to trace every caller.
+
+### Python: suppressions say which rule and why
+
+Turning off a rule names the rule and gives a reason on the same line:
+`# noqa: S608 - table name from the internal registry`. A bare `# noqa`, a `# type: ignore`
+with no error code, or a suppression for a rule that isn't firing all fail the check. *(Check)*
+
+*Why:* a suppression is a claim that you looked at this line and it's fine. Without a rule name
+it hides every future problem on that line too. Without a reason, the next person can't tell
+whether you were right.
+
+### Python: processes, shells, and SQL
+
+- Library code never exits the process. Only the command-line entry point calls `sys.exit`.
+  *(Check)*
+- Subprocesses take an argument list, never a shell string. `shell=True` and `os.system` are
+  never allowed, even with a suppression. *(Check)*
+- SQL is built only from internal identifiers, never from user or log data. Values go in as
+  bound parameters. A line that builds SQL from strings says which identifiers it fills in.
+  *(Check)*
+
+*Why:* one bad log calling `sys.exit` in the middle of a batch import stops every log after
+it. A shell string with a filename in it breaks on the first space and can run commands the
+filename smuggled in. SQL built from data is the same bug.
+
+### Python: errors, output, and time
+
+- Don't catch every exception, except at a boundary that records the error and carries on: a
+  per-file ingest loop, a request handler, a service loop. The suppression names the boundary.
+  *(Check)*
+- Library code doesn't `print`. It logs, or returns data for the CLI to show. *(Check)*
+- Date-times are timezone-aware. *(Check)*
+- Functions stay under cyclomatic complexity 12. The few that were over when this standard was
+  adopted are marked grandfathered and must not get worse. *(Check for new code, Review for
+  grandfathered functions)*
+
+*Why:* a catch-all in the wrong place turns a crash you would have seen into wrong numbers you
+won't see. Robot logs come from different clocks and time zones, and a naive date-time is
+off by hours without saying so. A function too complex to hold in your head is too complex to
+review.
+
+### Python: tests
+
+- Every change comes with tests. Unit tests use synthetic fixtures; tests that need real logs
+  are marked `corpus`. *(Review)*
+- Coverage never drops below the floors in `pyproject.toml`: an overall floor and 85% on the
+  reader and lake packages. Floors go up, not down. Lowering one needs a mentor. *(Check)*
+- Once implementation of a change starts, nobody edits its tests to make them pass. *(Review)*
+
+*Why:* the readers and the lake turn a log into every number Flashpoint shows. If they're
+wrong, every chart is wrong, and nothing on the screen will tell you.
+
+### Browser app: scripts, escaping, and offline
+
+- App scripts are classic scripts: no `import`/`export`, no build step. Each file runs in
+  strict mode and touches only the `FP` namespace, the mode object, and the vendored chart
+  library. *(Check)*
+- Views build the page only through the app's `h()` DOM builder. No `innerHTML`, inline
+  handlers, `eval`, or `new Function`. *(Check)*
+- No remote hosts. Everything the app loads ships with it. *(Check)*
+- Colours come from the role-named theme tokens, never a literal. *(Check)*
+- Vendored libraries are never edited. *(Check)*
+
+*Why:* the match report has to open by double-clicking a file on a pit laptop with no network,
+and browsers refuse ES modules from `file://`. Log data includes names that came from robot
+code, so anything that turns strings into HTML is an injection waiting for the wrong match
+name. Tokens let another team re-theme the app without touching code.
+
+### Browser app: lint and format
+
+JavaScript and CSS pass Biome's recommended rules, with warnings treated as errors, and match
+Biome's formatter. A `biome-ignore` comment carries a reason. *(Check)*
+
+*Why:* the same reasons as ruff: one style, so a diff shows only what changed, and a linter
+that catches unused variables and loose comparisons before a reviewer has to.
+
+### Running the checks
+
+`poetry run pre-commit run --all-files` runs every formatter and linter, at the same versions
+CI uses. Run it before you push.
+
+---
+
 ## Provenance
 
 **Source:** `projects/m7-ai-assisted/reference/code-review-prompt.md`, lines 53–300 — the
@@ -498,6 +604,14 @@ subsequently checked against the pinned toolchain — WPILib `2026.2.1` and Phoe
 by inspecting the shipped jars. The remaining examples are either plain Java or use API that is
 still current. A reader who finds a fourth should add a note in this same form rather than
 editing the example.
+
+**The Flashpoint section has a different source.** It was not promoted from the review prompt.
+It was written for Flashpoint's `code-quality-gates` OpenSpec change
+(`openspec/changes/code-quality-gates/specs/coding-standards/spec.md` in the Flashpoint repo),
+which is also what wires each *(Check)* rule into Flashpoint's CI. Direction of truth is the
+same as for the rest of this document: this page is the source, and Flashpoint's developer
+guide follows it. A new Flashpoint rule is added here first. If it's a *(Check)* rule, the
+Flashpoint change that enforces it lands with it.
 
 **Status.** This document is a **draft** until a season lead ratifies it. Draft means the
 standards in it are Ignite's current practice as written down for the first time, not that they
