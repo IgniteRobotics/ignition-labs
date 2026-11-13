@@ -14,24 +14,27 @@ You **fork** this repository once, at M0, because it is the only thing you will 
 
 ---
 
-## M0 — your one pull request to the team repository
+## M0 — your first pull request, into your own fork
 
-This is the only pull request you will ever open against `IgniteRobotics/ignition-labs`. Getting it merged past CI **is** what M0 is for.
+You fork once, here, and every pull request from M0 to M6 goes **into your own fork**. Getting this first one reviewed and merged past CI **is** what M0 is for.
 
 ```bash
 # 1. Fork IgniteRobotics/ignition-labs on github.com  →  <your-handle>/ignition-labs
 
-# 2. Clone YOUR fork, not the team's
+# 2. Turn on Actions in your fork (see the warning below). Do it now, before
+#    anything else, so your first push already runs CI.
+
+# 3. Clone YOUR fork, not the team's
 git clone https://github.com/<your-handle>/ignition-labs.git
 cd ignition-labs
 
-# 3. Point "upstream" at the team repository so you can pull updates later
+# 4. Point "upstream" at the team repository so you can pull updates later
 git remote add upstream https://github.com/IgniteRobotics/ignition-labs.git
 
-# 4. Branch. Never work on main.
-git checkout -b add-<your-handle>-contributor
+# 5. Branch. Never work on main.
+git checkout -b m0-onboarding
 
-# 5. Do the exercise: run spotlessApply on the deliberately-ugly FormatMe.java,
+# 6. Do the exercise: run spotlessApply on the deliberately-ugly FormatMe.java,
 #    read the diff, then revert it -- the fix is never committed. The next
 #    student needs the same violation to find.
 cd projects/m0-onboarding
@@ -39,25 +42,27 @@ cd projects/m0-onboarding
 git checkout src/main/java/frc/robot/FormatMe.java
 cd ../..
 
-# 6. Create contributors/<your-handle>.md, then commit and push.
+# 7. Create contributors/<your-handle>.md, then commit and push.
 #    Only the contributor file goes in -- there is no formatting fix left to
-#    stage after step 5's revert.
+#    stage after step 6's revert.
 git add contributors/<your-handle>.md
 git commit -m "Add <your-handle> to contributors"
-git push -u origin add-<your-handle>-contributor
+git push -u origin m0-onboarding
 ```
 
-Then open the pull request on github.com: `<your-handle>/ignition-labs:add-<your-handle>-contributor` → `IgniteRobotics/ignition-labs:main`.
+> **⚠️ Turn on Actions in your fork first.** GitHub disables Actions on forked repositories by default. Go to your fork → **Actions** tab → click **"I understand my workflows, go ahead and enable them."** If you skip it, your pull request shows *no checks at all*, which looks broken but isn't. This is the single most common M0 problem.
 
-> **⚠️ Do this before you open the pull request.** GitHub disables Actions on forked repositories by default. Go to your fork → **Actions** tab → click **"I understand my workflows, go ahead and enable them."** If you skip it, your pull request shows *no checks at all*, which looks broken but isn't. This is the single most common M0 problem.
+Then open the pull request on github.com: `<your-handle>/ignition-labs:m0-onboarding` → `<your-handle>/ignition-labs:main`. [Opening a pull request in your own fork](#opening-a-pull-request-in-your-own-fork), below, shows the one setting GitHub gets wrong for you.
 
-**What goes in `contributors/<your-handle>.md`:** your GitHub handle and what you want to work on. Nothing else — no legal name, no email, no school. It is yours, you made it, and you can delete it with another pull request whenever you like.
+A mentor or a veteran reviewer approves it. **Then you merge it yourself**: it is your fork, so the merge button is yours.
+
+**What goes in `contributors/<your-handle>.md`:** your GitHub handle and what you want to work on. Nothing else — no legal name, no email, no school. Your fork is public, so anyone can read this file. It is yours, you made it, and you can delete it whenever you like.
 
 ---
 
 ## M1 through M6 — same fork, forever
 
-You never fork again. Every milestone is a branch in the fork you already have, and the pull request goes **into your own fork**, where a mentor reviews it.
+You never fork again. Every milestone is a branch in the fork you already have, and the pull request goes **into your own fork**, where a mentor or veteran reviewer approves it, exactly like M0.
 
 ```bash
 # Start of every milestone: get the latest skeletons from the team repo
@@ -78,10 +83,11 @@ git push -u origin m3-command-based
 
 Then open the pull request: `<your-handle>/ignition-labs:m3-command-based` → `<your-handle>/ignition-labs:main`.
 
-Yes — **into your own fork.** That is not a mistake. Your solutions stay yours, the team repository stays clean, and the next student to reach M3 cannot read your answer. CI runs on your fork and a mentor reviews it there.
+Yes — **into your own fork.** That is not a mistake. The team repository stays clean, and your work stays in your fork, where CI runs and your reviewer reads it. Your fork is public, though: it is not a place to hide an answer, and other students can read it the same way you can read theirs.
 
 | Milestone | Branch name |
 |---|---|
+| M0 | `m0-onboarding` |
 | M1 | `m1-java-fundamentals` |
 | M2 | `m2-oop` |
 | M3 | `m3-command-based` |
@@ -89,11 +95,37 @@ Yes — **into your own fork.** That is not a mistake. Your solutions stay yours
 | M5 | `m5-auto-vision` |
 | M6 | `m6-testing` |
 
+### Opening a pull request in your own fork
+
+GitHub assumes a pull request from a fork is meant for the repository you forked from. On the **Open a pull request** page, check the top line before you click anything else:
+
+- **base repository:** change it from `IgniteRobotics/ignition-labs` to **`<your-handle>/ignition-labs`**
+- **base:** `main`
+- **compare:** your milestone branch
+
+From the terminal, name the base repository explicitly:
+
+```bash
+gh pr create --repo <your-handle>/ignition-labs --base main
+```
+
+If GitHub tells you that you cannot open a pull request on `IgniteRobotics/ignition-labs`, this is why. The team repository only accepts pull requests from collaborators, and you were never meant to send one there. Change the base repository and try again.
+
+### For reviewers
+
+You are approving a gate, so the approval is the record that this student passed it. The student owns their fork and could merge without you, or change the CI that checks them, so read the diff with that in mind.
+
+- [ ] Student Check is green on the pull request
+- [ ] The diff touches only the milestone's own project (at M0, only `contributors/<handle>.md`)
+- [ ] Nothing under `.github/`, nothing in `tests.lock`, and nothing under any `src/test/` that the milestone ships. If one of those changed, talk to the student before you approve. They may have found a genuinely bad test.
+- [ ] The milestone's mentor-verified items, from its Definition of done, are covered in review
+- [ ] Approve. The student merges.
+
 ---
 
 ## M4 and M6 — pull requests to the real robot code
 
-At M4 and M6 you also work in `Robot-2026`. Same shape as M0, different repository:
+At M4 and M6 you also work in `Robot-2026`. You set up the fork the same way as M0, but this pull request goes to the team's repository, not your fork:
 
 ```bash
 # Fork IgniteRobotics/Robot-2026 on github.com — once. You keep it.
@@ -139,6 +171,8 @@ The git ritual and the commit-access policy are the same boundary. That is delib
 ## When it goes wrong
 
 **"My pull request has no checks."** Actions are not enabled on your fork. See the warning in the M0 section.
+
+**"GitHub won't let me open the pull request" or "it went to `IgniteRobotics`."** The base repository is the team's, not yours. See [Opening a pull request in your own fork](#opening-a-pull-request-in-your-own-fork).
 
 **`git push` asks for a username and password, and my GitHub password does not work.** You skipped the authentication step. See [Setup](../SETUP.md), step 3.
 

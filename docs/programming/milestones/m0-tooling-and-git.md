@@ -95,6 +95,9 @@ above is the whole allow-list, whichever way you drive it.
 
 A pull request proposes merging your branch into `main`. It is where code review happens — and code review is not a judgment of you. It is how the team catches things and how you learn faster than by yourself.
 
+Until the Kickoff Gate, every pull request you open goes from a branch in your fork into
+your fork's own `main`. CI runs in your fork, which is why Actions have to be on there.
+
 Ignite's CI (`.github/workflows/student-check.yml`) runs in two stages, and which one
 you see depends on what you changed:
 
@@ -145,10 +148,10 @@ The project is `projects/m0-onboarding/`. It ships with a real thing to fix — 
 
 ⚠️ **Enable Actions on your fork before you open the pull request.** GitHub disables Actions on forked repositories by default. Until you turn them on, your pull request shows **no checks at all** — which looks like the repository is broken, and it isn't. Go to your fork on github.com → **Actions** tab → click **"I understand my workflows, go ahead and enable them."** Spec §15 rates this the single most likely thing to go wrong at M0.
 
-4. Push and open the pull request — upstream, the only one you send there
-5. Get it through CI. If `spotlessCheck` fails, fix it yourself
-6. Respond to at least one review comment
-7. Merge it
+4. Push and open the pull request **into your own fork**. GitHub defaults the base repository to the team's, so change it: see [the git workflow](../git-workflow.md#opening-a-pull-request-in-your-own-fork)
+5. Get it through CI. Student Check validates your contributor file; if it fails, the message says what to change
+6. Respond to at least one review comment from a mentor or veteran reviewer
+7. Once they approve, merge it yourself
 
 The change deliberately does not need to be impressive. The point is the pipeline, not the diff.
 
@@ -159,7 +162,7 @@ The change deliberately does not need to be impressive. The point is the pipelin
 - [ ] WPILib VS Code installed; `./gradlew build` succeeds on your machine
 - [ ] The simulator launches and you can identify the Robot State panel
 - [ ] GitLens, Git Graph and Live Share are installed, and you can find the Source Control panel
-- [ ] A merged pull request exists under your GitHub account
+- [ ] A pull request into your own fork, approved by a mentor or veteran reviewer, and merged by you
 - [ ] You ran `spotlessApply` on `FormatMe.java`, read the diff, reverted it, and can say what the formatter changed
 - [ ] You can explain what a branch is without using the word "branch"
 - [ ] You can point at `development` on the team gitflow diagram and say why it exists

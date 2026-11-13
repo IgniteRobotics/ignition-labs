@@ -27,7 +27,7 @@ This spec defines the **skeleton source code** that closes the first gap, the **
 
 **In scope.** Per-milestone skeleton projects and per-track test-out fixtures living in this repository; the git ritual students follow; the rule for when work moves to `Robot-2026`; the CI that verifies the skeletons; the GitHub Pages pipeline that publishes the curriculum; and a private companion repository holding reference solutions.
 
-**Out of scope.** Rewriting `CommandTemplate` (still excluded per `curriculum-spec.md` §8, still the highest-leverage separate fix). Any tracking site, roster system, or LMS. Changes to the curriculum prose beyond the corrections §6.5 and §7.3 identify — this spec adds code and process the existing documents already assume.
+**Out of scope.** Rewriting `CommandTemplate` (still excluded per `curriculum-spec.md` §8, still the separate fix that would pay off most). Any tracking site, roster system, or LMS. Changes to the curriculum prose beyond the corrections §6.5 and §7.3 identify — this spec adds code and process the existing documents already assume.
 
 ### 1.2 What this is not
 
@@ -46,6 +46,8 @@ It is not a course-in-a-box that replaces mentors. Every milestone retains expla
 **2026-08-22.** Merged in the M8 spec-anchored-development design session. Changes: **M8 — Spec-Anchored Development is inserted at position 8** as the milestone teaching what happens when a spec meets its second change — `MODIFIED` and `REMOVED` deltas, repair of the student's own M7 drift, and the `## Purpose` stub `openspec archive` leaves behind — assessed by a **second-reader test** rather than a defense review, because being articulate cannot pass a test where the author is silent (§9.9); **In-Season Deliverables & Ownership is renumbered M8 → M9**, unchanged in content: its page and its project directory both move from an `m8-` prefix to `m9-`, becoming `milestones/m9-in-season-deliverables.md` and `projects/m9-ownership/` (§9.10) — **the published URL under the old `m8-` slug therefore breaks, deliberately, and no redirects plugin was added to soften it**; the fade curve's L0 row becomes M6, M7, M8, M9 (§8); the §6.1 ladder gains an M8 rung and the in-season rung becomes M9; `ai-use-standard.md` goes to **v1.3**, moving the spec-drafting boundary in §4 from *never* to *before M8* — an agent may draft a spec you red-line from M8 on — which means **anyone who acknowledged v1.2 signs again**; and **M8 is added to the Kickoff Readiness Gate**, so the AI-tooling row now reads *+ M7 and M8*, in `README.md` and in `curriculum-spec.md` §3, which is a policy change and reverses the design record's own §2.8. §13 gains numbered step 13 — this is a new milestone, not content added to a shipped step. `tests.lock` is untouched; M8 ships no Gradle project and no tests. The originating design document is preserved at `../superpowers/specs/2026-08-22-m8-spec-anchored-design.md`.
 
 **2026-11-05.** Merged in the GitHub Issues & Projects and SDD/AI setup-guide design sessions. Changes: all team development moves onto **GitHub Issues and one org Project, *Ignite Programming***, on the four managed repos (`Robot-2026`, `Phoenix-2026`, `flashpoint`, `IgniteLib`); the issue is the why, the OpenSpec change is the what, and the pull request is the how, and every change starts from an issue its PR closes with `Closes #<num>`; `issues-and-projects.md` is added as the page that owns that lifecycle, and `team-gitflow.md` becomes canonical rather than a copy of the Notion page (§5.7); **`development` becomes the default branch** on all four, because GitHub honours a closing keyword only on a merge into the default branch; **`openspec archive` moves inside the pull request**: the student runs it as the last commit of their PR after the mentor has approved spec and code, and the mentor checks that commit (tasks checked, `openspec validate` passing, `openspec/specs/` updated) before merging, where previously the mentor ran it after merge (§9.8, §9.9); M7 gains two DoD items, an issue the PR closes and the archive commit, taking it from eleven to thirteen, and M8 gains the issue item, taking it from eight to nine; **`ai/setup.md` replaces "see the project README"** as M7's install path for Node 20.19+ and the OpenSpec CLI, and walks GitHub Copilot, Codex or Claude Code in WPILib VS Code; and the four team repos are **seeded for all three tools**: one `AGENTS.md`, agent hooks that freeze `src/test/` while a change is being implemented, the OpenSpec recipe pinned at `1.10.0`, and a drift check that fails a PR whose generated tool files differ from the recipe. §13 gains no numbered step — no milestone is built, and `tests.lock` is untouched. The originating design documents are preserved at `../superpowers/specs/2026-11-04-github-issues-and-projects-design.md` and `../superpowers/specs/2026-11-04-sdd-ai-setup-guide-design.md`.
+
+**2026-11-12.** Gate review of the fork, commit and PR ritual against the live GitHub settings. Changes: **M0's pull request moves into the student's own fork** (D2, §5.2), so no student pull request goes upstream at all. The upstream one could not work as written. `ignition-labs` had gone private, and a private repository does not run workflows on pull requests from forks, so M0's PR showed no checks however the student set up their fork. M0 also told a student with read access to merge it. With the PR inside the fork, CI runs there, and the "enable Actions on your fork" step (§7.3, mechanic 3) finally fixes the thing it is blamed for. The **privacy rationale is corrected** (D2, §5.6): a fork of a private repository inherits upstream's permissions, and a fork of a public one is public, so a student's fork is readable by other students either way. The fork keeps the canonical repository clean; it never hid one cohort's answers from the next. **Mentor review in the fork is a record, not a lock** (§12.2): the student administers their own fork, so `CODEOWNERS` binds nothing there, and the reviewer reads the diff for `.github/`, `tests.lock` and `src/test/`. `ignition-labs` returns to public, with pull request creation limited to collaborators and a ruleset on `main` (§16.1). `Robot-2026`'s M4 and M6 fork pull requests are untouched and still blocked. They are recorded in §16.1 for a later pass.
 
 ---
 
@@ -86,7 +88,7 @@ Eleven decisions, all made, recorded with reasoning so they can be argued with r
 | # | Decision | Reasoning |
 |---|---|---|
 | **D1** | **Skeletons live in this repository**, at `projects/m0-onboarding/` … `projects/m9-ownership/` and `projects/testouts/`, a sibling of `docs/` rather than of `programming/` | One clone gets a student the curriculum and the code. CI can verify the docs against the code they describe — the drift failure mode `curriculum-spec.md` §1.2 exists to prevent. One seasonal re-verification surface, not two. A separate `ignite-training` repo was the original proposal and was rejected: it reintroduces exactly the sync problem it was meant to avoid. Accepted cost: a student forking to do M1 also forks every mentor-facing document, which is harmless — those documents are public, and the README already sends students to them |
-| **D2** | **Fork this repository once at M0. Branch per milestone. Pull request into your own fork.** Upstream receives exactly one student PR, ever | Mentor review and CI happen on the student's fork; the canonical repository never accumulates thirty students' solutions, and no cohort can read the previous cohort's answers. The single upstream PR is M0's contributor file, because shipping a real PR past CI **is** M0's stated learning objective. GitHub Classroom's autograding is genuinely better verification, but it is a roster-linked tracking system, and `curriculum-spec.md` §8 excluded tracking systems after a peer resource drew real criticism for collecting student names and emails with no deletion path. Reversing that needs a privacy review, not a convenience argument. Full mechanics in §5 |
+| **D2** | **Fork this repository once at M0. Branch per milestone, M0 included. Pull request into your own fork.** Upstream receives no student PRs | Mentor review and CI happen on the student's fork, and the canonical repository never accumulates thirty students' solutions. M0's contributor file is a PR into the fork too, because shipping a real PR past CI **is** M0's stated learning objective, and only a PR inside the fork can get CI. Until 2026-11-12 this row said the fork also kept one cohort from reading the previous cohort's answers. It never did: a fork of a public repository is public, and a fork of a private one inherits upstream's read access. GitHub Classroom's autograding is genuinely better verification, but it is a roster-linked tracking system, and `curriculum-spec.md` §8 excluded tracking systems after a peer resource drew real criticism for collecting student names and emails with no deletion path. Reversing that needs a privacy review, not a convenience argument. Full mechanics in §5 |
 | **D3** | **Tests enforce the mechanical Definition-of-Done items only** | A JUnit assertion can prove a deadband function clamps correctly. It cannot prove a student can explain why `1/2` is `0`. Wiring CI to "check" the explanation items would produce a green check that means less than the mentor conversation it replaced. The test suite is the floor; the mentor conversation remains the ceiling. Every milestone's DoD is split explicitly in §9 |
 | **D4** | **Local WPILib toolchain only. No devcontainer, no Codespaces** | Installing the toolchain and getting `./gradlew build` green **is** M0's stated learning objective. A devcontainer lets a student skip the thing M0 exists to teach. Revisit only if a real student is genuinely blocked by a locked-down machine — at which point it is a one-off accommodation, not a shipped artifact |
 | **D5** | **Shared milestone skeletons + per-track test-out fixtures** | The curriculum is "one spine, four entry points" — tracks differ by *where you get on*, not what you learn. Per-track skeleton variants would be up to 36 artifacts duplicating the same content four ways, which is exactly the drift `curriculum-spec.md` §2 rejected. The track axis surfaces where it actually exists: the test-out fixtures, which are the load-bearing mechanism for Tracks B, C, and D |
@@ -213,20 +215,23 @@ This belongs on the M0 page verbatim, and it is the whole of `git-workflow.md`'s
 
 This repository is the only thing a student forks at M0, because it is the only thing they will change for six milestones. `Robot-2026` is *cloned* at M2 — read-only, no fork, no write. It is not forked until M4, when the student finally has something to send back.
 
-### 5.2 M0 — the one upstream pull request
+### 5.2 M0 — the first pull request, into your own fork
 
 ```
 fork IgniteRobotics/ignition-labs  →  jsmith/ignition-labs
+enable Actions on the fork (§7.3, mechanic 3)
 git clone https://github.com/jsmith/ignition-labs.git
 git remote add upstream https://github.com/IgniteRobotics/ignition-labs.git
-git checkout -b add-jsmith-contributor
-    …create contributors/jsmith.md, run spotlessApply on FormatMe.java…
-PR: jsmith/ignition-labs:add-jsmith-contributor → IgniteRobotics/ignition-labs:main
+git checkout -b m0-onboarding
+    …create contributors/jsmith.md, run spotlessApply on FormatMe.java and revert it…
+PR: jsmith/ignition-labs:m0-onboarding → jsmith/ignition-labs:main
 ```
 
-Merged by a mentor. This is the only student pull request the canonical repository ever receives, and shipping it *is* M0's stated learning objective.
+A mentor or a veteran reviewer approves it; the student merges it. Shipping it *is* M0's stated learning objective, and it is the same PR shape the student repeats at every milestone through M6.
 
-> **Privacy note.** GitHub handle only — no legal names, no emails, no school. The file is self-created and removable by the student's own PR at any time. This is deliberately *not* a roster: nothing reads it, nothing aggregates it, and the Kickoff Gate checklist stays where `curriculum-spec.md` §3 put it, with a mentor.
+It used to go upstream, as the one student PR the canonical repository ever received. That could not work once `ignition-labs` was private, because a private repository does not run workflows on pull requests from forks, and it no longer has a reason to: a contributor file in a fork teaches the same pipeline as one in the canonical repository.
+
+> **Privacy note.** GitHub handle only — no legal names, no emails, no school. The file lives in the student's fork, which is public, and the student can delete it at any time. This is deliberately *not* a roster: nothing reads it, nothing aggregates it, and the Kickoff Gate checklist stays where `curriculum-spec.md` §3 put it, with a mentor.
 
 ### 5.3 M1–M6 — same fork, forever
 
@@ -237,7 +242,9 @@ git checkout -b m3-command-based
 PR: jsmith/ignition-labs:m3-command-based → jsmith/ignition-labs:main
 ```
 
-CI runs on the fork. A mentor reviews on the fork. Upstream never sees a student solution. Skeleton updates arrive through `fetch upstream` — the same command M0 already teaches, now doing real work.
+CI runs on the fork. A mentor or veteran reviews on the fork, and the approval on that pull request is the record that the student passed the gate. Upstream never receives a student solution. Skeleton updates arrive through `fetch upstream` — the same command M0 already teaches, now doing real work.
+
+**Visible, not secret.** The fork is public, so another student can read it. Keeping solutions private between students would mean a repository that is not a fork, and that was considered and declined on 2026-11-12 because it costs a second repository per student.
 
 ### 5.4 M7–M9 — commit access
 
@@ -256,7 +263,7 @@ The git ritual and the commit-access policy are the same boundary. That is not a
 | A fresh fork per milestone | GitHub permits one fork per account per repository. Requires template-generation or manual re-clone, which breaks `fetch upstream` for skeleton updates and re-teaches setup nine times instead of once |
 | One cumulative branch, PR twice a season | Pull request review **is** the feedback loop. Batching it to twice a season means a student can carry a misunderstanding through three milestones before anyone reads their code |
 | Write access on this repository, branch directly | Contradicts the Kickoff Gate outright, and puts every student's in-progress work in the repository that publishes the site |
-| Students PR solutions upstream | Thirty students' solutions in the canonical repository, and every solution publicly visible to the next cohort |
+| Students PR solutions upstream | Thirty students' solutions in the canonical repository, every one of them in `main` for the next cohort to start from. Forks are public too, so visibility is not the difference; what goes into the canonical tree is |
 
 ### 5.7 Team gitflow, and where it enters
 
@@ -323,7 +330,7 @@ mirroring `ai-use-standard.md` §11. An unowned constitution is `FEATURE-BACKLOG
 
 | | Sandbox project | Git ritual | Real repo | Contact |
 |---|---|---|---|---|
-| **M0** | `projects/m0-onboarding/` | fork `ignition-labs` → branch → **PR upstream** | — | none |
+| **M0** | `projects/m0-onboarding/` | fork `ignition-labs` → branch → PR into own fork | — | none |
 | **M1** | `m1-java-fundamentals/` | branch → PR into own fork | Robot-2026 | **browse** on github.com — `IntakeConstants.java`, `Constants.java` |
 | **M2** | `m2-oop/` | branch → PR into own fork | Robot-2026 | **clone** — first real clone. `preferences/`, `LaunchState`, `LaunchRequestBuilder` |
 | **M3** | `m3-command-based/` | branch → PR into own fork | Phoenix-2026, Robot-2026 | **clone** — Phoenix end to end, then `RobotContainer` |
@@ -459,10 +466,10 @@ M0 is not about code. The skeleton exists so the pull request has something real
 
 **Given:** a complete, working, minimal `TimedRobot` project that builds and whose simulator launches. `CONTRIBUTING.md` with the curated command set from `curriculum-spec.md` §4.2 — `clone`, `checkout -b`, `add -u`, `commit -m`, `fetch --all`, `merge`, `push` — and nothing else. `student-check.yml`. A deliberately mis-formatted `FormatMe.java`. `FormatMe.java` is the conventional name for a formatting-exercise file and, by that convention, is the one file `skeleton-integrity.yml`'s formatting check exempts. `.vscode/extensions.json` recommending `eamodio.gitlens`, `mhutchie.git-graph` and `ms-vsliveshare.vsliveshare` — M0 only, since extensions install at user level and the prompt is useful exactly once. `team-gitflow.md` and its diagram, as required reading per §5.7.
 
-**Student authors:** `contributors/<github-handle>.md` from a template, and runs `./gradlew spotlessApply` on `FormatMe.java` locally to see the fix — then **reverts it**, and opens one pull request containing only the contributor file, upstream, per §5.2. The formatting fix is never committed: its entire value is in running it and reading the diff once, and a fix that landed on `main` would leave the next student's `FormatMe.java` already correctly formatted, with nothing left to fix.
+**Student authors:** `contributors/<github-handle>.md` from a template, and runs `./gradlew spotlessApply` on `FormatMe.java` locally to see the fix — then **reverts it**, and opens one pull request containing only the contributor file, into their own fork, per §5.2. The formatting fix is never committed: its entire value is in running it and reading the diff once, and a fix that landed on `main` would leave the next student's `FormatMe.java` already correctly formatted, with nothing left to fix.
 
 **Tests cover:** the contributor file's schema, when one is present — GitHub line, no placeholder text, no accidental email disclosure. Because the pull request touches only `contributors/`, `student-check.yml`'s build-and-`spotlessCheck` job never runs for it at all — that job is gated on `projects/**` having changed (§7.3, mechanic 2), and by design it has not.
-**Mentor verifies:** the contributor file exists for this student's PR (the checker cannot know which student authored a given pull request, so it cannot enforce this — an empty `contributors/` directory still exits 0); simulator launches and the student can point at the Robot State panel; can explain a branch without using the word "branch"; **Actions are enabled on their fork** (§7.3, mechanic 3). The three recommended extensions are installed and the student can find the Source Control panel; the student can point at `development` on the team gitflow diagram and say what it is for (§5.7).
+**Mentor verifies:** the PR is into the student's own fork, not upstream, and the reviewer's approval is on it before the student merges; the contributor file exists for this student's PR (the checker cannot know which student authored a given pull request, so it cannot enforce this — an empty `contributors/` directory still exits 0); simulator launches and the student can point at the Robot State panel; can explain a branch without using the word "branch"; **Actions are enabled on their fork** (§7.3, mechanic 3). The three recommended extensions are installed and the student can find the Source Control panel; the student can point at `development` on the team gitflow diagram and say what it is for (§5.7).
 
 ### 9.2 M1 — `projects/m1-java-fundamentals/` · fade: L3
 
@@ -687,7 +694,7 @@ A student who cannot make a test pass can delete the test. This is not hypotheti
 Three layers, in order of strength:
 
 1. **`tests.lock`** — a SHA-256 manifest of every given test file and every read-only source file (M4's `plant/` package especially). `student-check.yml` verifies it and fails the pull request on any mismatch, naming the modified file.
-2. **`CODEOWNERS`** — given test paths require mentor review, so a change is at least visible.
+2. **`CODEOWNERS`** — given test paths require mentor review, so a change is at least visible. **This layer binds only on the canonical repository.** Student pull requests are inside the student's own fork (§5.2, §5.3), which the student administers, so there `CODEOWNERS` requires nothing and the student can merge without approval or edit `student-check.yml` in the same PR it runs on. On a fork, layer 2 is the reviewer reading the diff: any change under `.github/`, to `tests.lock`, or under `src/test/` is a conversation before it is an approval. That is the reviewer checklist in `git-workflow.md`.
 3. **The failure message says so.** When the lock check fails, the CI comment reads *"this test is part of the milestone — if you think it is wrong, say so in the pull request and a mentor will look."* A student who has found a genuinely bad test should be able to say so and be right. That happens, and the response should not be an accusation.
 
 Layer 3 matters more than the other two. The check exists to make tampering visible, not to be uncircumventable — anyone determined can rewrite history. Visible is enough.
@@ -815,10 +822,13 @@ depends on it.
 | Prerequisite | State | Verified | If it goes false |
 |---|---|---|---|
 | `@IgniteRobotics/mentors` team exists | **Done** — exists, 1 member | 2026-08-19 | Every rule in `.github/CODEOWNERS` is **silently ignored**: no error, no warning, no review requirement on given tests, plants, or harnesses. GitHub does not report a CODEOWNERS entry naming a non-existent team |
-| `ignition-labs` git remote configured | **Done** — `origin`, public | 2026-08-19 | §7.1's whole workflow sequence is blocked |
+| `ignition-labs` git remote configured | **Done** — `origin` | 2026-08-19 | §7.1's whole workflow sequence is blocked |
+| `ignition-labs` public | **Done** — public again 2026-11-12. It had been found private that day, though this row said public | 2026-11-12 | Student forks inherit upstream's read access instead of being public, and `docs-links.yml` cannot check links into this repository |
+| `ignition-labs` pull requests limited to collaborators | **Done** — `pull_request_creation_policy: collaborators_only` | 2026-11-12 | Anyone on GitHub can open a pull request against the canonical repository. No student needs to: §5.2 |
+| `ignition-labs` ruleset on `main` | **Done** — `main-pr-gate`: pull request with 1 approval and code-owner review, Student Check's `matrix` job required, no force-push or deletion, org admins bypass. Before it, `commiters` could push straight to `main`, `tests.lock` included | 2026-11-12 | `CODEOWNERS` requests review and blocks nothing. Path-filtered checks (`skeleton-integrity`, `docs-links`) must never be added as required: a PR that doesn't touch their paths would wait on them forever |
 | GitHub Pages live | **Done** — Pages enabled, site serving | 2026-08-19 | Every published link in the curriculum 404s |
 | `Phoenix-2026` public (D-2) | **Done** — public 2026-08-18 | 2026-08-18 | **M3's reading assignment breaks** — the opening instruction of the largest milestone in the Kickoff Gate block. Any admin can flip visibility back with nothing here noticing. *Mitigated:* `.lycheeignore`'s `IgniteRobotics/.*` blanket is gone, so `docs-links.yml` now fails on the unreachable URL |
-| `Robot-2026` public | **Done** | 2026-08-18 | M2, M4, M5, M6, and M7 all read or contribute to it. Same mitigation as above |
+| `Robot-2026` public | **False.** Found private 2026-11-12, with workflows from fork pull requests disabled | 2026-11-12 | M2, M4, M5, M6, and M7 all read or contribute to it. Same mitigation as above. **Already broken:** `dev-main-pr-gate` requires `Build and Check Code Format` and `OpenSpec tool files`, neither runs on a fork pull request, so M4's and M6's fork PRs cannot merge without an org-admin bypass. Deferred to a later pass on 2026-11-12 |
 | `FEATURE-BACKLOG.md` has an owner | **Not done** | 2026-08-21 | Restocked to four entries on 2026-08-21, three of them pickable — but a one-off mining pass is not a maintainer, and nobody is refreshing it. Unlike M6's shortlist, features cannot be duplicated between students, so this depletes for real — see §15 |
 
 **Membership is not the same as existence.** The `mentors` team exists and has one member.

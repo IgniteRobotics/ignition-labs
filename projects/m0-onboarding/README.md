@@ -66,16 +66,18 @@ does nothing on purpose. You are checking that the toolchain works.
 
 Copy `templates/CONTRIBUTOR.md` from the repository root to
 `contributors/<your-github-handle>.md` and fill it in. GitHub handle only — no
-legal name, no email, no school. It is your file and you can delete it with
-another pull request whenever you want.
+legal name, no email, no school. Your fork is public, so anyone can read it. It
+is your file and you can delete it whenever you want.
 
 **7. Open the pull request.**
 
 Your branch and your pull request carry **only** `contributors/<your-handle>.md`.
 The formatting fix from steps 2–3 is not in there — you reverted it in step 3,
-on purpose. This one goes **upstream**, to `IgniteRobotics/ignition-labs` — it
-is the only pull request you will ever send there. The commands are in the git
-workflow.
+on purpose. This one goes **into your own fork**, `<your-handle>/ignition-labs`,
+not to `IgniteRobotics/ignition-labs`. GitHub picks the team's repository as the
+base by default, so change the base repository before you create it. The
+commands, and that setting, are in the git workflow. A mentor or veteran
+reviewer approves it, and then you merge it.
 
 ⚠️ **Before you open it:** go to your fork on github.com → **Actions** tab →
 click **"I understand my workflows, go ahead and enable them."** GitHub disables
@@ -91,5 +93,5 @@ at all, which looks broken but isn't.
 - `./gradlew build` succeeds on your machine
 - The simulator opens and you can point at the Robot State panel
 - `contributors/<your-handle>.md` is the only file in your pull request
-- Your pull request is green and merged
+- Your pull request into your own fork is green, approved, and merged
 - You can explain what a branch is without using the word "branch"

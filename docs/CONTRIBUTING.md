@@ -14,8 +14,10 @@ See [the git workflow](programming/git-workflow.md). The short version:
 
 > **Clone what you're reading. Fork what you'll change. Branch to work.**
 
-You fork this repository once at M0. Every milestone after that is a branch in
-that same fork, with a pull request into your **own** fork — not this one.
+You fork this repository once at M0. Every milestone, M0 included, is a branch
+in that same fork, with a pull request into your **own** fork — not this one.
+This repository only accepts pull requests from collaborators, so a pull request
+aimed here by mistake is refused rather than lost.
 
 ---
 
