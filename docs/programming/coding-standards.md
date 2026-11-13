@@ -460,8 +460,10 @@ function expects without them having to trace every caller.
 ### Python: suppressions say which rule and why
 
 Turning off a rule names the rule and gives a reason on the same line:
-`# noqa: S608 - table name from the internal registry`. A bare `# noqa`, a `# type: ignore`
-with no error code, or a suppression for a rule that isn't firing all fail the check. *(Check)*
+`# noqa: S608 - table name from the internal registry`, or for the type checker
+`# type: ignore[arg-type]  # fixture dict is untyped`. A bare `# noqa`, a `# type: ignore`
+with no error code or no reason, or a suppression for a rule that isn't firing all fail the
+check. *(Check)*
 
 *Why:* a suppression is a claim that you looked at this line and it's fine. Without a rule name
 it hides every future problem on that line too. Without a reason, the next person can't tell
