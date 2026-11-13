@@ -6,4 +6,5 @@ One file per person, named for your GitHub handle. Copy
 
 **GitHub handle only.** No legal names, no email addresses, no school. This is
 deliberately not a roster: nothing reads these files, nothing aggregates them,
-and you can delete yours with a pull request at any time.
+and you can delete yours at any time. It lives in your fork, which is public,
+and it never comes back to the team repository.

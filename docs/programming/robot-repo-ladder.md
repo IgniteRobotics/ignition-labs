@@ -21,7 +21,7 @@ You move up this ladder and never back down. Each step is a bigger permission th
 
 | | Your project | Git ritual | Real repo | What you do there |
 |---|---|---|---|---|
-| **M0** | `projects/m0-onboarding/` | fork `docs` → branch → **PR upstream** | — | — |
+| **M0** | `projects/m0-onboarding/` | fork `ignition-labs` → branch → PR into own fork | — | — |
 | **M1** | `m1-java-fundamentals/` | branch → PR into own fork | Robot-2026 | **browse** — `IntakeConstants.java`, `Constants.java` |
 | **M2** | `m2-oop/` | branch → PR into own fork | Robot-2026 | **clone** — `preferences/`, `LaunchState`, `LaunchRequestBuilder` |
 | **M3** | `m3-command-based/` | branch → PR into own fork | Phoenix-2026, Robot-2026 | **clone** — Phoenix end to end, then `RobotContainer` |

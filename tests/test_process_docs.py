@@ -39,8 +39,22 @@ def test_gives_copy_pasteable_commands(git_workflow, command):
     assert command in git_workflow
 
 
-def test_m0_pull_request_targets_upstream(git_workflow):
-    assert "IgniteRobotics/ignition-labs:main" in git_workflow
+def test_m0_pull_request_targets_own_fork(git_workflow):
+    # Spec D2 / §5.2, 2026-11-12: no student pull request goes upstream. The team
+    # repository limits pull request creation to collaborators, so an instruction
+    # to target it would send a student straight into a refusal.
+    assert (
+        "`<your-handle>/ignition-labs:m0-onboarding` → `<your-handle>/ignition-labs:main`"
+        in git_workflow
+    )
+    assert "IgniteRobotics/ignition-labs:main" not in git_workflow
+
+
+def test_explains_how_to_change_the_base_repository(git_workflow):
+    # GitHub defaults a fork's pull request to the upstream repository. Without this
+    # section every student's first PR is aimed at the wrong place.
+    assert "### Opening a pull request in your own fork" in git_workflow
+    assert "gh pr create --repo <your-handle>/ignition-labs" in git_workflow
 
 
 def test_later_milestones_pull_request_into_own_fork(git_workflow):

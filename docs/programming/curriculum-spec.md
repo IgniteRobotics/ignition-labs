@@ -169,7 +169,7 @@ Every milestone file follows an identical section structure. This is a hard requ
 
 **Concepts.** WPILib VS Code installation and the FRC toolchain. What Gradle does and why `./gradlew build` matters. Reading a stack trace. Git as a concept before git as commands: commits as save points, branches as parallel universes, merges as reconciliation. The curated command set — `clone`, `checkout -b`, `add -u`, `commit -m`, `fetch --all`, `merge`, `push` — deliberately narrower than git's full surface. This mirrors a pattern reported on Chief Delphi by a team that hands rookies an explicit allow-list rather than all of git, keeping them productive without exposing `rebase` and `reset` before they can recover from either. Pull requests and code review as a team ritual. What Spotless and Google Java Format do and why formatting consistency is not bikeshedding.
 
-**Project (simulation-mandatory).** Fork the Ignite teaching repo. Create a branch. Make a trivial but real change. Open a pull request. Get it through `spotlessCheck` in CI. Respond to at least one review comment. Merge it.
+**Project (simulation-mandatory).** Fork the Ignite teaching repo. Create a branch. Make a trivial but real change. Open a pull request into your own fork. Get it through CI. Respond to at least one review comment. Merge it once a mentor or veteran reviewer approves.
 
 The project is deliberately not about code quality — it is about surviving the mechanics of contribution. A student who cannot open a passing PR in October will not be able to contribute in January.
 
