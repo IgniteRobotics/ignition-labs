@@ -2,10 +2,10 @@
 
 **Applies to:** All Java in `Robot-2026` and every season repository after it; Python and
 JavaScript in Flashpoint (its own section below)
-**Status:** **Draft.** Not ratified
-**Owner:** ⚠️ UNASSIGNED — TODO(P2): a season lead must be named here. This line must not merge as a placeholder.
-**Ratified by:** —
-**Effective:** on ratification
+**Status:** Ratified
+**Owner:** Josh Reddick
+**Ratified by:** Josh Reddick, 2026-11-13
+**Effective:** 2026-11-13
 **Review date:** end of the 2027 build season
 
 ---
@@ -615,6 +615,5 @@ same as for the rest of this document: this page is the source, and Flashpoint's
 guide follows it. A new Flashpoint rule is added here first. If it's a *(Check)* rule, the
 Flashpoint change that enforces it lands with it.
 
-**Status.** This document is a **draft** until a season lead ratifies it. Draft means the
-standards in it are Ignite's current practice as written down for the first time, not that they
-are optional.
+**Status.** Josh Reddick ratified this document on 2026-11-13. Changes to it go through a pull
+request.
